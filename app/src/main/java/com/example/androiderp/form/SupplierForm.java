@@ -166,7 +166,6 @@ public class SupplierForm extends AppCompatActivity implements View.OnClickListe
             case R.id.supplierform_category_layout:
 
                 Intent intent=new Intent(SupplierForm.this, SupplierCategoryListView.class);
-                intent.putExtra("action",edit);
                 intent.putExtra("index",category.getText().toString());
                 startActivityForResult(intent,1);
                 break;

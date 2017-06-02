@@ -56,7 +56,12 @@
         <activity android:name="com.example.androiderp.form.SupplierForm">
 
         </activity>
+        <activity android:name="com.example.androiderp.basicdata.UnitListView">
 
+        </activity>
+        <activity android:name="com.example.androiderp.basicdata.BrandListView">
+
+        </activity>
     </application>
 
 </manifest>

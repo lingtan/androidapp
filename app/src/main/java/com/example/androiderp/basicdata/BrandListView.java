@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.androiderp.CustomDataClass.Brand;
 import com.example.androiderp.CustomDataClass.SupplierCategory;
 import com.example.androiderp.R;
 import com.example.androiderp.adaper.CommonAdapter;
@@ -28,13 +29,13 @@ import org.litepal.crud.DataSupport;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SupplierCategoryListView extends CustomSearchBase implements View.OnClickListener {
+public class BrandListView extends CustomSearchBase implements View.OnClickListener {
     private List<CommonDataStructure> listdatas = new ArrayList<CommonDataStructure>();
     private CommonAdapter adapter;
     private ListView plistView;
     private DisplayMetrics dm;
     private List<CommonDataStructure> searchdatas= new ArrayList<CommonDataStructure>();
-    private List<SupplierCategory> customlist;
+    private List<Brand> customlist;
     private TextView custom_toobar_l,custom_toobar_r,custom_toobar_m;
     private CustomSearch custom_search;
     private String categoryid;
@@ -48,13 +49,13 @@ public class SupplierCategoryListView extends CustomSearchBase implements View.O
         setContentView(R.layout.custom_layout);
         custom_toobar_l=(TextView)findViewById(R.id.custom_toobar_left) ;
         custom_toobar_m=(TextView)findViewById(R.id.custom_toobar_midd);
-        custom_toobar_m.setText("供应商分类");
+        custom_toobar_m.setText("品牌");
         custom_toobar_r=(TextView)findViewById(R.id.custom_toobar_right);
         custom_toobar_l.setOnClickListener(this);
         custom_toobar_r.setOnClickListener(this);
         custom_toobar_m.setOnClickListener(this);
         custom_search = (CustomSearch) findViewById(R.id.search);
-        customlist= DataSupport.findAll(SupplierCategory.class);
+        customlist= DataSupport.findAll(Brand.class);
 
         custom_toobar_l.setCompoundDrawables(null,null,null,null);
         Toolbar.LayoutParams params = new Toolbar.LayoutParams(
@@ -68,17 +69,17 @@ public class SupplierCategoryListView extends CustomSearchBase implements View.O
         Intent intent=getIntent();
         categoryid=intent.getStringExtra("category");
         indexname=intent.getStringExtra("index");
-        custom_toobar_l.setText("新增分类");
-        for(SupplierCategory supplierCategory:customlist)
+        custom_toobar_l.setText("新增品牌");
+        for(Brand brand:customlist)
 
         {
-            if(supplierCategory.getName().equals(indexname))
+            if(brand.getName().equals(indexname))
             {
-                indexpositon =customlist.indexOf(supplierCategory);
+                indexpositon =customlist.indexOf(brand);
             }
             CommonDataStructure commonData=new CommonDataStructure();
-            commonData.setName(supplierCategory.getName());
-            commonData.setId(supplierCategory.getId());
+            commonData.setName(brand.getName());
+            commonData.setId(brand.getId());
             commonData.setImage(R.drawable.seclec_arrow);
             listdatas.add(commonData);
 
@@ -102,7 +103,7 @@ public class SupplierCategoryListView extends CustomSearchBase implements View.O
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view,
                                     int position, long id) {
-                Intent intent=new Intent(SupplierCategoryListView.this,SupplierForm.class);
+                Intent intent=new Intent(BrandListView.this,SupplierForm.class);
                         if(searchdatas.size()!=0) {
 
                             intent.putExtra("data_return", searchdatas.get(position).getName());
@@ -120,7 +121,7 @@ public class SupplierCategoryListView extends CustomSearchBase implements View.O
                 lastCheckedOption = (ImageView)view.findViewById(R.id.custom_item_layout_one_image);
                 lastCheckedOption.setVisibility(View.VISIBLE);
                 pposition=position;
-                SupplierCategoryListView.this.finish();
+                BrandListView.this.finish();
 
 
             }
@@ -133,7 +134,7 @@ public class SupplierCategoryListView extends CustomSearchBase implements View.O
                  updateLayout("10");
                  custom_toobar_m.setText(categoryid);
              }else {
-                 adapter = new CommonAdapter(SupplierCategoryListView.this, R.layout.custom_item, listdatas);
+                 adapter = new CommonAdapter(BrandListView.this, R.layout.custom_item, listdatas);
                  adapter.setSeclection(indexpositon);
                  plistView.setAdapter(adapter);
              }
@@ -194,7 +195,7 @@ public class SupplierCategoryListView extends CustomSearchBase implements View.O
             {
                 searchindex=pposition;
             }
-            adapter = new CommonAdapter(SupplierCategoryListView.this, R.layout.custom_item, searchdatas);
+            adapter = new CommonAdapter(BrandListView.this, R.layout.custom_item, searchdatas);
             adapter.setSeclection(searchindex);
             plistView.setAdapter(adapter);
         }
@@ -206,7 +207,7 @@ public class SupplierCategoryListView extends CustomSearchBase implements View.O
         switch(v.getId())
         {
             case R.id.custom_toobar_left:
-                Intent cate = new Intent(SupplierCategoryListView.this, SupplierCategoryForm.class);
+                Intent cate = new Intent(BrandListView.this, SupplierCategoryForm.class);
                 cate.putExtra("action","add");
                 startActivityForResult(cate,2);
 
@@ -218,7 +219,7 @@ public class SupplierCategoryListView extends CustomSearchBase implements View.O
                 break;
 
             case R.id.custom_toobar_right:
-                SupplierCategoryListView.this.finish();
+                BrandListView.this.finish();
                 break;
 
 
@@ -233,20 +234,20 @@ public class SupplierCategoryListView extends CustomSearchBase implements View.O
                     if(listdatas.size()!=0) {
                         listdatas.clear();
                     }
-                    customlist= DataSupport.findAll(SupplierCategory.class);
-                    for(SupplierCategory supplierCategory:customlist)
+                    customlist= DataSupport.findAll(Brand.class);
+                    for(Brand brand:customlist)
 
                     {
                         CommonDataStructure commonData=new CommonDataStructure();
-                        commonData.setName(supplierCategory.getName());
-                        commonData.setId(supplierCategory.getId());
+                        commonData.setName(brand.getName());
+                        commonData.setId(brand.getId());
                         commonData.setImage(R.drawable.seclec_arrow);
                         listdatas.add(commonData);
 
 
 
                     }
-                    adapter = new CommonAdapter(SupplierCategoryListView.this, R.layout.custom_item, listdatas);
+                    adapter = new CommonAdapter(BrandListView.this, R.layout.custom_item, listdatas);
                     adapter.setSeclection(pposition);
                     plistView.setAdapter(adapter);
                 }
