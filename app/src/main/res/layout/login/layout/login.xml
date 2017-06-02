@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/login_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="60dp"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    tools:context="com.example.androiderp.login.Login">
+
+    <LinearLayout
+        android:id="@+id/login_layout_one"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="60dp"
+        android:orientation="vertical">
+        <com.example.androiderp.custom.CustomEditText
+            android:id="@+id/login_layout_one_one_name"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:drawableLeft="@drawable/login_user"
+            style="@style/customeditTextStyle"
+            />
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/login_layout_one_one"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:counterEnabled="true"
+            app:counterMaxLength="10"
+            android:imeOptions="actionSearch"
+            app:counterOverflowTextAppearance="@style/MyOverflowText"
+            app:errorTextAppearance="@style/MyErrorStyle">
+
+        </android.support.design.widget.TextInputLayout>
+        <com.example.androiderp.custom.CustomEditText
+            android:id="@+id/login_layout_one_tow_password"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:drawableLeft="@drawable/login_password"
+            android:inputType="textPassword"
+            android:layout_marginTop="10dp"
+            style="@style/customeditTextStyle"
+            />
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/login_layout_one_tow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:counterEnabled="true"
+
+            app:counterMaxLength="11"
+            app:counterOverflowTextAppearance="@style/MyOverflowText"
+            app:errorTextAppearance="@style/MyErrorStyle">
+
+        </android.support.design.widget.TextInputLayout>
+
+        <com.example.androiderp.custom.CustomEditText
+            android:id="@+id/login_layout_one_three_email"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:drawableLeft="@drawable/login_email"
+            android:inputType="textEmailAddress"
+            android:layout_marginTop="10dp"
+            style="@style/customeditTextStyle"
+            />
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/login_layout_one_three"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:counterOverflowTextAppearance="@style/MyOverflowText"
+            app:errorTextAppearance="@style/MyErrorStyle">
+
+        </android.support.design.widget.TextInputLayout>
+    <LinearLayout
+        android:id="@+id/login_layout_one_four"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp">
+        <TextView
+            android:id="@+id/login_layout_one_four_remenbertext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="记住密码"
+            android:textSize="16sp"/>
+        <CheckBox
+            android:id="@+id/login_layout_one_four_remenberpaw"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+        </LinearLayout>
+        <Button
+            android:id="@+id/login_layout_one_login"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/login_button_shape"
+            android:text="@string/login"
+            android:textColor="#ffffff"
+            android:textSize="16dp" />
+    </LinearLayout>
+
+    </LinearLayout>
+
+
+</RelativeLayout>

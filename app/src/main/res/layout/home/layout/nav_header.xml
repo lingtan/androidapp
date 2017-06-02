@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="192dp"
+    android:background="?attr/colorPrimaryDark"
+    android:padding="16dp">
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/nav_icon"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:src="@drawable/app_aligame"
+        android:layout_centerInParent="true"/>
+    <TextView
+        android:id="@+id/nav_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:text="ling_tan@live.cn"
+        android:textColor="#ffffff"/>
+    <TextView
+        android:id="@+id/nav_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/nav_email"
+        android:text="lingtan"
+        android:textColor="#ffffff"/>
+
+</RelativeLayout>

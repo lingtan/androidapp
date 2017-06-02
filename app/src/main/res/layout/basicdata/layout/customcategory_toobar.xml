@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.example.androiderp.custom.CustomToobarAdd
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/customcategory_toobar_layout"
+    android:layout_width="match_parent"
+    android:layout_height="?attr/actionBarSize"
+    android:fitsSystemWindows="true"
+    app:contentInsetLeft="0dp"
+    app:contentInsetStart="0dp"
+    android:background="#FFA500"
+  >
+
+    <TextView
+        android:id="@+id/customcategory_toobar_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxLines="1"
+        android:gravity="center_vertical"
+        android:drawableLeft="@drawable/toobar_back"
+        android:text="返回"
+        android:textSize="14dp"
+        android:visibility="visible"
+        android:textColor="@android:color/white"/>
+
+    <TextView
+        android:id="@+id/customcategory_toobar_midd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:maxLines="1"
+        android:textColor="@android:color/white"
+        android:text="全部分类"
+        android:gravity="center"
+        android:textSize="14dp"
+        android:visibility="visible" />
+
+    <TextView
+        android:id="@+id/customcategory_toobar_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="20dp"
+        android:maxLines="1"
+        android:layout_gravity="right"
+        android:gravity="center"
+        android:visibility="visible"
+        android:drawableRight="@drawable/toobar_add"
+        android:textColor="@android:color/white"
+        android:textSize="14dp" />
+
+</com.example.androiderp.custom.CustomToobarAdd>

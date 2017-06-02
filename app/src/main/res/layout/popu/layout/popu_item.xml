@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:id="@+id/popu_iten_layout"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:orientation="vertical"
+android:padding="5dip"
+    android:background="#ffffff">
+
+    <LinearLayout android:id="@+id/popu_iten_layout_one"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="3dip"
+        android:layout_alignParentLeft="true"
+        android:layout_marginRight="5dip"
+        android:background="#ffffff">
+
+        <ImageView
+            android:id="@+id/popu_iten_layout_one_image"
+            android:layout_width="25dip"
+            android:layout_height="25dip"
+            android:background="#ffffff"/>
+
+    <TextView
+        android:id="@+id/popu_iten_layout_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/popu_iten_layout_one"
+        android:textColor="#343434"
+        android:textSize="14dip"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="1dip"
+        android:background="#ffffff"/>
+    </LinearLayout>
+</RelativeLayout>
+
+
+
+

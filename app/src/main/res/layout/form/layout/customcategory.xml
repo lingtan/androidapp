@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#F0F3F6"
+    >
+    <include layout="@layout/custom_toobar" android:id="@+id/id_toobar"/>
+    <LinearLayout style="@style/wrap_layout" >
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"/>
+        <!-- 无圆角-->
+        <LinearLayout style="@style/mid_layout">
+            <TextView style="@style/usertext"
+                android:text="客户名称：" />
+            <EditText
+                android:layout_width="240dp"
+                android:layout_height="wrap_content"
+                android:hint="请输入客户名称"
+                android:textSize="14dp"
+                android:id="@+id/customcategory_name"
+                android:maxLines="1"/>
+        </LinearLayout>
+        <View style="@style/bg_line"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"/>
+        <!-- 下圆角-->
+        <LinearLayout style="@style/bottom_layout">
+            <TextView style="@style/usertext"
+                android:text="联系地址："
+                />
+
+            <EditText
+                android:layout_width="240dp"
+                android:layout_height="wrap_content"
+                android:textSize="14dp"
+                android:hint="请输联系地址"
+                android:id="@+id/customcategory_address"
+                android:maxLines="1"/>
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+</LinearLayout>
+

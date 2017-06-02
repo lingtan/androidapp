@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:id="@+id/custom_item_layout"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:orientation="vertical"
+android:padding="5dip">
+
+    <LinearLayout
+        android:id="@+id/custom_item_layout_one"
+        android:layout_width="wrap_content"
+        android:layout_height="26dp"
+        android:layout_alignParentLeft="true"
+        android:layout_marginRight="5dip">
+    <TextView
+        android:id="@+id/custom_item_layout_one_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:textColor="#343434"
+        android:textSize="14dip" />
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true">
+
+        <ImageView
+            android:id="@+id/custom_item_layout_one_image"
+            android:layout_width="34dp"
+            android:layout_height="28dp"
+            android:layout_marginRight="16dp"
+            android:src="@drawable/toobar_add"
+            android:visibility="gone"
+            />
+    </LinearLayout>
+</RelativeLayout>
+
+
+
+
