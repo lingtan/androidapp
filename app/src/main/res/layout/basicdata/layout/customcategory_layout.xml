@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    tools:context=".basicdata.CustomList"
+    tools:context=".basicdata.CustomListView"
    >
 
     <include layout="@layout/customcategory_toobar" android:id="@+id/customcategory_toobar"/>

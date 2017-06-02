@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.androiderp.CustomDataClass.Custom;
+import com.example.androiderp.adaper.CommonListViewAdapter;
 import com.example.androiderp.form.CustomForm;
 import com.example.androiderp.listview.Utils;
 import com.example.androiderp.CustomDataClass.CustomCategory;
@@ -37,7 +38,7 @@ public class CustomCategoryListview extends CustomSearchBase implements View.OnC
         SlideAndDragListView.OnMenuItemClickListener, SlideAndDragListView.OnItemDeleteListener {
     private List<CommonDataStructure> listdatas = new ArrayList<CommonDataStructure>();
     private List<DataStructure> fruit = new ArrayList<DataStructure>();
-    private CommonAdapter adapter;
+    private CommonListViewAdapter adapter;
     private SlideAndDragListView<CommonDataStructure>  plistView;
     private DisplayMetrics dm;
     private List<CommonDataStructure> searchdatas= new ArrayList<CommonDataStructure>();
@@ -94,7 +95,7 @@ public class CustomCategoryListview extends CustomSearchBase implements View.OnC
                  updateLayout("10");
                  custom_toobar_m.setText(categoryid);
              }else {
-                 adapter = new CommonAdapter(CustomCategoryListview.this, R.layout.custom_item, listdatas);
+                 adapter = new CommonListViewAdapter(CustomCategoryListview.this, R.layout.custom_item, listdatas);
                  adapter.setSeclection(indexpositon);
                  plistView.setAdapter(adapter);
              }
@@ -255,7 +256,7 @@ public class CustomCategoryListview extends CustomSearchBase implements View.OnC
             {
                 index=pposition;
             }
-            adapter = new CommonAdapter(CustomCategoryListview.this, R.layout.custom_item, searchdatas);
+            adapter = new CommonListViewAdapter(CustomCategoryListview.this, R.layout.custom_item, searchdatas);
             adapter.setSeclection(index);
             plistView.setAdapter(adapter);
         }
@@ -307,7 +308,7 @@ public class CustomCategoryListview extends CustomSearchBase implements View.OnC
 
 
                     }
-                    adapter = new CommonAdapter(CustomCategoryListview.this, R.layout.custom_item, listdatas);
+                    adapter = new CommonListViewAdapter(CustomCategoryListview.this, R.layout.custom_item, listdatas);
                     adapter.setSeclection(pposition);
                     plistView.setAdapter(adapter);
 

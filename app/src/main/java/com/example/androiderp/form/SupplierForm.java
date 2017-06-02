@@ -4,40 +4,28 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Rect;
-import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.androiderp.CustomDataClass.Custom;
 import com.example.androiderp.CustomDataClass.Supplier;
 import com.example.androiderp.R;
 import com.example.androiderp.adaper.DataStructure;
-import com.example.androiderp.adaper.PopuMenuDataStructure;
-import com.example.androiderp.basicdata.CustomCategoryList;
-import com.example.androiderp.basicdata.CustomList;
-import com.example.androiderp.basicdata.SupplierCategoryList;
-import com.example.androiderp.basicdata.SupplierCategoryResult;
-import com.example.androiderp.basicdata.SupplierList;
+import com.example.androiderp.basicdata.SupplierCategoryListView;
 import com.example.androiderp.common.Common;
 
 import org.litepal.crud.DataSupport;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by lingtan on 2017/5/15.
@@ -177,7 +165,7 @@ public class SupplierForm extends AppCompatActivity implements View.OnClickListe
              break;
             case R.id.supplierform_category_layout:
 
-                Intent intent=new Intent(SupplierForm.this, SupplierCategoryResult.class);
+                Intent intent=new Intent(SupplierForm.this, SupplierCategoryListView.class);
                 intent.putExtra("action",edit);
                 intent.putExtra("index",category.getText().toString());
                 startActivityForResult(intent,1);

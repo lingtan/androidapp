@@ -18,29 +18,25 @@ package com.example.androiderp.home;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.TextView;
+
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 import com.example.androiderp.Fragment.FirstFragment;
 import com.example.androiderp.Fragment.SecondFragment;
 import com.example.androiderp.Fragment.ThressFragment;
 import com.example.androiderp.R;
-import com.example.androiderp.basicdata.CustomList;
-import com.example.androiderp.basicdata.CustomListSearch;
+import com.example.androiderp.basicdata.CustomSearchListView;
 import com.example.androiderp.custom.CustomHomeSearch;
 import com.example.androiderp.custom.CustomSearchBase;
 
@@ -63,7 +59,7 @@ public class ErpHome extends CustomSearchBase implements  BottomNavigationBar.On
     @Override
     public void iniView(){
         setContentView(R.layout.home_layout);//加载主界面
-        getWindow().setStatusBarColor(Color.TRANSPARENT);
+
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN|View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
         final Intent intent=getIntent();
         customHomeSearch=(CustomHomeSearch)findViewById(R.id.home_search);
@@ -113,7 +109,7 @@ public class ErpHome extends CustomSearchBase implements  BottomNavigationBar.On
         public void onFocusChange(View v, boolean hasFocus) {
 
             if (hasFocus) {
-            Intent    intent = new Intent(ErpHome.this, CustomListSearch.class);
+            Intent    intent = new Intent(ErpHome.this, CustomSearchListView.class);
                 startActivity(intent);
                 v.clearFocus();
             }

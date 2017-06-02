@@ -18,7 +18,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.androiderp.basicdata.CustomList;
+import com.example.androiderp.basicdata.CustomListView;
 import com.example.androiderp.common.Common;
 import com.example.androiderp.pull.XmlPullParser;
 import com.example.androiderp.CustomDataClass.User;
@@ -180,7 +180,7 @@ public class SenHome extends AppCompatActivity implements SearchView.OnQueryText
                 searchView.setQueryHint(popuMenuDatas.get(position).getName());
                 if(popuMenuDatas.get(position).getName().equals("客户管理"))
                 {
-                    Intent intent = new Intent(SenHome.this, CustomList.class);
+                    Intent intent = new Intent(SenHome.this, CustomListView.class);
                     startActivity(intent);
                 }
                 common.mPopWindow.dismiss();

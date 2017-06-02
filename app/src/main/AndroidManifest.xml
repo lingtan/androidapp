@@ -29,27 +29,21 @@
             android:launchMode="singleTop">
 
         </activity>
-        <activity android:name="com.example.androiderp.basicdata.CustomList">
-
-        </activity>
-        <activity android:name="com.example.androiderp.basicdata.CustomCategoryList">
-
-        </activity>
-        <activity android:name="com.example.androiderp.basicdata.SupplierCategoryList">
+        <activity android:name="com.example.androiderp.basicdata.CustomListView">
 
         </activity>
         <activity android:name="com.example.androiderp.basicdata.CustomCategoryListview">
 
         </activity>
-        <activity android:name="com.example.androiderp.basicdata.SupplierCategoryResult">
+        <activity android:name="com.example.androiderp.basicdata.SupplierCategoryListView">
 
         </activity>
-        <activity android:name="com.example.androiderp.basicdata.SupplierList">
+        <activity android:name="com.example.androiderp.basicdata.SupplierListView">
         </activity>
-        <activity android:name="com.example.androiderp.basicdata.CustomListView">
+        <activity android:name="com.example.androiderp.basicdata.CustomTowListView">
 
         </activity>
-        <activity android:name="com.example.androiderp.basicdata.CustomListSearch">
+        <activity android:name="com.example.androiderp.basicdata.CustomSearchListView">
 
         </activity>
         <activity android:name="com.example.androiderp.form.CustomCategoryForm">

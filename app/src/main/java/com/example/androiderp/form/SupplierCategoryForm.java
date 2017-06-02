@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
@@ -14,18 +13,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.example.androiderp.CustomDataClass.CustomCategory;
 import com.example.androiderp.CustomDataClass.SupplierCategory;
 import com.example.androiderp.R;
-import com.example.androiderp.adaper.PopuMenuDataStructure;
-import com.example.androiderp.basicdata.CustomCategoryList;
-import com.example.androiderp.basicdata.SupplierCategoryList;
-import com.example.androiderp.basicdata.SupplierCategoryResult;
-import com.example.androiderp.common.Common;
 
 import org.litepal.crud.DataSupport;
-
-import java.util.List;
 
 /**
  * Created by lingtan on 2017/5/15.

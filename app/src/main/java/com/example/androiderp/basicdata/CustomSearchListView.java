@@ -1,7 +1,6 @@
 package com.example.androiderp.basicdata;
 
 import android.content.Intent;
-import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -14,8 +13,6 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.example.androiderp.CustomDataClass.Custom;
-import com.example.androiderp.CustomDataClass.CustomCategory;
-import com.example.androiderp.CustomDataClass.User;
 import com.example.androiderp.R;
 import com.example.androiderp.adaper.CommonAdapter;
 import com.example.androiderp.adaper.CommonDataStructure;
@@ -31,7 +28,7 @@ import org.litepal.crud.DataSupport;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CustomListSearch extends CustomSearchBase implements View.OnClickListener {
+public class CustomSearchListView extends CustomSearchBase implements View.OnClickListener {
     private List<CommonDataStructure> customListDatas = new ArrayList<CommonDataStructure>();
     private List<DataStructure> fruit = new ArrayList<DataStructure>();
     private List<PopuMenuDataStructure> popuMenuDatas;
@@ -52,7 +49,7 @@ public class CustomListSearch extends CustomSearchBase implements View.OnClickLi
         toobar_search = (CustomHomeSearch) findViewById(R.id.home_custom_search);
         toobar_search.setVisibility(View.VISIBLE);
         customAllDatas= DataSupport.findAll(Custom.class);
-        intent= new Intent(CustomListSearch.this, CustomForm.class);
+        intent= new Intent(CustomSearchListView.this, CustomForm.class);
         for(Custom custom:customAllDatas)
 
         {
@@ -96,7 +93,7 @@ public class CustomListSearch extends CustomSearchBase implements View.OnClickLi
         });
         if(customListDatas.size()!=0) {
 
-                 adapter = new CommonAdapter(CustomListSearch.this, R.layout.custom_item, customListDatas);
+                 adapter = new CommonAdapter(CustomSearchListView.this, R.layout.custom_item, customListDatas);
                  listView.setAdapter(adapter);
             
         }
@@ -157,7 +154,7 @@ public class CustomListSearch extends CustomSearchBase implements View.OnClickLi
 //adapter刷新,重写Filter方式会出现BUG.
     public void updateLayout(Object[] obj) {
         if(searchDatas!=null) {
-            adapter = new CommonAdapter(CustomListSearch.this, R.layout.custom_item, searchDatas);
+            adapter = new CommonAdapter(CustomSearchListView.this, R.layout.custom_item, searchDatas);
             listView.setAdapter(adapter);
         }
     }
@@ -165,7 +162,7 @@ public class CustomListSearch extends CustomSearchBase implements View.OnClickLi
     private void showPopupWindow(final List<PopuMenuDataStructure> popuMenuData) {
         common = new Common();
 
-        common.PopupWindow(CustomListSearch.this, dm, popuMenuData);
+        common.PopupWindow(CustomSearchListView.this, dm, popuMenuData);
         common.listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
@@ -208,7 +205,7 @@ public class CustomListSearch extends CustomSearchBase implements View.OnClickLi
 
 
                     }
-                    adapter = new CommonAdapter(CustomListSearch.this, R.layout.custom_item, customListDatas);
+                    adapter = new CommonAdapter(CustomSearchListView.this, R.layout.custom_item, customListDatas);
                     listView.setAdapter(adapter);
                 }
                 break;

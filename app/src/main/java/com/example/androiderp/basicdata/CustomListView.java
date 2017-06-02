@@ -1,5 +1,4 @@
 package com.example.androiderp.basicdata;
-
 import android.content.Intent;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -10,7 +9,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
-
 import com.example.androiderp.CustomDataClass.Custom;
 import com.example.androiderp.CustomDataClass.CustomCategory;
 import com.example.androiderp.CustomDataClass.User;
@@ -23,9 +21,7 @@ import com.example.androiderp.common.Common;
 import com.example.androiderp.custom.CustomSearch;
 import com.example.androiderp.custom.CustomSearchBase;
 import com.example.androiderp.form.CustomForm;
-
 import org.litepal.crud.DataSupport;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,10 +29,8 @@ public class CustomListView extends CustomSearchBase implements View.OnClickList
     private List<CommonDataStructure> customListDatas = new ArrayList<CommonDataStructure>();
     private List<DataStructure> fruit = new ArrayList<DataStructure>();
     private List<PopuMenuDataStructure> popuMenuDatas;
-    private CommonAdapter rightAdapter;
-    private CommonAdapter leftAdapter;
-    private ListView rightListView;
-    private ListView leftListView;
+    private CommonAdapter adapter;
+    private ListView listView;
     private DisplayMetrics dm;
     private User user;
     private List<CommonDataStructure> searchDatas= new ArrayList<CommonDataStructure>();
@@ -46,13 +40,10 @@ public class CustomListView extends CustomSearchBase implements View.OnClickList
     private TextView toobar_l,toobar_r,toobar_m;
     private CustomSearch search;
     private Intent intent;
-    private List<CustomCategory> categoryAllDatas;
-    private List<CommonDataStructure> categorylistdatas = new ArrayList<CommonDataStructure>();
-    private int pposition;
 
     @Override
     public void iniView(){
-        setContentView(R.layout.custom_listview_layout);
+        setContentView(R.layout.custom_layout);
         toobar_l=(TextView)findViewById(R.id.custom_toobar_left) ;
         toobar_m=(TextView)findViewById(R.id.custom_toobar_midd);
         toobar_r=(TextView)findViewById(R.id.custom_toobar_right);
@@ -74,41 +65,14 @@ public class CustomListView extends CustomSearchBase implements View.OnClickList
 
 
         }
-        categoryAllDatas= DataSupport.findAll(CustomCategory.class);
-        CommonDataStructure commonDataAll=new CommonDataStructure();
-        commonDataAll.setName("全部产品");
-        categorylistdatas.add(commonDataAll);
-        CommonDataStructure commonDataN=new CommonDataStructure();
-        commonDataN.setName("未分类");
-        categorylistdatas.add(commonDataN);
-        for(CustomCategory custom:categoryAllDatas)
 
-        {
-            CommonDataStructure commonData=new CommonDataStructure();
-            commonData.setName(custom.getName());
-            commonData.setId(custom.getId());
-            categorylistdatas.add(commonData);
-
-        }
         //构造函数第一参数是类的对象，第二个是布局文件，第三个是数据源
-        leftListView=(ListView) findViewById(R.id.left_list);
-        leftListView.setTextFilterEnabled(true);
-        rightListView = (ListView) findViewById(R.id.right_list);
-        rightListView.setTextFilterEnabled(true);
-        leftListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                pposition=position;
-                leftAdapter.setSeclection(position);
-                leftAdapter.notifyDataSetInvalidated();
-                Object[] obj = categorySearch(categorylistdatas.get(position).getName().toString());
-                updateLayout(obj);
-            }
-        });
+        listView = (ListView) findViewById(R.id.list);
+        listView.setTextFilterEnabled(true);
         dm=new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         user=(User) getIntent().getParcelableExtra("user_data");
-        rightListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view,
@@ -131,12 +95,10 @@ public class CustomListView extends CustomSearchBase implements View.OnClickList
 
             }
         });
-        if(customListDatas.size()!=0&&categorylistdatas.size()!=0) {
-            leftAdapter = new CommonAdapter(CustomListView.this, R.layout.custom_item, categorylistdatas);
-            leftAdapter.setSeclection(0);
-            leftListView.setAdapter(leftAdapter);
-            rightAdapter = new CommonAdapter(CustomListView.this, R.layout.custom_item, customListDatas);
-            rightListView.setAdapter(rightAdapter);
+        if(customListDatas.size()!=0) {
+
+                 adapter = new CommonAdapter(CustomListView.this, R.layout.custom_item, customListDatas);
+                 listView.setAdapter(adapter);
             
         }
 
@@ -179,26 +141,16 @@ public class CustomListView extends CustomSearchBase implements View.OnClickList
         if(searchDatas!=null) {
             searchDatas.clear();
         }
-        if(name.equals("未分类"))
+        if(name.equals("全部类别"))
         {
             for (int i = 0; i < customListDatas.size(); i++) {
-               if(customListDatas.get(i).getCategory()==null)
+               if(customListDatas.get(i).getCategory()!=null)
                {
                     searchDatas.add(customListDatas.get(i));
                }
             }
 
-        }else if (name.equals("全部产品"))
-        {
-            for (int i = 0; i < customListDatas.size(); i++) {
-
-                    searchDatas.add(customListDatas.get(i));
-
-            }
-
-        }
-
-        else {
+        }else {
         for (int i = 0; i < customListDatas.size(); i++) {
               if(customListDatas.get(i).getCategory()!=null){
                 int index = customListDatas.get(i).getCategory().indexOf(name);
@@ -213,8 +165,8 @@ public class CustomListView extends CustomSearchBase implements View.OnClickList
 //adapter刷新,重写Filter方式会出现BUG.
     public void updateLayout(Object[] obj) {
         if(searchDatas!=null) {
-            rightAdapter = new CommonAdapter(CustomListView.this, R.layout.custom_item, searchDatas);
-            rightListView.setAdapter(rightAdapter);
+            adapter = new CommonAdapter(CustomListView.this, R.layout.custom_item, searchDatas);
+            listView.setAdapter(adapter);
         }
     }
 
@@ -270,8 +222,8 @@ public class CustomListView extends CustomSearchBase implements View.OnClickList
 
 
                     }
-                    rightAdapter = new CommonAdapter(CustomListView.this, R.layout.custom_item, customListDatas);
-                    rightListView.setAdapter(rightAdapter);
+                    adapter = new CommonAdapter(CustomListView.this, R.layout.custom_item, customListDatas);
+                    listView.setAdapter(adapter);
                 }
                 break;
 

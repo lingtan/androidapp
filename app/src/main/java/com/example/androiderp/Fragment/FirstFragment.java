@@ -4,21 +4,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBar;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import com.example.androiderp.R;
 import com.example.androiderp.adaper.CusteomGridAdapter;
-import com.example.androiderp.basicdata.CustomCategoryList;
 import com.example.androiderp.basicdata.CustomCategoryListview;
-import com.example.androiderp.basicdata.CustomList;
 import com.example.androiderp.basicdata.CustomListView;
+import com.example.androiderp.basicdata.CustomTowListView;
 import com.example.androiderp.custom.CustomGridView;
-import com.example.androiderp.utili.SenHome;
 
 /**
  * Created by lingtan on 2017/5/18.
@@ -46,15 +41,14 @@ public class FirstFragment extends Fragment {
                 Context context = view.getContext();
                 switch (position) {
                     case 0:
-                        intent = new Intent(context, CustomList.class);
+                        intent = new Intent(context, CustomListView.class);
                         startActivity(intent);
                         break;
                     case 1:
-                       intent = new Intent(context, CustomCategoryList.class);
-                        startActivity(intent);
+
                         break;
                     case 4:
-                        intent = new Intent(context, CustomListView.class);
+                        intent = new Intent(context, CustomTowListView.class);
                         startActivity(intent);
                         break;
                     case 5:

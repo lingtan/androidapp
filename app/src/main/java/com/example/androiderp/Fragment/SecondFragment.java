@@ -10,8 +10,8 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import com.example.androiderp.R;
-import com.example.androiderp.basicdata.CustomList;
-import com.example.androiderp.basicdata.SupplierList;
+import com.example.androiderp.basicdata.CustomListView;
+import com.example.androiderp.basicdata.SupplierListView;
 
 /**
  * Created by lingtan on 2017/5/18.
@@ -28,7 +28,7 @@ public class SecondFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Context context = v.getContext();
-                Intent intent = new Intent(context, CustomList.class);
+                Intent intent = new Intent(context, CustomListView.class);
                 startActivity(intent);
             }
         });
@@ -36,7 +36,7 @@ public class SecondFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Context context = v.getContext();
-                Intent intent = new Intent(context, SupplierList.class);
+                Intent intent = new Intent(context, SupplierListView.class);
                 startActivity(intent);
             }
         });

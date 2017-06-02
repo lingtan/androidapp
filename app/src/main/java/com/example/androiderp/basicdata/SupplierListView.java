@@ -9,8 +9,6 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.example.androiderp.CustomDataClass.Custom;
-import com.example.androiderp.CustomDataClass.CustomCategory;
 import com.example.androiderp.CustomDataClass.Supplier;
 import com.example.androiderp.R;
 import com.example.androiderp.adaper.CommonAdapter;
@@ -18,16 +16,14 @@ import com.example.androiderp.adaper.CommonDataStructure;
 import com.example.androiderp.adaper.DataStructure;
 import com.example.androiderp.custom.CustomSearch;
 import com.example.androiderp.custom.CustomSearchBase;
-import com.example.androiderp.form.CustomCategoryForm;
 import com.example.androiderp.form.SupplierForm;
-import com.example.androiderp.home.ErpHome;
 
 import org.litepal.crud.DataSupport;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SupplierList extends CustomSearchBase implements View.OnClickListener {
+public class SupplierListView extends CustomSearchBase implements View.OnClickListener {
     private List<CommonDataStructure> supplierlistdatas = new ArrayList<CommonDataStructure>();
     private List<DataStructure> fruit = new ArrayList<DataStructure>();
     private CommonAdapter adapter;
@@ -51,7 +47,7 @@ public class SupplierList extends CustomSearchBase implements View.OnClickListen
         search = (CustomSearch) findViewById(R.id.search);
         toobar_m.setCompoundDrawables(null,null,null,null);
         supplieralldatas= DataSupport.findAll(Supplier.class);
-        intent=new Intent(SupplierList.this,SupplierForm.class);
+        intent=new Intent(SupplierListView.this,SupplierForm.class);
         for(Supplier supplier:supplieralldatas)
 
         {
@@ -93,7 +89,7 @@ public class SupplierList extends CustomSearchBase implements View.OnClickListen
         });
         if(supplierlistdatas.size()!=0) {
 
-                 adapter = new CommonAdapter(SupplierList.this, R.layout.custom_item, supplierlistdatas);
+                 adapter = new CommonAdapter(SupplierListView.this, R.layout.custom_item, supplierlistdatas);
                  listView.setAdapter(adapter);
 
         }
@@ -121,7 +117,7 @@ public class SupplierList extends CustomSearchBase implements View.OnClickListen
 //adapter刷新,重写Filter方式会出现BUG.
     public void updateLayout(Object[] obj) {
         if(suppliersearchdatas!=null) {
-            adapter = new CommonAdapter(SupplierList.this, R.layout.custom_item, suppliersearchdatas);
+            adapter = new CommonAdapter(SupplierListView.this, R.layout.custom_item, suppliersearchdatas);
             listView.setAdapter(adapter);
         }
     }
@@ -132,7 +128,7 @@ public class SupplierList extends CustomSearchBase implements View.OnClickListen
         switch(v.getId())
         {
             case R.id.custom_toobar_left:
-                SupplierList.this.finish();
+                SupplierListView.this.finish();
                 break;
 
             case R.id.custom_toobar_midd:
@@ -171,7 +167,7 @@ public class SupplierList extends CustomSearchBase implements View.OnClickListen
 
 
                     }
-                    adapter = new CommonAdapter(SupplierList.this, R.layout.custom_item, supplierlistdatas);
+                    adapter = new CommonAdapter(SupplierListView.this, R.layout.custom_item, supplierlistdatas);
                     listView.setAdapter(adapter);
                 }
                 break;

@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.example.androiderp.R;
-import com.example.androiderp.basicdata.CustomList;
+import com.example.androiderp.basicdata.CustomListView;
 
 /**
  * Created by lingtan on 2017/5/18.
@@ -26,7 +26,7 @@ public class FouthFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Context context = v.getContext();
-                Intent intent = new Intent(context, CustomList.class);
+                Intent intent = new Intent(context, CustomListView.class);
                 startActivity(intent);
             }
         });
