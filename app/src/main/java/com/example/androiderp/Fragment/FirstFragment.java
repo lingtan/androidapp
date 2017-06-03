@@ -23,13 +23,13 @@ import com.example.androiderp.custom.CustomGridView;
 
 public class FirstFragment extends Fragment {
     private String[] img_text = { "商品管理", "采购新增", "销售新增", "库存查询", "客户管理", "盘点作业",
-            "经营分析", "仓库管理", "库存调拨","供应商管理","销售流水","采购流水","职员管理","账户管理"};
+            "经营分析", "仓库管理", "库存调拨","供应商管理","销售流水","采购流水","职员管理","账户管理",""};
     private int[] imgs = { R.drawable.home_firstfragment_sp, R.drawable.hoem_firstfragmnet_cg,
             R.drawable.firstfragment_xs, R.drawable.hoem_fistfragment_search,
             R.drawable.home_firstfragment_kh, R.drawable.home_fisrfragment_pd,
             R.drawable.hoem_fisrtfragment_jy, R.drawable.home_fisrtfragment_kc, R.drawable.home_fistfragment_db ,
             R.drawable.home_fisrtfragment_gy,R.drawable.home_fisrtfragment_xscx,R.drawable.home_fisrtfragment_cgcx,
-            R.drawable.home_firstfragment_zy,R.drawable.home_fisrtfragment_zh};
+            R.drawable.home_firstfragment_zy,R.drawable.home_fisrtfragment_zh,R.drawable.home_firstfragmnet_more};
     private   Intent intent;
     @Override
     public View onCreateView(LayoutInflater inflater,  ViewGroup container,  Bundle savedInstanceState) {

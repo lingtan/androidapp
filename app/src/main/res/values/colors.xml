@@ -2,19 +2,19 @@
 <resources>
     <color name="colorPrimary">#152c5e</color>
     <color name="colorPrimaryDark">#152c5e</color>
-    <color name="colorAccent">#FFA500</color>
+    <color name="colorAccent">#ffffff</color>
     <color name="border_clo">#E2E2E2</color>
     <color name="text_clo">#333</color>
     <color name="white">#fff</color>
-    <color name="window_background">#FFF5F5F5</color>
+    <color name="window_background">#ffffff</color>
     <color name="teal">#00796B</color>
     <color name="brown">#8D6E63</color>
     <color name="blue">#2196F3</color>
     <color name="grey">#607D8B</color>
     <color name="orange">#F57C00</color>
-    <color name="griditems_bg">#ffe8ecef</color>
+    <color name="griditems_bg">#ffffff</color>
     <color name="commo_text_color">#ff333333</color>
-    <color name="line">#ffd3dde6</color>
+    <color name="line">#ffffff</color>
     <color name="itemcolor">#f5f6eb</color>
     <color name="holo_green_light">#ff99cc00</color>
     <color name="holo_red_light">#ffff4444</color>

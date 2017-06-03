@@ -68,16 +68,16 @@
         <activity android:name="com.example.androiderp.form.ProductForm">
 
         </activity>
-        <activity android:name="com.example.androiderp.basicdata.UnitListView">
+        <activity android:name="com.example.androiderp.basicdata.ProductTowListView">
 
-        </activity>
+    </activity>
         <activity android:name="com.example.androiderp.basicdata.BrandListView">
 
         </activity>
-        <activity android:name="com.example.androiderp.basicdata.ProductCategoryListView">
+        <activity android:name="com.example.androiderp.basicdata.ProductCategoryListview">
 
         </activity>
-        <activity android:name="com.example.androiderp.basicdata.ProductTowListView">
+        <activity android:name="com.example.androiderp.basicdata.UnitListView">
 
         </activity>
     </application>

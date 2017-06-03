@@ -20,15 +20,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.androiderp.CustomDataClass.Product;
-import com.example.androiderp.CustomDataClass.ProductCategory;
-import com.example.androiderp.CustomDataClass.Supplier;
 import com.example.androiderp.R;
 import com.example.androiderp.adaper.DataStructure;
 import com.example.androiderp.basicdata.BrandListView;
-import com.example.androiderp.basicdata.ProductCategoryListView;
-import com.example.androiderp.basicdata.SupplierCategoryListView;
+import com.example.androiderp.basicdata.ProductCategoryListview;
 import com.example.androiderp.basicdata.UnitListView;
-import com.example.androiderp.common.Common;
 
 import org.litepal.crud.DataSupport;
 
@@ -194,7 +190,7 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
              break;
             case R.id.product_category_layout:
 
-                Intent intentcategory=new Intent(ProductForm.this, ProductCategoryListView.class);
+                Intent intentcategory=new Intent(ProductForm.this, ProductCategoryListview.class);
                 intentcategory.putExtra("index",category.getText().toString());
                 startActivityForResult(intentcategory,1);
                 break;

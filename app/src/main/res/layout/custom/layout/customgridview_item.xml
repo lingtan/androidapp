@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="0.0dip"
-    android:background="@color/griditems_bg" >
+    android:background="#ffffff" >
 
     <RelativeLayout
         android:id="@+id/customgridview_item_layout_one"

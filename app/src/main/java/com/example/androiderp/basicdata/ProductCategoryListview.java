@@ -13,13 +13,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.androiderp.CustomDataClass.Brand;
+import com.example.androiderp.CustomDataClass.ProductCategory;
 import com.example.androiderp.R;
 import com.example.androiderp.adaper.CommonDataStructure;
 import com.example.androiderp.adaper.CommonListViewAdapter;
 import com.example.androiderp.adaper.DataStructure;
 import com.example.androiderp.custom.CustomSearch;
 import com.example.androiderp.custom.CustomSearchBase;
-import com.example.androiderp.form.BrandForm;
+import com.example.androiderp.form.ProductCategoryForm;
 import com.example.androiderp.listview.Menu;
 import com.example.androiderp.listview.MenuItem;
 import com.example.androiderp.listview.SlideAndDragListView;
@@ -30,7 +31,7 @@ import org.litepal.crud.DataSupport;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BrandListView extends CustomSearchBase implements View.OnClickListener,
+public class ProductCategoryListview extends CustomSearchBase implements View.OnClickListener,
         AdapterView.OnItemClickListener,
         SlideAndDragListView.OnMenuItemClickListener, SlideAndDragListView.OnItemDeleteListener {
     private List<CommonDataStructure> listdatas = new ArrayList<CommonDataStructure>();
@@ -38,7 +39,7 @@ public class BrandListView extends CustomSearchBase implements View.OnClickListe
     private SlideAndDragListView<CommonDataStructure>  plistView;
     private DisplayMetrics dm;
     private List<CommonDataStructure> searchdatas= new ArrayList<CommonDataStructure>();
-    private List<Brand> customlist;
+    private List<ProductCategory> customlist;
     private TextView custom_toobar_l,custom_toobar_r,custom_toobar_m;
     private CustomSearch custom_search;
     private String categoryid;
@@ -54,23 +55,23 @@ public class BrandListView extends CustomSearchBase implements View.OnClickListe
         initUiAndListener();
         custom_toobar_l=(TextView)findViewById(R.id.custom_toobar_left) ;
         custom_toobar_m=(TextView)findViewById(R.id.custom_toobar_midd);
-        custom_toobar_m.setText("新增品牌");
+        custom_toobar_m.setText("新增分类");
         custom_toobar_r=(TextView)findViewById(R.id.custom_toobar_right);
         custom_toobar_l.setOnClickListener(this);
         custom_toobar_r.setOnClickListener(this);
         custom_toobar_m.setOnClickListener(this);
         custom_search = (CustomSearch) findViewById(R.id.search);
-        customlist= DataSupport.findAll(Brand.class);
+        customlist= DataSupport.findAll(ProductCategory.class);
         custom_toobar_m.setCompoundDrawables(null,null,null,null);
-        for(Brand brand:customlist)
+        for(ProductCategory productCategory:customlist)
 
-        {   if(brand.getName().equals(indexname))
+        {   if(productCategory.getName().equals(indexname))
         {
-            indexpositon =customlist.indexOf(brand);
+            indexpositon =customlist.indexOf(productCategory);
         }
             CommonDataStructure commonData=new CommonDataStructure();
-            commonData.setName(brand.getName());
-            commonData.setId(brand.getId());
+            commonData.setName(productCategory.getName());
+            commonData.setId(productCategory.getId());
             commonData.setImage(R.drawable.seclec_arrow);
             listdatas.add(commonData);
 
@@ -91,7 +92,7 @@ public class BrandListView extends CustomSearchBase implements View.OnClickListe
                  updateLayout("10");
                  custom_toobar_m.setText(categoryid);
              }else {
-                 adapter = new CommonListViewAdapter(BrandListView.this, R.layout.custom_item, listdatas);
+                 adapter = new CommonListViewAdapter(ProductCategoryListview.this, R.layout.custom_item, listdatas);
                  adapter.setSeclection(indexpositon);
                  plistView.setAdapter(adapter);
              }
@@ -134,7 +135,7 @@ public class BrandListView extends CustomSearchBase implements View.OnClickListe
             case MenuItem.DIRECTION_RIGHT:
                 switch (buttonPosition) {
                     case 0:
-                        Intent intent=new Intent(BrandListView.this,BrandForm.class);
+                        Intent intent=new Intent(ProductCategoryListview.this,ProductCategoryForm.class);
                         if(searchdatas.size()!=0) {
 
                             intent.putExtra("action", "edit");
@@ -151,16 +152,16 @@ public class BrandListView extends CustomSearchBase implements View.OnClickListe
 
                         return Menu.ITEM_NOTHING;
                     case 1:
-                        AlertDialog.Builder dialog=new AlertDialog.Builder(BrandListView.this);
+                        AlertDialog.Builder dialog=new AlertDialog.Builder(ProductCategoryListview.this);
                         dialog.setTitle("提示");
-                        dialog.setMessage("您确认要删除该品牌？");
+                        dialog.setMessage("您确认要删除该分类？");
                         dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 DataStructure.deleteAll(Brand.class,"name = ?",listdatas.get(itemPosition - plistView.getHeaderViewsCount()).getName().toString());
 
-                                AlertDialog.Builder dialogOK=new AlertDialog.Builder(BrandListView.this);
-                                dialogOK.setMessage("该品牌已经删除");
+                                AlertDialog.Builder dialogOK=new AlertDialog.Builder(ProductCategoryListview.this);
+                                dialogOK.setMessage("该分类已经删除");
                                 dialogOK.setNegativeButton("确认", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
@@ -197,7 +198,7 @@ public class BrandListView extends CustomSearchBase implements View.OnClickListe
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
 
-        Intent intent=new Intent(BrandListView.this,BrandForm.class);
+        Intent intent=new Intent(ProductCategoryListview.this,ProductCategoryForm.class);
         if(searchdatas.size()!=0) {
 
             intent.putExtra("action", "edit");
@@ -268,7 +269,7 @@ public class BrandListView extends CustomSearchBase implements View.OnClickListe
             {
                 index=pposition;
             }
-            adapter = new CommonListViewAdapter(BrandListView.this, R.layout.custom_item, searchdatas);
+            adapter = new CommonListViewAdapter(ProductCategoryListview.this, R.layout.custom_item, searchdatas);
             adapter.setSeclection(index);
             plistView.setAdapter(adapter);
         }
@@ -280,7 +281,7 @@ public class BrandListView extends CustomSearchBase implements View.OnClickListe
         switch(v.getId())
         {
             case R.id.custom_toobar_left:
-                BrandListView.this.finish();
+                ProductCategoryListview.this.finish();
                 break;
 
             case R.id.custom_toobar_midd:
@@ -289,7 +290,7 @@ public class BrandListView extends CustomSearchBase implements View.OnClickListe
                 break;
 
             case R.id.custom_toobar_right:
-                Intent cate = new Intent(BrandListView.this, BrandForm.class);
+                Intent cate = new Intent(ProductCategoryListview.this, ProductCategoryForm.class);
                 cate.putExtra("action","add");
                 startActivity(cate);
                 break;
@@ -307,20 +308,20 @@ public class BrandListView extends CustomSearchBase implements View.OnClickListe
                     if(listdatas.size()!=0) {
                         listdatas.clear();
                     }
-                    customlist= DataSupport.findAll(Brand.class);
-                    for(Brand brand:customlist)
+                    customlist= DataSupport.findAll(ProductCategory.class);
+                    for(ProductCategory category:customlist)
 
                     {
                         CommonDataStructure commonData=new CommonDataStructure();
-                        commonData.setName(brand.getName());
-                        commonData.setId(brand.getId());
+                        commonData.setName(category.getName());
+                        commonData.setId(category.getId());
                         commonData.setImage(R.drawable.seclec_arrow);
                         listdatas.add(commonData);
 
 
 
                     }
-                    adapter = new CommonListViewAdapter(BrandListView.this, R.layout.custom_item, listdatas);
+                    adapter = new CommonListViewAdapter(ProductCategoryListview.this, R.layout.custom_item, listdatas);
                     adapter.setSeclection(pposition);
                     plistView.setAdapter(adapter);
 
