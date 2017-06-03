@@ -59,10 +59,6 @@ public class FirstFragment extends Fragment {
                         startActivity(intent);
                         break;
                     case 6:
-                        intent = new Intent(context, UnitListView.class);
-                        startActivity(intent);
-                        break;
-                    case 7:
                         intent = new Intent(context, CustomListView.class);
                         startActivity(intent);
                         break;

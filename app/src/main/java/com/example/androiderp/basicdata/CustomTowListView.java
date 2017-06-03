@@ -138,7 +138,7 @@ public class CustomTowListView extends CustomSearchBase implements View.OnClickL
             rightAdapter = new CommonAdapter(CustomTowListView.this, R.layout.custom_item, customListDatas);
             rightListView.setAdapter(rightAdapter);
             
-       
+
 
         search.addTextChangedListener(textWatcher);
 

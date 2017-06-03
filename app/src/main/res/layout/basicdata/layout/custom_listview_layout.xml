@@ -32,7 +32,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="0.75">
+        android:layout_weight="0.78">
     <ListView
         android:layout_marginTop="100dp"
         android:id="@+id/left_list"
@@ -46,7 +46,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="0.25">
+        android:layout_weight="0.22">
         <ListView
             android:layout_marginTop="100dp"
             android:id="@+id/right_list"
