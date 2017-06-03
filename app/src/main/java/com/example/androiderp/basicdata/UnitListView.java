@@ -23,6 +23,7 @@ import com.example.androiderp.custom.CustomSearch;
 import com.example.androiderp.custom.CustomSearchBase;
 import com.example.androiderp.form.SupplierCategoryForm;
 import com.example.androiderp.form.SupplierForm;
+import com.example.androiderp.form.UnitForm;
 
 import org.litepal.crud.DataSupport;
 
@@ -103,7 +104,7 @@ public class UnitListView extends CustomSearchBase implements View.OnClickListen
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view,
                                     int position, long id) {
-                Intent intent=new Intent(UnitListView.this,SupplierForm.class);
+                Intent intent=new Intent();
                         if(searchdatas.size()!=0) {
 
                             intent.putExtra("data_return", searchdatas.get(position).getName());
@@ -207,7 +208,7 @@ public class UnitListView extends CustomSearchBase implements View.OnClickListen
         switch(v.getId())
         {
             case R.id.custom_toobar_left:
-                Intent cate = new Intent(UnitListView.this, SupplierCategoryForm.class);
+                Intent cate = new Intent(UnitListView.this, UnitForm.class);
                 cate.putExtra("action","add");
                 startActivityForResult(cate,2);
 

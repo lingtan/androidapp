@@ -13,6 +13,7 @@ import com.example.androiderp.adaper.CusteomGridAdapter;
 import com.example.androiderp.basicdata.CustomCategoryListview;
 import com.example.androiderp.basicdata.CustomListView;
 import com.example.androiderp.basicdata.CustomTowListView;
+import com.example.androiderp.basicdata.ProductTowListView;
 import com.example.androiderp.basicdata.UnitListView;
 import com.example.androiderp.custom.CustomGridView;
 
@@ -42,7 +43,7 @@ public class FirstFragment extends Fragment {
                 Context context = view.getContext();
                 switch (position) {
                     case 0:
-                        intent = new Intent(context, CustomListView.class);
+                        intent = new Intent(context, ProductTowListView.class);
                         startActivity(intent);
                         break;
                     case 1:
@@ -59,6 +60,10 @@ public class FirstFragment extends Fragment {
                         break;
                     case 6:
                         intent = new Intent(context, UnitListView.class);
+                        startActivity(intent);
+                        break;
+                    case 7:
+                        intent = new Intent(context, CustomListView.class);
                         startActivity(intent);
                         break;
                     default:

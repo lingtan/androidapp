@@ -52,14 +52,32 @@
         <activity android:name="com.example.androiderp.form.SupplierCategoryForm">
 
         </activity>
+        <activity android:name="com.example.androiderp.form.ProductCategoryForm">
+
+        </activity>
+        <activity android:name="com.example.androiderp.form.BrandForm">
+
+        </activity>
+        <activity android:name="com.example.androiderp.form.UnitForm">
+
+        </activity>
 
         <activity android:name="com.example.androiderp.form.SupplierForm">
+
+        </activity>
+        <activity android:name="com.example.androiderp.form.ProductForm">
 
         </activity>
         <activity android:name="com.example.androiderp.basicdata.UnitListView">
 
         </activity>
         <activity android:name="com.example.androiderp.basicdata.BrandListView">
+
+        </activity>
+        <activity android:name="com.example.androiderp.basicdata.ProductCategoryListView">
+
+        </activity>
+        <activity android:name="com.example.androiderp.basicdata.ProductTowListView">
 
         </activity>
     </application>
