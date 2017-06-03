@@ -230,13 +230,13 @@ public class ProductTowListView extends CustomSearchBase implements View.OnClick
             public void onItemClick(AdapterView<?> adapterView, View view,
                                     int position, long id) {
 
-                if(popuMenuDatas.get(position).getName().equals("客户新增"))
+                if(popuMenuDatas.get(position).getName().equals("商品新增"))
                 {
-                    intent.removeExtra("custom_item");
+                    intent.removeExtra("product_item");
                     intent.putExtra("action","add");
                     startActivityForResult(intent,1);
                 }
-                else if(popuMenuDatas.get(position).getName().equals("客户修改")){
+                else if(popuMenuDatas.get(position).getName().equals("商品修改")){
 
                 }else
                 {
@@ -301,10 +301,11 @@ public class ProductTowListView extends CustomSearchBase implements View.OnClick
             case R.id.custom_toobar_right:
                 if( common.mPopWindow==null ||!common.mPopWindow.isShowing())
                 {   popuMenuDatas.clear();
-                    PopuMenuDataStructure popuMenua = new PopuMenuDataStructure(R.drawable.poppu_wrie, "客户修改");
-                    popuMenuDatas.add(popuMenua);
-                    PopuMenuDataStructure popuMenub = new PopuMenuDataStructure(R.drawable.poppu_wrie, "客户新增");
+
+                    PopuMenuDataStructure popuMenub = new PopuMenuDataStructure(R.drawable.poppu_wrie, "商品新增");
                     popuMenuDatas.add(popuMenub);
+                    PopuMenuDataStructure popuMenua = new PopuMenuDataStructure(R.drawable.poppu_wrie, "商品修改");
+                    popuMenuDatas.add(popuMenua);
                     int xPos = dm.widthPixels / 3;
                     showPopupWindow(popuMenuDatas);
                     common.mPopWindow.showAsDropDown(v,0,5);

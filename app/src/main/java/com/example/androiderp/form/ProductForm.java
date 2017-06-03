@@ -114,9 +114,9 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
         }
         if(edit!=null) {
             if (edit.equals("edit")) {
-                toobar_tile.setText("供应商修改");
+                toobar_tile.setText("商品修改");
             } else {
-                toobar_tile.setText("供应商新增");
+                toobar_tile.setText("商品新增");
             }
         }
     }
@@ -215,14 +215,14 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
             case R.id.loginbutton:
                 AlertDialog.Builder dialog=new AlertDialog.Builder(ProductForm.this);
                 dialog.setTitle("提示");
-                dialog.setMessage("您确认要删除该客户？");
+                dialog.setMessage("您确认要删除该商品？");
                 dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         DataStructure.deleteAll(Product.class,"name = ?",name.getText().toString());
 
                         AlertDialog.Builder dialogOK=new AlertDialog.Builder(ProductForm.this);
-                        dialogOK.setMessage("该客户已经删除");
+                        dialogOK.setMessage("该商品已经删除");
                         dialogOK.setNegativeButton("确认", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
