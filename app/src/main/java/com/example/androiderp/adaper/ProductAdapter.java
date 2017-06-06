@@ -88,10 +88,10 @@ public class ProductAdapter extends ArrayAdapter<Product>   {
             //itemLayout.setBackgroundColor(Color.parseColor("#ffffff"));
         }
         // 重新获取ViewHolder
-        viewHolder.name.setText(data.get(position).getName());
+        viewHolder.name.setText(data.get(position).getName().toString());
         viewHolder.number.setText(data.get(position).getNumber());
         viewHolder.model.setText(data.get(position).getModel());
-        viewHolder.salesprice.setText(data.get(position).getSalesprice());
+        viewHolder.salesprice.setText("¥"+data.get(position).getSalesprice().toString());
         viewHolder.image.setImageResource(data.get(position).getImage());
 
 

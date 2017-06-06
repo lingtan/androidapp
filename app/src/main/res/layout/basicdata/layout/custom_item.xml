@@ -9,7 +9,7 @@ android:padding="5dip">
     <LinearLayout
         android:id="@+id/custom_item_layout_one"
         android:layout_width="match_parent"
-        android:layout_height="25dp"
+        android:layout_height="28dp"
         android:layout_alignParentLeft="true"
         android:orientation="vertical"
         android:gravity="center">
@@ -19,7 +19,7 @@ android:padding="5dip">
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:textColor="#343434"
-        android:textSize="14dip" />
+        android:textSize="12dip" />
 
     </LinearLayout>
     <LinearLayout
