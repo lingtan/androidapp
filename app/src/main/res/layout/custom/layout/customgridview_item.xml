@@ -12,7 +12,7 @@
         android:layout_height="match_parent"
         android:layout_centerInParent="true"
         android:background="@drawable/bg_gv"
-        android:padding="30.0dip" >
+        android:padding="22.0dip" >
 
         <ImageView
             android:id="@+id/customgridview_item_layout_one_image"

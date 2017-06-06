@@ -78,7 +78,6 @@ private  void formInit()
                     } else {
                         custom = new ProductCategory();
                         custom.setName(username.getText().toString());
-
                         custom.save();
                         Intent intent = new Intent();
                         setResult(RESULT_OK,intent);

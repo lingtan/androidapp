@@ -4,6 +4,7 @@
     android:id="@+id/custom_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:focusable="true"
     android:focusableInTouchMode="true"
     tools:context=".basicdata.CustomListView"
@@ -34,21 +35,22 @@
         android:layout_height="match_parent"
         android:layout_weight="0.75">
     <ListView
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="97dp"
         android:id="@+id/left_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:divider="#c9cabb"
         android:dividerHeight="1px"
-        android:background="#f5f6eb">
+      >
     </ListView>
     </LinearLayout>
+        <View style="@style/bg_line_tow" android:layout_marginTop="97dp"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="0.25">
         <ListView
-            android:layout_marginTop="100dp"
+            android:layout_marginTop="97dp"
             android:id="@+id/right_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -56,6 +58,27 @@
             android:dividerHeight="1px" >
         </ListView>
     </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:background="#ffffff"
+        android:gravity="center_vertical"
+        android:layout_alignParentBottom="true"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="产品总数："
+            android:textColor="#343434"
+            android:layout_marginLeft="15dp"
+            android:textSize="12dip" />
+        <TextView
+            android:id="@+id/product_item_layout_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/holo_red_light"
+            android:textSize="14dip" />
     </LinearLayout>
 </RelativeLayout>
 

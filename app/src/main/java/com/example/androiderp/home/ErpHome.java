@@ -30,6 +30,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
+import com.ashokvarma.bottomnavigation.BadgeItem;
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 import com.example.androiderp.Fragment.FirstFragment;
@@ -54,6 +55,7 @@ public class ErpHome extends CustomSearchBase implements  BottomNavigationBar.On
     private String edit;
     private CustomHomeSearch customHomeSearch;
     private InputMethodManager manager;
+    private BadgeItem  badgeItem;
 
 
     @Override
@@ -73,6 +75,10 @@ public class ErpHome extends CustomSearchBase implements  BottomNavigationBar.On
         ab.setHomeAsUpIndicator(R.drawable.home_toobar_menu);//设置主页按钮
         ab.setDisplayHomeAsUpEnabled(true);//显示主页按钮
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);//加载滑动布置
+        badgeItem = new BadgeItem()
+                .setBorderWidth(4)
+                .setBackgroundColorResource(R.color.holo_red_light)
+                .setText("0");
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);//加载导向内容
         if (navigationView != null) {
             setupDrawerContent(navigationView);
@@ -127,13 +133,14 @@ public class ErpHome extends CustomSearchBase implements  BottomNavigationBar.On
                 .setBackgroundStyle(BottomNavigationBar.BACKGROUND_STYLE_STATIC);
         bottomNavigationBar
                 .addItem(new BottomNavigationItem(R.drawable.home, "主页").setActiveColorResource(R.color.colorPrimaryDark))
-                .addItem(new BottomNavigationItem(R.drawable.purchase, "采购").setActiveColorResource(R.color.colorPrimaryDark))
+                .addItem(new BottomNavigationItem(R.drawable.purchase, "采购").setActiveColorResource(R.color.colorPrimaryDark).setBadgeItem(badgeItem))
                 .addItem(new BottomNavigationItem(R.drawable.home_sales, "销售").setActiveColorResource(R.color.colorPrimaryDark))
                 .addItem(new BottomNavigationItem(R.drawable.hoem_stock, "库存").setActiveColorResource(R.color.colorPrimaryDark))
                 .addItem(new BottomNavigationItem(R.drawable.home_report, "报表").setActiveColorResource(R.color.colorPrimaryDark))
                 .setFirstSelectedPosition(lastSelectedPosition)
-                .setInActiveColor(R.color.brown)
+                .setInActiveColor(R.color.colorPrimaryDark)
                 .initialise();
+
 
     }
 
@@ -147,6 +154,9 @@ public class ErpHome extends CustomSearchBase implements  BottomNavigationBar.On
                 transaction.replace(R.id.tab,new FirstFragment());
                 transaction.commit();
                 ab.setDisplayHomeAsUpEnabled(true);
+                if (badgeItem != null) {
+                    badgeItem.setText(Integer.toString(position));
+                }
                  showEditMenu();
                 break;
             case 1:
@@ -154,6 +164,9 @@ public class ErpHome extends CustomSearchBase implements  BottomNavigationBar.On
                 fragmentManager=getSupportFragmentManager();
                 transaction=fragmentManager.beginTransaction();
                 transaction.replace(R.id.tab,new SecondFragment());
+                if (badgeItem != null) {
+                    badgeItem.setText(Integer.toString(position));
+                }
                 transaction.commit();
                 ab.setDisplayHomeAsUpEnabled(false);
                 hiddenEditMenu();
@@ -163,15 +176,22 @@ public class ErpHome extends CustomSearchBase implements  BottomNavigationBar.On
                 fragmentManager=getSupportFragmentManager();
                 transaction=fragmentManager.beginTransaction();
                 transaction.replace(R.id.tab,new ThressFragment());
+                if (badgeItem != null) {
+                    badgeItem.setText(Integer.toString(position));
+                }
                 transaction.commit();
                 ab.setDisplayHomeAsUpEnabled(false);
                 hiddenEditMenu();
                 break;
             case 3:
-
+                if (badgeItem != null) {
+                    badgeItem.setText(Integer.toString(position));
+                }
                 break;
             case 4:
-
+                if (badgeItem != null) {
+                    badgeItem.setText(Integer.toString(position));
+                }
                 break;
             default:
                 break;

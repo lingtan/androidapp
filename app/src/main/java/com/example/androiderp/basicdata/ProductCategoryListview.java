@@ -61,6 +61,9 @@ public class ProductCategoryListview extends CustomSearchBase implements View.On
         custom_toobar_r.setOnClickListener(this);
         custom_toobar_m.setOnClickListener(this);
         custom_search = (CustomSearch) findViewById(R.id.search);
+        Intent intent=getIntent();
+        categoryid=intent.getStringExtra("category");
+        indexname=intent.getStringExtra("index");
         customlist= DataSupport.findAll(ProductCategory.class);
         custom_toobar_m.setCompoundDrawables(null,null,null,null);
         for(ProductCategory productCategory:customlist)
@@ -69,6 +72,7 @@ public class ProductCategoryListview extends CustomSearchBase implements View.On
         {
             indexpositon =customlist.indexOf(productCategory);
         }
+
             CommonDataStructure commonData=new CommonDataStructure();
             commonData.setName(productCategory.getName());
             commonData.setId(productCategory.getId());
@@ -78,14 +82,16 @@ public class ProductCategoryListview extends CustomSearchBase implements View.On
 
 
         }
-        pposition=indexpositon;
+        if(indexname.isEmpty())
+        {
+            indexpositon=-1;
+        }else {
+            pposition = indexpositon;
+        }
 
         //构造函数第一参数是类的对象，第二个是布局文件，第三个是数据源
         dm=new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
-
-        Intent intent=getIntent();
-        categoryid=intent.getStringExtra("category");
         if(listdatas.size()!=0) {
              if(categoryid!=null) {
                  Object[] obj = searchCategory(categoryid);
@@ -158,14 +164,19 @@ public class ProductCategoryListview extends CustomSearchBase implements View.On
                         dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                DataStructure.deleteAll(Brand.class,"name = ?",listdatas.get(itemPosition - plistView.getHeaderViewsCount()).getName().toString());
+                                DataStructure.deleteAll(ProductCategory.class,"name = ?",listdatas.get(itemPosition - plistView.getHeaderViewsCount()).getName().toString());
 
                                 AlertDialog.Builder dialogOK=new AlertDialog.Builder(ProductCategoryListview.this);
                                 dialogOK.setMessage("该分类已经删除");
                                 dialogOK.setNegativeButton("确认", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
+                                        if(indexpositon==itemPosition)
+                                        {
+                                            indexpositon=-1;
+                                        }
                                         listdatas.remove(itemPosition - plistView.getHeaderViewsCount());
+                                        adapter.setSeclection(indexpositon);
                                         adapter.notifyDataSetChanged();
                                     }
                                 });
@@ -292,7 +303,7 @@ public class ProductCategoryListview extends CustomSearchBase implements View.On
             case R.id.custom_toobar_right:
                 Intent cate = new Intent(ProductCategoryListview.this, ProductCategoryForm.class);
                 cate.putExtra("action","add");
-                startActivity(cate);
+                startActivityForResult(cate,1);
                 break;
 
 

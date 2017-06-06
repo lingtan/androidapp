@@ -18,6 +18,7 @@ public class Product extends DataSupport {
     private String category;
     private String brand;
     private String unit;
+    private int image;
 
     public int getId() {
         return id;
@@ -105,5 +106,13 @@ public class Product extends DataSupport {
 
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    public int getImage() {
+        return image;
+    }
+
+    public void setImage(int image) {
+        this.image = image;
     }
 }

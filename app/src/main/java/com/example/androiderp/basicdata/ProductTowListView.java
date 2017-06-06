@@ -1,55 +1,38 @@
 package com.example.androiderp.basicdata;
-
 import android.content.Intent;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
-
-import com.example.androiderp.CustomDataClass.Custom;
-import com.example.androiderp.CustomDataClass.CustomCategory;
 import com.example.androiderp.CustomDataClass.Product;
 import com.example.androiderp.CustomDataClass.ProductCategory;
-import com.example.androiderp.CustomDataClass.User;
 import com.example.androiderp.R;
 import com.example.androiderp.adaper.CommonAdapter;
 import com.example.androiderp.adaper.CommonDataStructure;
-import com.example.androiderp.adaper.DataStructure;
-import com.example.androiderp.adaper.PopuMenuDataStructure;
-import com.example.androiderp.common.Common;
+import com.example.androiderp.adaper.ProductAdapter;
 import com.example.androiderp.custom.CustomSearch;
 import com.example.androiderp.custom.CustomSearchBase;
-import com.example.androiderp.form.CustomForm;
 import com.example.androiderp.form.ProductForm;
-
 import org.litepal.crud.DataSupport;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class ProductTowListView extends CustomSearchBase implements View.OnClickListener {
-    private List<CommonDataStructure> customListDatas = new ArrayList<CommonDataStructure>();
-    private List<PopuMenuDataStructure> popuMenuDatas;
-    private CommonAdapter rightAdapter;
+    private ProductAdapter rightAdapter;
     private CommonAdapter leftAdapter;
     private ListView rightListView;
     private ListView leftListView;
     private DisplayMetrics dm;
-    private List<CommonDataStructure> searchDatas= new ArrayList<CommonDataStructure>();
+    private List<Product> searchDatas= new ArrayList<Product>();
     private List<Product> customAllDatas;
-    private List<ProductCategory> categoryDatas;
-    private Common common;
-    private TextView toobar_l,toobar_r,toobar_m;
+    private TextView toobar_l,toobar_r,toobar_m,bottoncount;
     private CustomSearch search;
     private Intent intent;
     private List<ProductCategory> categoryAllDatas;
     private List<CommonDataStructure> categorylistdatas = new ArrayList<CommonDataStructure>();
-    private int pposition;
 
     @Override
     public void iniView(){
@@ -63,20 +46,9 @@ public class ProductTowListView extends CustomSearchBase implements View.OnClick
         toobar_r.setOnClickListener(this);
         toobar_m.setOnClickListener(this);
         search = (CustomSearch) findViewById(R.id.search);
+        bottoncount=(TextView)findViewById(R.id.product_item_layout_count) ;
         customAllDatas= DataSupport.findAll(Product.class);
         intent= new Intent(ProductTowListView.this, ProductForm.class);
-        for(Product product:customAllDatas)
-
-        {
-            CommonDataStructure commonData=new CommonDataStructure();
-            commonData.setName(product.getName());
-            commonData.setCategory(product.getCategory());
-            commonData.setId(product.getId());
-            customListDatas.add(commonData);
-
-
-
-        }
         categoryAllDatas= DataSupport.findAll(ProductCategory.class);
         CommonDataStructure commonDataAll=new CommonDataStructure();
         commonDataAll.setName("全部产品");
@@ -93,6 +65,7 @@ public class ProductTowListView extends CustomSearchBase implements View.OnClick
             categorylistdatas.add(commonData);
 
         }
+        bottoncount.setText(String.valueOf(customAllDatas.size()));
         //构造函数第一参数是类的对象，第二个是布局文件，第三个是数据源
         leftListView=(ListView) findViewById(R.id.left_list);
         leftListView.setTextFilterEnabled(true);
@@ -101,7 +74,6 @@ public class ProductTowListView extends CustomSearchBase implements View.OnClick
         leftListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                pposition=position;
                 leftAdapter.setSeclection(position);
                 leftAdapter.notifyDataSetInvalidated();
                 Object[] obj = categorySearch(categorylistdatas.get(position).getName().toString());
@@ -125,7 +97,7 @@ public class ProductTowListView extends CustomSearchBase implements View.OnClick
                         }else {
 
                             intent.putExtra("action", "edit");
-                            intent.putExtra("product_item", String.valueOf(customListDatas.get(position).getId()));
+                            intent.putExtra("product_item", String.valueOf(customAllDatas.get(position).getId()));
 
                         }
                 startActivityForResult(intent,1);
@@ -137,19 +109,13 @@ public class ProductTowListView extends CustomSearchBase implements View.OnClick
             leftAdapter = new CommonAdapter(ProductTowListView.this, R.layout.custom_item, categorylistdatas);
             leftAdapter.setSeclection(0);
             leftListView.setAdapter(leftAdapter);
-            rightAdapter = new CommonAdapter(ProductTowListView.this, R.layout.custom_item, customListDatas);
+            rightAdapter = new ProductAdapter(ProductTowListView.this, R.layout.product_item, customAllDatas);
             rightListView.setAdapter(rightAdapter);
             
 
 
         search.addTextChangedListener(textWatcher);
 
-        popuMenuDatas = new ArrayList<PopuMenuDataStructure>();
-        PopuMenuDataStructure popuMenua = new PopuMenuDataStructure(android.R.drawable.ic_menu_edit, "美的");
-        popuMenuDatas.add(popuMenua);
-        PopuMenuDataStructure popuMenub = new PopuMenuDataStructure(android.R.drawable.ic_menu_edit, "松下");
-        popuMenuDatas.add(popuMenub);
-        showPopupWindow(popuMenuDatas);
 
     }
 
@@ -158,19 +124,12 @@ public class ProductTowListView extends CustomSearchBase implements View.OnClick
         if(searchDatas!=null) {
             searchDatas.clear();
         }
-        for (int i = 0; i < customListDatas.size(); i++) {
-            int index = customListDatas.get(i).getName().indexOf(name);
-            int indey;
-            if(toobar_m.getText().toString().equals("全部类别"))
-            {
-                indey=0;
-            }else {
-                indey = customListDatas.get(i).getCategory().indexOf(toobar_m.getText().toString());
+        for (int i = 0; i < customAllDatas.size(); i++) {
+            int index = customAllDatas.get(i).getName().indexOf(name);
 
-            }
             // 存在匹配的数据
-            if (index != -1&&indey!=-1) {
-                searchDatas.add(customListDatas.get(i));
+            if (index != -1) {
+                searchDatas.add(customAllDatas.get(i));
             }
         }
         return searchDatas.toArray();
@@ -183,30 +142,30 @@ public class ProductTowListView extends CustomSearchBase implements View.OnClick
         }
         if(name.equals("未分类"))
         {
-            for (int i = 0; i < customListDatas.size(); i++) {
-               if(customListDatas.get(i).getCategory()==null)
+            for (int i = 0; i < customAllDatas.size(); i++) {
+               if(customAllDatas.get(i).getCategory()==null)
                {
-                    searchDatas.add(customListDatas.get(i));
+                    searchDatas.add(customAllDatas.get(i));
                }
             }
 
         }else if (name.equals("全部产品"))
         {
-            for (int i = 0; i < customListDatas.size(); i++) {
+            for (int i = 0; i < customAllDatas.size(); i++) {
 
-                    searchDatas.add(customListDatas.get(i));
+                    searchDatas.add(customAllDatas.get(i));
 
             }
 
         }
 
         else {
-        for (int i = 0; i < customListDatas.size(); i++) {
-              if(customListDatas.get(i).getCategory()!=null){
-                int index = customListDatas.get(i).getCategory().indexOf(name);
+        for (int i = 0; i < customAllDatas.size(); i++) {
+              if(customAllDatas.get(i).getCategory()!=null){
+                int index = customAllDatas.get(i).getCategory().indexOf(name);
                 // 存在匹配的数据
                 if (index != -1) {
-                    searchDatas.add(customListDatas.get(i));
+                    searchDatas.add(customAllDatas.get(i));
                 }
             }
         }}
@@ -215,36 +174,9 @@ public class ProductTowListView extends CustomSearchBase implements View.OnClick
 //adapter刷新,重写Filter方式会出现BUG.
     public void updateLayout(Object[] obj) {
         if(searchDatas!=null) {
-            rightAdapter = new CommonAdapter(ProductTowListView.this, R.layout.custom_item, searchDatas);
+            rightAdapter = new ProductAdapter(ProductTowListView.this, R.layout.product_item, searchDatas);
             rightListView.setAdapter(rightAdapter);
         }
-    }
-
-    private void showPopupWindow(final List<PopuMenuDataStructure> popuMenuData) {
-        common = new Common();
-
-        common.PopupWindow(ProductTowListView.this, dm, popuMenuData);
-        common.listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view,
-                                    int position, long id) {
-
-                if(popuMenuDatas.get(position).getName().equals("商品新增"))
-                {
-                    intent.removeExtra("product_item");
-                    intent.putExtra("action","add");
-                    startActivityForResult(intent,1);
-                }
-                else if(popuMenuDatas.get(position).getName().equals("商品修改")){
-
-                }else
-                {
-
-                }
-                common.mPopWindow.dismiss();
-            }
-        });
     }
 
     @Override
@@ -253,24 +185,39 @@ public class ProductTowListView extends CustomSearchBase implements View.OnClick
             case 1:
                 if(resultCode==RESULT_OK)
                 {
-                    if(customListDatas.size()!=0) {
-                        customListDatas.clear();
+                    if(customAllDatas.size()!=0) {
+                        customAllDatas.clear();
                     }
                     customAllDatas= DataSupport.findAll(Product.class);
-                    for(Product category:customAllDatas)
+
+                    rightAdapter = new ProductAdapter(ProductTowListView.this, R.layout.product_item, customAllDatas);
+                    rightListView.setAdapter(rightAdapter);
+
+                    if(categorylistdatas.size()!=0)
+                    {
+                        categorylistdatas.clear();
+                    }
+                    categoryAllDatas= DataSupport.findAll(ProductCategory.class);
+                    CommonDataStructure commonDataAll=new CommonDataStructure();
+                    commonDataAll.setName("全部产品");
+                    categorylistdatas.add(commonDataAll);
+                    CommonDataStructure commonDataN=new CommonDataStructure();
+                    commonDataN.setName("未分类");
+                    categorylistdatas.add(commonDataN);
+                    for(ProductCategory productCategory:categoryAllDatas)
 
                     {
                         CommonDataStructure commonData=new CommonDataStructure();
-                        commonData.setName(category.getName());
-                        commonData.setCategory(category.getCategory());
-                        commonData.setId(category.getId());
-                        customListDatas.add(commonData);
-
-
+                        commonData.setName(productCategory.getName());
+                        commonData.setId(productCategory.getId());
+                        categorylistdatas.add(commonData);
 
                     }
-                    rightAdapter = new CommonAdapter(ProductTowListView.this, R.layout.custom_item, customListDatas);
-                    rightListView.setAdapter(rightAdapter);
+
+                    leftAdapter = new CommonAdapter(ProductTowListView.this, R.layout.custom_item, categorylistdatas);
+                    leftAdapter.setSeclection(0);
+                    leftListView.setAdapter(leftAdapter);
+                    bottoncount.setText(String.valueOf(customAllDatas.size()));
                 }
                 break;
 
@@ -278,17 +225,6 @@ public class ProductTowListView extends CustomSearchBase implements View.OnClick
                 }
         }
 
-
-    public boolean onKey(View v, int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_MENU && event.getRepeatCount() == 0
-                && event.getAction() == KeyEvent.ACTION_DOWN) {
-            if (common.mPopWindow != null && common.mPopWindow.isShowing()) {
-                common.mPopWindow.dismiss();
-            }
-            return true;
-        }
-        return false;
-    }
 
     @Override
     public void onClick(View v) {
@@ -299,21 +235,10 @@ public class ProductTowListView extends CustomSearchBase implements View.OnClick
                 break;
 
             case R.id.custom_toobar_right:
-                if( common.mPopWindow==null ||!common.mPopWindow.isShowing())
-                {   popuMenuDatas.clear();
 
-                    PopuMenuDataStructure popuMenub = new PopuMenuDataStructure(R.drawable.poppu_wrie, "商品新增");
-                    popuMenuDatas.add(popuMenub);
-                    PopuMenuDataStructure popuMenua = new PopuMenuDataStructure(R.drawable.poppu_wrie, "商品修改");
-                    popuMenuDatas.add(popuMenua);
-                    int xPos = dm.widthPixels / 3;
-                    showPopupWindow(popuMenuDatas);
-                    common.mPopWindow.showAsDropDown(v,0,5);
-                    //mPopWindow.showAtLocation(findViewById(R.id.main), Gravity.BOTTOM, 0, 0);//从底部弹出
-                }
-                else {
-                    common.mPopWindow.dismiss();
-                }
+                intent.removeExtra("product_item");
+                intent.putExtra("action","add");
+                startActivityForResult(intent,1);
                 break;
 
 

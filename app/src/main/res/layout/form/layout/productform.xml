@@ -89,8 +89,26 @@
         </LinearLayout>
 
     </LinearLayout>
-
-    <LinearLayout style="@style/wrap_layout_to" >
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="20dp"
+    android:layout_marginTop="10dp"
+    android:gravity="center"
+    android:id="@+id/productform_layout_more">
+    <TextView
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:id="@+id/product_more"
+        android:text="更多信息"
+        android:textSize="14dp"
+        android:textColor="#33B5E5"
+        android:drawableRight="@drawable/form_more"
+        android:gravity="center"
+        />
+</RelativeLayout>
+    <LinearLayout style="@style/hide_layout_to"
+        android:id="@+id/productform_layout_hide_one"
+        android:visibility="gone">
         <!-- 上圆角-->
         <LinearLayout style="@style/top_layout">
             <TextView style="@style/usertext"
@@ -139,7 +157,9 @@
         </LinearLayout>
 
     </LinearLayout>
-    <LinearLayout style="@style/wrap_layout_to" >
+    <LinearLayout style="@style/wrap_layout_to"
+        android:id="@+id/productform_layout_hide_tow"
+        android:visibility="gone">
         <!-- 上圆角-->
         <LinearLayout style="@style/top_layout"
             android:id="@+id/product_category_layout">
@@ -199,7 +219,7 @@
                 />
         </LinearLayout>
 
-
+    </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -208,16 +228,17 @@
             <Button
                 android:id="@+id/loginbutton"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="40dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
+                android:layout_marginBottom="20dp"
                 android:background="@drawable/buttonshape"
                 android:text="删除客户"
                 android:textColor="#ffffff"
                 android:visibility="invisible"
-                android:textSize="16dp" />
+                android:textSize="14dp" />
         </LinearLayout>
-    </LinearLayout>
+
  </LinearLayout>
     </ScrollView>
 </LinearLayout>

@@ -62,6 +62,9 @@ public class UnitListView extends CustomSearchBase implements View.OnClickListen
         custom_toobar_r.setOnClickListener(this);
         custom_toobar_m.setOnClickListener(this);
         custom_search = (CustomSearch) findViewById(R.id.search);
+        Intent intent=getIntent();
+        categoryid=intent.getStringExtra("category");
+        indexname=intent.getStringExtra("index");
         customlist= DataSupport.findAll(Unit.class);
         custom_toobar_m.setCompoundDrawables(null,null,null,null);
         for(Unit unit:customlist)
@@ -79,14 +82,18 @@ public class UnitListView extends CustomSearchBase implements View.OnClickListen
 
 
         }
-        pposition=indexpositon;
+        if(indexname.isEmpty())
+        {
+            indexpositon=-1;
+        }else {
+            pposition = indexpositon;
+        }
 
         //构造函数第一参数是类的对象，第二个是布局文件，第三个是数据源
         dm=new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
 
-        Intent intent=getIntent();
-        categoryid=intent.getStringExtra("category");
+
         if(listdatas.size()!=0) {
              if(categoryid!=null) {
                  Object[] obj = searchCategory(categoryid);
@@ -166,7 +173,12 @@ public class UnitListView extends CustomSearchBase implements View.OnClickListen
                                 dialogOK.setNegativeButton("确认", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
+                                        if(indexpositon==itemPosition)
+                                        {
+                                            indexpositon=-1;
+                                        }
                                         listdatas.remove(itemPosition - plistView.getHeaderViewsCount());
+                                        adapter.setSeclection(indexpositon);
                                         adapter.notifyDataSetChanged();
                                     }
                                 });
@@ -293,7 +305,7 @@ public class UnitListView extends CustomSearchBase implements View.OnClickListen
             case R.id.custom_toobar_right:
                 Intent cate = new Intent(UnitListView.this, UnitForm.class);
                 cate.putExtra("action","add");
-                startActivity(cate);
+                startActivityForResult(cate,1);
                 break;
 
 

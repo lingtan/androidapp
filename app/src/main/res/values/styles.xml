@@ -53,6 +53,14 @@
         <item name="android:background">@drawable/bg_layout_shape</item>
 
     </style>
+    <style name="hide_layout_to">
+        <item name="android:orientation">vertical</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:padding">1px</item>
+        <item name="android:background">@drawable/bg_layout_shape</item>
+
+    </style>
 
     <!-- 共用层样式 -->
     <style name="base_layout">
@@ -90,6 +98,11 @@
     <style name="bg_line">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">1px</item>
+        <item name="android:background">@color/border_clo</item>
+    </style>
+    <style name="bg_line_tow">
+        <item name="android:layout_width">3px</item>
+        <item name="android:layout_height">match_parent</item>
         <item name="android:background">@color/border_clo</item>
     </style>
     <!-- 上圆角样式 -->

@@ -60,6 +60,9 @@ public class BrandListView extends CustomSearchBase implements View.OnClickListe
         custom_toobar_r.setOnClickListener(this);
         custom_toobar_m.setOnClickListener(this);
         custom_search = (CustomSearch) findViewById(R.id.search);
+        Intent intent=getIntent();
+        categoryid=intent.getStringExtra("category");
+        indexname=intent.getStringExtra("index");
         customlist= DataSupport.findAll(Brand.class);
         custom_toobar_m.setCompoundDrawables(null,null,null,null);
         for(Brand brand:customlist)
@@ -77,14 +80,17 @@ public class BrandListView extends CustomSearchBase implements View.OnClickListe
 
 
         }
-        pposition=indexpositon;
-
+        if(indexname.isEmpty())
+        {
+            indexpositon=-1;
+        }else {
+            pposition = indexpositon;
+        }
         //构造函数第一参数是类的对象，第二个是布局文件，第三个是数据源
         dm=new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
 
-        Intent intent=getIntent();
-        categoryid=intent.getStringExtra("category");
+
         if(listdatas.size()!=0) {
              if(categoryid!=null) {
                  Object[] obj = searchCategory(categoryid);
@@ -291,7 +297,7 @@ public class BrandListView extends CustomSearchBase implements View.OnClickListe
             case R.id.custom_toobar_right:
                 Intent cate = new Intent(BrandListView.this, BrandForm.class);
                 cate.putExtra("action","add");
-                startActivity(cate);
+                startActivityForResult(cate,1);
                 break;
 
 
