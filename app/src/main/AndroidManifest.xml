@@ -68,10 +68,19 @@
         <activity android:name="com.example.androiderp.form.ProductForm">
 
         </activity>
+        <activity android:name="com.example.androiderp.form.ProductShoppingForm">
+
+        </activity>
         <activity android:name="com.example.androiderp.basicdata.ProductTowListView">
 
     </activity>
+        <activity android:name="com.example.androiderp.basicdata.ProductBadgeListView">
+
+        </activity>
         <activity android:name="com.example.androiderp.basicdata.BrandListView">
+
+        </activity>
+        <activity android:name="com.example.androiderp.basicdata.BrandBadgeListView">
 
         </activity>
         <activity android:name="com.example.androiderp.basicdata.ProductCategoryListview">

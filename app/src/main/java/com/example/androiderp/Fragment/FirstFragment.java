@@ -10,9 +10,11 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import com.example.androiderp.R;
 import com.example.androiderp.adaper.CusteomGridAdapter;
+import com.example.androiderp.basicdata.BrandBadgeListView;
 import com.example.androiderp.basicdata.CustomCategoryListview;
 import com.example.androiderp.basicdata.CustomListView;
 import com.example.androiderp.basicdata.CustomTowListView;
+import com.example.androiderp.basicdata.ProductBadgeListView;
 import com.example.androiderp.basicdata.ProductTowListView;
 import com.example.androiderp.basicdata.UnitListView;
 import com.example.androiderp.custom.CustomGridView;
@@ -47,7 +49,9 @@ public class FirstFragment extends Fragment {
                         startActivity(intent);
                         break;
                     case 1:
-                        intent = new Intent(context, UnitListView.class);
+                        break;
+                    case 2:
+                        intent = new Intent(context, BrandBadgeListView.class);
                         startActivity(intent);
                         break;
                     case 4:
@@ -60,6 +64,10 @@ public class FirstFragment extends Fragment {
                         break;
                     case 6:
                         intent = new Intent(context, CustomListView.class);
+                        startActivity(intent);
+                        break;
+                    case 7:
+                        intent = new Intent(context, ProductBadgeListView.class);
                         startActivity(intent);
                         break;
                     default:

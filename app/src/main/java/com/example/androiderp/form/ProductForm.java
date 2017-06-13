@@ -195,6 +195,7 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                     supplier.setCategory(category.getText().toString());
                     supplier.setBrand(brand.getText().toString());
                     supplier.setUnit(unit.getText().toString());
+                    supplier.setImage(R.drawable.listvist_item_delete);
                     supplier.save();
                     Toast.makeText(ProductForm.this,"新增成功",Toast.LENGTH_SHORT).show();
                     edit="edit";
