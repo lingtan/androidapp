@@ -2,6 +2,8 @@ package com.example.androiderp.adaper;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.provider.ContactsContract;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,8 +20,10 @@ import com.example.androiderp.custom.CustomBadgeView;
 import java.util.HashSet;
 import java.util.List;
 
+import okhttp3.Callback;
+
 //继承ArrayAdapter<DataStructure>
-public class ProductBadgeAdapter extends ArrayAdapter<Product>   {
+public class ProductBadgeAdapter extends ArrayAdapter<Product> implements View.OnClickListener {
 //类成员变量
     private int resourceId;
     private Context context;
@@ -27,19 +31,24 @@ public class ProductBadgeAdapter extends ArrayAdapter<Product>   {
     private int ai;
     public HashSet<Long> selectedItems = new HashSet<Long>();
     private List<Product> data;
+    private Callback mCallback;
 
 
     //这个数据是会改变的，所以要有个变量来备份一下原始数据
+    public interface Callback {
 
+        public void click(View v);
+   }
 
     //构造函数，context是一个抽象类，可以理解为类的类型！
     public ProductBadgeAdapter(Context context, int textViewResourceId,
-                               List<Product> data) {
+                               List<Product> data,Callback callback) {
         
         super(context, textViewResourceId, data);
         this.context=context;
         this.data=data;
         resourceId = textViewResourceId;
+        mCallback = callback;
     }
 
     //返回数据集的长度
@@ -60,7 +69,7 @@ public class ProductBadgeAdapter extends ArrayAdapter<Product>   {
 
     //重写getView方法，方法视图！，position是item的位置，converView 展示在界面上的一个item，parent是converView所在的父控件！
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {// 获取当前项的Fruit实例
+    public View getView(final int position, View convertView, ViewGroup parent) {// 获取当前项的Fruit实例
         View view;
         ViewHolder viewHolder;
         if (convertView == null) {
@@ -71,6 +80,7 @@ public class ProductBadgeAdapter extends ArrayAdapter<Product>   {
             viewHolder.number = (TextView) view.findViewById (R.id.custom_item_layout_number);
             viewHolder.model = (TextView) view.findViewById (R.id.custom_item_layout_model);
             viewHolder.salesprice = (TextView) view.findViewById (R.id.custom_item_layout_salesprice);
+            viewHolder.badgeshow = (TextView) view.findViewById (R.id.product_badge_item_show);
 
             view.setTag(viewHolder); // 将ViewHolder存储在View中
         } else {
@@ -86,16 +96,17 @@ public class ProductBadgeAdapter extends ArrayAdapter<Product>   {
 
         RelativeLayout itemLayout=(RelativeLayout)view.findViewById(R.id.badge_item_layout);
 
-         if(selectedItems.contains((long)position)){
 
-            viewHolder.image.setVisibility(View.VISIBLE);
-            itemLayout.setBackgroundColor(Color.parseColor("#ffffff"));
+            if(!TextUtils.isEmpty(data.get(position).getBadgeshow())) {
+                viewHolder.image.setVisibility(View.VISIBLE);
+            }
 
-        }else {
-            itemLayout.setBackgroundColor(Color.TRANSPARENT);
+
+        else {
+
              viewHolder.image.setVisibility(View.INVISIBLE);
 
-            //itemLayout.setBackgroundColor(Color.parseColor("#ffffff"));
+
         }
         // 重新获取ViewHolder
         viewHolder.name.setText(data.get(position).getName().toString());
@@ -103,8 +114,9 @@ public class ProductBadgeAdapter extends ArrayAdapter<Product>   {
         viewHolder.model.setText(data.get(position).getModel());
         viewHolder.salesprice.setText("¥"+data.get(position).getSalesprice().toString());
         viewHolder.image.setImageResource(data.get(position).getImage());
-
-
+        viewHolder.badgeshow.setText(data.get(position).getBadgeshow());
+        viewHolder.image.setOnClickListener(this);
+        viewHolder.image.setTag(position);
 
         /*首先响应子控件的事件
         viewHolder.name.setOnClickListener(new View.OnClickListener() {
@@ -130,9 +142,15 @@ public void setSeclection(int position,int i)
         TextView  number;
         TextView  model;
         TextView  salesprice;
+        TextView  badgeshow;
 
 
 
+    }
+
+    @Override
+ public void onClick(View v) {
+             mCallback.click(v);
     }
 //屏蔽每项的单击事件
     /*

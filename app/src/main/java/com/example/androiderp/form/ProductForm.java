@@ -196,6 +196,7 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                     supplier.setBrand(brand.getText().toString());
                     supplier.setUnit(unit.getText().toString());
                     supplier.setImage(R.drawable.listvist_item_delete);
+                    supplier.setBadgeshow("");
                     supplier.save();
                     Toast.makeText(ProductForm.this,"新增成功",Toast.LENGTH_SHORT).show();
                     edit="edit";
@@ -216,7 +217,7 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                     finish();
                 }else {
                     Intent intent = new Intent();
-                    setResult(RESULT_OK,intent);
+                    setResult(RESULT_FIRST_USER,intent);
                     finish();
                 }
              break;

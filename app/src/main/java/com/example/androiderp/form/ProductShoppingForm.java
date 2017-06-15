@@ -85,7 +85,10 @@ public class ProductShoppingForm extends AppCompatActivity implements View.OnCli
                 errorIcon.getIntrinsicHeight()));
         save.setText("保存");
         toobar_tile.setText("商品销售");
-        toobar_back.setText("取消");
+        Drawable del= getResources().getDrawable(R.drawable.suppliercategory_delete);
+        del.setBounds(0, 0, del.getMinimumWidth(), del.getMinimumHeight());
+        toobar_back.setCompoundDrawables(del,null,null,null);
+        toobar_back.setText("");
         formInit();
         salesprice.addTextChangedListener(new TextWatcher() {
             @Override
@@ -103,13 +106,13 @@ public class ProductShoppingForm extends AppCompatActivity implements View.OnCli
 
                 if(s.toString().trim().length()==0|salesfqty.getText().toString().trim().length()==0)
                 {
-                    setSaleamount.setText("¥0.00");
+                    toobar_tile.setText("商品销售");
                 }else {
 
                     DecimalFormat df = new DecimalFormat("#####0.00");
                     amounttext=df.format(Double.valueOf(salesprice.getText().toString().trim()) * Integer.parseInt(salesfqty.getText().toString().trim()));
 
-                    setSaleamount.setText("¥"+amounttext);
+                    toobar_tile.setText("金额：¥"+amounttext);
                 }
 
 
@@ -131,13 +134,13 @@ public class ProductShoppingForm extends AppCompatActivity implements View.OnCli
 
                 if(s.toString().trim().length()==0|salesprice.getText().toString().trim().length()==0)
                 {
-                    setSaleamount.setText("¥0.00");
+                    toobar_tile.setText("商品销售");
                 }else {
 
                     DecimalFormat df = new DecimalFormat("#####0.00");
                     amounttext=df.format(Double.valueOf(salesprice.getText().toString().trim()) * Integer.parseInt(salesfqty.getText().toString().trim()));
 
-                    setSaleamount.setText("¥"+amounttext);
+                    toobar_tile.setText("金额：¥"+amounttext);
                 }
                 }
 
@@ -190,6 +193,8 @@ public class ProductShoppingForm extends AppCompatActivity implements View.OnCli
 
             break;
             case R.id.customtoobar_left:
+                Intent intent = new Intent();
+                setResult(RESULT_FIRST_USER,intent);
                 finish();
              break;
 
