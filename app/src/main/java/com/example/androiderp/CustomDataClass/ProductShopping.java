@@ -11,6 +11,7 @@ import android.os.Parcelable;
 public class ProductShopping implements Parcelable {
     private String salename;
     private String salenumber;
+    private String category;
     private double salesprice;
     private int salefqty;
     private double saleamount;
@@ -29,6 +30,14 @@ public class ProductShopping implements Parcelable {
 
     public void setSalenumber(String salenumber) {
         this.salenumber = salenumber;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 
     public double getSalesprice() {
@@ -64,6 +73,7 @@ public class ProductShopping implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(salename);
         dest.writeString(salenumber);
+        dest.writeString(category);
         dest.writeDouble(salesprice);
         dest.writeInt(salefqty);
         dest.writeDouble(saleamount);
@@ -74,6 +84,7 @@ public class ProductShopping implements Parcelable {
             ProductShopping productShopping=new ProductShopping();
             productShopping.salename=source.readString();
             productShopping.salenumber=source.readString();
+            productShopping.category=source.readString();
             productShopping.salesprice=source.readDouble();
             productShopping.salefqty=source.readInt();
             productShopping.saleamount=source.readDouble();

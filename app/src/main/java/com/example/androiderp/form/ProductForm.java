@@ -16,6 +16,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -26,10 +27,12 @@ import com.example.androiderp.R;
 import com.example.androiderp.adaper.DataStructure;
 import com.example.androiderp.adaper.PopuMenuDataStructure;
 import com.example.androiderp.basicdata.BrandListView;
+import com.example.androiderp.basicdata.ProductBadgeListView;
 import com.example.androiderp.basicdata.ProductCategoryListview;
 import com.example.androiderp.basicdata.ProductTowListView;
 import com.example.androiderp.basicdata.UnitListView;
 import com.example.androiderp.common.Common;
+import com.xys.libzxing.zxing.activity.CaptureActivity;
 
 import org.litepal.crud.DataSupport;
 
@@ -43,6 +46,7 @@ import java.util.List;
 public class ProductForm extends AppCompatActivity implements View.OnClickListener {
     private InputMethodManager manager;
     private EditText name,number,purchaseprice,salesprice,barcode,model,note;
+    private ImageView numberscreen;
     private TextView save,toobar_tile,toobar_back,toobar_add,category,brand,unit;
     private Product supplier;
     private DisplayMetrics dm;
@@ -55,6 +59,7 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
     private Common common;
     private Intent  intentback;
     private List<PopuMenuDataStructure> popuMenuDatas;
+    private List<Product> findNumber;
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
@@ -73,7 +78,7 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
         barcode=(EditText)findViewById(R.id.product_barcode);
         model=(EditText)findViewById(R.id.product_model);
         note=(EditText)findViewById(R.id.product_note);
-
+        numberscreen=(ImageView)findViewById(R.id.number_screen);
         category=(TextView)findViewById(R.id.product_category);
         brand=(TextView)findViewById(R.id.product_brand);
         unit=(TextView)findViewById(R.id.product_unit);
@@ -111,13 +116,21 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
         PopuMenuDataStructure popuMenub = new PopuMenuDataStructure(android.R.drawable.ic_menu_edit, "松下");
         popuMenuDatas.add(popuMenub);
         showPopupWindow(popuMenuDatas);
+        numberscreen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent openCameraIntent = new Intent(ProductForm.this, CaptureActivity.class);
+                startActivityForResult(openCameraIntent, 5);
+            }
+        });
 
     }
     private void  formInit()
     {
 
         if(customid!=null) {
-
+            
             customlist = DataSupport.find(Product.class, Long.parseLong(customid));
             name.setText(customlist.getName());
             number.setText(customlist.getNumber());
@@ -130,6 +143,7 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
             brand.setText(customlist.getBrand());
             unit.setText(customlist.getUnit());
             if(edit.equals("edit")) {
+                number.setKeyListener(null);
                 toobar_add.setVisibility(View.VISIBLE);
                 buttondelete.setVisibility(View.VISIBLE);
             }else {
@@ -159,6 +173,7 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
 
         {
             case R.id.customtoobar_right:
+                findNumber=DataStructure.where("number = ?",number.getText().toString()).find(Product.class);
                 if (TextUtils.isEmpty(name.getText().toString())) {
                     name.setError("需要输入商品名称",errorIcon);
                 }else if (TextUtils.isEmpty(category.getText().toString()))
@@ -183,7 +198,12 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                     setResult(RESULT_OK,intent);
                     hintKbTwo();
 
-                } else {
+                } else if (findNumber.size()>0)
+                {
+                    Toast.makeText(ProductForm.this,"货号已经存在",Toast.LENGTH_SHORT).show();
+                }else
+
+                {
                     supplier = new Product();
                     supplier.setName(name.getText().toString());
                     supplier.setNumber(number.getText().toString());
@@ -199,6 +219,7 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                     supplier.setBadgeshow("");
                     supplier.save();
                     Toast.makeText(ProductForm.this,"新增成功",Toast.LENGTH_SHORT).show();
+                    customid=String.valueOf(DataSupport.findLast(Product.class).getId());
                     edit="edit";
                     toobar_add.setVisibility(View.VISIBLE);
                     buttondelete.setVisibility(View.VISIBLE);
@@ -214,11 +235,12 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                 {Intent intent = new Intent();
                     intent.putExtra("category",categoryid);
                     setResult(RESULT_OK,intent);
-                    finish();
+                    ProductForm.this.finish();
                 }else {
-                    Intent intent = new Intent();
-                    setResult(RESULT_FIRST_USER,intent);
-                    finish();
+                    //不需要直接返回第一页
+                   // Intent intent = new Intent();
+                   // setResult(RESULT_OK,intent);
+                    ProductForm.this.finish();
                 }
              break;
             case R.id.product_category_layout:
@@ -357,8 +379,19 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                 if(resultCode==RESULT_OK){
                     Intent intent = new Intent();
                     setResult(RESULT_OK,intent);
-                   finish();
+                   ProductForm.this.finish();
                 }
+                break;
+
+            case 5:
+                if(resultCode==RESULT_OK) {
+
+                    Bundle bundle = data.getExtras();
+                    String scanResult = bundle.getString("result");
+                    number.setText(scanResult);
+
+                }
+
                 break;
             default:
         }

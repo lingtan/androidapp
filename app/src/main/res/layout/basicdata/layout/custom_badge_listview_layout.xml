@@ -10,7 +10,7 @@
     tools:context=".basicdata.CustomListView"
    >
 
-    <include layout="@layout/custom_toobar" android:id="@+id/id_toobar"/>
+    <include layout="@layout/custom_badge_toobar" android:id="@+id/id_toobar"/>
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="47dp"

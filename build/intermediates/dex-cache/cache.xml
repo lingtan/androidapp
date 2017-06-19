@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        is-multidex="false"
+        jar="/Users/lingtan/Desktop/androiderp/app/src/libs/butterknife-7.0.1.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="d5d13ea991eab0252e3710e5df3d6a9d4b21d461">
+        <dex dex="/Users/lingtan/Desktop/androiderp/app/build/intermediates/pre-dexed/debug/butterknife-7.0.1_78f5b0706e31b1230c7386f65e4b0d8be420ddc4.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/lingtan/Desktop/androiderp/libzxing/build/intermediates/bundles/default/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="9e78b2178baaa3964d5d4c8b2bf849936b209f40">
+        <dex dex="/Users/lingtan/Desktop/androiderp/app/build/intermediates/pre-dexed/debug/classes_88d96adfffea93383325daa55daa430dbdb10017.jar" />
+    </item>
+
+</items>

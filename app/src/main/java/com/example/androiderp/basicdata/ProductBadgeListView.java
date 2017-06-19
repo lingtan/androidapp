@@ -1,18 +1,16 @@
 package com.example.androiderp.basicdata;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.example.androiderp.CustomDataClass.Product;
 import com.example.androiderp.CustomDataClass.ProductCategory;
 import com.example.androiderp.CustomDataClass.ProductShopping;
@@ -25,6 +23,10 @@ import com.example.androiderp.custom.CustomSearch;
 import com.example.androiderp.custom.CustomSearchBase;
 import com.example.androiderp.form.ProductForm;
 import com.example.androiderp.form.ProductShoppingForm;
+import com.example.androiderp.scanning.CommonScanActivity;
+import com.example.androiderp.scanning.utils.Constant;
+import com.xys.libzxing.zxing.activity.CaptureActivity;
+
 import org.litepal.crud.DataSupport;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -38,12 +40,13 @@ public class ProductBadgeListView extends CustomSearchBase implements View.OnCli
     private DisplayMetrics dm;
     private List<Product> searchDatas= new ArrayList<Product>();
     private List<Product> customAllDatas;
-    private TextView toobar_l,toobar_r,toobar_m,bottoncount;
+    private TextView toobar_l,toobar_r,toobar_m,bottoncount,toobar_screen;
     private CustomSearch search;
     private Intent intent;
     private List<ProductCategory> categoryAllDatas;
     private List<CommonDataStructure> categorylistdatas = new ArrayList<CommonDataStructure>();
     private int countall;
+    private int categorycount;
     private double countamount;
    private ImageView imageView;
     private HashSet<Long> pselectedItems = new HashSet<Long>();
@@ -59,6 +62,8 @@ public class ProductBadgeListView extends CustomSearchBase implements View.OnCli
         toobar_l=(TextView)findViewById(R.id.custom_toobar_left) ;
         toobar_m=(TextView)findViewById(R.id.custom_toobar_midd);
         toobar_r=(TextView)findViewById(R.id.custom_toobar_right);
+        toobar_screen=(TextView)findViewById(R.id.customtoobar_screen);
+        toobar_screen.setOnClickListener(this);
         toobar_m.setText("商品信息");
         toobar_m.setCompoundDrawables(null,null,null,null);
         toobar_l.setOnClickListener(this);
@@ -166,7 +171,7 @@ public class ProductBadgeListView extends CustomSearchBase implements View.OnCli
         {
             for (int i = 0; i < customAllDatas.size(); i++) {
                 if(customAllDatas.get(i).getCategory()==null)
-                { int index = customAllDatas.get(i).getName().indexOf(name);
+                { int index = customAllDatas.get(i).getNumber().indexOf(name);
                     if (index != -1) {
                         searchDatas.add(customAllDatas.get(i));
                     }
@@ -177,7 +182,7 @@ public class ProductBadgeListView extends CustomSearchBase implements View.OnCli
         }else if (leftlistselectetext.equals("全部产品"))
         {
             for (int i = 0; i < customAllDatas.size(); i++) {
-                int index = customAllDatas.get(i).getName().indexOf(name);
+                int index = customAllDatas.get(i).getNumber().indexOf(name);
                 if (index != -1) {
                     searchDatas.add(customAllDatas.get(i));
                 }
@@ -188,7 +193,7 @@ public class ProductBadgeListView extends CustomSearchBase implements View.OnCli
 
         else {
             for (int i = 0; i < customAllDatas.size(); i++) {
-                int index = customAllDatas.get(i).getName().indexOf(name);
+                int index = customAllDatas.get(i).getNumber().indexOf(name);
                 int indey = customAllDatas.get(i).getCategory().indexOf(leftlistselectetext);
                 // 存在匹配的数据
                 if (index != -1 & indey != -1) {
@@ -297,11 +302,24 @@ public class ProductBadgeListView extends CustomSearchBase implements View.OnCli
                     commonDataN.setName("未分类");
                     categorylistdatas.add(commonDataN);
                     for(ProductCategory productCategory:categoryAllDatas)
-
                     {
+                        categorycount=0;
+                        for(ProductShopping shop:shoppings)
+                    {
+                        if(shop.getCategory().equals(productCategory.getName()))
+                        {
+                            categorycount+=shop.getSalefqty();
+                        }
+
+
+
+                    }
                         CommonDataStructure commonData=new CommonDataStructure();
                         commonData.setName(productCategory.getName());
                         commonData.setId(productCategory.getId());
+                        if(categorycount>0) {
+                            commonData.setCategory(String.valueOf(categorycount));
+                        }
                         categorylistdatas.add(commonData);
 
                     }
@@ -326,8 +344,32 @@ public class ProductBadgeListView extends CustomSearchBase implements View.OnCli
 
                 }
                 if(resultCode==RESULT_FIRST_USER){
+
                     rightAdapter.notifyDataSetChanged();
                 }
+
+                break;
+            case 3:
+                if(resultCode==RESULT_OK) {
+
+                    Bundle bundle = data.getExtras();
+                    String scanResult = bundle.getString("result");
+                    for(Product product:searchDatas)
+
+                    {
+                        if(product.getNumber().equals(scanResult))
+                        {
+                            intent.removeExtra("action");
+                            intent.putExtra("action", "edit");
+                            intent.putExtra("product_item", String.valueOf(product.getId()));
+                            startActivityForResult(intent,1);
+                        }
+
+
+                    }
+
+                }
+                break;
 
             default:
                 }
@@ -347,6 +389,12 @@ public class ProductBadgeListView extends CustomSearchBase implements View.OnCli
                 intentnew.removeExtra("product_item");
                 intentnew.putExtra("action","add");
                 startActivityForResult(intentnew,2);
+                break;
+            case R.id.customtoobar_screen:
+                intent=new Intent(this,CommonScanActivity.class);
+                intent.putExtra(Constant.REQUEST_SCAN_MODE,Constant.REQUEST_SCAN_MODE_ALL_MODE);
+                startActivity(intent);
+
                 break;
 
 
@@ -401,9 +449,42 @@ public class ProductBadgeListView extends CustomSearchBase implements View.OnCli
             countall+= shoppings.get(i).getSalefqty();
             countamount+=shoppings.get(i).getSaleamount();
         }
+        if(categorylistdatas.size()!=0)
+        {
+            categorylistdatas.clear();
+        }
+        categoryAllDatas= DataSupport.findAll(ProductCategory.class);
+        CommonDataStructure commonDataAll=new CommonDataStructure();
+        commonDataAll.setName("全部产品");
+        categorylistdatas.add(commonDataAll);
+        CommonDataStructure commonDataN=new CommonDataStructure();
+        commonDataN.setName("未分类");
+        categorylistdatas.add(commonDataN);
+        for(ProductCategory productCategory:categoryAllDatas)
+        {
+            categorycount=0;
+            for(ProductShopping shop:shoppings)
+            {
+                if(shop.getCategory().equals(productCategory.getName()))
+                {
+                    categorycount+=shop.getSalefqty();
+                }
 
+
+
+            }
+            CommonDataStructure commonData=new CommonDataStructure();
+            commonData.setName(productCategory.getName());
+            commonData.setId(productCategory.getId());
+            if(categorycount>0) {
+                commonData.setCategory(String.valueOf(categorycount));
+            }
+            categorylistdatas.add(commonData);
+
+        }
 
        rightAdapter.notifyDataSetChanged();
+       leftAdapter.notifyDataSetChanged();
         badgeView.setBadgeCount(countall);
         bottoncount.setText("¥"+df.format(countamount));
         if(countamount==0.00)

@@ -1,5 +1,6 @@
 package com.example.androiderp.basicdata;
 import android.content.Intent;
+import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
@@ -16,6 +17,8 @@ import com.example.androiderp.adaper.ProductAdapter;
 import com.example.androiderp.custom.CustomSearch;
 import com.example.androiderp.custom.CustomSearchBase;
 import com.example.androiderp.form.ProductForm;
+import com.xys.libzxing.zxing.activity.CaptureActivity;
+
 import org.litepal.crud.DataSupport;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,18 +31,21 @@ public class ProductTowListView extends CustomSearchBase implements View.OnClick
     private DisplayMetrics dm;
     private List<Product> searchDatas= new ArrayList<Product>();
     private List<Product> customAllDatas;
-    private TextView toobar_l,toobar_r,toobar_m,bottoncount;
+    private TextView toobar_l,toobar_r,toobar_m,bottoncount,toobar_screen;
     private CustomSearch search;
-    private Intent intent;
+    private Intent intent,screenintent;
     private List<ProductCategory> categoryAllDatas;
     private List<CommonDataStructure> categorylistdatas = new ArrayList<CommonDataStructure>();
+    private String scanResult;
 
     @Override
     public void iniView(){
-        setContentView(R.layout.custom_listview_layout);
+        setContentView(R.layout.product_listview_layout);
         toobar_l=(TextView)findViewById(R.id.custom_toobar_left) ;
         toobar_m=(TextView)findViewById(R.id.custom_toobar_midd);
         toobar_r=(TextView)findViewById(R.id.custom_toobar_right);
+        toobar_screen=(TextView)findViewById(R.id.customtoobar_screen);
+        toobar_screen.setOnClickListener(this);
         toobar_m.setText("商品信息");
         toobar_m.setCompoundDrawables(null,null,null,null);
         toobar_l.setOnClickListener(this);
@@ -47,6 +53,8 @@ public class ProductTowListView extends CustomSearchBase implements View.OnClick
         toobar_m.setOnClickListener(this);
         search = (CustomSearch) findViewById(R.id.search);
         bottoncount=(TextView)findViewById(R.id.product_item_layout_count) ;
+        screenintent=getIntent();
+        scanResult=screenintent.getStringExtra("scanResult");
         customAllDatas= DataSupport.findAll(Product.class);
         intent= new Intent(ProductTowListView.this, ProductForm.class);
         categoryAllDatas= DataSupport.findAll(ProductCategory.class);
@@ -56,6 +64,7 @@ public class ProductTowListView extends CustomSearchBase implements View.OnClick
         CommonDataStructure commonDataN=new CommonDataStructure();
         commonDataN.setName("未分类");
         categorylistdatas.add(commonDataN);
+
         for(ProductCategory productCategory:categoryAllDatas)
 
         {
@@ -116,6 +125,14 @@ public class ProductTowListView extends CustomSearchBase implements View.OnClick
 
         search.addTextChangedListener(textWatcher);
 
+        if(scanResult!=null)
+        {
+            Object[] obj = search(scanResult);
+            updateLayout(obj);
+            search.setText(scanResult);
+
+        }
+
 
     }
 
@@ -125,7 +142,7 @@ public class ProductTowListView extends CustomSearchBase implements View.OnClick
             searchDatas.clear();
         }
         for (int i = 0; i < customAllDatas.size(); i++) {
-            int index = customAllDatas.get(i).getName().indexOf(name);
+            int index = customAllDatas.get(i).getNumber().indexOf(name);
 
             // 存在匹配的数据
             if (index != -1) {
@@ -220,6 +237,17 @@ public class ProductTowListView extends CustomSearchBase implements View.OnClick
                     bottoncount.setText(String.valueOf(customAllDatas.size()));
                 }
                 break;
+            case 2:
+                if(resultCode==RESULT_OK) {
+
+                    Bundle bundle = data.getExtras();
+                    String scanResult = bundle.getString("result");
+                    search.requestFocusFromTouch();
+                    search.setText(scanResult);
+
+                }
+                break;
+
 
             default:
                 }
@@ -239,6 +267,12 @@ public class ProductTowListView extends CustomSearchBase implements View.OnClick
                 intent.removeExtra("product_item");
                 intent.putExtra("action","add");
                 startActivityForResult(intent,1);
+                break;
+
+            case R.id.customtoobar_screen:
+                Intent openCameraIntent = new Intent(ProductTowListView.this, CaptureActivity.class);
+                startActivityForResult(openCameraIntent, 2);
+
                 break;
 
 

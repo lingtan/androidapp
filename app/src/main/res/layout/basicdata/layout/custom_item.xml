@@ -3,25 +3,32 @@
 android:id="@+id/custom_item_layout"
 android:layout_width="match_parent"
 android:layout_height="wrap_content"
-android:orientation="vertical"
-android:padding="5dip">
+android:orientation="vertical">
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/custom_item_layout_one"
         android:layout_width="match_parent"
-        android:layout_height="28dp"
+        android:layout_height="35dp"
         android:layout_alignParentLeft="true"
-        android:orientation="vertical"
-        android:gravity="center">
+       >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/custom_badge_item_show"
+            android:textColor="#ffffff"
+            android:background="#FF0000"
+            android:textStyle="bold"
+            android:textSize="12dip" />
     <TextView
         android:id="@+id/custom_item_layout_one_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="25dp"
         android:textColor="#343434"
         android:textSize="12dip" />
 
-    </LinearLayout>
+    </RelativeLayout>
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

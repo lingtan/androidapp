@@ -18,6 +18,7 @@ package com.example.androiderp.home;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
@@ -38,8 +39,11 @@ import com.example.androiderp.Fragment.SecondFragment;
 import com.example.androiderp.Fragment.ThressFragment;
 import com.example.androiderp.R;
 import com.example.androiderp.basicdata.CustomSearchListView;
+import com.example.androiderp.basicdata.ProductTowListView;
 import com.example.androiderp.custom.CustomHomeSearch;
 import com.example.androiderp.custom.CustomSearchBase;
+import com.example.androiderp.form.ProductForm;
+import com.xys.libzxing.zxing.activity.CaptureActivity;
 
 /**
  * TODO
@@ -83,7 +87,6 @@ public class ErpHome extends CustomSearchBase implements  BottomNavigationBar.On
         if (navigationView != null) {
             setupDrawerContent(navigationView);
         }
-
         switch (edit) {
             case "send":
                 fragmentManager=getSupportFragmentManager();
@@ -252,6 +255,11 @@ public class ErpHome extends CustomSearchBase implements  BottomNavigationBar.On
             case android.R.id.home:
                 mDrawerLayout.openDrawer(GravityCompat.START);
                 return true;
+
+            case R.id.toobar_nemu_night:
+                Intent openCameraIntent = new Intent(ErpHome.this, CaptureActivity.class);
+                startActivityForResult(openCameraIntent, 1);
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -279,5 +287,20 @@ public class ErpHome extends CustomSearchBase implements  BottomNavigationBar.On
             }
         }
         return super.onTouchEvent(event);
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case 1:
+                if (resultCode == RESULT_OK) {
+                    Bundle bundle = data.getExtras();
+                    String scanResult = bundle.getString("result");
+                    Intent intent = new Intent(ErpHome.this, ProductTowListView.class);
+                    intent.putExtra("scanResult",scanResult);
+                    startActivity(intent);
+                }
+                break;
+            default:
+        }
     }
 }

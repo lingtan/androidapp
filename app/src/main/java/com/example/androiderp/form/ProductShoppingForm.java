@@ -46,7 +46,7 @@ import java.util.List;
 
 public class ProductShoppingForm extends AppCompatActivity implements View.OnClickListener {
     private InputMethodManager manager;
-    private EditText name,number,salesfqty,salesprice;
+    private EditText name,number,salesfqty,salesprice,category;
     private TextView save,toobar_tile,toobar_back,toobar_add,setSaleamount;
     private ProductShopping shopping;
     private DisplayMetrics dm;
@@ -65,7 +65,11 @@ public class ProductShoppingForm extends AppCompatActivity implements View.OnCli
         edit=intent.getStringExtra("action");
         manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         name=(EditText)findViewById(R.id.product_name);
+        name.setKeyListener(null);
         number=(EditText)findViewById(R.id.product_number);
+        number.setKeyListener(null);
+        category=(EditText)findViewById(R.id.product_category);
+        category.setKeyListener(null);
         salesfqty=(EditText)findViewById(R.id.product_fqty);
         salesprice=(EditText)findViewById(R.id.product_salesprice);
         setSaleamount=(TextView) findViewById(R.id.product_amount);
@@ -158,6 +162,7 @@ public class ProductShoppingForm extends AppCompatActivity implements View.OnCli
             name.setText(customlist.getName());
             number.setText(customlist.getNumber());
             salesprice.setText(customlist.getSalesprice());
+            category.setText(customlist.getCategory());
             if(edit.equals("edit")) {
                 toobar_add.setVisibility(View.VISIBLE);
             }else {
@@ -180,6 +185,7 @@ public class ProductShoppingForm extends AppCompatActivity implements View.OnCli
                     shopping = new ProductShopping();
                     shopping.setSalename(name.getText().toString());
                     shopping.setSalenumber(number.getText().toString());
+                    shopping.setCategory(category.getText().toString());
                     shopping.setSalesprice(Double.valueOf(salesprice.getText().toString().trim()));
                     shopping.setSalefqty(Integer.parseInt(salesfqty.getText().toString().trim()));
                     shopping.setSaleamount(Double.valueOf(salesprice.getText().toString().trim())*Integer.parseInt(salesfqty.getText().toString().trim()));

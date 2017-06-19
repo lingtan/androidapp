@@ -42,7 +42,11 @@
             <TextView style="@style/usertext"
                 android:text="商品号码："
                 />
-
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/number_screen"
+                android:background="@drawable/number_screen"/>
             <EditText
                 android:layout_width="240dp"
                 android:layout_height="wrap_content"

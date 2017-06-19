@@ -21,6 +21,7 @@
                 android:textSize="14dp"
                 android:id="@+id/product_name"
                 android:maxLines="1"
+                android:background="@null"
                 android:imeOptions="actionDone"
                 android:inputType="text"/>
         </LinearLayout>
@@ -40,6 +41,27 @@
                 android:hint="商品编码唯一，保存后不能修改"
                 android:id="@+id/product_number"
                 android:maxLines="1"
+                android:background="@null"
+                android:imeOptions="actionDone"
+                android:inputType="text"/>
+        </LinearLayout>
+        <View style="@style/bg_line"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"/>
+        <!-- 下圆角-->
+        <LinearLayout style="@style/bottom_layout">
+            <TextView style="@style/usertext"
+                android:text="商品分类："
+                />
+
+            <EditText
+                android:layout_width="240dp"
+                android:layout_height="wrap_content"
+                android:textSize="14dp"
+                android:hint="选择类别"
+                android:id="@+id/product_category"
+                android:maxLines="1"
+                android:background="@null"
                 android:imeOptions="actionDone"
                 android:inputType="text"/>
         </LinearLayout>

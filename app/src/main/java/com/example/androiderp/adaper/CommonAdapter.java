@@ -60,6 +60,7 @@ public class CommonAdapter extends ArrayAdapter<CommonDataStructure>   {
             view = LayoutInflater.from(getContext()).inflate(resourceId, parent, false);
             viewHolder = new ViewHolder();
             viewHolder.name = (TextView) view.findViewById (R.id.custom_item_layout_one_name);
+            viewHolder.badge = (TextView) view.findViewById (R.id.custom_badge_item_show);
             viewHolder.image=(ImageView) view.findViewById(R.id.custom_item_layout_one_image);
 
             view.setTag(viewHolder); // 将ViewHolder存储在View中
@@ -87,7 +88,7 @@ public class CommonAdapter extends ArrayAdapter<CommonDataStructure>   {
         // 重新获取ViewHolder
         viewHolder.name.setText(data.get(position).getName());
         viewHolder.image.setImageResource(data.get(position).getImage());
-
+        viewHolder.badge.setText(data.get(position).getCategory());
         Log.d("lingtant",String.valueOf(position));
 
         /*首先响应子控件的事件
@@ -110,7 +111,7 @@ public void setSeclection(int position)
 
         ImageView image;
         TextView  name;
-
+        TextView  badge;
 
     }
 //屏蔽每项的单击事件

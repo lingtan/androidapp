@@ -24,7 +24,7 @@ android:orientation="vertical"
      android:textColor="#ffffff"
      android:background="#FF0000"
       android:textStyle="bold"
-     android:textSize="14dip" />
+     android:textSize="12dip" />
     <TextView
         android:id="@+id/custom_item_layout_one_name"
         android:layout_width="match_parent"

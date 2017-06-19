@@ -19,7 +19,7 @@
     <item
         android:id="@+id/toobar_nemu_night"
         android:title="morce"
-        android:icon="@drawable/toobar_more"
+        android:icon="@drawable/prudect_screen"
         app:showAsAction="always">
     </item>
 
