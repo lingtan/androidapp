@@ -42,8 +42,8 @@ import com.example.androiderp.basicdata.CustomSearchListView;
 import com.example.androiderp.basicdata.ProductTowListView;
 import com.example.androiderp.custom.CustomHomeSearch;
 import com.example.androiderp.custom.CustomSearchBase;
-import com.example.androiderp.form.ProductForm;
-import com.xys.libzxing.zxing.activity.CaptureActivity;
+import com.example.androiderp.scanning.CommonScanActivity;
+import com.example.androiderp.scanning.utils.Constant;
 
 /**
  * TODO
@@ -257,7 +257,8 @@ public class ErpHome extends CustomSearchBase implements  BottomNavigationBar.On
                 return true;
 
             case R.id.toobar_nemu_night:
-                Intent openCameraIntent = new Intent(ErpHome.this, CaptureActivity.class);
+                Intent openCameraIntent = new Intent(ErpHome.this, CommonScanActivity.class);
+                openCameraIntent.putExtra(Constant.REQUEST_SCAN_MODE,Constant.REQUEST_SCAN_MODE_ALL_MODE);
                 startActivityForResult(openCameraIntent, 1);
                 return true;
         }
@@ -293,10 +294,10 @@ public class ErpHome extends CustomSearchBase implements  BottomNavigationBar.On
         switch (requestCode) {
             case 1:
                 if (resultCode == RESULT_OK) {
-                    Bundle bundle = data.getExtras();
-                    String scanResult = bundle.getString("result");
+
+
                     Intent intent = new Intent(ErpHome.this, ProductTowListView.class);
-                    intent.putExtra("scanResult",scanResult);
+                    intent.putExtra("scanResult",data.getStringExtra("scanResult"));
                     startActivity(intent);
                 }
                 break;

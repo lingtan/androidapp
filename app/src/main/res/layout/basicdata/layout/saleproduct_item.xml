@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:id="@+id/custom_item_layout"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/custom_item_layout_one"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_alignParentLeft="true"
+       >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/custom_badge_item_show"
+            android:textColor="#ffffff"
+            android:background="#FF0000"
+            android:textStyle="bold"
+            android:textSize="12dip" />
+    <TextView
+        android:id="@+id/custom_item_layout_one_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="25dp"
+        android:textColor="#343434"
+        android:textSize="12dip" />
+        <TextView
+            android:id="@+id/custom_item_layout_one_fqty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/custom_item_layout_one_name"
+            android:textColor="#343434"
+            android:textSize="12dip" />
+
+        <TextView
+            android:id="@+id/custom_item_layout_one_salesprice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/custom_item_layout_one_fqty"
+            android:textColor="#343434"
+            android:textSize="12dip" />
+        <TextView
+            android:id="@+id/custom_item_layout_one_saleamount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/custom_item_layout_one_salesprice"
+            android:textColor="#343434"
+            android:textSize="12dip" />
+
+    </RelativeLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true">
+
+        <ImageView
+            android:id="@+id/custom_item_layout_one_image"
+            android:layout_width="34dp"
+            android:layout_height="28dp"
+            android:layout_marginRight="16dp"
+            android:src="@drawable/toobar_add"
+            android:visibility="gone"
+            />
+    </LinearLayout>
+</RelativeLayout>
+
+
+
+

@@ -27,12 +27,11 @@ import com.example.androiderp.R;
 import com.example.androiderp.adaper.DataStructure;
 import com.example.androiderp.adaper.PopuMenuDataStructure;
 import com.example.androiderp.basicdata.BrandListView;
-import com.example.androiderp.basicdata.ProductBadgeListView;
 import com.example.androiderp.basicdata.ProductCategoryListview;
-import com.example.androiderp.basicdata.ProductTowListView;
 import com.example.androiderp.basicdata.UnitListView;
 import com.example.androiderp.common.Common;
-import com.xys.libzxing.zxing.activity.CaptureActivity;
+import com.example.androiderp.scanning.CommonScanActivity;
+import com.example.androiderp.scanning.utils.Constant;
 
 import org.litepal.crud.DataSupport;
 
@@ -120,7 +119,8 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
             @Override
             public void onClick(View v) {
 
-                Intent openCameraIntent = new Intent(ProductForm.this, CaptureActivity.class);
+                Intent openCameraIntent = new Intent(ProductForm.this,CommonScanActivity.class);
+                openCameraIntent.putExtra(Constant.REQUEST_SCAN_MODE,Constant.REQUEST_SCAN_MODE_ALL_MODE);
                 startActivityForResult(openCameraIntent, 5);
             }
         });
@@ -386,9 +386,8 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
             case 5:
                 if(resultCode==RESULT_OK) {
 
-                    Bundle bundle = data.getExtras();
-                    String scanResult = bundle.getString("result");
-                    number.setText(scanResult);
+                    Intent intent=getIntent();
+                    number.setText(data.getStringExtra("scanResult"));
 
                 }
 

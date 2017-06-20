@@ -17,7 +17,8 @@ import com.example.androiderp.adaper.ProductAdapter;
 import com.example.androiderp.custom.CustomSearch;
 import com.example.androiderp.custom.CustomSearchBase;
 import com.example.androiderp.form.ProductForm;
-import com.xys.libzxing.zxing.activity.CaptureActivity;
+import com.example.androiderp.scanning.CommonScanActivity;
+import com.example.androiderp.scanning.utils.Constant;
 
 import org.litepal.crud.DataSupport;
 import java.util.ArrayList;
@@ -129,7 +130,7 @@ public class ProductTowListView extends CustomSearchBase implements View.OnClick
         {
             Object[] obj = search(scanResult);
             updateLayout(obj);
-            search.setText(scanResult);
+            
 
         }
 
@@ -240,10 +241,8 @@ public class ProductTowListView extends CustomSearchBase implements View.OnClick
             case 2:
                 if(resultCode==RESULT_OK) {
 
-                    Bundle bundle = data.getExtras();
-                    String scanResult = bundle.getString("result");
                     search.requestFocusFromTouch();
-                    search.setText(scanResult);
+                    search.setText(data.getStringExtra("scanResult"));
 
                 }
                 break;
@@ -270,7 +269,8 @@ public class ProductTowListView extends CustomSearchBase implements View.OnClick
                 break;
 
             case R.id.customtoobar_screen:
-                Intent openCameraIntent = new Intent(ProductTowListView.this, CaptureActivity.class);
+                Intent openCameraIntent = new Intent(ProductTowListView.this, CommonScanActivity.class);
+                openCameraIntent.putExtra(Constant.REQUEST_SCAN_MODE,Constant.REQUEST_SCAN_MODE_ALL_MODE);
                 startActivityForResult(openCameraIntent, 2);
 
                 break;

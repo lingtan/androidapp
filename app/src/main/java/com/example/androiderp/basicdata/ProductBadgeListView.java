@@ -5,15 +5,19 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import com.example.androiderp.CustomDataClass.Product;
 import com.example.androiderp.CustomDataClass.ProductCategory;
 import com.example.androiderp.CustomDataClass.ProductShopping;
+import com.example.androiderp.CustomDataClass.ShoppingData;
 import com.example.androiderp.R;
 import com.example.androiderp.adaper.CommonAdapter;
 import com.example.androiderp.adaper.CommonDataStructure;
@@ -23,9 +27,9 @@ import com.example.androiderp.custom.CustomSearch;
 import com.example.androiderp.custom.CustomSearchBase;
 import com.example.androiderp.form.ProductForm;
 import com.example.androiderp.form.ProductShoppingForm;
+import com.example.androiderp.form.SaleProductForm;
 import com.example.androiderp.scanning.CommonScanActivity;
 import com.example.androiderp.scanning.utils.Constant;
-import com.xys.libzxing.zxing.activity.CaptureActivity;
 
 import org.litepal.crud.DataSupport;
 import java.text.DecimalFormat;
@@ -55,6 +59,7 @@ public class ProductBadgeListView extends CustomSearchBase implements View.OnCli
     private ImageView badgeimage;
     private  int   leftlistselecte;
     private  String   leftlistselectetext;
+    private LinearLayout accounts;
 
     @Override
     public void iniView(){
@@ -71,6 +76,7 @@ public class ProductBadgeListView extends CustomSearchBase implements View.OnCli
         toobar_m.setOnClickListener(this);
         search = (CustomSearch) findViewById(R.id.search);
         bottoncount=(TextView)findViewById(R.id.product_item_layout_count) ;
+        accounts=(LinearLayout)findViewById(R.id.product_item_layout_bottom);
         customAllDatas= DataSupport.findAll(Product.class);
         intent= new Intent(ProductBadgeListView.this, ProductShoppingForm.class);
         categoryAllDatas= DataSupport.findAll(ProductCategory.class);
@@ -155,6 +161,21 @@ public class ProductBadgeListView extends CustomSearchBase implements View.OnCli
 
 
         search.addTextChangedListener(textWatcher);
+
+        accounts.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if(shoppings!=null&shoppings.size()!=0){
+                    Intent intentdata=new Intent(ProductBadgeListView.this, SaleProductForm.class);
+                    ShoppingData shoppingData=new ShoppingData();
+                    shoppingData.setShoppingdata(shoppings);
+                    intentdata.putExtra("shoppingdata",shoppingData);
+                    setResult(RESULT_OK,intentdata);
+                    ProductBadgeListView.this.finish();
+                }
+            }
+        });
 
 
     }
@@ -352,12 +373,10 @@ public class ProductBadgeListView extends CustomSearchBase implements View.OnCli
             case 3:
                 if(resultCode==RESULT_OK) {
 
-                    Bundle bundle = data.getExtras();
-                    String scanResult = bundle.getString("result");
                     for(Product product:searchDatas)
 
                     {
-                        if(product.getNumber().equals(scanResult))
+                        if(product.getNumber().equals(data.getStringExtra("scanResult")))
                         {
                             intent.removeExtra("action");
                             intent.putExtra("action", "edit");
@@ -391,9 +410,9 @@ public class ProductBadgeListView extends CustomSearchBase implements View.OnCli
                 startActivityForResult(intentnew,2);
                 break;
             case R.id.customtoobar_screen:
-                intent=new Intent(this,CommonScanActivity.class);
-                intent.putExtra(Constant.REQUEST_SCAN_MODE,Constant.REQUEST_SCAN_MODE_ALL_MODE);
-                startActivity(intent);
+                Intent openCameraIntent=new Intent(ProductBadgeListView.this,CommonScanActivity.class);
+                openCameraIntent.putExtra(Constant.REQUEST_SCAN_MODE,Constant.REQUEST_SCAN_MODE_ALL_MODE);
+                startActivityForResult(openCameraIntent,3);
 
                 break;
 

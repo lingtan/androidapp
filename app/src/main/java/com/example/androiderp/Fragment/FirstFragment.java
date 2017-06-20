@@ -18,6 +18,7 @@ import com.example.androiderp.basicdata.ProductBadgeListView;
 import com.example.androiderp.basicdata.ProductTowListView;
 import com.example.androiderp.basicdata.UnitListView;
 import com.example.androiderp.custom.CustomGridView;
+import com.example.androiderp.form.SaleProductForm;
 
 /**
  * Created by lingtan on 2017/5/18.
@@ -49,10 +50,13 @@ public class FirstFragment extends Fragment {
                         startActivity(intent);
                         break;
                     case 1:
-                        break;
-                    case 2:
                         intent = new Intent(context, BrandBadgeListView.class);
                         startActivity(intent);
+                        break;
+                    case 2:
+                        intent = new Intent(context, SaleProductForm.class);
+                        startActivity(intent);
+
                         break;
                     case 4:
                         intent = new Intent(context, CustomTowListView.class);
@@ -69,6 +73,9 @@ public class FirstFragment extends Fragment {
                     case 7:
                         intent = new Intent(context, ProductBadgeListView.class);
                         startActivity(intent);
+                        break;
+                    case 8:
+
                         break;
                     default:
                         break;

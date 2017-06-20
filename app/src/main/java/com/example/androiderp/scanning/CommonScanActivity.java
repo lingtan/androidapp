@@ -22,6 +22,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.Window;
@@ -137,23 +138,11 @@ public final class CommonScanActivity extends Activity implements ScanListener, 
         //扫描成功后，扫描器不会再连续扫描，如需连续扫描，调用reScan()方法。
         //scanManager.reScan();
 //		Toast.makeText(that, "result="+rawResult.getText(), Toast.LENGTH_LONG).show();
-
-        if (!scanManager.isScanning()) { //如果当前不是在扫描状态
-            //设置再次扫描按钮出现
-            rescan.setVisibility(View.VISIBLE);
-            scan_image.setVisibility(View.VISIBLE);
-            Bitmap barcode = null;
-            byte[] compressedBitmap = bundle.getByteArray(DecodeThread.BARCODE_BITMAP);
-            if (compressedBitmap != null) {
-                barcode = BitmapFactory.decodeByteArray(compressedBitmap, 0, compressedBitmap.length, null);
-                barcode = barcode.copy(Bitmap.Config.ARGB_8888, true);
-            }
-            scan_image.setImageBitmap(barcode);
-        }
-        rescan.setVisibility(View.VISIBLE);
-        scan_image.setVisibility(View.VISIBLE);
-        tv_scan_result.setVisibility(View.VISIBLE);
-        tv_scan_result.setText("结果："+rawResult.getText());
+        
+        Intent intent = new Intent();
+        intent.putExtra("scanResult",rawResult.getText());
+        setResult(RESULT_OK,intent);
+        finish();
     }
 
     void startScan() {

@@ -108,6 +108,9 @@
             android:name=".scanning.CommonScanActivity"
             android:label="@string/app_name"
             android:theme="@android:style/Theme.Light.NoTitleBar" />
+        <activity android:name="com.example.androiderp.form.SaleProductForm">
+
+        </activity>
     </application>
 
 </manifest>
