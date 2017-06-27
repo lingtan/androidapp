@@ -40,7 +40,7 @@
         <!-- 下圆角-->
         <LinearLayout style="@style/bottom_layout">
             <TextView style="@style/usertext"
-                android:text="商品号码："
+                android:text="商品码："
                 />
             <ImageView
                 android:layout_width="wrap_content"
@@ -171,15 +171,17 @@
                 android:text="分类"
                 android:layout_gravity="center_vertical"
                 />
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/from_arrow"/>
+
             <TextView style="@style/usertext"
                 android:id="@+id/product_category"
                 android:hint="请选择分类"
                 android:layout_gravity="center_vertical"
                 />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/from_arrow"
+                android:gravity="right"/>
         </LinearLayout>
 
         <!-- 分割线 -->
@@ -192,15 +194,17 @@
                 android:text="品牌"
                 android:layout_gravity="center_vertical"
                 />
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/from_arrow"/>
+
             <TextView style="@style/usertext"
                 android:id="@+id/product_brand"
                 android:hint="请选择品牌"
                 android:layout_gravity="center_vertical"
                 />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/from_arrow"
+                android:gravity="right"/>
         </LinearLayout>
         <!-- 分割线 -->
         <View style="@style/bg_line"  android:layout_marginLeft="10dp"
@@ -212,15 +216,17 @@
                 android:text="单位"
                 android:layout_gravity="center_vertical"
                 />
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/from_arrow"/>
+
             <TextView style="@style/usertext"
                 android:id="@+id/product_unit"
                 android:hint="请选择单位"
                 android:layout_gravity="center_vertical"
                 />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/from_arrow"
+                android:gravity="right"/>
         </LinearLayout>
 
     </LinearLayout>

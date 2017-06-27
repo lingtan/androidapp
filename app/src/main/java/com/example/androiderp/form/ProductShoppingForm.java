@@ -47,13 +47,14 @@ import java.util.List;
 public class ProductShoppingForm extends AppCompatActivity implements View.OnClickListener {
     private InputMethodManager manager;
     private EditText name,number,salesfqty,salesprice,category;
-    private TextView save,toobar_tile,toobar_back,toobar_add,setSaleamount;
+    private TextView save,toobar_tile,toobar_back,toobar_add;
     private ProductShopping shopping;
     private DisplayMetrics dm;
     private Product customlist;
     private String customid,edit;
     private Drawable errorIcon;
     private String  amounttext;
+    private Button shopsave;
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
@@ -72,27 +73,29 @@ public class ProductShoppingForm extends AppCompatActivity implements View.OnCli
         category.setKeyListener(null);
         salesfqty=(EditText)findViewById(R.id.product_fqty);
         salesprice=(EditText)findViewById(R.id.product_salesprice);
-        setSaleamount=(TextView) findViewById(R.id.product_amount);
         save=(TextView)findViewById(R.id.customtoobar_right);
         toobar_tile=(TextView)findViewById(R.id.customtoobar_midd);
         toobar_back=(TextView)findViewById(R.id.customtoobar_left);
         toobar_add=(TextView)findViewById(R.id.customtoobar_r) ;
+        shopsave=(Button)findViewById(R.id.shopping_button);
+        shopsave.setOnClickListener(this);
         save.setOnClickListener(this);
         toobar_back.setOnClickListener(this);
         toobar_add.setCompoundDrawables(null,null,null,null);
-        save.setCompoundDrawables(null,null,null,null);
         toobar_tile.setCompoundDrawables(null,null,null,null);
-        toobar_back.setCompoundDrawables(null,null,null,null);
         errorIcon = getResources().getDrawable(R.drawable.icon_error);
 // 设置图片大小
         errorIcon.setBounds(new Rect(0, 0, errorIcon.getIntrinsicWidth(),
                 errorIcon.getIntrinsicHeight()));
-        save.setText("保存");
         toobar_tile.setText("商品销售");
         Drawable del= getResources().getDrawable(R.drawable.suppliercategory_delete);
         del.setBounds(0, 0, del.getMinimumWidth(), del.getMinimumHeight());
+        Drawable more= getResources().getDrawable(R.drawable.toobar_more);
+        more.setBounds(0, 0, more.getMinimumWidth(), more.getMinimumHeight());
         toobar_back.setCompoundDrawables(del,null,null,null);
+        save.setCompoundDrawables(more,null,null,null);
         toobar_back.setText("");
+        save.setText("");
         formInit();
         salesprice.addTextChangedListener(new TextWatcher() {
             @Override
@@ -175,7 +178,13 @@ public class ProductShoppingForm extends AppCompatActivity implements View.OnCli
         switch (v.getId())
 
         {
-            case R.id.customtoobar_right:
+            case R.id.customtoobar_left:
+                Intent intent = new Intent();
+                setResult(RESULT_FIRST_USER,intent);
+                finish();
+             break;
+
+            case R.id.shopping_button:
                 if (TextUtils.isEmpty(salesprice.getText().toString())) {
                     salesprice.setError("销售价格不能为0",errorIcon);
                 }else if (TextUtils.isEmpty(salesfqty.getText().toString()))
@@ -183,6 +192,7 @@ public class ProductShoppingForm extends AppCompatActivity implements View.OnCli
                     salesfqty.setError("销售数量不能为0",errorIcon);
                 }else {
                     shopping = new ProductShopping();
+                    shopping.setId(customlist.getId());
                     shopping.setSalename(name.getText().toString());
                     shopping.setSalenumber(number.getText().toString());
                     shopping.setCategory(category.getText().toString());
@@ -190,20 +200,11 @@ public class ProductShoppingForm extends AppCompatActivity implements View.OnCli
                     shopping.setSalefqty(Integer.parseInt(salesfqty.getText().toString().trim()));
                     shopping.setSaleamount(Double.valueOf(salesprice.getText().toString().trim())*Integer.parseInt(salesfqty.getText().toString().trim()));
                     toobar_add.setVisibility(View.VISIBLE);
-                    Intent intent = new Intent();
-                    intent.putExtra("shop_data",shopping);
-                    setResult(RESULT_OK,intent);
+                    Intent intentsave = new Intent();
+                    intentsave.putExtra("shop_data",shopping);
+                    setResult(RESULT_OK,intentsave);
                     finish();
                 }
-
-
-            break;
-            case R.id.customtoobar_left:
-                Intent intent = new Intent();
-                setResult(RESULT_FIRST_USER,intent);
-                finish();
-             break;
-
 
 
         }

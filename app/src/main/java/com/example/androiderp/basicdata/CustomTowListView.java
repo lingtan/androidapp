@@ -98,6 +98,7 @@ public class CustomTowListView extends CustomSearchBase implements View.OnClickL
         leftListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                toobar_m.setText(categorylistdatas.get(position).getName().toString());
                 pposition=position;
                 leftAdapter.setSeclection(position);
                 leftAdapter.notifyDataSetInvalidated();
@@ -159,7 +160,7 @@ public class CustomTowListView extends CustomSearchBase implements View.OnClickL
         for (int i = 0; i < customListDatas.size(); i++) {
             int index = customListDatas.get(i).getName().indexOf(name);
             int indey;
-            if(toobar_m.getText().toString().equals("全部类别"))
+            if(toobar_m.getText().toString().equals("全部产品"))
             {
                 indey=0;
             }else {
@@ -297,30 +298,6 @@ public class CustomTowListView extends CustomSearchBase implements View.OnClickL
         {
             case R.id.custom_toobar_left:
                 CustomTowListView.this.finish();
-                break;
-
-            case R.id.custom_toobar_midd:
-                if( common.mPopWindow==null ||!common.mPopWindow.isShowing())
-                {   popuMenuDatas.clear();
-                    PopuMenuDataStructure popuMenub = new PopuMenuDataStructure(R.drawable.poppu_wrie,"全部类别");
-                    popuMenuDatas.add(popuMenub);
-                    categoryDatas= DataSupport.findAll(CustomCategory.class);
-                    for(CustomCategory category:categoryDatas)
-
-                    {
-                        PopuMenuDataStructure popuMenua = new PopuMenuDataStructure(R.drawable.poppu_wrie, category.getName());
-                        popuMenuDatas.add(popuMenua);
-
-                    }
-                    showPopupWindow(popuMenuDatas);
-                    int xPos = dm.widthPixels / 3;
-                    common.mPopWindow.showAsDropDown(v,-120,5);
-                    //mPopWindow.showAtLocation(findViewById(R.id.main), Gravity.BOTTOM, 0, 0);//从底部弹出
-                }
-                else {
-                    common.mPopWindow.dismiss();
-                }
-
                 break;
 
             case R.id.custom_toobar_right:

@@ -8,7 +8,7 @@
     android:fitsSystemWindows="true"
     app:contentInsetLeft="0dp"
     app:contentInsetStart="0dp"
-    android:background="#152c5e"
+    android:background="#E57E58"
   >
 
     <TextView
@@ -33,7 +33,6 @@
         android:text="全部类别"
         android:gravity="center"
         android:textSize="14dp"
-        android:drawableRight="@drawable/toobar_arrow"
         android:visibility="visible" />
     <TextView
         android:id="@+id/custom_toobar_right"

@@ -58,6 +58,12 @@
         <activity android:name="com.example.androiderp.basicdata.CustomTowListView">
 
         </activity>
+        <activity android:name="com.example.androiderp.basicdata.SaleOutListView">
+
+        </activity>
+        <activity android:name="com.example.androiderp.basicdata.SaleOutEntyList">
+
+        </activity>
         <activity android:name="com.example.androiderp.basicdata.CustomSearchListView">
 
         </activity>
@@ -76,7 +82,9 @@
         <activity android:name="com.example.androiderp.form.UnitForm">
 
         </activity>
+        <activity android:name="com.example.androiderp.form.StockForm">
 
+        </activity>
         <activity android:name="com.example.androiderp.form.SupplierForm">
 
         </activity>
@@ -86,19 +94,40 @@
         <activity android:name="com.example.androiderp.form.ProductShoppingForm">
 
         </activity>
+        <activity android:name="com.example.androiderp.form.EmployeeForm">
+
+        </activity>
+        <activity android:name="com.example.androiderp.form.ConsignmentForm">
+
+        </activity>
+        <activity android:name="com.example.androiderp.form.ScrennProductShoppingForm">
+
+        </activity>
         <activity android:name="com.example.androiderp.basicdata.ProductTowListView">
 
     </activity>
         <activity android:name="com.example.androiderp.basicdata.ProductBadgeListView">
 
         </activity>
+        <activity android:name="com.example.androiderp.basicdata.ConsignmentListview">
+
+        </activity>
         <activity android:name="com.example.androiderp.basicdata.BrandListView">
+
+        </activity>
+        <activity android:name="com.example.androiderp.basicdata.EmployeeListview">
+
+        </activity>
+        <activity android:name="com.example.androiderp.basicdata.StockListView">
 
         </activity>
         <activity android:name="com.example.androiderp.basicdata.BrandBadgeListView">
 
         </activity>
         <activity android:name="com.example.androiderp.basicdata.ProductCategoryListview">
+
+        </activity>
+        <activity android:name="com.example.androiderp.basicdata.SelectCustomListView">
 
         </activity>
         <activity android:name="com.example.androiderp.basicdata.UnitListView">

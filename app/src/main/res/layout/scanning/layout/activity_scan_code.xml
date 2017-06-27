@@ -20,7 +20,7 @@
             android:id="@+id/title_bar"
             android:layout_width="fill_parent"
             android:layout_height="45dip"
-            android:background="@android:color/white" >
+            android:background="@color/scan_bg" >
 
             <ImageView
                 android:id="@+id/authorize_return"
@@ -31,7 +31,7 @@
                 android:background="@null"
                 android:paddingLeft="12dp"
                 android:paddingRight="20dp"
-                android:src="@drawable/ic_my_returns_arrow"
+                android:src="@drawable/toobar_back"
                 />
             <TextView
                 android:id="@+id/common_title_TV_center"
@@ -41,6 +41,7 @@
                 android:layout_centerVertical="true"
                 android:ellipsize="middle"
                 android:singleLine="true"
+                android:textColor="#ffffff"
                 android:text="二维码扫描"
                 android:textSize="18sp" />
         </RelativeLayout>

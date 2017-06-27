@@ -2,7 +2,7 @@
 <litepal>
     <dbname value="BookStore" ></dbname>
 
-    <version value="14" ></version>
+    <version value="20" ></version>
 
     <list>
         <mapping class="com.example.androiderp.adaper.DataStructure"></mapping>
@@ -14,6 +14,11 @@
         <mapping class="com.example.androiderp.CustomDataClass.Brand"></mapping>
         <mapping class="com.example.androiderp.CustomDataClass.Product"></mapping>
         <mapping class="com.example.androiderp.CustomDataClass.ProductCategory"></mapping>
+        <mapping class="com.example.androiderp.CustomDataClass.Stock"></mapping>
+        <mapping class="com.example.androiderp.CustomDataClass.Employee"></mapping>
+        <mapping class="com.example.androiderp.CustomDataClass.Consignment"></mapping>
+        <mapping class="com.example.androiderp.CustomDataClass.SalesOut"></mapping>
+        <mapping class="com.example.androiderp.CustomDataClass.SalesOutEnty"></mapping>
 
     </list>
 </litepal>

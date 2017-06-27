@@ -9,12 +9,21 @@ import android.os.Parcelable;
  */
 
 public class ProductShopping implements Parcelable {
+    private int id;
     private String salename;
     private String salenumber;
     private String category;
     private double salesprice;
     private int salefqty;
     private double saleamount;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getSalename() {
         return salename;
@@ -76,6 +85,7 @@ public class ProductShopping implements Parcelable {
         dest.writeString(category);
         dest.writeDouble(salesprice);
         dest.writeInt(salefqty);
+        dest.writeInt(id);
         dest.writeDouble(saleamount);
     }
     public static final Parcelable.Creator<ProductShopping> CREATOR=new Parcelable.Creator<ProductShopping>(){
@@ -87,6 +97,7 @@ public class ProductShopping implements Parcelable {
             productShopping.category=source.readString();
             productShopping.salesprice=source.readDouble();
             productShopping.salefqty=source.readInt();
+            productShopping.id=source.readInt();
             productShopping.saleamount=source.readDouble();
             return productShopping;
         }

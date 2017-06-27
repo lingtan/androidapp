@@ -279,9 +279,11 @@ public class ProductBadgeListView extends CustomSearchBase implements View.OnCli
                 {
 
                     ProductShopping shopping=(ProductShopping) data.getParcelableExtra("shop_data");
+                    Log.d("tongtan",String.valueOf(shopping.getId()));
+                    Log.d("tongtan",shopping.getSalename());
                     for(ProductShopping shop:shoppings)
-
                     {
+
                        if(shop.getSalenumber().equals(shopping.getSalenumber())){
                            shoppings.remove(shop);
                        }

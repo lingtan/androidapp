@@ -1,43 +1,42 @@
 package com.example.androiderp.form;
 
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
-import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
-import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
+import android.widget.ListAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.example.androiderp.CustomDataClass.Product;
 import com.example.androiderp.CustomDataClass.ProductCategory;
 import com.example.androiderp.CustomDataClass.ProductShopping;
+import com.example.androiderp.CustomDataClass.SalesOut;
+import com.example.androiderp.CustomDataClass.SalesOutEnty;
 import com.example.androiderp.CustomDataClass.ShoppingData;
+import com.example.androiderp.CustomDataClass.Stock;
 import com.example.androiderp.R;
 import com.example.androiderp.adaper.CommonDataStructure;
-import com.example.androiderp.adaper.CommonListViewAdapter;
 import com.example.androiderp.adaper.DataStructure;
 import com.example.androiderp.adaper.PopuMenuDataStructure;
 import com.example.androiderp.adaper.SaleProductListViewAdapter;
-import com.example.androiderp.basicdata.BrandListView;
+import com.example.androiderp.basicdata.ConsignmentListview;
+import com.example.androiderp.basicdata.EmployeeListview;
 import com.example.androiderp.basicdata.ProductBadgeListView;
-import com.example.androiderp.basicdata.ProductCategoryListview;
-import com.example.androiderp.basicdata.UnitListView;
+import com.example.androiderp.basicdata.SaleOutListView;
+import com.example.androiderp.basicdata.SelectCustomListView;
 import com.example.androiderp.common.Common;
 import com.example.androiderp.custom.CustomSearchBase;
 import com.example.androiderp.listview.Menu;
@@ -46,10 +45,13 @@ import com.example.androiderp.listview.SlideAndDragListView;
 import com.example.androiderp.listview.Utils;
 import com.example.androiderp.scanning.CommonScanActivity;
 import com.example.androiderp.scanning.utils.Constant;
-
 import org.litepal.crud.DataSupport;
 
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -59,67 +61,68 @@ import java.util.List;
 public class SaleProductForm extends CustomSearchBase implements View.OnClickListener, AdapterView.OnItemClickListener,
         SlideAndDragListView.OnMenuItemClickListener, SlideAndDragListView.OnItemDeleteListener {
     private InputMethodManager manager;
-    private EditText barcode,model,note;
-    private ImageView numberscreen;
+    private EditText note;
     private LinearLayout saleproduct_add;
-    private TextView save,toobar_tile,toobar_back,toobar_add,category,brand,unit,name,number;
-    private Product supplier;
+    private TextView save,toobar_tile,toobar_back,toobar_add,category,name,number,data,consignment,totalamout,totalfqty;
     private DisplayMetrics dm;
-    private LinearLayout categoryLayout,brandLayout,unitLayout,hideLayoutOne,hideLayoutTow;
-    private RelativeLayout moreLayout;
+    private LinearLayout categoryLayout,customLayout,stockLayout,dataLayout,consignmentLayout,screenLayout,totalLayout;
     private Product customlist;
-    private String customid,edit;
-    private Button buttondelete;
+    private String customid;
     private Drawable errorIcon;
     private Common common;
     private Intent  intentback;
     private List<PopuMenuDataStructure> popuMenuDatas;
     private List<Product> findNumber;
+    private List<SalesOutEnty> salesOutEntyList=new ArrayList<SalesOutEnty>();
     private List<ProductShopping> shoppinglist = new ArrayList<ProductShopping>();
     private List<CommonDataStructure> listdatas = new ArrayList<CommonDataStructure>();
     private SlideAndDragListView<CommonDataStructure> plistView;
     private SaleProductListViewAdapter adapter;
     private Menu mMenu;
+    private List<Stock> stocks;
+    private Calendar cal;
+    private int year,month,day;
+    private int countall;
+    private double countamount;
+    private Intent intent;
     public void iniView() {
         setContentView(R.layout.saleproductform);
         initMenu();
         initUiAndListener();
         dm=new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
-        intentback= new Intent(SaleProductForm.this, SaleProductForm.class);
+        showStockWindow();
         final Intent intent=getIntent();
         customid=intent.getStringExtra("product_item");
-        edit=intent.getStringExtra("action");
         manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        name=(TextView)findViewById(R.id.product_supplier);
+        name=(TextView)findViewById(R.id.product_custom);
         saleproduct_add=(LinearLayout) findViewById(R.id.saleproduct_add);
         number=(TextView)findViewById(R.id.product_stock);
-        barcode=(EditText)findViewById(R.id.product_barcode);
-        model=(EditText)findViewById(R.id.product_model);
+        data=(TextView)findViewById(R.id.product_data);
+        consignment=(TextView)findViewById(R.id.product_consignment);
         note=(EditText)findViewById(R.id.product_note);
-        numberscreen=(ImageView)findViewById(R.id.number_screen);
+        screenLayout=(LinearLayout) findViewById(R.id.number_screen);
         category=(TextView)findViewById(R.id.product_category);
-        brand=(TextView)findViewById(R.id.product_brand);
-        unit=(TextView)findViewById(R.id.product_unit);
         save=(TextView)findViewById(R.id.customtoobar_right);
         toobar_tile=(TextView)findViewById(R.id.customtoobar_midd);
         toobar_back=(TextView)findViewById(R.id.customtoobar_left);
         categoryLayout=(LinearLayout)findViewById(R.id.product_category_layout);
-        brandLayout=(LinearLayout)findViewById(R.id.product_brand_layout);
-        unitLayout=(LinearLayout)findViewById(R.id.product_unit_layout);
         toobar_add=(TextView)findViewById(R.id.customtoobar_r) ;
-        buttondelete=(Button)findViewById(R.id.loginbutton);
-        moreLayout=(RelativeLayout)findViewById(R.id.productform_layout_more);
-        hideLayoutOne=(LinearLayout)findViewById(R.id.productform_layout_hide_one);
-        hideLayoutTow=(LinearLayout)findViewById(R.id.productform_layout_hide_tow);
+        stockLayout=(LinearLayout)findViewById(R.id.product_stock_layout);
+        customLayout=(LinearLayout)findViewById(R.id.product_custom_layout);
+        dataLayout=(LinearLayout)findViewById(R.id.product_data_layout);
+        consignmentLayout=(LinearLayout)findViewById(R.id.product_consignment_layout);
+        totalfqty=(TextView)findViewById(R.id.product_totalfqty);
+        totalamout=(TextView)findViewById(R.id.product_totalamount);
+        totalLayout=(LinearLayout)findViewById(R.id.product_total_layout);
+        stockLayout.setOnClickListener(this);
+        customLayout.setOnClickListener(this);
+        dataLayout.setOnClickListener(this);
+        consignmentLayout.setOnClickListener(this);
         save.setOnClickListener(this);
         toobar_back.setOnClickListener(this);
         categoryLayout.setOnClickListener(this);
-        brandLayout.setOnClickListener(this);
-        unitLayout.setOnClickListener(this);
         toobar_add.setOnClickListener(this);
-        buttondelete.setOnClickListener(this);
-        moreLayout.setOnClickListener(this);
         saleproduct_add.setOnClickListener(this);
         save.setCompoundDrawables(null,null,null,null);
         toobar_tile.setCompoundDrawables(null,null,null,null);
@@ -129,14 +132,9 @@ public class SaleProductForm extends CustomSearchBase implements View.OnClickLis
                 errorIcon.getIntrinsicHeight()));
         save.setText("保存");
         formInit();
+        getDate();
 
-        popuMenuDatas = new ArrayList<PopuMenuDataStructure>();
-        PopuMenuDataStructure popuMenua = new PopuMenuDataStructure(android.R.drawable.ic_menu_edit, "美的");
-        popuMenuDatas.add(popuMenua);
-        PopuMenuDataStructure popuMenub = new PopuMenuDataStructure(android.R.drawable.ic_menu_edit, "松下");
-        popuMenuDatas.add(popuMenub);
-        showPopupWindow(popuMenuDatas);
-        numberscreen.setOnClickListener(new View.OnClickListener() {
+        screenLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -145,6 +143,7 @@ public class SaleProductForm extends CustomSearchBase implements View.OnClickLis
                 startActivityForResult(openCameraIntent, 5);
             }
         });
+        toobar_tile.setText("销售单");
 
     }
     private void  formInit()
@@ -155,35 +154,24 @@ public class SaleProductForm extends CustomSearchBase implements View.OnClickLis
             customlist = DataSupport.find(Product.class, Long.parseLong(customid));
             name.setText(customlist.getName());
             number.setText(customlist.getNumber());
-            barcode.setText(customlist.getBarcode());
-            model.setText(customlist.getModel());
             note.setText(customlist.getNote());
             category.setText(customlist.getCategory());
-            brand.setText(customlist.getBrand());
-            unit.setText(customlist.getUnit());
-            if(edit.equals("edit")) {
-                number.setKeyListener(null);
-                toobar_add.setVisibility(View.VISIBLE);
-                buttondelete.setVisibility(View.VISIBLE);
-            }else {
-                toobar_add.setVisibility(View.INVISIBLE);
-                buttondelete.setVisibility(View.INVISIBLE);
-            }
-        }
-        if(edit!=null) {
-            if (edit.equals("edit")) {
-                toobar_tile.setText("商品修改");
-            } else {
-                toobar_tile.setText("商品新增");
-            }
+
         }
     }
-
+    //获取当前日期
+    private void getDate() {
+        cal=Calendar.getInstance();
+        year=cal.get(Calendar.YEAR);       //获取年月日时分秒
+        month=cal.get(Calendar.MONTH);   //获取到的月份是从0开始计数
+        day=cal.get(Calendar.DAY_OF_MONTH);
+        data.setText(year+"-"+(++month)+"-"+day);
+    }
     public void initMenu() {
         mMenu = new Menu(true);
         mMenu.addItem(new MenuItem.Builder().setWidth((int) getResources().getDimension(R.dimen.slv_item_bg_btn_width))
                 .setBackground(Utils.getDrawable(this, R.drawable.btn_right0))
-                .setText("编辑")
+                .setText("取消")
                 .setDirection(MenuItem.DIRECTION_RIGHT)
                 .setTextColor(Color.BLACK)
                 .setTextSize(14)
@@ -209,43 +197,34 @@ public class SaleProductForm extends CustomSearchBase implements View.OnClickLis
             case MenuItem.DIRECTION_RIGHT:
                 switch (buttonPosition) {
                     case 0:
-                        Intent intent=new Intent(SaleProductForm.this,ProductCategoryForm.class);
-                        startActivityForResult(intent,1);
 
-                        return Menu.ITEM_NOTHING;
+                        return Menu.ITEM_SCROLL_BACK;
                     case 1:
-                        AlertDialog.Builder dialog=new AlertDialog.Builder(SaleProductForm.this);
-                        dialog.setTitle("提示");
-                        dialog.setMessage("您确认要删除该分类？");
-                        dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
+
                                 DataStructure.deleteAll(ProductCategory.class,"name = ?",listdatas.get(itemPosition - plistView.getHeaderViewsCount()).getName().toString());
 
-                                AlertDialog.Builder dialogOK=new AlertDialog.Builder(SaleProductForm.this);
-                                dialogOK.setMessage("该分类已经删除");
-                                dialogOK.setNegativeButton("确认", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
 
-                                        listdatas.remove(itemPosition - plistView.getHeaderViewsCount());
-                                        adapter.notifyDataSetChanged();
-                                    }
-                                });
-                                dialogOK.show();
+                                  listdatas.remove(itemPosition - plistView.getHeaderViewsCount());
+                                   adapter.notifyDataSetChanged();
+                                  setListViewHeightBasedOnChildren(plistView);
+                        countall=0;
+                        countamount=0.00;
+                        DecimalFormat df = new DecimalFormat("#####0.00");
+                        for(int i = 0; i < listdatas.size(); i++)
+                        {
+
+                            countall+= listdatas.get(i).getFqty();
+                            countamount+=listdatas.get(i).getSaleamount();
+                        }
+                        if(countamount!=0) {
+                            totalLayout.setVisibility(View.VISIBLE);
+                            totalamout.setText("¥"+df.format(countamount));
+                            totalfqty.setText(String.valueOf(countall));
+                        }else {
+                            totalLayout.setVisibility(View.GONE);
+                        }
 
 
-
-
-                            }
-                        });
-                        dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-
-                            }
-                        });
-                        dialog.show();
                         return Menu.ITEM_NOTHING;
                 }
         }
@@ -261,11 +240,10 @@ public class SaleProductForm extends CustomSearchBase implements View.OnClickLis
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
 
-        Intent intent=new Intent(SaleProductForm.this,ProductCategoryForm.class);
-
-        setResult(RESULT_OK,intent);
-
-        this.finish();
+        Intent intent=new Intent(SaleProductForm.this,ScrennProductShoppingForm.class);
+        intent.putExtra("action", "edit");
+        intent.putExtra("product_item", String.valueOf(listdatas.get(position).getId()));
+        startActivityForResult(intent,7);
     }
 
     private void hintKbTwo() {
@@ -282,59 +260,73 @@ public class SaleProductForm extends CustomSearchBase implements View.OnClickLis
 
         {
             case R.id.customtoobar_right:
-                findNumber=DataStructure.where("number = ?",number.getText().toString()).find(Product.class);
                 if (TextUtils.isEmpty(name.getText().toString())) {
-                    name.setError("需要输入商品名称",errorIcon);
-                }else if (TextUtils.isEmpty(category.getText().toString()))
-                {
-                    category.setError("请选择分类",errorIcon);
-                }
-                else if (edit.equals("edit")) {
-                    supplier = new Product();
-                    supplier.setName(name.getText().toString());
-                    supplier.setNumber(number.getText().toString());
-                    supplier.setBarcode(barcode.getText().toString());
-                    supplier.setModel(model.getText().toString());
-                    supplier.setNote(note.getText().toString());
-                    supplier.setCategory(category.getText().toString());
-                    supplier.setBrand(brand.getText().toString());
-                    supplier.setUnit(unit.getText().toString());
-                    supplier.update(Long.parseLong(customid));
-                    Toast.makeText(SaleProductForm.this,"修改成功",Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent();
-                    setResult(RESULT_OK,intent);
-                    hintKbTwo();
+                    Toast.makeText(SaleProductForm.this,"请选择客户",Toast.LENGTH_SHORT).show();
 
-                } else if (findNumber.size()>0)
+                }else if (TextUtils.isEmpty(number.getText().toString()))
                 {
-                    Toast.makeText(SaleProductForm.this,"货号已经存在",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SaleProductForm.this,"请选择仓库",Toast.LENGTH_SHORT).show();
+                }
+                else if (listdatas.size()==0)
+                {
+                    Toast.makeText(SaleProductForm.this,"请选择产品",Toast.LENGTH_SHORT).show();
                 }else
 
                 {
-                    supplier = new Product();
-                    supplier.setName(name.getText().toString());
-                    supplier.setNumber(number.getText().toString());
-                    supplier.setBarcode(barcode.getText().toString());
-                    supplier.setModel(model.getText().toString());
-                    supplier.setNote(note.getText().toString());
-                    supplier.setCategory(category.getText().toString());
-                    supplier.setBrand(brand.getText().toString());
-                    supplier.setUnit(unit.getText().toString());
-                    supplier.setImage(R.drawable.listvist_item_delete);
-                    supplier.setBadgeshow("");
-                    supplier.save();
+                    SimpleDateFormat format=new SimpleDateFormat("yyyyMMddHHmmss");
+                    Date curData=new Date(System.currentTimeMillis());
+                    String fdate=format.format(curData);
+                    for(int i = 0; i < listdatas.size(); i++)
+                    {
+
+                        SalesOutEnty salesOutEnty=new SalesOutEnty();
+                        salesOutEnty.setItemname(listdatas.get(i).getName());
+                        salesOutEnty.setItemnumber(listdatas.get(i).getNumber());
+                        salesOutEnty.setItemprice(listdatas.get(i).getSalesprice());
+                        salesOutEnty.setItemfqty(listdatas.get(i).getFqty());
+                        salesOutEnty.setItemamount(listdatas.get(i).getSaleamount());
+                        salesOutEntyList.add(salesOutEnty);
+                    }
+                    DataSupport.saveAll(salesOutEntyList);
+                    SalesOut salesOut =new SalesOut();
+                    salesOut.setSalesOutEntyList(salesOutEntyList);
+                    salesOut.setCustomer(name.getText().toString());
+                    salesOut.setNuber("XSCK"+ fdate);
+                    salesOut.setFdate(data.getText().toString());
+                    salesOut.setStock(number.getText().toString());
+                    salesOut.setSaleamount(countamount);
+                    salesOut.setSalefqty(countall);
+                    salesOut.setSalesman(category.getText().toString());
+                    salesOut.setConsignment(consignment.getText().toString());
+                    salesOut.setNote(note.getText().toString().trim());
+                    salesOut.save();
                     Toast.makeText(SaleProductForm.this,"新增成功",Toast.LENGTH_SHORT).show();
-                    customid=String.valueOf(DataSupport.findLast(Product.class).getId());
-                    edit="edit";
+                    save.setVisibility(View.GONE);
                     toobar_add.setVisibility(View.VISIBLE);
-                    buttondelete.setVisibility(View.VISIBLE);
-                    Intent intent = new Intent();
-                    setResult(RESULT_OK,intent);
-                    hintKbTwo();
+
 
                 }
 
             break;
+            case R.id.product_stock_layout:
+                if( common.mPopWindow==null ||!common.mPopWindow.isShowing())
+                {
+                    int xPos = dm.widthPixels / 3;
+                    common.mPopWindow.showAsDropDown(number,xPos,5);
+                    //mPopWindow.showAtLocation(findViewById(R.id.main), Gravity.BOTTOM, 0, 0);//从底部弹出
+                }
+                else {
+                    common.mPopWindow.dismiss();
+                }
+
+                break;
+
+            case R.id.product_custom_layout:
+                Intent intentcustom=new Intent(SaleProductForm.this, SelectCustomListView.class);
+                startActivityForResult(intentcustom,8);
+
+
+                break;
             case R.id.customtoobar_left:
 
                     SaleProductForm.this.finish();
@@ -342,51 +334,20 @@ public class SaleProductForm extends CustomSearchBase implements View.OnClickLis
              break;
             case R.id.product_category_layout:
 
-                Intent intentcategory=new Intent(SaleProductForm.this, ProductCategoryListview.class);
+                Intent intentcategory=new Intent(SaleProductForm.this, EmployeeListview.class);
                 intentcategory.putExtra("index",category.getText().toString());
                 startActivityForResult(intentcategory,1);
                 break;
+            case R.id.product_data_layout:
 
-            case R.id.product_brand_layout:
-
-                Intent intentbrand=new Intent(SaleProductForm.this, BrandListView.class);
-                intentbrand.putExtra("index",brand.getText().toString());
-                startActivityForResult(intentbrand,2);
-                break;
-
-            case R.id.product_unit_layout:
-
-                Intent intentunit=new Intent(SaleProductForm.this, UnitListView.class);
-                intentunit.putExtra("index",unit.getText().toString());
-                startActivityForResult(intentunit,3);
-                break;
-            case R.id.loginbutton:
-                AlertDialog.Builder dialog=new AlertDialog.Builder(SaleProductForm.this);
-                dialog.setTitle("提示");
-                dialog.setMessage("您确认要删除该商品？");
-                dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                DatePickerDialog.OnDateSetListener listener=new DatePickerDialog.OnDateSetListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        DataStructure.deleteAll(Product.class,"name = ?",name.getText().toString());
-
-                        AlertDialog.Builder dialogOK=new AlertDialog.Builder(SaleProductForm.this);
-                        dialogOK.setMessage("该商品已经删除");
-                        dialogOK.setNegativeButton("确认", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Intent intent = new Intent();
-                                setResult(RESULT_OK,intent);
-                                finish();
-                            }
-                        });
-                        dialogOK.show();
-
-
-
-
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        data.setText(year+"-"+(++month)+"-"+day);
                     }
-                });
-                dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                };
+                DatePickerDialog dialog=new DatePickerDialog(SaleProductForm.this, 0,listener,year,month,day);//后边三个参数为显示dialog时默认的日期，月份从0开始，0-11对应1-12个月
+                dialog.setButton(DialogInterface.BUTTON_NEGATIVE,"取消",new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
@@ -394,14 +355,18 @@ public class SaleProductForm extends CustomSearchBase implements View.OnClickLis
                 });
                 dialog.show();
                 break;
-
+            case R.id.product_consignment_layout:
+                Intent intentconsignment=new Intent(SaleProductForm.this, ConsignmentListview.class);
+                intentconsignment.putExtra("index",consignment.getText().toString());
+                startActivityForResult(intentconsignment,9);
+                break;
             case R.id.customtoobar_r:
                 if( common.mPopWindow==null ||!common.mPopWindow.isShowing())
                 {   popuMenuDatas.clear();
 
-                    PopuMenuDataStructure popuMenub = new PopuMenuDataStructure(R.drawable.poppu_wrie, "商品新增");
+                    PopuMenuDataStructure popuMenub = new PopuMenuDataStructure(R.drawable.poppu_wrie, "销售单新增");
                     popuMenuDatas.add(popuMenub);
-                    PopuMenuDataStructure popuMenua = new PopuMenuDataStructure(R.drawable.poppu_wrie, "商品复制");
+                    PopuMenuDataStructure popuMenua = new PopuMenuDataStructure(R.drawable.poppu_wrie, "销售单复制");
                     popuMenuDatas.add(popuMenua);
                     int xPos = dm.widthPixels / 3;
                     showPopupWindow(popuMenuDatas);
@@ -412,13 +377,6 @@ public class SaleProductForm extends CustomSearchBase implements View.OnClickLis
                     common.mPopWindow.dismiss();
                 }
                 break;
-
-            case R.id.productform_layout_more:
-                moreLayout.setVisibility(View.INVISIBLE);
-                hideLayoutOne.setVisibility(View.VISIBLE);
-                hideLayoutTow.setVisibility(View.VISIBLE);
-
-                 break;
             case R.id.saleproduct_add:
                 Intent intentbadge=new Intent(SaleProductForm.this, ProductBadgeListView.class);
                 startActivityForResult(intentbadge,6);
@@ -436,22 +394,13 @@ public class SaleProductForm extends CustomSearchBase implements View.OnClickLis
             public void onItemClick(AdapterView<?> adapterView, View view,
                                     int position, long id) {
 
-                if(popuMenuDatas.get(position).getName().equals("商品新增"))
+                if(popuMenuDatas.get(position).getName().equals("销售单新增"))
                 {
-
-                    intentback.removeExtra("product_item");
-                    intentback.putExtra("action","add");
-                    startActivityForResult(intentback,4);
+                    intent = new Intent(SaleProductForm.this, SaleProductForm.class);
+                    startActivity(intent);
                 }
-                else if(popuMenuDatas.get(position).getName().equals("商品复制"))
+                else
 
-                {
-                    intentback.removeExtra("product_item");
-                    intentback.putExtra("action","add");
-                    intentback.putExtra("product_item", customid);
-                    startActivityForResult(intentback,4);
-
-                }else
                 {
 
                 }
@@ -461,23 +410,18 @@ public class SaleProductForm extends CustomSearchBase implements View.OnClickLis
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        DecimalFormat df = new DecimalFormat("#####0.00");
         switch (requestCode){
             case 1:
                 if(resultCode==RESULT_OK){
                     category.setText(data.getStringExtra("data_return"));
                 }
                 break;
-            case 2:
+            case 9:
                 if(resultCode==RESULT_OK){
-                    brand.setText(data.getStringExtra("data_return"));
+                    consignment.setText(data.getStringExtra("data_return"));
                 }
                 break;
-            case 3:
-                if(resultCode==RESULT_OK){
-                    unit.setText(data.getStringExtra("data_return"));
-                }
-                break;
-
             case 4:
                 if(resultCode==RESULT_OK){
                     Intent intent = new Intent();
@@ -489,38 +433,182 @@ public class SaleProductForm extends CustomSearchBase implements View.OnClickLis
             case 5:
                 if(resultCode==RESULT_OK) {
 
-                    Intent intent=getIntent();
-                    number.setText(data.getStringExtra("scanResult"));
+                    countall=0;
+                    countamount=0.00;
+                    findNumber=DataStructure.where("number = ?",data.getStringExtra("scanResult")).find(Product.class);
 
+                   if(findNumber.size()==0){
+                       Toast.makeText(SaleProductForm.this,"找不到条码为"+data.getStringExtra("scanResult")+"商品",Toast.LENGTH_LONG).show();
+                   }else {
+
+                       for (Product product : findNumber) {
+                           boolean flag=true;
+                           for (CommonDataStructure structure : listdatas) {
+
+                               if(structure.getNumber().equals(product.getNumber()))
+                               {
+                                   structure.setFqty(structure.getFqty()+1);
+                                   structure.setSaleamount(structure.getSaleamount()+structure.getSalesprice());
+                                   flag=false;
+                               }
+                           }
+                           if(flag==true)
+                           {
+                               CommonDataStructure commonData = new CommonDataStructure();
+                               commonData.setId(product.getId());
+                               commonData.setNumber(product.getNumber());
+                               commonData.setName(product.getName());
+                               commonData.setFqty(1);
+                               commonData.setSaleamount(Double.valueOf(product.getSalesprice()));
+                               commonData.setSalesprice(Double.valueOf(product.getSalesprice()));
+
+                               listdatas.add(commonData);
+                           }
+
+                       }
+
+                       for(int i = 0; i < listdatas.size(); i++)
+                       {
+
+                           countall+= listdatas.get(i).getFqty();
+                           countamount+=listdatas.get(i).getSaleamount();
+                       }
+                       adapter = new SaleProductListViewAdapter(SaleProductForm.this, R.layout.saleproduct_item, listdatas);
+                       plistView.setAdapter(adapter);
+                       setListViewHeightBasedOnChildren(plistView);
+                       if(countamount!=0) {
+                           totalLayout.setVisibility(View.VISIBLE);
+                           totalamout.setText("¥"+df.format(countamount));
+                           totalfqty.setText(String.valueOf(countall));
+                       }else {
+                           totalLayout.setVisibility(View.GONE);
+                       }
+
+                   }
                 }
 
                 break;
             case 6:
                 if(resultCode==RESULT_OK) {
+                    countall=0;
+                    countamount=0.00;
 
                     ShoppingData shoppingData=data.getParcelableExtra("shoppingdata");
 
                     shoppinglist=shoppingData.getShoppingdata();
                     for(ProductShopping shopping:shoppinglist)
                     {
+                        for(int i = 0; i < listdatas.size(); i++)
+                        {
+                            if(listdatas.get(i).getNumber().equals(shopping.getSalenumber()))
+                            {
 
+                                shopping.setSalefqty(shopping.getSalefqty()+listdatas.get(i).getFqty());
+                                shopping.setSaleamount(shopping.getSaleamount()+listdatas.get(i).getSaleamount());
+                                listdatas.remove(i);
+                                i--;
+                            }
+                        }
                         CommonDataStructure commonData=new CommonDataStructure();
+                        commonData.setId(shopping.getId());
                         commonData.setName(shopping.getSalename());
+                        commonData.setNumber(shopping.getSalenumber());
                         commonData.setFqty(shopping.getSalefqty());
                         commonData.setSaleamount(shopping.getSaleamount());
                         commonData.setSalesprice(shopping.getSalesprice());
                         listdatas.add(commonData);
                     }
+                    for(int i = 0; i < listdatas.size(); i++)
+                    {
+
+                        countall+= listdatas.get(i).getFqty();
+                        countamount+=listdatas.get(i).getSaleamount();
+                    }
 
                     adapter = new SaleProductListViewAdapter(SaleProductForm.this, R.layout.saleproduct_item, listdatas);
                     plistView.setAdapter(adapter);
+                    setListViewHeightBasedOnChildren(plistView);
+                    if(countamount!=0) {
+                        totalLayout.setVisibility(View.VISIBLE);
+                        totalamout.setText("¥"+df.format(countamount));
+                        totalfqty.setText(String.valueOf(countall));
+                    }else {
+                        totalLayout.setVisibility(View.GONE);
+                    }
                 }
 
                 break;
+
+            case 7:
+                if(resultCode==RESULT_OK) {
+                    countall=0;
+                    countamount=0.00;
+                    ProductShopping shopping = (ProductShopping) data.getParcelableExtra("shop_data");
+                    for ( CommonDataStructure commonData : listdatas)
+
+                    {
+                        if (commonData.getNumber().toString().equals(shopping.getSalenumber().toString())) {
+                            commonData.setFqty(shopping.getSalefqty());
+                            commonData.setSalesprice(shopping.getSalesprice());
+                            commonData.setSaleamount(shopping.getSaleamount());
+                        }
+                    }
+
+                    adapter = new SaleProductListViewAdapter(SaleProductForm.this, R.layout.saleproduct_item, listdatas);
+                    plistView.setAdapter(adapter);
+
+                    for(int i = 0; i < listdatas.size(); i++)
+                    {
+
+                        countall+= listdatas.get(i).getFqty();
+                        countamount+=listdatas.get(i).getSaleamount();
+                    }
+
+                    if(countamount!=0) {
+                        totalLayout.setVisibility(View.VISIBLE);
+                        totalamout.setText("¥"+df.format(countamount));
+                        totalfqty.setText(String.valueOf(countall));
+                    }else {
+                        totalLayout.setVisibility(View.GONE);
+                    }
+
+                }
+
+
+                break;
+
+            case 8:
+                if(resultCode==RESULT_OK){
+                    name.setText(data.getStringExtra("data_return"));
+                }
+                break;
+
             default:
         }
     }
+    private void showStockWindow() {
+        common = new Common();
+        popuMenuDatas = new ArrayList<PopuMenuDataStructure>();
+        stocks= DataSupport.findAll(Stock.class);
+        for(Stock stock:stocks)
 
+        {
+            PopuMenuDataStructure popuMenua = new PopuMenuDataStructure(R.drawable.poppu_wrie, stock.getName());
+            popuMenuDatas.add(popuMenua);
+
+        }
+        common.PopupWindow(SaleProductForm.this, dm, popuMenuDatas);
+        common.listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view,
+                                    int position, long id) {
+
+                number.setText(popuMenuDatas.get(position).getName());
+                common.mPopWindow.dismiss();
+            }
+        });
+    }
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         // TODO Auto-generated method stub
@@ -530,6 +618,25 @@ public class SaleProductForm extends CustomSearchBase implements View.OnClickLis
             }
         }
         return super.onTouchEvent(event);
+    }
+//根据内容动态测量listview实际高度,动态显示listview内容，此方法，适配器中 getView 方法如果是 RelativeLayout 则显示不正常
+    private void setListViewHeightBasedOnChildren(SlideAndDragListView<CommonDataStructure> listView) {
+        if (listView == null) {
+            return;
+        }
+        ListAdapter listAdapter = listView.getAdapter();
+        if (listAdapter == null) {
+            return;
+        }
+        int totalHeight = 0;
+        for (int i = 0; i < listAdapter.getCount(); i++) {
+            View listItem = listAdapter.getView(i, null, listView);
+            listItem.measure(0, 0);
+            totalHeight += listItem.getMeasuredHeight();
+        }
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+        listView.setLayoutParams(params);
     }
 
 }

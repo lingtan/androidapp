@@ -8,7 +8,8 @@ android:orientation="vertical">
     <RelativeLayout
         android:id="@+id/custom_item_layout_one"
         android:layout_width="match_parent"
-        android:layout_height="35dp"
+        android:layout_height="50dp"
+        android:gravity="center_vertical"
         android:layout_alignParentLeft="true"
        >
         <TextView
@@ -17,44 +18,40 @@ android:orientation="vertical">
             android:id="@+id/custom_badge_item_show"
             android:textColor="#ffffff"
             android:background="#FF0000"
-            android:textStyle="bold"
             android:textSize="12dip" />
     <TextView
         android:id="@+id/custom_item_layout_one_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginLeft="25dp"
+        android:layout_marginLeft="15dp"
         android:textColor="#343434"
-        android:textSize="12dip" />
+        android:textStyle="bold"
+        android:textSize="13dip" />
         <TextView
             android:id="@+id/custom_item_layout_one_fqty"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:layout_marginLeft="10dp"
             android:layout_toRightOf="@+id/custom_item_layout_one_name"
-            android:textColor="#343434"
-            android:textSize="12dip" />
+            android:textColor="#E57E58"
+            android:textSize="13dip" />
 
         <TextView
             android:id="@+id/custom_item_layout_one_salesprice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:layout_marginLeft="10dp"
             android:layout_toRightOf="@+id/custom_item_layout_one_fqty"
             android:textColor="#343434"
-            android:textSize="12dip" />
+            android:textSize="13dip" />
         <TextView
             android:id="@+id/custom_item_layout_one_saleamount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:layout_marginLeft="10dp"
             android:layout_toRightOf="@+id/custom_item_layout_one_salesprice"
-            android:textColor="#343434"
-            android:textSize="12dip" />
+            android:textColor="#E57E58"
+            android:textSize="13dip" />
 
     </RelativeLayout>
     <LinearLayout

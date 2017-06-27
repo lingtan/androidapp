@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.example.androiderp.R;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 //继承ArrayAdapter<DataStructure>
@@ -86,10 +87,11 @@ public class SaleProductListViewAdapter extends ArrayAdapter<CommonDataStructure
             itemLayout.setBackgroundColor(Color.parseColor("#ffffff"));
         }
         // 重新获取ViewHolder
+        DecimalFormat df = new DecimalFormat("#####0.00");
         viewHolder.name.setText(data.get(position).getName());
         viewHolder.fqty.setText(String.valueOf(data.get(position).getFqty()));
-        viewHolder.saleamount.setText(String.valueOf(data.get(position).getSaleamount()));
-        viewHolder.salesprice.setText(String.valueOf(data.get(position).getSalesprice()));
+        viewHolder.saleamount.setText("¥"+df.format(data.get(position).getSaleamount()));
+        viewHolder.salesprice.setText("¥"+df.format(data.get(position).getSalesprice()));
         viewHolder.image.setImageResource(data.get(position).getImage());
 
 

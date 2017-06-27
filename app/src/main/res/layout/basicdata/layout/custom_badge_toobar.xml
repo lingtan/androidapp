@@ -8,7 +8,7 @@
     android:fitsSystemWindows="true"
     app:contentInsetLeft="0dp"
     app:contentInsetStart="0dp"
-    android:background="#152c5e"
+    android:background="#E57E58"
   >
 
     <TextView

@@ -5,6 +5,7 @@ public class CommonDataStructure {
 
 
     private String name;
+    private String number;
     private int fqty;
     private double saleamount;
     private double salesprice;
@@ -18,6 +19,14 @@ public class CommonDataStructure {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
     }
 
     public int getFqty() {
