@@ -14,6 +14,7 @@ import com.example.androiderp.R;
 import com.example.androiderp.adaper.SaleOutAdapter;
 import com.example.androiderp.custom.CustomSearch;
 import com.example.androiderp.custom.CustomSearchBase;
+import com.example.androiderp.form.PurchaseProductForm;
 import com.example.androiderp.form.SaleProductForm;
 
 import org.litepal.crud.DataSupport;
@@ -151,7 +152,7 @@ public class SupplierOutListView extends CustomSearchBase implements View.OnClic
                 break;
 
             case R.id.custom_toobar_right:
-                intentadd = new Intent(SupplierOutListView.this, SaleProductForm.class);
+                intentadd = new Intent(SupplierOutListView.this, PurchaseProductForm.class);
                 startActivity(intentadd);
                 break;
 
