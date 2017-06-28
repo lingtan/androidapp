@@ -53,15 +53,16 @@
                 android:text="供应商分类"
                 android:layout_gravity="center_vertical"
                 />
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/from_arrow"/>
             <TextView style="@style/usertext"
                 android:id="@+id/supplierform_category"
                 android:hint="请选择供应商分类"
                 android:layout_gravity="center_vertical"
                />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/from_arrow"
+                android:layout_gravity="right|center_vertical"/>
         </LinearLayout>
 
     </LinearLayout>
@@ -104,7 +105,7 @@
             <Button
                 android:id="@+id/loginbutton"
                 android:layout_width="match_parent"
-                android:layout_height="350dp"
+                android:layout_height="40dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginBottom="30dp"
@@ -112,7 +113,7 @@
                 android:text="删除客户"
                 android:textColor="#ffffff"
                 android:visibility="invisible"
-                android:textSize="16dp" />
+                android:textSize="14dp" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

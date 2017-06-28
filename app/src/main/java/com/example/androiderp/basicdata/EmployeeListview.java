@@ -45,9 +45,6 @@ public class EmployeeListview extends CustomSearchBase implements View.OnClickLi
     private CustomSearch custom_search;
     private String categoryid;
     private ImageView lastCheckedOption;
-    private int pposition;
-    private int indexpositon;
-    private String indexname;
     private Menu mMenu;
     @Override
     public void iniView(){
@@ -64,15 +61,11 @@ public class EmployeeListview extends CustomSearchBase implements View.OnClickLi
         custom_search = (CustomSearch) findViewById(R.id.search);
         Intent intent=getIntent();
         categoryid=intent.getStringExtra("category");
-        indexname=intent.getStringExtra("index");
         customlist= DataSupport.findAll(Employee.class);
         custom_toobar_m.setCompoundDrawables(null,null,null,null);
         for(Employee employee:customlist)
 
-        {   if(employee.getName().equals(indexname))
         {
-            indexpositon =customlist.indexOf(employee);
-        }
 
             CommonDataStructure commonData=new CommonDataStructure();
             commonData.setName(employee.getName());
@@ -83,12 +76,7 @@ public class EmployeeListview extends CustomSearchBase implements View.OnClickLi
 
 
         }
-        if(indexname.isEmpty())
-        {
-            indexpositon=-1;
-        }else {
-            pposition = indexpositon;
-        }
+
 
         //构造函数第一参数是类的对象，第二个是布局文件，第三个是数据源
         dm=new DisplayMetrics();
@@ -100,7 +88,6 @@ public class EmployeeListview extends CustomSearchBase implements View.OnClickLi
                  custom_toobar_m.setText(categoryid);
              }else {
                  adapter = new CommonListViewAdapter(EmployeeListview.this, R.layout.custom_item, listdatas);
-                 adapter.setSeclection(indexpositon);
                  plistView.setAdapter(adapter);
              }
 
@@ -142,18 +129,18 @@ public class EmployeeListview extends CustomSearchBase implements View.OnClickLi
             case MenuItem.DIRECTION_RIGHT:
                 switch (buttonPosition) {
                     case 0:
-                        Intent intent=new Intent(EmployeeListview.this,ProductCategoryForm.class);
+                        Intent intent=new Intent(EmployeeListview.this,EmployeeForm.class);
                         if(searchdatas.size()!=0) {
 
                             intent.putExtra("action", "edit");
                             intent.putExtra("customid", String.valueOf(searchdatas.get(itemPosition).getId()));
-                            indexname=searchdatas.get(itemPosition).getName();
+
 
                         }else {
 
                             intent.putExtra("action", "edit");
                             intent.putExtra("customid", String.valueOf(listdatas.get(itemPosition).getId()));
-                            indexname=listdatas.get(itemPosition).getName();
+
                         }
                         startActivityForResult(intent,1);
 
@@ -172,12 +159,8 @@ public class EmployeeListview extends CustomSearchBase implements View.OnClickLi
                                 dialogOK.setNegativeButton("确认", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        if(indexpositon==itemPosition)
-                                        {
-                                            indexpositon=-1;
-                                        }
+
                                         listdatas.remove(itemPosition - plistView.getHeaderViewsCount());
-                                        adapter.setSeclection(indexpositon);
                                         adapter.notifyDataSetChanged();
                                     }
                                 });
@@ -210,28 +193,7 @@ public class EmployeeListview extends CustomSearchBase implements View.OnClickLi
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
 
-        Intent intent=new Intent(EmployeeListview.this,ProductCategoryForm.class);
-        if(searchdatas.size()!=0) {
 
-            intent.putExtra("action", "edit");
-            intent.putExtra("data_return", String.valueOf(searchdatas.get(position).getName()));
-            indexname=searchdatas.get(position).getName();
-
-        }else {
-
-            intent.putExtra("action", "edit");
-            intent.putExtra("data_return", String.valueOf(listdatas.get(position).getName()));
-            indexname=listdatas.get(position).getName();
-        }
-        setResult(RESULT_OK,intent);
-
-        if(lastCheckedOption != null){
-            lastCheckedOption.setVisibility(View.INVISIBLE);
-        }
-        lastCheckedOption = (ImageView)view.findViewById(R.id.custom_item_layout_one_image);
-        lastCheckedOption.setVisibility(View.VISIBLE);
-        pposition=position;
-        this.finish();
     }
     //筛选条件
     public Object[] searchItem(String name) {
@@ -267,22 +229,8 @@ public class EmployeeListview extends CustomSearchBase implements View.OnClickLi
 //adapter刷新,重写Filter方式会出现BUG.
     public void updateLayout(String name) {
         if(searchdatas!=null) {
-            int index=-1;
-            if(!name.isEmpty())
-            {
-               for(int i=0;i<searchdatas.size();i++)
-               {
-                   if(searchdatas.get(i).getName().equals(indexname))
-                   {
-                       index=i;
-                   }
-               }
-            }else
-            {
-                index=pposition;
-            }
+
             adapter = new CommonListViewAdapter(EmployeeListview.this, R.layout.custom_item, searchdatas);
-            adapter.setSeclection(index);
             plistView.setAdapter(adapter);
         }
     }
@@ -334,7 +282,6 @@ public class EmployeeListview extends CustomSearchBase implements View.OnClickLi
 
                     }
                     adapter = new CommonListViewAdapter(EmployeeListview.this, R.layout.custom_item, listdatas);
-                    adapter.setSeclection(pposition);
                     plistView.setAdapter(adapter);
 
 

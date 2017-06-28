@@ -59,6 +59,7 @@ public class CommonAdapter extends ArrayAdapter<CommonDataStructure>   {
         if (convertView == null) {
             view = LayoutInflater.from(getContext()).inflate(resourceId, parent, false);
             viewHolder = new ViewHolder();
+            viewHolder.badge = (TextView) view.findViewById (R.id.custom_badge_item_show);
             viewHolder.name = (TextView) view.findViewById (R.id.custom_item_layout_one_name);
             viewHolder.image=(ImageView) view.findViewById(R.id.custom_item_layout_one_image);
 
@@ -87,6 +88,7 @@ public class CommonAdapter extends ArrayAdapter<CommonDataStructure>   {
         // 重新获取ViewHolder
         viewHolder.name.setText(data.get(position).getName());
         viewHolder.image.setImageResource(data.get(position).getImage());
+        viewHolder.badge.setText(data.get(position).getBadge());
 
         /*首先响应子控件的事件
         viewHolder.name.setOnClickListener(new View.OnClickListener() {

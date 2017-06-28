@@ -28,6 +28,7 @@ public class SaleOutListView extends CustomSearchBase implements View.OnClickLis
     private TextView toobar_l,toobar_r,toobar_m;
     private CustomSearch search;
     private Intent intent;
+    private Intent intentadd;
 
     @Override
     public void iniView(){
@@ -39,7 +40,7 @@ public class SaleOutListView extends CustomSearchBase implements View.OnClickLis
         toobar_r.setOnClickListener(this);
         toobar_m.setOnClickListener(this);
         search = (CustomSearch) findViewById(R.id.search);
-        customAllDatas= DataSupport.findAll(SalesOut.class);
+        customAllDatas=DataSupport.where("billtype =?","2").find(SalesOut.class);
         intent= new Intent(SaleOutListView.this, SaleOutEntyList.class);
         toobar_m.setText("销售流水");
         toobar_l.setText("首页");
@@ -128,7 +129,7 @@ public class SaleOutListView extends CustomSearchBase implements View.OnClickLis
                     if(customAllDatas.size()!=0) {
                         customAllDatas.clear();
                     }
-                    customAllDatas= DataSupport.findAll(SalesOut.class);
+                    customAllDatas=DataSupport.where("billtype =?","2").find(SalesOut.class);
 
                     adapter = new SaleOutAdapter(SaleOutListView.this, R.layout.saleout_item, customAllDatas);
                     listView.setAdapter(adapter);
@@ -148,8 +149,8 @@ public class SaleOutListView extends CustomSearchBase implements View.OnClickLis
                 break;
 
             case R.id.custom_toobar_right:
-                intent = new Intent(SaleOutListView.this, SaleProductForm.class);
-                startActivity(intent);
+                intentadd = new Intent(SaleOutListView.this, SaleProductForm.class);
+                startActivity(intentadd);
                 break;
 
 

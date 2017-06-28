@@ -18,12 +18,11 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.example.androiderp.CustomDataClass.Supplier;
+import com.example.androiderp.CustomDataClass.SupplierCategory;
 import com.example.androiderp.R;
 import com.example.androiderp.adaper.DataStructure;
 import com.example.androiderp.basicdata.SupplierCategoryListView;
-import com.example.androiderp.common.Common;
 
 import org.litepal.crud.DataSupport;
 
@@ -36,7 +35,6 @@ public class SupplierForm extends AppCompatActivity implements View.OnClickListe
     private EditText name,address,phone,fax;
     private TextView save,toobar_tile,toobar_back,toobar_add,category;
     private Supplier supplier;
-    private Common common;
     private DisplayMetrics dm;
     private LinearLayout linearLayout;
     private Supplier customlist;
@@ -92,6 +90,15 @@ public class SupplierForm extends AppCompatActivity implements View.OnClickListe
             category.setText(customlist.getCategory());
             toobar_add.setVisibility(View.VISIBLE);
             buttondelete.setVisibility(View.VISIBLE);
+        }else {
+
+            SupplierCategory sCategory  = DataSupport.find(SupplierCategory.class, 1);
+            if(sCategory==null)
+            {
+
+            }else {
+                category.setText(sCategory.getName());
+            }
         }
         if(edit!=null) {
             if (edit.equals("edit")) {

@@ -320,6 +320,7 @@ public class ProductBadgeListView extends CustomSearchBase implements View.OnCli
                     categoryAllDatas= DataSupport.findAll(ProductCategory.class);
                     CommonDataStructure commonDataAll=new CommonDataStructure();
                     commonDataAll.setName("全部产品");
+                    commonDataAll.setBadge(String.valueOf(countall));
                     categorylistdatas.add(commonDataAll);
                     CommonDataStructure commonDataN=new CommonDataStructure();
                     commonDataN.setName("未分类");
@@ -341,7 +342,7 @@ public class ProductBadgeListView extends CustomSearchBase implements View.OnCli
                         commonData.setName(productCategory.getName());
                         commonData.setId(productCategory.getId());
                         if(categorycount>0) {
-                            commonData.setCategory(String.valueOf(categorycount));
+                            commonData.setBadge(String.valueOf(categorycount));
                         }
                         categorylistdatas.add(commonData);
 

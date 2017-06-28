@@ -31,8 +31,6 @@ import java.util.List;
 
 public class SelectCustomListView extends CustomSearchBase implements View.OnClickListener {
     private List<CommonDataStructure> customListDatas = new ArrayList<CommonDataStructure>();
-    private List<DataStructure> fruit = new ArrayList<DataStructure>();
-    private List<PopuMenuDataStructure> popuMenuDatas;
     private CommonAdapter rightAdapter;
     private CommonAdapter leftAdapter;
     private ListView rightListView;
@@ -41,13 +39,11 @@ public class SelectCustomListView extends CustomSearchBase implements View.OnCli
     private User user;
     private List<CommonDataStructure> searchDatas= new ArrayList<CommonDataStructure>();
     private List<Custom> customAllDatas;
-    private List<CustomCategory> categoryDatas;
-    private Common common;
     private TextView toobar_l,toobar_r,toobar_m;
     private CustomSearch search;
-    private Intent intent;
     private List<CustomCategory> categoryAllDatas;
     private List<CommonDataStructure> categorylistdatas = new ArrayList<CommonDataStructure>();
+    private String selectCategory;
     private int pposition;
 
     @Override
@@ -61,7 +57,8 @@ public class SelectCustomListView extends CustomSearchBase implements View.OnCli
         toobar_m.setOnClickListener(this);
         search = (CustomSearch) findViewById(R.id.search);
         customAllDatas= DataSupport.findAll(Custom.class);
-        intent= new Intent(SelectCustomListView.this, CustomForm.class);
+        toobar_m.setText("客户");
+        selectCategory="全部";
         for(Custom custom:customAllDatas)
 
         {
@@ -76,7 +73,7 @@ public class SelectCustomListView extends CustomSearchBase implements View.OnCli
         }
         categoryAllDatas= DataSupport.findAll(CustomCategory.class);
         CommonDataStructure commonDataAll=new CommonDataStructure();
-        commonDataAll.setName("全部产品");
+        commonDataAll.setName("全部");
         categorylistdatas.add(commonDataAll);
         CommonDataStructure commonDataN=new CommonDataStructure();
         commonDataN.setName("未分类");
@@ -98,7 +95,7 @@ public class SelectCustomListView extends CustomSearchBase implements View.OnCli
         leftListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                toobar_m.setText(categorylistdatas.get(position).getName().toString());
+                selectCategory=categorylistdatas.get(position).getName().toString();
                 pposition=position;
                 leftAdapter.setSeclection(position);
                 leftAdapter.notifyDataSetInvalidated();
@@ -114,16 +111,14 @@ public class SelectCustomListView extends CustomSearchBase implements View.OnCli
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view,
                                     int position, long id) {
-                intent.removeExtra("action");
+                Intent intent=getIntent();
                         if(searchDatas.size()!=0) {
 
-                            intent.putExtra("action", "edit");
                             intent.putExtra("data_return", String.valueOf(searchDatas.get(position).getName()));
 
 
                         }else {
 
-                            intent.putExtra("action", "edit");
                             intent.putExtra("data_return", String.valueOf(customListDatas.get(position).getName()));
                         }
                 setResult(RESULT_OK,intent);
@@ -143,13 +138,6 @@ public class SelectCustomListView extends CustomSearchBase implements View.OnCli
 
         search.addTextChangedListener(textWatcher);
 
-        popuMenuDatas = new ArrayList<PopuMenuDataStructure>();
-        PopuMenuDataStructure popuMenua = new PopuMenuDataStructure(android.R.drawable.ic_menu_edit, "美的");
-        popuMenuDatas.add(popuMenua);
-        PopuMenuDataStructure popuMenub = new PopuMenuDataStructure(android.R.drawable.ic_menu_edit, "松下");
-        popuMenuDatas.add(popuMenub);
-        showPopupWindow(popuMenuDatas);
-
     }
 
     //筛选条件
@@ -160,11 +148,11 @@ public class SelectCustomListView extends CustomSearchBase implements View.OnCli
         for (int i = 0; i < customListDatas.size(); i++) {
             int index = customListDatas.get(i).getName().indexOf(name);
             int indey;
-            if(toobar_m.getText().toString().equals("全部产品"))
+            if(selectCategory.equals("全部"))
             {
                 indey=0;
             }else {
-                indey = customListDatas.get(i).getCategory().indexOf(toobar_m.getText().toString());
+                indey = customListDatas.get(i).getCategory().indexOf(selectCategory);
 
             }
             // 存在匹配的数据
@@ -189,7 +177,7 @@ public class SelectCustomListView extends CustomSearchBase implements View.OnCli
                }
             }
 
-        }else if (name.equals("全部产品"))
+        }else if (name.equals("全部"))
         {
             for (int i = 0; i < customListDatas.size(); i++) {
 
@@ -219,35 +207,6 @@ public class SelectCustomListView extends CustomSearchBase implements View.OnCli
         }
     }
 
-    private void showPopupWindow(final List<PopuMenuDataStructure> popuMenuData) {
-        common = new Common();
-
-        common.PopupWindow(SelectCustomListView.this, dm, popuMenuData);
-        common.listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view,
-                                    int position, long id) {
-
-                if(popuMenuDatas.get(position).getName().equals("客户新增"))
-                {
-                    intent.removeExtra("custom_item");
-                    intent.putExtra("action","add");
-                    startActivityForResult(intent,1);
-                }
-                else if(popuMenuDatas.get(position).getName().equals("客户修改")){
-
-                }else
-                {
-                    Object[] obj = categorySearch(popuMenuData.get(position).getName().toString());
-                    Log.d("lingtan",popuMenuData.get(position).getName().toString());
-                    updateLayout(obj);
-                    toobar_m.setText(popuMenuData.get(position).getName().toString());
-                }
-                common.mPopWindow.dismiss();
-            }
-        });
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -281,16 +240,6 @@ public class SelectCustomListView extends CustomSearchBase implements View.OnCli
         }
 
 
-    public boolean onKey(View v, int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_MENU && event.getRepeatCount() == 0
-                && event.getAction() == KeyEvent.ACTION_DOWN) {
-            if (common.mPopWindow != null && common.mPopWindow.isShowing()) {
-                common.mPopWindow.dismiss();
-            }
-            return true;
-        }
-        return false;
-    }
 
     @Override
     public void onClick(View v) {
@@ -301,20 +250,10 @@ public class SelectCustomListView extends CustomSearchBase implements View.OnCli
                 break;
 
             case R.id.custom_toobar_right:
-                if( common.mPopWindow==null ||!common.mPopWindow.isShowing())
-                {   popuMenuDatas.clear();
-                    PopuMenuDataStructure popuMenua = new PopuMenuDataStructure(R.drawable.poppu_wrie, "客户修改");
-                    popuMenuDatas.add(popuMenua);
-                    PopuMenuDataStructure popuMenub = new PopuMenuDataStructure(R.drawable.poppu_wrie, "客户新增");
-                    popuMenuDatas.add(popuMenub);
-                    int xPos = dm.widthPixels / 3;
-                    showPopupWindow(popuMenuDatas);
-                    common.mPopWindow.showAsDropDown(v,0,5);
-                    //mPopWindow.showAtLocation(findViewById(R.id.main), Gravity.BOTTOM, 0, 0);//从底部弹出
-                }
-                else {
-                    common.mPopWindow.dismiss();
-                }
+                Intent intent=new Intent(SelectCustomListView.this,CustomForm.class);
+                intent.removeExtra("custom_item");
+                intent.putExtra("action","add");
+                startActivityForResult(intent,1);
                 break;
 
 

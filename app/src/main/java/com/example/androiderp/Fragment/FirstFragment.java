@@ -8,18 +8,24 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+
+import com.example.androiderp.CustomDataClass.Employee;
 import com.example.androiderp.R;
 import com.example.androiderp.adaper.CusteomGridAdapter;
 import com.example.androiderp.basicdata.BrandBadgeListView;
 import com.example.androiderp.basicdata.CustomCategoryListview;
 import com.example.androiderp.basicdata.CustomListView;
 import com.example.androiderp.basicdata.CustomTowListView;
+import com.example.androiderp.basicdata.EmployeeListview;
 import com.example.androiderp.basicdata.ProductBadgeListView;
 import com.example.androiderp.basicdata.ProductTowListView;
 import com.example.androiderp.basicdata.SaleOutListView;
 import com.example.androiderp.basicdata.StockListView;
+import com.example.androiderp.basicdata.SupplierOutListView;
+import com.example.androiderp.basicdata.SupplierTowListView;
 import com.example.androiderp.basicdata.UnitListView;
 import com.example.androiderp.custom.CustomGridView;
+import com.example.androiderp.form.PurchaseProductForm;
 import com.example.androiderp.form.SaleProductForm;
 
 /**
@@ -52,7 +58,7 @@ public class FirstFragment extends Fragment {
                         startActivity(intent);
                         break;
                     case 1:
-                        intent = new Intent(context, BrandBadgeListView.class);
+                        intent = new Intent(context, PurchaseProductForm.class);
                         startActivity(intent);
                         break;
                     case 2:
@@ -73,11 +79,11 @@ public class FirstFragment extends Fragment {
                         startActivity(intent);
                         break;
                     case 7:
-                        intent = new Intent(context, ProductBadgeListView.class);
+                        intent = new Intent(context, StockListView.class);
                         startActivity(intent);
                         break;
-                    case 8:
-                        intent = new Intent(context, StockListView.class);
+                    case 9:
+                        intent = new Intent(context, SupplierTowListView.class);
                         startActivity(intent);
                         break;
 
@@ -85,6 +91,16 @@ public class FirstFragment extends Fragment {
                         intent = new Intent(context, SaleOutListView.class);
                         startActivity(intent);
                         break;
+                    case 11:
+                        intent = new Intent(context, SupplierOutListView.class);
+                        startActivity(intent);
+                        break;
+                    case 12:
+                        intent = new Intent(context, EmployeeListview.class);
+                        startActivity(intent);
+                        break;
+
+
                     default:
                         break;
                 }

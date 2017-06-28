@@ -13,6 +13,7 @@ import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -38,6 +39,7 @@ public class ScrennProductShoppingForm extends AppCompatActivity implements View
     private String customid,edit;
     private Drawable errorIcon;
     private String  amounttext;
+    private Button shopsave;
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
@@ -57,23 +59,26 @@ public class ScrennProductShoppingForm extends AppCompatActivity implements View
         salesfqty=(EditText)findViewById(R.id.product_fqty);
         salesprice=(EditText)findViewById(R.id.product_salesprice);
         save=(TextView)findViewById(R.id.customtoobar_right);
+        shopsave=(Button)findViewById(R.id.shopping_button);
         toobar_tile=(TextView)findViewById(R.id.customtoobar_midd);
         toobar_back=(TextView)findViewById(R.id.customtoobar_left);
         toobar_add=(TextView)findViewById(R.id.customtoobar_r) ;
         save.setOnClickListener(this);
         toobar_back.setOnClickListener(this);
+        shopsave.setOnClickListener(this);
         toobar_add.setCompoundDrawables(null,null,null,null);
-        save.setCompoundDrawables(null,null,null,null);
         toobar_tile.setCompoundDrawables(null,null,null,null);
-        toobar_back.setCompoundDrawables(null,null,null,null);
         errorIcon = getResources().getDrawable(R.drawable.icon_error);
 // 设置图片大小
         errorIcon.setBounds(new Rect(0, 0, errorIcon.getIntrinsicWidth(),
                 errorIcon.getIntrinsicHeight()));
-        save.setText("保存");
+        save.setText("");
         toobar_tile.setText("商品销售");
         Drawable del= getResources().getDrawable(R.drawable.suppliercategory_delete);
         del.setBounds(0, 0, del.getMinimumWidth(), del.getMinimumHeight());
+        Drawable more= getResources().getDrawable(R.drawable.toobar_more);
+        more.setBounds(0, 0, more.getMinimumWidth(), more.getMinimumHeight());
+        save.setCompoundDrawables(more,null,null,null);
         toobar_back.setCompoundDrawables(del,null,null,null);
         toobar_back.setText("");
         formInit();
@@ -158,7 +163,7 @@ public class ScrennProductShoppingForm extends AppCompatActivity implements View
         switch (v.getId())
 
         {
-            case R.id.customtoobar_right:
+           case R.id.shopping_button:
                 if (TextUtils.isEmpty(salesprice.getText().toString())) {
                     salesprice.setError("销售价格不能为0",errorIcon);
                 }else if (TextUtils.isEmpty(salesfqty.getText().toString()))

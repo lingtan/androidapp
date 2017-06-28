@@ -11,6 +11,7 @@ public class CommonDataStructure {
     private double salesprice;
     private int image;
     private String category;
+    private String badge;
     private int id;
 
     public String getName() {
@@ -75,5 +76,13 @@ public class CommonDataStructure {
 
     public void setImage(int image) {
         this.image = image;
+    }
+
+    public String getBadge() {
+        return badge;
+    }
+
+    public void setBadge(String badge) {
+        this.badge = badge;
     }
 }

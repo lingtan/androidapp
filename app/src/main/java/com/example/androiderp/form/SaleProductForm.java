@@ -20,6 +20,10 @@ import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.androiderp.CustomDataClass.Consignment;
+import com.example.androiderp.CustomDataClass.Custom;
+import com.example.androiderp.CustomDataClass.Employee;
 import com.example.androiderp.CustomDataClass.Product;
 import com.example.androiderp.CustomDataClass.ProductCategory;
 import com.example.androiderp.CustomDataClass.ProductShopping;
@@ -66,7 +70,10 @@ public class SaleProductForm extends CustomSearchBase implements View.OnClickLis
     private TextView save,toobar_tile,toobar_back,toobar_add,category,name,number,data,consignment,totalamout,totalfqty;
     private DisplayMetrics dm;
     private LinearLayout categoryLayout,customLayout,stockLayout,dataLayout,consignmentLayout,screenLayout,totalLayout;
-    private Product customlist;
+    private Custom customlist;
+    private Stock  stockList;
+    private Employee employeelist;
+    private Consignment consignmentList;
     private String customid;
     private Drawable errorIcon;
     private Common common;
@@ -80,6 +87,7 @@ public class SaleProductForm extends CustomSearchBase implements View.OnClickLis
     private SaleProductListViewAdapter adapter;
     private Menu mMenu;
     private List<Stock> stocks;
+    private List<Employee> employees;
     private Calendar cal;
     private int year,month,day;
     private int countall;
@@ -91,7 +99,6 @@ public class SaleProductForm extends CustomSearchBase implements View.OnClickLis
         initUiAndListener();
         dm=new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
-        showStockWindow();
         final Intent intent=getIntent();
         customid=intent.getStringExtra("product_item");
         manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -149,15 +156,43 @@ public class SaleProductForm extends CustomSearchBase implements View.OnClickLis
     private void  formInit()
     {
 
-        if(customid!=null) {
-            
-            customlist = DataSupport.find(Product.class, Long.parseLong(customid));
-            name.setText(customlist.getName());
-            number.setText(customlist.getNumber());
-            note.setText(customlist.getNote());
-            category.setText(customlist.getCategory());
+            customlist = DataSupport.find(Custom.class, 1);
+        stockList = DataSupport.find(Stock.class, 1);
+        employeelist = DataSupport.find(Employee.class, 1);
+        consignmentList = DataSupport.find(Consignment.class, 1);
 
+        if(customlist==null)
+        {
+
+        }else {
+            name.setText(customlist.getName());
         }
+
+        if(stockList==null)
+        {
+
+        }else {
+            number.setText(stockList.getName());
+        }
+        if(employeelist==null)
+        {
+
+        }else {
+            category.setText(employeelist.getName());
+        }
+        if(consignmentList==null)
+        {
+
+        }else {
+            consignment.setText(consignmentList.getName());
+        }
+
+
+
+
+
+
+
     }
     //获取当前日期
     private void getDate() {
@@ -299,6 +334,7 @@ public class SaleProductForm extends CustomSearchBase implements View.OnClickLis
                     salesOut.setSalesman(category.getText().toString());
                     salesOut.setConsignment(consignment.getText().toString());
                     salesOut.setNote(note.getText().toString().trim());
+                    salesOut.setBilltype("2");
                     salesOut.save();
                     Toast.makeText(SaleProductForm.this,"新增成功",Toast.LENGTH_SHORT).show();
                     save.setVisibility(View.GONE);
@@ -309,6 +345,7 @@ public class SaleProductForm extends CustomSearchBase implements View.OnClickLis
 
             break;
             case R.id.product_stock_layout:
+                showStockWindow();
                 if( common.mPopWindow==null ||!common.mPopWindow.isShowing())
                 {
                     int xPos = dm.widthPixels / 3;
@@ -333,10 +370,17 @@ public class SaleProductForm extends CustomSearchBase implements View.OnClickLis
 
              break;
             case R.id.product_category_layout:
+                showEmployeeWindow();
 
-                Intent intentcategory=new Intent(SaleProductForm.this, EmployeeListview.class);
-                intentcategory.putExtra("index",category.getText().toString());
-                startActivityForResult(intentcategory,1);
+                if( common.mPopWindow==null ||!common.mPopWindow.isShowing())
+                {
+                    int xPos = dm.widthPixels / 3;
+                    common.mPopWindow.showAsDropDown(category,xPos,5);
+                    //mPopWindow.showAtLocation(findViewById(R.id.main), Gravity.BOTTOM, 0, 0);//从底部弹出
+                }
+                else {
+                    common.mPopWindow.dismiss();
+                }
                 break;
             case R.id.product_data_layout:
 
@@ -605,6 +649,30 @@ public class SaleProductForm extends CustomSearchBase implements View.OnClickLis
                                     int position, long id) {
 
                 number.setText(popuMenuDatas.get(position).getName());
+                common.mPopWindow.dismiss();
+            }
+        });
+    }
+
+    private void showEmployeeWindow() {
+        common = new Common();
+        popuMenuDatas = new ArrayList<PopuMenuDataStructure>();
+        employees= DataSupport.findAll(Employee.class);
+        for(Employee employee:employees)
+
+        {
+            PopuMenuDataStructure popuMenua = new PopuMenuDataStructure(R.drawable.poppu_wrie, employee.getName());
+            popuMenuDatas.add(popuMenua);
+
+        }
+        common.PopupWindow(SaleProductForm.this, dm, popuMenuDatas);
+        common.listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view,
+                                    int position, long id) {
+
+                category.setText(popuMenuDatas.get(position).getName());
                 common.mPopWindow.dismiss();
             }
         });

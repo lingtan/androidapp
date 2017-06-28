@@ -88,6 +88,9 @@
         <activity android:name="com.example.androiderp.form.SupplierForm">
 
         </activity>
+        <activity android:name="com.example.androiderp.form.PurchaseProductForm">
+
+        </activity>
         <activity android:name="com.example.androiderp.form.ProductForm">
 
         </activity>
@@ -115,10 +118,22 @@
         <activity android:name="com.example.androiderp.basicdata.BrandListView">
 
         </activity>
+        <activity android:name="com.example.androiderp.basicdata.SupplierTowListView">
+
+        </activity>
         <activity android:name="com.example.androiderp.basicdata.EmployeeListview">
 
         </activity>
+        <activity android:name="com.example.androiderp.basicdata.SelectSupplierListView">
+
+        </activity>
         <activity android:name="com.example.androiderp.basicdata.StockListView">
+
+        </activity>
+        <activity android:name="com.example.androiderp.basicdata.SupplierOutListView">
+
+        </activity>
+        <activity android:name="com.example.androiderp.basicdata.SupplierOutEntyList">
 
         </activity>
         <activity android:name="com.example.androiderp.basicdata.BrandBadgeListView">

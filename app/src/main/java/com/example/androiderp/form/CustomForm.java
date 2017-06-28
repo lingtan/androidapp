@@ -87,6 +87,15 @@ public class CustomForm extends AppCompatActivity implements View.OnClickListene
             category.setText(customdata.getCategory());
             toobar_add.setVisibility(View.VISIBLE);
             buttondelete.setVisibility(View.VISIBLE);
+        }else {
+         CustomCategory  cCategory  = DataSupport.find(CustomCategory.class, 1);
+            if(cCategory==null)
+            {
+
+            }else {
+                category.setText(cCategory.getName());
+            }
+
         }
         if(edit.equals("edit"))
         {

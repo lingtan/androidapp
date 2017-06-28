@@ -13,14 +13,15 @@ import java.util.List;
 public class SalesOut extends DataSupport {
     private int id;
     private String customer;
-    private String   Fdate;
+    private String Fdate;
     private String nuber;
     private double saleamount;
-    private int salefqty;
+    private int    salefqty;
     private String stock;
     private String consignment;
     private String salesman;
     private String note;
+    private String billtype;
     private List<SalesOutEnty> salesOutEntyList=new ArrayList<SalesOutEnty>();
 
     public int getId() {
@@ -101,6 +102,14 @@ public class SalesOut extends DataSupport {
 
     public void setNote(String note) {
         this.note = note;
+    }
+
+    public String getBilltype() {
+        return billtype;
+    }
+
+    public void setBilltype(String billtype) {
+        this.billtype = billtype;
     }
 
     public List<SalesOutEnty> getSalesOutEntyList() {
