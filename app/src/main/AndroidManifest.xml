@@ -64,6 +64,15 @@
         <activity android:name="com.example.androiderp.basicdata.SaleOutEntyList">
 
         </activity>
+        <activity android:name="com.example.androiderp.basicdata.ProductAppropriationListView">
+
+        </activity>
+        <activity android:name="com.example.androiderp.basicdata.AppropriationListView">
+
+        </activity>
+        <activity android:name="com.example.androiderp.basicdata.AppropriationEntyList">
+
+        </activity>
         <activity android:name="com.example.androiderp.basicdata.CustomSearchListView">
 
         </activity>
@@ -95,6 +104,9 @@
 
         </activity>
         <activity android:name="com.example.androiderp.form.ProductShoppingForm">
+
+        </activity>
+        <activity android:name="com.example.androiderp.form.AppropriationForm">
 
         </activity>
         <activity android:name="com.example.androiderp.form.EmployeeForm">
