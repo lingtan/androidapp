@@ -124,6 +124,7 @@ public class CustomForm extends AppCompatActivity implements View.OnClickListene
                         Intent intent = new Intent();
                         setResult(RESULT_OK,intent);
                         Toast.makeText(CustomForm.this,"修改成功",Toast.LENGTH_SHORT).show();
+                        hintKbTwo();
                     } else {
                         custom = new Custom();
                         custom.setName(name.getText().toString());
@@ -136,6 +137,7 @@ public class CustomForm extends AppCompatActivity implements View.OnClickListene
                         edit="edit";
                         toobar_add.setVisibility(View.VISIBLE);
                         buttondelete.setVisibility(View.VISIBLE);
+                        hintKbTwo();
                         Intent intent = new Intent();
                         setResult(RESULT_OK,intent);
 
@@ -217,7 +219,14 @@ public class CustomForm extends AppCompatActivity implements View.OnClickListene
 
         }
     }
-
+    private void hintKbTwo() {
+        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        if(imm.isActive()&&getCurrentFocus()!=null){
+            if (getCurrentFocus().getWindowToken()!=null) {
+                imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+            }
+        }
+    }
     private void showPopupWindow() {
         common = new Common();
         popuMenuDatas = new ArrayList<PopuMenuDataStructure>();

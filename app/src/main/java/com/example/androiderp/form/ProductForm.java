@@ -49,7 +49,7 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
     private TextView save,toobar_tile,toobar_back,toobar_add,category,brand,unit;
     private Product supplier;
     private DisplayMetrics dm;
-    private LinearLayout categoryLayout,brandLayout,unitLayout,hideLayoutOne,hideLayoutTow;
+    private LinearLayout categoryLayout,brandLayout,unitLayout,hideLayoutOne,hideLayoutTow,hideLayoutthree;
     private RelativeLayout moreLayout;
     private Product customlist;
     private String categoryid,customid,edit;
@@ -92,6 +92,7 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
         moreLayout=(RelativeLayout)findViewById(R.id.productform_layout_more);
         hideLayoutOne=(LinearLayout)findViewById(R.id.productform_layout_hide_one);
         hideLayoutTow=(LinearLayout)findViewById(R.id.productform_layout_hide_tow);
+        hideLayoutthree=(LinearLayout)findViewById(R.id.productform_layout_hide_three);
         save.setOnClickListener(this);
         toobar_back.setOnClickListener(this);
         categoryLayout.setOnClickListener(this);
@@ -147,8 +148,8 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                 toobar_add.setVisibility(View.VISIBLE);
                 buttondelete.setVisibility(View.VISIBLE);
             }else {
-                toobar_add.setVisibility(View.INVISIBLE);
-                buttondelete.setVisibility(View.INVISIBLE);
+                toobar_add.setVisibility(View.GONE);
+                buttondelete.setVisibility(View.GONE);
             }
         }
         if(edit!=null) {
@@ -317,9 +318,14 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                 break;
 
             case R.id.productform_layout_more:
-                moreLayout.setVisibility(View.INVISIBLE);
+                moreLayout.setVisibility(View.GONE);
                 hideLayoutOne.setVisibility(View.VISIBLE);
                 hideLayoutTow.setVisibility(View.VISIBLE);
+                if (edit.equals("edit")) {
+                   hideLayoutthree.setVisibility(View.GONE);
+                }else {
+                    hideLayoutthree.setVisibility(View.VISIBLE);
+                }
 
         }
     }

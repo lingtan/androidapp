@@ -16,7 +16,7 @@ public class SalesOut extends DataSupport {
     private String Fdate;
     private String nuber;
     private double saleamount;
-    private int    salefqty;
+    private double salefqty;
     private String stock;
     private String consignment;
     private String salesman;
@@ -64,11 +64,11 @@ public class SalesOut extends DataSupport {
         this.saleamount = saleamount;
     }
 
-    public int getSalefqty() {
+    public double getSalefqty() {
         return salefqty;
     }
 
-    public void setSalefqty(int salefqty) {
+    public void setSalefqty(double salefqty) {
         this.salefqty = salefqty;
     }
 

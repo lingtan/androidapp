@@ -6,7 +6,7 @@ public class CommonDataStructure {
 
     private String name;
     private String number;
-    private int fqty;
+    private double fqty;
     private double saleamount;
     private double salesprice;
     private int image;
@@ -30,11 +30,11 @@ public class CommonDataStructure {
         this.number = number;
     }
 
-    public int getFqty() {
+    public double getFqty() {
         return fqty;
     }
 
-    public void setFqty(int fqty) {
+    public void setFqty(double fqty) {
         this.fqty = fqty;
     }
 

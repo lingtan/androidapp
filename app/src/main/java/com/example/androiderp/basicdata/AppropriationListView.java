@@ -80,7 +80,7 @@ public class AppropriationListView extends CustomSearchBase implements View.OnCl
         });
         if(customAllDatas.size()!=0) {
 
-                 adapter = new AppropriationAdapter(AppropriationListView.this, R.layout.saleout_item, customAllDatas);
+                 adapter = new AppropriationAdapter(AppropriationListView.this, R.layout.appropriation_item, customAllDatas);
                  listView.setAdapter(adapter);
             
         }

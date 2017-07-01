@@ -18,12 +18,14 @@ import com.example.androiderp.CustomDataClass.ProductCategory;
 import com.example.androiderp.CustomDataClass.ProductShopping;
 import com.example.androiderp.CustomDataClass.ShoppingData;
 import com.example.androiderp.R;
+import com.example.androiderp.adaper.AppropriationBadgeAdapter;
 import com.example.androiderp.adaper.CommonAdapter;
 import com.example.androiderp.adaper.CommonDataStructure;
 import com.example.androiderp.adaper.ProductBadgeAdapter;
 import com.example.androiderp.custom.CustomBadgeView;
 import com.example.androiderp.custom.CustomSearch;
 import com.example.androiderp.custom.CustomSearchBase;
+import com.example.androiderp.form.AppropriationShoppingForm;
 import com.example.androiderp.form.ProductForm;
 import com.example.androiderp.form.ProductShoppingForm;
 import com.example.androiderp.form.SaleProductForm;
@@ -37,8 +39,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-public class ProductAppropriationListView extends CustomSearchBase implements View.OnClickListener, ProductBadgeAdapter.Callback{
-    private ProductBadgeAdapter rightAdapter;
+public class ProductAppropriationListView extends CustomSearchBase implements View.OnClickListener, AppropriationBadgeAdapter.Callback{
+    private AppropriationBadgeAdapter rightAdapter;
     private CommonAdapter leftAdapter;
     private ListView rightListView;
     private ListView leftListView;
@@ -50,8 +52,8 @@ public class ProductAppropriationListView extends CustomSearchBase implements Vi
     private Intent intent;
     private List<ProductCategory> categoryAllDatas;
     private List<CommonDataStructure> categorylistdatas = new ArrayList<CommonDataStructure>();
-    private int countall;
-    private int categorycount;
+    private double countall;
+    private double categorycount;
     private double countamount;
    private ImageView imageView;
     private HashSet<Long> pselectedItems = new HashSet<Long>();
@@ -78,7 +80,7 @@ public class ProductAppropriationListView extends CustomSearchBase implements Vi
         search = (CustomSearch) findViewById(R.id.search);
         accounts=(LinearLayout)findViewById(R.id.product_item_layout_bottom);
         customAllDatas= DataSupport.findAll(Product.class);
-        intent= new Intent(ProductAppropriationListView.this, ProductShoppingForm.class);
+        intent= new Intent(ProductAppropriationListView.this, AppropriationShoppingForm.class);
         categoryAllDatas= DataSupport.findAll(ProductCategory.class);
         CommonDataStructure commonDataAll=new CommonDataStructure();
         commonDataAll.setName("全部产品");
@@ -264,7 +266,7 @@ public class ProductAppropriationListView extends CustomSearchBase implements Vi
     public void updateLayout(Object[] obj) {
         if(searchDatas!=null) {
 
-            rightAdapter = new ProductBadgeAdapter(ProductAppropriationListView.this, R.layout.product_badge_item, searchDatas,this);
+            rightAdapter = new AppropriationBadgeAdapter(ProductAppropriationListView.this, R.layout.appropriation_badge_item, searchDatas,this);
             rightAdapter.selectedItems=pselectedItems;
             rightListView.setAdapter(rightAdapter);
         }
@@ -307,6 +309,7 @@ public class ProductAppropriationListView extends CustomSearchBase implements Vi
                         }
 
                         product.setImage(R.drawable.listvist_item_delete);
+                        product.setStockfqty(10);
 
                     }
                     rightAdapter.notifyDataSetChanged();

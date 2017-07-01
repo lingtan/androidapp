@@ -12,7 +12,7 @@ public class SalesOutEnty extends DataSupport {
     private String itemnumber;
     private String itemcategory;
     private double itemprice;
-    private int itemfqty;
+    private double itemfqty;
     private double itemamount;
     private SalesOut salesOut;
 
@@ -56,11 +56,11 @@ public class SalesOutEnty extends DataSupport {
         this.itemprice = itemprice;
     }
 
-    public int getItemfqty() {
+    public double getItemfqty() {
         return itemfqty;
     }
 
-    public void setItemfqty(int itemfqty) {
+    public void setItemfqty(double itemfqty) {
         this.itemfqty = itemfqty;
     }
 

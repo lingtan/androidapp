@@ -15,6 +15,7 @@ public class Appropriation extends DataSupport {
     private String nuber;
     private String instock;
     private String outstock;
+    private String note;
 
     private List<AppropriationEnty> salesOutEntyList=new ArrayList<AppropriationEnty>();
 
@@ -56,6 +57,14 @@ public class Appropriation extends DataSupport {
 
     public void setOutstock(String outstock) {
         this.outstock = outstock;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
 
     public List<AppropriationEnty> getSalesOutEntyList() {

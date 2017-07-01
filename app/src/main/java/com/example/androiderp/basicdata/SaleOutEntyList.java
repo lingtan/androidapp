@@ -105,7 +105,7 @@ public class SaleOutEntyList extends CustomSearchBase implements View.OnClickLis
             category.setText(customlist.getSalesman());
             consignment.setText(customlist.getConsignment());
             totalamout.setText("¥"+df.format(customlist.getSaleamount()));
-            totalfqty.setText(String.valueOf(customlist.getSalefqty()));
+            totalfqty.setText(df.format(customlist.getSalefqty()));
             note.setText(customlist.getNote());
           for(SalesOutEnty salesOutEnty:salesOutEntyList) {
               CommonDataStructure commonData = new CommonDataStructure();

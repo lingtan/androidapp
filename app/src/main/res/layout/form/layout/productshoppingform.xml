@@ -95,7 +95,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/product_fqty"
                 android:textSize="14dp"
-                android:hint="输入数量"
+                android:hint="0.00"
                 android:maxLines="1"
                 android:inputType="phone"/>
         </LinearLayout>

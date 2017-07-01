@@ -90,7 +90,7 @@ public class SaleProductForm extends CustomSearchBase implements View.OnClickLis
     private List<Employee> employees;
     private Calendar cal;
     private int year,month,day;
-    private int countall;
+    private double countall;
     private double countamount;
     private Intent intent;
     public void iniView() {
@@ -242,7 +242,7 @@ public class SaleProductForm extends CustomSearchBase implements View.OnClickLis
                                   listdatas.remove(itemPosition - plistView.getHeaderViewsCount());
                                    adapter.notifyDataSetChanged();
                                   setListViewHeightBasedOnChildren(plistView);
-                        countall=0;
+                        countall=0.00;
                         countamount=0.00;
                         DecimalFormat df = new DecimalFormat("#####0.00");
                         for(int i = 0; i < listdatas.size(); i++)
@@ -254,7 +254,7 @@ public class SaleProductForm extends CustomSearchBase implements View.OnClickLis
                         if(countamount!=0) {
                             totalLayout.setVisibility(View.VISIBLE);
                             totalamout.setText("¥"+df.format(countamount));
-                            totalfqty.setText(String.valueOf(countall));
+                            totalfqty.setText(df.format(countall));
                         }else {
                             totalLayout.setVisibility(View.GONE);
                         }
@@ -360,6 +360,7 @@ public class SaleProductForm extends CustomSearchBase implements View.OnClickLis
 
             case R.id.product_custom_layout:
                 Intent intentcustom=new Intent(SaleProductForm.this, SelectCustomListView.class);
+                intentcustom.putExtra("index",name.getText().toString());
                 startActivityForResult(intentcustom,8);
 
 
@@ -523,7 +524,7 @@ public class SaleProductForm extends CustomSearchBase implements View.OnClickLis
                        if(countamount!=0) {
                            totalLayout.setVisibility(View.VISIBLE);
                            totalamout.setText("¥"+df.format(countamount));
-                           totalfqty.setText(String.valueOf(countall));
+                           totalfqty.setText(df.format(countall));
                        }else {
                            totalLayout.setVisibility(View.GONE);
                        }
@@ -575,7 +576,7 @@ public class SaleProductForm extends CustomSearchBase implements View.OnClickLis
                     if(countamount!=0) {
                         totalLayout.setVisibility(View.VISIBLE);
                         totalamout.setText("¥"+df.format(countamount));
-                        totalfqty.setText(String.valueOf(countall));
+                        totalfqty.setText(df.format(countall));
                     }else {
                         totalLayout.setVisibility(View.GONE);
                     }
@@ -611,7 +612,7 @@ public class SaleProductForm extends CustomSearchBase implements View.OnClickLis
                     if(countamount!=0) {
                         totalLayout.setVisibility(View.VISIBLE);
                         totalamout.setText("¥"+df.format(countamount));
-                        totalfqty.setText(String.valueOf(countall));
+                        totalfqty.setText(df.format(countall));
                     }else {
                         totalLayout.setVisibility(View.GONE);
                     }

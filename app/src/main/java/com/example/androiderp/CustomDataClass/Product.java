@@ -19,6 +19,7 @@ public class Product extends DataSupport {
     private String brand;
     private String unit;
     private int image;
+    private double stockfqty;
     private String badgeshow;
 
     public int getId() {
@@ -115,6 +116,14 @@ public class Product extends DataSupport {
 
     public void setImage(int image) {
         this.image = image;
+    }
+
+    public double getStockfqty() {
+        return stockfqty;
+    }
+
+    public void setStockfqty(double stockfqty) {
+        this.stockfqty = stockfqty;
     }
 
     public String getBadgeshow() {

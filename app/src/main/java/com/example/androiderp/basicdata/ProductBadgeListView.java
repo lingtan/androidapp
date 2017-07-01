@@ -49,8 +49,8 @@ public class ProductBadgeListView extends CustomSearchBase implements View.OnCli
     private Intent intent;
     private List<ProductCategory> categoryAllDatas;
     private List<CommonDataStructure> categorylistdatas = new ArrayList<CommonDataStructure>();
-    private int countall;
-    private int categorycount;
+    private double countall;
+    private double categorycount;
     private double countamount;
    private ImageView imageView;
     private HashSet<Long> pselectedItems = new HashSet<Long>();

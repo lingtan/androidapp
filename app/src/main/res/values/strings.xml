@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name"></string>
+    <string name="app_name">快记</string>
     <string name="EnterName">请输入姓名</string>
     <string name="EnterPassWord">请输入密码</string>
     <string name="EnterEmail">请输入邮箱地址</string>

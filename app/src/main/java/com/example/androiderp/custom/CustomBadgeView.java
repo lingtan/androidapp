@@ -121,7 +121,7 @@ public class CustomBadgeView extends TextView {
         super.setText(text, type);
     }
 
-    public void setBadgeCount(int count) {
+    public void setBadgeCount(double count) {
         setText(String.valueOf(count));
     }
 

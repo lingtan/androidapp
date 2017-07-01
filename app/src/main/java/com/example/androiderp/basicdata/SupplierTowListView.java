@@ -33,7 +33,6 @@ public class SupplierTowListView extends CustomSearchBase implements View.OnClic
     private List<Supplier> customAllDatas;
     private TextView toobar_l,toobar_r,toobar_m;
     private CustomSearch search;
-    private Intent intent;
     private String selectCategory;
     private List<SupplierCategory> categoryAllDatas;
     private List<CommonDataStructure> categorylistdatas = new ArrayList<CommonDataStructure>();
@@ -50,7 +49,7 @@ public class SupplierTowListView extends CustomSearchBase implements View.OnClic
         toobar_m.setOnClickListener(this);
         search = (CustomSearch) findViewById(R.id.search);
         customAllDatas= DataSupport.findAll(Supplier.class);
-        intent= new Intent(SupplierTowListView.this, SupplierForm.class);
+
         toobar_m.setText("供应商");
         selectCategory="全部";
         for(Supplier supplier:customAllDatas)
@@ -105,6 +104,7 @@ public class SupplierTowListView extends CustomSearchBase implements View.OnClic
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view,
                                     int position, long id) {
+             Intent   intent= new Intent(SupplierTowListView.this, SupplierForm.class);
                         if(searchDatas.size()!=0) {
 
                             intent.putExtra("action", "edit");
@@ -244,7 +244,7 @@ public class SupplierTowListView extends CustomSearchBase implements View.OnClic
                 break;
 
             case R.id.custom_toobar_right:
-                intent.removeExtra("custom_item");
+                Intent  intent= new Intent(SupplierTowListView.this, SupplierForm.class);
                 intent.putExtra("action","add");
                 startActivityForResult(intent,1);
                 break;

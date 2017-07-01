@@ -290,10 +290,11 @@ public class AppropriationForm extends CustomSearchBase implements View.OnClickL
                     DataSupport.saveAll(salesOutEntyList);
                     Appropriation salesOut =new Appropriation();
                     salesOut.setSalesOutEntyList(salesOutEntyList);
-                    salesOut.setInstock(name.getText().toString());
+                    salesOut.setInstock(number.getText().toString());
                     salesOut.setNuber("DBD"+ fdate);
-                    salesOut.setOutstock(number.getText().toString());
-                    salesOut.setFdate(year+"-"+(++month)+"-"+day);
+                    salesOut.setOutstock(name.getText().toString());
+                    salesOut.setFdate(String.valueOf(year+"-"+(++month)+"-"+day));
+                    salesOut.setNote(note.getText().toString());
                     salesOut.save();
                     Toast.makeText(AppropriationForm.this,"新增成功",Toast.LENGTH_SHORT).show();
                     save.setVisibility(View.GONE);

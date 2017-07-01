@@ -111,6 +111,7 @@
         />
 </RelativeLayout>
     <LinearLayout style="@style/hide_layout_to"
+        android:layout_marginTop="10dp"
         android:id="@+id/productform_layout_hide_one"
         android:visibility="gone">
         <!-- 上圆角-->
@@ -161,6 +162,30 @@
         </LinearLayout>
 
     </LinearLayout>
+            <LinearLayout style="@style/wrap_layout_to"
+            android:id="@+id/productform_layout_hide_three"
+            android:visibility="gone">
+
+            <View style="@style/bg_line"  android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"/>
+            <!-- 下圆角-->
+            <LinearLayout style="@style/top_layout"
+                android:id="@+id/product_stock_layout">
+                <TextView style="@style/usertext"
+                    android:text="库存初始化："
+                    android:layout_gravity="center_vertical"
+                    />
+
+                <TextView style="@style/usertext"
+                    android:id="@+id/product_stock"
+                    android:text="添加"
+                    android:textColor="#E57E58"
+                    android:gravity="right"
+                    />
+
+            </LinearLayout>
+
+        </LinearLayout>
     <LinearLayout style="@style/wrap_layout_to"
         android:id="@+id/productform_layout_hide_tow"
         android:visibility="gone">

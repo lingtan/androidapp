@@ -145,7 +145,7 @@ public class ProductShoppingForm extends AppCompatActivity implements View.OnCli
                 }else {
 
                     DecimalFormat df = new DecimalFormat("#####0.00");
-                    amounttext=df.format(Double.valueOf(salesprice.getText().toString().trim()) * Integer.parseInt(salesfqty.getText().toString().trim()));
+                    amounttext=df.format(Double.valueOf(salesprice.getText().toString().trim()) * Double.valueOf(salesfqty.getText().toString().trim()));
 
                     toobar_tile.setText("金额：¥"+amounttext);
                 }
@@ -197,8 +197,8 @@ public class ProductShoppingForm extends AppCompatActivity implements View.OnCli
                     shopping.setSalenumber(number.getText().toString());
                     shopping.setCategory(category.getText().toString());
                     shopping.setSalesprice(Double.valueOf(salesprice.getText().toString().trim()));
-                    shopping.setSalefqty(Integer.parseInt(salesfqty.getText().toString().trim()));
-                    shopping.setSaleamount(Double.valueOf(salesprice.getText().toString().trim())*Integer.parseInt(salesfqty.getText().toString().trim()));
+                    shopping.setSalefqty(Double.valueOf(salesfqty.getText().toString().trim()));
+                    shopping.setSaleamount(Double.valueOf(salesprice.getText().toString().trim())*Double.valueOf(salesfqty.getText().toString().trim()));
                     toobar_add.setVisibility(View.VISIBLE);
                     Intent intentsave = new Intent();
                     intentsave.putExtra("shop_data",shopping);

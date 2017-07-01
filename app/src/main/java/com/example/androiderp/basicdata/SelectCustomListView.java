@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -44,7 +45,10 @@ public class SelectCustomListView extends CustomSearchBase implements View.OnCli
     private List<CustomCategory> categoryAllDatas;
     private List<CommonDataStructure> categorylistdatas = new ArrayList<CommonDataStructure>();
     private String selectCategory;
+    private ImageView lastCheckedOption;
     private int pposition;
+    private int indexpositon;
+    private String indexname;
 
     @Override
     public void iniView(){
@@ -55,6 +59,8 @@ public class SelectCustomListView extends CustomSearchBase implements View.OnCli
         toobar_l.setOnClickListener(this);
         toobar_r.setOnClickListener(this);
         toobar_m.setOnClickListener(this);
+        Intent intent=getIntent();
+        indexname=intent.getStringExtra("index");
         search = (CustomSearch) findViewById(R.id.search);
         customAllDatas= DataSupport.findAll(Custom.class);
         toobar_m.setText("客户");
@@ -62,10 +68,15 @@ public class SelectCustomListView extends CustomSearchBase implements View.OnCli
         for(Custom custom:customAllDatas)
 
         {
+            if(custom.getName().equals(indexname))
+            {
+                indexpositon =customAllDatas.indexOf(custom);
+            }
             CommonDataStructure commonData=new CommonDataStructure();
             commonData.setName(custom.getName());
             commonData.setCategory(custom.getCategory());
             commonData.setId(custom.getId());
+            commonData.setImage(R.drawable.seclec_arrow);
             customListDatas.add(commonData);
 
 
@@ -100,12 +111,18 @@ public class SelectCustomListView extends CustomSearchBase implements View.OnCli
                 leftAdapter.setSeclection(position);
                 leftAdapter.notifyDataSetInvalidated();
                 Object[] obj = categorySearch(categorylistdatas.get(position).getName().toString());
-                updateLayout(obj);
+                updateLayout(categorylistdatas.get(position).getName().toString());
             }
         });
         dm=new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         user=(User) getIntent().getParcelableExtra("user_data");
+        if(indexname.isEmpty())
+        {
+            indexpositon=-1;
+        }else {
+            pposition = indexpositon;
+        }
         rightListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
@@ -115,12 +132,19 @@ public class SelectCustomListView extends CustomSearchBase implements View.OnCli
                         if(searchDatas.size()!=0) {
 
                             intent.putExtra("data_return", String.valueOf(searchDatas.get(position).getName()));
-
+                            indexname=searchDatas.get(position).getName();
 
                         }else {
 
                             intent.putExtra("data_return", String.valueOf(customListDatas.get(position).getName()));
+                            indexname=customListDatas.get(position).getName();
                         }
+                if(lastCheckedOption != null){
+                    lastCheckedOption.setVisibility(View.INVISIBLE);
+                }
+                lastCheckedOption = (ImageView)view.findViewById(R.id.custom_item_layout_one_image);
+                lastCheckedOption.setVisibility(View.VISIBLE);
+                pposition=position;
                 setResult(RESULT_OK,intent);
                 finish();
 
@@ -132,6 +156,7 @@ public class SelectCustomListView extends CustomSearchBase implements View.OnCli
             leftAdapter.setSeclection(0);
             leftListView.setAdapter(leftAdapter);
             rightAdapter = new CommonAdapter(SelectCustomListView.this, R.layout.custom_item, customListDatas);
+             rightAdapter.setSeclection(indexpositon);
             rightListView.setAdapter(rightAdapter);
             
 
@@ -200,9 +225,24 @@ public class SelectCustomListView extends CustomSearchBase implements View.OnCli
         return searchDatas.toArray();
     }
 //adapter刷新,重写Filter方式会出现BUG.
-    public void updateLayout(Object[] obj) {
+    public void updateLayout(String name) {
         if(searchDatas!=null) {
+            int index=-1;
+            if(!name.isEmpty())
+            {
+                for(int i=0;i<searchDatas.size();i++)
+                {
+                    if(searchDatas.get(i).getName().equals(indexname))
+                    {
+                        index=i;
+                    }
+                }
+            }else
+            {
+                index=pposition;
+            }
             rightAdapter = new CommonAdapter(SelectCustomListView.this, R.layout.custom_item, searchDatas);
+            rightAdapter.setSeclection(index);
             rightListView.setAdapter(rightAdapter);
         }
     }
@@ -225,12 +265,14 @@ public class SelectCustomListView extends CustomSearchBase implements View.OnCli
                         commonData.setName(category.getName());
                         commonData.setCategory(category.getCategory());
                         commonData.setId(category.getId());
+                        commonData.setImage(R.drawable.seclec_arrow);
                         customListDatas.add(commonData);
 
 
 
                     }
                     rightAdapter = new CommonAdapter(SelectCustomListView.this, R.layout.custom_item, customListDatas);
+                    rightAdapter.setSeclection(pposition);
                     rightListView.setAdapter(rightAdapter);
                 }
                 break;
@@ -282,7 +324,7 @@ public class SelectCustomListView extends CustomSearchBase implements View.OnCli
         public void afterTextChanged(Editable s) {
 
             Object[] obj = search(search.getText().toString());
-            updateLayout(obj);
+            updateLayout(search.getText().toString());
 
         }
     };

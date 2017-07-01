@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.example.androiderp.CustomDataClass.Appropriation;
 import com.example.androiderp.CustomDataClass.AppropriationEnty;
+import com.example.androiderp.CustomDataClass.Employee;
 import com.example.androiderp.CustomDataClass.SalesOut;
 import com.example.androiderp.CustomDataClass.SalesOutEnty;
 import com.example.androiderp.CustomDataClass.Stock;
@@ -42,12 +43,13 @@ import java.util.List;
 public class AppropriationEntyList extends CustomSearchBase implements View.OnClickListener, AdapterView.OnItemClickListener,
         SlideAndDragListView.OnMenuItemClickListener, SlideAndDragListView.OnItemDeleteListener {
     private InputMethodManager manager;
-    private TextView note,save,toobar_tile,toobar_back,toobar_add,category,name,number,data,consignment,totalamout,totalfqty;
+    private TextView note,save,toobar_tile,toobar_back,toobar_add,category,name,number,data,consignment,totalfqty;
     private DisplayMetrics dm;
     private Appropriation customlist;
     private String customid;
     private Drawable errorIcon;
     private Common common;
+    private double countall;
     private Intent  intentback;
     private List<PopuMenuDataStructure> popuMenuDatas;
     private List<AppropriationEnty> salesOutEntyList=new ArrayList<AppropriationEnty>();
@@ -57,7 +59,7 @@ public class AppropriationEntyList extends CustomSearchBase implements View.OnCl
     private Menu mMenu;
     private List<Stock> stocks;
     public void iniView() {
-        setContentView(R.layout.saleoutentyform);
+        setContentView(R.layout.appropriationentyform);
         initMenu();
         initUiAndListener();
         dm=new DisplayMetrics();
@@ -78,7 +80,6 @@ public class AppropriationEntyList extends CustomSearchBase implements View.OnCl
         toobar_back=(TextView)findViewById(R.id.customtoobar_left);
         toobar_add=(TextView)findViewById(R.id.customtoobar_r) ;
         totalfqty=(TextView)findViewById(R.id.saleoutenty_fqty);
-        totalamout=(TextView)findViewById(R.id.saleoutenty_amount);
         save.setOnClickListener(this);
         toobar_back.setOnClickListener(this);
         toobar_add.setOnClickListener(this);
@@ -100,23 +101,34 @@ public class AppropriationEntyList extends CustomSearchBase implements View.OnCl
 
     }
     private void  formInit()
-    {
+    {  countall=0;
         DecimalFormat df = new DecimalFormat("#####0.00");
         if(customid!=null) {
+            Employee  employeelist = DataSupport.find(Employee.class, 1);
+            if(employeelist==null)
+            {
 
+            }else {
+                category.setText(employeelist.getName());
+            }
             customlist = DataSupport.find(Appropriation.class, Long.parseLong(customid),true);
             salesOutEntyList=customlist.getSalesOutEntyList();
             name.setText(customlist.getOutstock());
             number.setText(customlist.getInstock());
             data.setText(customlist.getFdate().toString().trim());
+            consignment.setText(customlist.getNuber());
+            note.setText(customlist.getNote());
           for(AppropriationEnty appropriationEnty:salesOutEntyList) {
               CommonDataStructure commonData = new CommonDataStructure();
               commonData.setId(appropriationEnty.getId());
               commonData.setNumber(appropriationEnty.getItemnumber());
               commonData.setName(appropriationEnty.getItemname());
               commonData.setFqty(appropriationEnty.getItemfqty());
+              countall+=appropriationEnty.getItemfqty();
               listdatas.add(commonData);
           }
+
+          totalfqty.setText(df.format(countall));
             adapter = new AppropriationListViewAdapter(AppropriationEntyList.this, R.layout.saleproduct_item, listdatas);
             plistView.setAdapter(adapter);
             setListViewHeightBasedOnChildren(plistView);

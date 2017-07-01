@@ -87,7 +87,7 @@ public class AppropriationListViewAdapter extends ArrayAdapter<CommonDataStructu
         // 重新获取ViewHolder
         DecimalFormat df = new DecimalFormat("#####0.00");
         viewHolder.name.setText(data.get(position).getName());
-        viewHolder.fqty.setText(String.valueOf(data.get(position).getFqty()));
+        viewHolder.fqty.setText(df.format(data.get(position).getFqty()));
         viewHolder.image.setImageResource(data.get(position).getImage());
 
 

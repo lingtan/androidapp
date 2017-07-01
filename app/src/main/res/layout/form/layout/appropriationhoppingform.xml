@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#F0F3F6"
+    >
+    <include layout="@layout/customtoobar_d" android:id="@+id/supplierform_toobar"/>
+
+    <LinearLayout style="@style/wrap_layout" >
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"/>
+        <!-- 无圆角-->
+        <LinearLayout style="@style/mid_layout">
+            <TextView style="@style/usertext"
+                android:text="商品名称：" />
+            <EditText
+                android:layout_width="240dp"
+                android:layout_height="wrap_content"
+                android:hint="商品名称"
+                android:textSize="14dp"
+                android:id="@+id/product_name"
+                android:maxLines="1"
+                android:background="@null"
+                android:imeOptions="actionDone"
+                android:inputType="text"/>
+        </LinearLayout>
+        <View style="@style/bg_line"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"/>
+        <!-- 下圆角-->
+        <LinearLayout style="@style/bottom_layout">
+            <TextView style="@style/usertext"
+                android:text="商品号码："
+                />
+
+            <EditText
+                android:layout_width="240dp"
+                android:layout_height="wrap_content"
+                android:textSize="14dp"
+                android:hint="商品编码唯一，保存后不能修改"
+                android:id="@+id/product_number"
+                android:maxLines="1"
+                android:background="@null"
+                android:imeOptions="actionDone"
+                android:inputType="text"/>
+        </LinearLayout>
+        <View style="@style/bg_line"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"/>
+        <!-- 下圆角-->
+        <LinearLayout style="@style/bottom_layout">
+            <TextView style="@style/usertext"
+                android:text="商品分类："
+                />
+
+            <EditText
+                android:layout_width="240dp"
+                android:layout_height="wrap_content"
+                android:textSize="14dp"
+                android:hint="选择类别"
+                android:id="@+id/product_category"
+                android:maxLines="1"
+                android:background="@null"
+                android:imeOptions="actionDone"
+                android:inputType="text"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout style="@style/wrap_layout_to" >
+        <!-- 分割线 -->
+        <View style="@style/bg_line"  android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"/>
+        <!-- 下圆角-->
+        <LinearLayout style="@style/bottom_layout">
+            <TextView style="@style/usertext"
+                android:text="调拨数量" />
+            <EditText
+                android:layout_width="240dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/product_fqty"
+                android:textSize="14dp"
+                android:hint="0.00"
+                android:maxLines="1"
+                android:inputType="phone"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp">
+
+        <Button
+            android:id="@+id/shopping_button"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="20dp"
+            android:background="#E57E58"
+            android:text="确认"
+            android:textColor="#ffffff"
+            android:textSize="14dp" />
+    </LinearLayout>
+
+
+</LinearLayout>
+

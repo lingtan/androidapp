@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.androiderp.CustomDataClass.Appropriation;
@@ -57,11 +58,11 @@ public class AppropriationAdapter extends ArrayAdapter<Appropriation>   {
         if (convertView == null) {
             view = LayoutInflater.from(getContext()).inflate(resourceId, parent, false);
             viewHolder = new ViewHolder();
-            viewHolder.customer = (TextView) view.findViewById (R.id.saleout_custom);
             viewHolder.nuber=(TextView) view.findViewById(R.id.saleout_number);
             viewHolder.saleamount = (TextView) view.findViewById (R.id.saleout_amount);
             viewHolder.Fdate = (TextView) view.findViewById (R.id.saleout_fdate);
             viewHolder.stock = (TextView) view.findViewById (R.id.saleout_stock);
+            viewHolder.image=(ImageView) view.findViewById(R.id.appropriation_arrow);
 
             view.setTag(viewHolder); // 将ViewHolder存储在View中
         } else {
@@ -72,11 +73,11 @@ public class AppropriationAdapter extends ArrayAdapter<Appropriation>   {
         }
         DecimalFormat df = new DecimalFormat("#####0.00");
         // 重新获取ViewHolder
-        viewHolder.customer.setText(data.get(position).getNuber().toString());
         viewHolder.nuber.setText(data.get(position).getNuber());
         viewHolder.saleamount.setText(data.get(position).getInstock());
         viewHolder.Fdate.setText(data.get(position).getFdate().toString());
         viewHolder.stock.setText(data.get(position).getOutstock());
+        viewHolder.image.setImageResource(R.drawable.appropriation_arrow);
 
 
 
@@ -97,11 +98,11 @@ public void setSeclection(int position)
     clickTemp=position;
 }
     class ViewHolder {
-        TextView  customer;
         TextView  Fdate;
         TextView  nuber;
         TextView saleamount;
         TextView stock;
+        ImageView image;
 
 
 

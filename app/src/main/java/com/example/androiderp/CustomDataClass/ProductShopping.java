@@ -14,7 +14,7 @@ public class ProductShopping implements Parcelable {
     private String salenumber;
     private String category;
     private double salesprice;
-    private int salefqty;
+    private double salefqty;
     private double saleamount;
 
     public int getId() {
@@ -57,11 +57,11 @@ public class ProductShopping implements Parcelable {
         this.salesprice = salesprice;
     }
 
-    public int getSalefqty() {
+    public double getSalefqty() {
         return salefqty;
     }
 
-    public void setSalefqty(int salefqty) {
+    public void setSalefqty(double salefqty) {
         this.salefqty = salefqty;
     }
 
@@ -84,7 +84,7 @@ public class ProductShopping implements Parcelable {
         dest.writeString(salenumber);
         dest.writeString(category);
         dest.writeDouble(salesprice);
-        dest.writeInt(salefqty);
+        dest.writeDouble(salefqty);
         dest.writeInt(id);
         dest.writeDouble(saleamount);
     }
@@ -96,7 +96,7 @@ public class ProductShopping implements Parcelable {
             productShopping.salenumber=source.readString();
             productShopping.category=source.readString();
             productShopping.salesprice=source.readDouble();
-            productShopping.salefqty=source.readInt();
+            productShopping.salefqty=source.readDouble();
             productShopping.id=source.readInt();
             productShopping.saleamount=source.readDouble();
             return productShopping;

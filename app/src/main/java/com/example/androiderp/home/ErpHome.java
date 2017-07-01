@@ -135,13 +135,13 @@ public class ErpHome extends CustomSearchBase implements  BottomNavigationBar.On
         bottomNavigationBar
                 .setBackgroundStyle(BottomNavigationBar.BACKGROUND_STYLE_STATIC);
         bottomNavigationBar
-                .addItem(new BottomNavigationItem(R.drawable.home, "主页").setActiveColorResource(R.color.colorPrimaryDark))
-                .addItem(new BottomNavigationItem(R.drawable.purchase, "采购").setActiveColorResource(R.color.colorPrimaryDark).setBadgeItem(badgeItem))
-                .addItem(new BottomNavigationItem(R.drawable.home_sales, "销售").setActiveColorResource(R.color.colorPrimaryDark))
-                .addItem(new BottomNavigationItem(R.drawable.hoem_stock, "库存").setActiveColorResource(R.color.colorPrimaryDark))
-                .addItem(new BottomNavigationItem(R.drawable.home_report, "报表").setActiveColorResource(R.color.colorPrimaryDark))
+                .addItem(new BottomNavigationItem(R.drawable.home, "主页").setActiveColorResource(R.color.bottom).setBadgeItem(badgeItem))
+                .addItem(new BottomNavigationItem(R.drawable.purchase, "采购").setActiveColorResource(R.color.bottom))
+                .addItem(new BottomNavigationItem(R.drawable.home_sales, "销售").setActiveColorResource(R.color.bottom))
+                .addItem(new BottomNavigationItem(R.drawable.hoem_stock, "库存").setActiveColorResource(R.color.bottom))
+                .addItem(new BottomNavigationItem(R.drawable.home_report, "报表").setActiveColorResource(R.color.bottom))
                 .setFirstSelectedPosition(lastSelectedPosition)
-                .setInActiveColor(R.color.colorPrimaryDark)
+                .setInActiveColor(R.color.bottomNavigationBar)
                 .initialise();
 
 

@@ -358,6 +358,7 @@ public class PurchaseProductForm extends CustomSearchBase implements View.OnClic
 
             case R.id.product_custom_layout:
                 Intent intentcustom=new Intent(PurchaseProductForm.this, SelectSupplierListView.class);
+                intentcustom.putExtra("index",name.getText().toString());
                 startActivityForResult(intentcustom,8);
 
 

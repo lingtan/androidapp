@@ -82,6 +82,9 @@
         <activity android:name="com.example.androiderp.form.SupplierCategoryForm">
 
         </activity>
+        <activity android:name="com.example.androiderp.form.AppropriationShoppingForm">
+
+        </activity>
         <activity android:name="com.example.androiderp.form.ProductCategoryForm">
 
         </activity>

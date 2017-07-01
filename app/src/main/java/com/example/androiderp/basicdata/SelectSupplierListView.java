@@ -6,6 +6,7 @@ import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import com.example.androiderp.CustomDataClass.CustomCategory;
@@ -39,7 +40,10 @@ public class SelectSupplierListView extends CustomSearchBase implements View.OnC
     private List<SupplierCategory> categoryAllDatas;
     private List<CommonDataStructure> categorylistdatas = new ArrayList<CommonDataStructure>();
     private String selectCategory;
+    private ImageView lastCheckedOption;
     private int pposition;
+    private int indexpositon;
+    private String indexname;
 
     @Override
     public void iniView(){
@@ -50,6 +54,8 @@ public class SelectSupplierListView extends CustomSearchBase implements View.OnC
         toobar_l.setOnClickListener(this);
         toobar_r.setOnClickListener(this);
         toobar_m.setOnClickListener(this);
+        Intent intent=getIntent();
+        indexname=intent.getStringExtra("index");
         search = (CustomSearch) findViewById(R.id.search);
         customAllDatas= DataSupport.findAll(Supplier.class);
         toobar_m.setText("供应商");
@@ -57,10 +63,15 @@ public class SelectSupplierListView extends CustomSearchBase implements View.OnC
         for(Supplier supplier:customAllDatas)
 
         {
+            if(supplier.getName().equals(indexname))
+            {
+                indexpositon =customAllDatas.indexOf(supplier);
+            }
             CommonDataStructure commonData=new CommonDataStructure();
             commonData.setName(supplier.getName());
             commonData.setCategory(supplier.getCategory());
             commonData.setId(supplier.getId());
+            commonData.setImage(R.drawable.seclec_arrow);
             customListDatas.add(commonData);
 
 
@@ -82,6 +93,12 @@ public class SelectSupplierListView extends CustomSearchBase implements View.OnC
             categorylistdatas.add(commonData);
 
         }
+        if(indexname.isEmpty())
+        {
+            indexpositon=-1;
+        }else {
+            pposition = indexpositon;
+        }
         //构造函数第一参数是类的对象，第二个是布局文件，第三个是数据源
         leftListView=(ListView) findViewById(R.id.left_list);
         leftListView.setTextFilterEnabled(true);
@@ -95,7 +112,7 @@ public class SelectSupplierListView extends CustomSearchBase implements View.OnC
                 leftAdapter.setSeclection(position);
                 leftAdapter.notifyDataSetInvalidated();
                 Object[] obj = categorySearch(categorylistdatas.get(position).getName().toString());
-                updateLayout(obj);
+                updateLayout(categorylistdatas.get(position).getName().toString());
             }
         });
         dm=new DisplayMetrics();
@@ -110,12 +127,19 @@ public class SelectSupplierListView extends CustomSearchBase implements View.OnC
                         if(searchDatas.size()!=0) {
 
                             intent.putExtra("data_return", String.valueOf(searchDatas.get(position).getName()));
-
+                            indexname=searchDatas.get(position).getName();
 
                         }else {
 
                             intent.putExtra("data_return", String.valueOf(customListDatas.get(position).getName()));
+                            indexname=customListDatas.get(position).getName();
                         }
+                if(lastCheckedOption != null){
+                    lastCheckedOption.setVisibility(View.INVISIBLE);
+                }
+                lastCheckedOption = (ImageView)view.findViewById(R.id.custom_item_layout_one_image);
+                lastCheckedOption.setVisibility(View.VISIBLE);
+                pposition=position;
                 setResult(RESULT_OK,intent);
                 finish();
 
@@ -127,6 +151,7 @@ public class SelectSupplierListView extends CustomSearchBase implements View.OnC
             leftAdapter.setSeclection(0);
             leftListView.setAdapter(leftAdapter);
             rightAdapter = new CommonAdapter(SelectSupplierListView.this, R.layout.custom_item, customListDatas);
+        rightAdapter.setSeclection(indexpositon);
             rightListView.setAdapter(rightAdapter);
             
 
@@ -196,9 +221,24 @@ public class SelectSupplierListView extends CustomSearchBase implements View.OnC
         return searchDatas.toArray();
     }
 //adapter刷新,重写Filter方式会出现BUG.
-    public void updateLayout(Object[] obj) {
+    public void updateLayout(String name) {
         if(searchDatas!=null) {
+            int index=-1;
+            if(!name.isEmpty())
+            {
+                for(int i=0;i<searchDatas.size();i++)
+                {
+                    if(searchDatas.get(i).getName().equals(indexname))
+                    {
+                        index=i;
+                    }
+                }
+            }else
+            {
+                index=pposition;
+            }
             rightAdapter = new CommonAdapter(SelectSupplierListView.this, R.layout.custom_item, searchDatas);
+            rightAdapter.setSeclection(index);
             rightListView.setAdapter(rightAdapter);
         }
     }
@@ -222,12 +262,14 @@ public class SelectSupplierListView extends CustomSearchBase implements View.OnC
                         commonData.setName(supplier.getName());
                         commonData.setCategory(supplier.getCategory());
                         commonData.setId(supplier.getId());
+                        commonData.setImage(R.drawable.seclec_arrow);
                         customListDatas.add(commonData);
 
 
 
                     }
                     rightAdapter = new CommonAdapter(SelectSupplierListView.this, R.layout.custom_item, customListDatas);
+                    rightAdapter.setSeclection(pposition);
                     rightListView.setAdapter(rightAdapter);
                 }
                 break;
@@ -248,8 +290,7 @@ public class SelectSupplierListView extends CustomSearchBase implements View.OnC
             case R.id.custom_toobar_right:
                Intent intent = new Intent(SelectSupplierListView.this, SupplierForm.class);
                 intent.putExtra("action","add");
-                intent.removeExtra("supller_item");
-                startActivity(intent);
+                startActivityForResult(intent,1);
                 break;
 
 
@@ -278,7 +319,7 @@ public class SelectSupplierListView extends CustomSearchBase implements View.OnC
         public void afterTextChanged(Editable s) {
 
             Object[] obj = search(search.getText().toString());
-            updateLayout(obj);
+            updateLayout(search.getText().toString());
 
         }
     };

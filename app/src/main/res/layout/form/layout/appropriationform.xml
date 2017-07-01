@@ -22,7 +22,7 @@
         <LinearLayout style="@style/mid_layout"
             android:id="@+id/product_custom_layout">
             <TextView style="@style/usertext"
-                android:text="调出仓：" />
+                android:text="调出仓库：" />
 
             <TextView style="@style/usertext"
                 android:id="@+id/product_custom"
@@ -42,7 +42,7 @@
         <LinearLayout style="@style/bottom_layout"
             android:id="@+id/product_stock_layout">
             <TextView style="@style/usertext"
-                android:text="调入仓："
+                android:text="调入仓库："
                 />
 
 

@@ -10,7 +10,7 @@ public class AppropriationEnty extends DataSupport {
     private int id;
     private String itemname;
     private String itemnumber;
-    private int itemfqty;
+    private double itemfqty;
     private String instock;
     private String outstock;
 
@@ -39,11 +39,11 @@ public class AppropriationEnty extends DataSupport {
         this.itemnumber = itemnumber;
     }
 
-    public int getItemfqty() {
+    public double getItemfqty() {
         return itemfqty;
     }
 
-    public void setItemfqty(int itemfqty) {
+    public void setItemfqty(double itemfqty) {
         this.itemfqty = itemfqty;
     }
 

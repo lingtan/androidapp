@@ -18,6 +18,7 @@ import com.example.androiderp.basicdata.CustomCategoryListview;
 import com.example.androiderp.basicdata.CustomListView;
 import com.example.androiderp.basicdata.CustomTowListView;
 import com.example.androiderp.basicdata.EmployeeListview;
+import com.example.androiderp.basicdata.ProductAppropriationListView;
 import com.example.androiderp.basicdata.ProductBadgeListView;
 import com.example.androiderp.basicdata.ProductTowListView;
 import com.example.androiderp.basicdata.SaleOutListView;
@@ -65,6 +66,11 @@ public class FirstFragment extends Fragment {
                         break;
                     case 2:
                         intent = new Intent(context, SaleProductForm.class);
+                        startActivity(intent);
+
+                        break;
+                    case 3:
+                        intent = new Intent(context, ProductAppropriationListView.class);
                         startActivity(intent);
 
                         break;
