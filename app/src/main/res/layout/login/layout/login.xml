@@ -22,6 +22,7 @@
             android:id="@+id/login_layout_one_one_name"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
+            android:hint="用户"
             android:drawableLeft="@drawable/login_user"
             style="@style/customeditTextStyle"
             />
@@ -43,6 +44,7 @@
             android:drawableLeft="@drawable/login_password"
             android:inputType="textPassword"
             android:layout_marginTop="10dp"
+            android:hint="密码"
             style="@style/customeditTextStyle"
             />
         <android.support.design.widget.TextInputLayout
@@ -64,6 +66,7 @@
             android:drawableLeft="@drawable/login_email"
             android:inputType="textEmailAddress"
             android:layout_marginTop="10dp"
+            android:hint="邮箱"
             style="@style/customeditTextStyle"
             />
         <android.support.design.widget.TextInputLayout

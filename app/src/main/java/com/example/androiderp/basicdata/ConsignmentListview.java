@@ -11,10 +11,12 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.androiderp.CustomDataClass.Consignment;
 import com.example.androiderp.CustomDataClass.Employee;
 import com.example.androiderp.CustomDataClass.ProductCategory;
+import com.example.androiderp.CustomDataClass.SalesOut;
 import com.example.androiderp.R;
 import com.example.androiderp.adaper.CommonDataStructure;
 import com.example.androiderp.adaper.CommonListViewAdapter;
@@ -22,6 +24,7 @@ import com.example.androiderp.adaper.DataStructure;
 import com.example.androiderp.custom.CustomSearch;
 import com.example.androiderp.custom.CustomSearchBase;
 import com.example.androiderp.form.ConsignmentForm;
+import com.example.androiderp.form.CustomForm;
 import com.example.androiderp.form.EmployeeForm;
 import com.example.androiderp.form.ProductCategoryForm;
 import com.example.androiderp.listview.Menu;
@@ -51,6 +54,7 @@ public class ConsignmentListview extends CustomSearchBase implements View.OnClic
     private int indexpositon;
     private String indexname;
     private Menu mMenu;
+    private List<SalesOut> findCustomDatas=new ArrayList<SalesOut>();
     @Override
     public void iniView(){
         setContentView(R.layout.customlistview_category_layout);
@@ -163,29 +167,33 @@ public class ConsignmentListview extends CustomSearchBase implements View.OnClic
                     case 1:
                         AlertDialog.Builder dialog=new AlertDialog.Builder(ConsignmentListview.this);
                         dialog.setTitle("提示");
-                        dialog.setMessage("您确认要删除该分类？");
+                        dialog.setMessage("您确认要删除该发货方式？");
                         dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                DataStructure.deleteAll(ProductCategory.class,"name = ?",listdatas.get(itemPosition - plistView.getHeaderViewsCount()).getName().toString());
+                                if(isCustom(listdatas.get(itemPosition - plistView.getHeaderViewsCount()).getName().toString()))
+                                {
+                                    Toast.makeText(ConsignmentListview.this,"已经有业务发生，不能删除",Toast.LENGTH_SHORT).show();
+                                    adapter.notifyDataSetChanged();
+                                }else {
+                                    DataStructure.deleteAll(ProductCategory.class, "name = ?", listdatas.get(itemPosition - plistView.getHeaderViewsCount()).getName().toString());
 
-                                AlertDialog.Builder dialogOK=new AlertDialog.Builder(ConsignmentListview.this);
-                                dialogOK.setMessage("该分类已经删除");
-                                dialogOK.setNegativeButton("确认", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        if(indexpositon==itemPosition)
-                                        {
-                                            indexpositon=-1;
+                                    AlertDialog.Builder dialogOK = new AlertDialog.Builder(ConsignmentListview.this);
+                                    dialogOK.setMessage("该发货方式已经删除");
+                                    dialogOK.setNegativeButton("确认", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            if (indexpositon == itemPosition) {
+                                                indexpositon = -1;
+                                            }
+                                            listdatas.remove(itemPosition - plistView.getHeaderViewsCount());
+                                            adapter.setSeclection(indexpositon);
+                                            adapter.notifyDataSetChanged();
                                         }
-                                        listdatas.remove(itemPosition - plistView.getHeaderViewsCount());
-                                        adapter.setSeclection(indexpositon);
-                                        adapter.notifyDataSetChanged();
-                                    }
-                                });
-                                dialogOK.show();
+                                    });
+                                    dialogOK.show();
 
-
+                                }
 
 
                             }
@@ -369,4 +377,18 @@ public class ConsignmentListview extends CustomSearchBase implements View.OnClic
 
         }
     };
+    public boolean isCustom(String name)
+    {
+
+        findCustomDatas=DataSupport.where("consignment=?",name).find(SalesOut.class);
+
+        if (findCustomDatas.size()>0)
+        {
+            return true;
+        }else {
+            return false;
+        }
+
+    }
+
 }

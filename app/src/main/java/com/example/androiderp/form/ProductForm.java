@@ -10,6 +10,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -23,11 +24,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.androiderp.CustomDataClass.Product;
+import com.example.androiderp.CustomDataClass.SalesOut;
+import com.example.androiderp.CustomDataClass.SalesOutEnty;
+import com.example.androiderp.CustomDataClass.ShoppingData;
+import com.example.androiderp.CustomDataClass.StockIniti;
+import com.example.androiderp.CustomDataClass.StockInitiData;
+import com.example.androiderp.CustomDataClass.StockInitiTem;
 import com.example.androiderp.R;
 import com.example.androiderp.adaper.DataStructure;
 import com.example.androiderp.adaper.PopuMenuDataStructure;
 import com.example.androiderp.basicdata.BrandListView;
 import com.example.androiderp.basicdata.ProductCategoryListview;
+import com.example.androiderp.basicdata.StockInitiListView;
 import com.example.androiderp.basicdata.UnitListView;
 import com.example.androiderp.common.Common;
 import com.example.androiderp.scanning.CommonScanActivity;
@@ -35,6 +43,7 @@ import com.example.androiderp.scanning.utils.Constant;
 
 import org.litepal.crud.DataSupport;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,7 +55,7 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
     private InputMethodManager manager;
     private EditText name,number,purchaseprice,salesprice,barcode,model,note;
     private ImageView numberscreen;
-    private TextView save,toobar_tile,toobar_back,toobar_add,category,brand,unit;
+    private TextView save,toobar_tile,toobar_back,toobar_add,category,brand,unit,stock_initi;
     private Product supplier;
     private DisplayMetrics dm;
     private LinearLayout categoryLayout,brandLayout,unitLayout,hideLayoutOne,hideLayoutTow,hideLayoutthree;
@@ -59,6 +68,8 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
     private Intent  intentback;
     private List<PopuMenuDataStructure> popuMenuDatas;
     private List<Product> findNumber;
+    private List<SalesOutEnty> findCustomDatas=new ArrayList<SalesOutEnty>();
+    List<StockInitiTem> stockInitiTems = new ArrayList<StockInitiTem>();
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
@@ -81,6 +92,7 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
         category=(TextView)findViewById(R.id.product_category);
         brand=(TextView)findViewById(R.id.product_brand);
         unit=(TextView)findViewById(R.id.product_unit);
+        stock_initi=(TextView)findViewById(R.id.product_stock_initi);
         save=(TextView)findViewById(R.id.customtoobar_right);
         toobar_tile=(TextView)findViewById(R.id.customtoobar_midd);
         toobar_back=(TextView)findViewById(R.id.customtoobar_left);
@@ -101,6 +113,7 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
         toobar_add.setOnClickListener(this);
         buttondelete.setOnClickListener(this);
         moreLayout.setOnClickListener(this);
+        stock_initi.setOnClickListener(this);
         save.setCompoundDrawables(null,null,null,null);
         toobar_tile.setCompoundDrawables(null,null,null,null);
         errorIcon = getResources().getDrawable(R.drawable.icon_error);
@@ -219,9 +232,26 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                     supplier.setImage(R.drawable.listvist_item_delete);
                     supplier.setBadgeshow("");
                     supplier.save();
-                    Toast.makeText(ProductForm.this,"新增成功",Toast.LENGTH_SHORT).show();
+
+                    for(int i = 0; i < stockInitiTems.size(); i++) {
+
+                        if(stockInitiTems.get(i).getSalefqty()>0) {
+                            StockIniti stockIniti=new StockIniti();
+                            stockIniti.setName(name.getText().toString());
+                            stockIniti.setNumber(number.getText().toString());
+                            stockIniti.setStock(stockInitiTems.get(i).getSalename());
+                            stockIniti.setFqty(stockInitiTems.get(i).getSalefqty());
+                            stockIniti.save();
+
+                        }
+
+
+                    }
+
+                        Toast.makeText(ProductForm.this,"新增成功",Toast.LENGTH_SHORT).show();
                     customid=String.valueOf(DataSupport.findLast(Product.class).getId());
                     edit="edit";
+                    hideLayoutthree.setVisibility(View.GONE);
                     toobar_add.setVisibility(View.VISIBLE);
                     buttondelete.setVisibility(View.VISIBLE);
                     Intent intent = new Intent();
@@ -271,21 +301,26 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                 dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        DataStructure.deleteAll(Product.class,"name = ?",name.getText().toString());
+                        if(isCustom(name.getText().toString()))
+                        {
+                            Toast.makeText(ProductForm.this,"已经有业务发生，不能删除",Toast.LENGTH_SHORT).show();
 
-                        AlertDialog.Builder dialogOK=new AlertDialog.Builder(ProductForm.this);
-                        dialogOK.setMessage("该商品已经删除");
-                        dialogOK.setNegativeButton("确认", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Intent intent = new Intent();
-                                setResult(RESULT_OK,intent);
-                                finish();
-                            }
-                        });
-                        dialogOK.show();
+                        }else {
+                            DataStructure.deleteAll(Product.class, "name = ?", name.getText().toString());
 
+                            AlertDialog.Builder dialogOK = new AlertDialog.Builder(ProductForm.this);
+                            dialogOK.setMessage("该商品已经删除");
+                            dialogOK.setNegativeButton("确认", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Intent intent = new Intent();
+                                    setResult(RESULT_OK, intent);
+                                    finish();
+                                }
+                            });
+                            dialogOK.show();
 
+                        }
 
 
                     }
@@ -326,6 +361,14 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                 }else {
                     hideLayoutthree.setVisibility(View.VISIBLE);
                 }
+                break;
+            case R.id.product_stock_initi:
+
+                Intent intentstock=new Intent(ProductForm.this, StockInitiListView.class);
+                StockInitiData stockInitiData=new StockInitiData();
+                stockInitiData.setShoppingdata(stockInitiTems);
+                intentstock.putExtra("stockinitidata",stockInitiData);
+                startActivityForResult(intentstock,10);
 
         }
     }
@@ -398,6 +441,27 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                 }
 
                 break;
+            case 10:
+                if(resultCode==RESULT_OK) {
+
+                    StockInitiData stockInitiData=data.getParcelableExtra("stockinitidata");
+                    stockInitiTems=stockInitiData.getShoppingdata();
+
+                    for(StockInitiTem stock:stockInitiTems)
+
+                    {
+                        DecimalFormat df = new DecimalFormat("#####0.00");
+                        Log.d("linga",stock.getSalename());
+                        Log.d("linga",df.format(stock.getSalefqty()));
+
+
+
+
+                    }
+
+                }
+
+                break;
             default:
         }
     }
@@ -411,6 +475,19 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
             }
         }
         return super.onTouchEvent(event);
+    }
+    public boolean isCustom(String name)
+    {
+
+        findCustomDatas=DataSupport.where("itemname =?",name).find(SalesOutEnty.class);
+
+        if (findCustomDatas.size()>0)
+        {
+            return true;
+        }else {
+            return false;
+        }
+
     }
 
 }

@@ -177,7 +177,7 @@
                     />
 
                 <TextView style="@style/usertext"
-                    android:id="@+id/product_stock"
+                    android:id="@+id/product_stock_initi"
                     android:text="添加"
                     android:textColor="#E57E58"
                     android:gravity="right"

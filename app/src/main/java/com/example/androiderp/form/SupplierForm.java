@@ -18,6 +18,8 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.androiderp.CustomDataClass.SalesOut;
 import com.example.androiderp.CustomDataClass.Supplier;
 import com.example.androiderp.CustomDataClass.SupplierCategory;
 import com.example.androiderp.R;
@@ -25,6 +27,9 @@ import com.example.androiderp.adaper.DataStructure;
 import com.example.androiderp.basicdata.SupplierCategoryListView;
 
 import org.litepal.crud.DataSupport;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by lingtan on 2017/5/15.
@@ -41,6 +46,7 @@ public class SupplierForm extends AppCompatActivity implements View.OnClickListe
     private String categoryid,customid,edit;
     private Button buttondelete;
     private Drawable errorIcon;
+    private List<SalesOut> findCustomDatas=new ArrayList<SalesOut>();
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
@@ -179,26 +185,31 @@ public class SupplierForm extends AppCompatActivity implements View.OnClickListe
             case R.id.loginbutton:
                 AlertDialog.Builder dialog=new AlertDialog.Builder(SupplierForm.this);
                 dialog.setTitle("提示");
-                dialog.setMessage("您确认要删除该客户？");
+                dialog.setMessage("您确认要删除该供应商？");
                 dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        DataStructure.deleteAll(Supplier.class,"name = ?",name.getText().toString());
+                        if(isCustom(name.getText().toString()))
+                        {
+                            Toast.makeText(SupplierForm.this,"已经有业务发生，不能删除",Toast.LENGTH_SHORT).show();
 
-                        AlertDialog.Builder dialogOK=new AlertDialog.Builder(SupplierForm.this);
-                        dialogOK.setMessage("该客户已经删除");
-                        dialogOK.setNegativeButton("确认", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Intent intent = new Intent();
-                                setResult(RESULT_OK,intent);
-                                finish();
-                            }
-                        });
-                        dialogOK.show();
+                        }else {
+                            DataStructure.deleteAll(Supplier.class, "name = ?", name.getText().toString());
+
+                            AlertDialog.Builder dialogOK = new AlertDialog.Builder(SupplierForm.this);
+                            dialogOK.setMessage("该供应商已经删除");
+                            dialogOK.setNegativeButton("确认", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Intent intent = new Intent();
+                                    setResult(RESULT_OK, intent);
+                                    finish();
+                                }
+                            });
+                            dialogOK.show();
 
 
-
+                        }
 
                     }
                 });
@@ -247,6 +258,19 @@ public class SupplierForm extends AppCompatActivity implements View.OnClickListe
             }
         }
         return super.onTouchEvent(event);
+    }
+    public boolean isCustom(String name)
+    {
+
+        findCustomDatas=DataSupport.where("customer=?",name).find(SalesOut.class);
+
+        if (findCustomDatas.size()>0)
+        {
+            return true;
+        }else {
+            return false;
+        }
+
     }
 
 }

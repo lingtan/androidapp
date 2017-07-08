@@ -11,8 +11,10 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.androiderp.CustomDataClass.Brand;
+import com.example.androiderp.CustomDataClass.SalesOut;
 import com.example.androiderp.CustomDataClass.Stock;
 import com.example.androiderp.R;
 import com.example.androiderp.adaper.CommonDataStructure;
@@ -21,6 +23,7 @@ import com.example.androiderp.adaper.DataStructure;
 import com.example.androiderp.custom.CustomSearch;
 import com.example.androiderp.custom.CustomSearchBase;
 import com.example.androiderp.form.BrandForm;
+import com.example.androiderp.form.CustomForm;
 import com.example.androiderp.form.StockForm;
 import com.example.androiderp.listview.Menu;
 import com.example.androiderp.listview.MenuItem;
@@ -44,8 +47,8 @@ public class StockListView extends CustomSearchBase implements View.OnClickListe
     private TextView custom_toobar_l,custom_toobar_r,custom_toobar_m;
     private CustomSearch custom_search;
     private String categoryid;
-    private ImageView lastCheckedOption;
     private Menu mMenu;
+    private List<SalesOut> findCustomDatas=new ArrayList<SalesOut>();
     @Override
     public void iniView(){
         setContentView(R.layout.customlistview_category_layout);
@@ -149,21 +152,27 @@ public class StockListView extends CustomSearchBase implements View.OnClickListe
                         dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                DataStructure.deleteAll(Stock.class,"name = ?",listdatas.get(itemPosition - plistView.getHeaderViewsCount()).getName().toString());
 
-                                AlertDialog.Builder dialogOK=new AlertDialog.Builder(StockListView.this);
-                                dialogOK.setMessage("该仓库已经删除");
-                                dialogOK.setNegativeButton("确认", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        listdatas.remove(itemPosition - plistView.getHeaderViewsCount());
-                                        adapter.notifyDataSetChanged();
-                                    }
-                                });
-                                dialogOK.show();
+                                if(isCustom(listdatas.get(itemPosition - plistView.getHeaderViewsCount()).getName().toString()))
+                                {
+                                    Toast.makeText(StockListView.this,"已经有业务发生，不能删除",Toast.LENGTH_SHORT).show();
+                                    adapter.notifyDataSetChanged();
+                                }else {
+                                    DataStructure.deleteAll(Stock.class, "name = ?", listdatas.get(itemPosition - plistView.getHeaderViewsCount()).getName().toString());
+
+                                    AlertDialog.Builder dialogOK = new AlertDialog.Builder(StockListView.this);
+                                    dialogOK.setMessage("该仓库已经删除");
+                                    dialogOK.setNegativeButton("确认", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            listdatas.remove(itemPosition - plistView.getHeaderViewsCount());
+                                            adapter.notifyDataSetChanged();
+                                        }
+                                    });
+                                    dialogOK.show();
 
 
-
+                                }
 
                             }
                         });
@@ -309,4 +318,18 @@ public class StockListView extends CustomSearchBase implements View.OnClickListe
 
         }
     };
+
+    public boolean isCustom(String name)
+    {
+
+        findCustomDatas=DataSupport.where("stock =?",name).find(SalesOut.class);
+
+        if (findCustomDatas.size()>0)
+        {
+            return true;
+        }else {
+            return false;
+        }
+
+    }
 }

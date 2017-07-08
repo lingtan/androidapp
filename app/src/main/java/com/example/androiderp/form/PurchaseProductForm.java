@@ -318,6 +318,8 @@ public class PurchaseProductForm extends CustomSearchBase implements View.OnClic
                         salesOutEnty.setItemprice(listdatas.get(i).getSalesprice());
                         salesOutEnty.setItemfqty(listdatas.get(i).getFqty());
                         salesOutEnty.setItemamount(listdatas.get(i).getSaleamount());
+                        salesOutEnty.setStock(number.getText().toString());
+                        salesOutEnty.setBilltype("1");
                         salesOutEntyList.add(salesOutEnty);
                     }
                     DataSupport.saveAll(salesOutEntyList);

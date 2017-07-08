@@ -19,7 +19,7 @@
     </style>
     <style name="MyOverflowText" parent="TextAppearance.AppCompat.Small">
         <item name="android:textColor">#E08031</item>
-        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">10dp</item>
     </style>
 
     <style name="MyErrorStyle">
@@ -142,7 +142,15 @@
         <item name="android:imeOptions">actionSearch</item>
         <item name="android:singleLine">true</item>
         <item name="android:textSize">12sp</item>
-        <item name="android:hint">搜索</item>
+    </style>
+    <style name="StockeditTextStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">30dp</item>
+        <item name="android:background">@drawable/stockiniti_shape</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:inputType">numberDecimal</item>
+        <item name="android:textSize">12sp</item>
     </style>
     <style name="home_search_Style">
         <item name="android:layout_width">match_parent</item>

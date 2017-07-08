@@ -9,6 +9,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +32,7 @@ import com.example.androiderp.CustomDataClass.SalesOut;
 import com.example.androiderp.CustomDataClass.SalesOutEnty;
 import com.example.androiderp.CustomDataClass.ShoppingData;
 import com.example.androiderp.CustomDataClass.Stock;
+import com.example.androiderp.CustomDataClass.StockIniti;
 import com.example.androiderp.R;
 import com.example.androiderp.adaper.CommonDataStructure;
 import com.example.androiderp.adaper.DataStructure;
@@ -93,6 +95,11 @@ public class SaleProductForm extends CustomSearchBase implements View.OnClickLis
     private double countall;
     private double countamount;
     private Intent intent;
+    private List<StockIniti> stockInitis = new ArrayList<StockIniti>();
+    private List<SalesOutEnty> salesOutEnties;
+    private List<SalesOutEnty> supplierOutEnties;
+    private double fqty;
+    private int  stockcheck=1;
     public void iniView() {
         setContentView(R.layout.saleproductform);
         initMenu();
@@ -295,6 +302,7 @@ public class SaleProductForm extends CustomSearchBase implements View.OnClickLis
 
         {
             case R.id.customtoobar_right:
+
                 if (TextUtils.isEmpty(name.getText().toString())) {
                     Toast.makeText(SaleProductForm.this,"请选择客户",Toast.LENGTH_SHORT).show();
 
@@ -305,9 +313,15 @@ public class SaleProductForm extends CustomSearchBase implements View.OnClickLis
                 else if (listdatas.size()==0)
                 {
                     Toast.makeText(SaleProductForm.this,"请选择产品",Toast.LENGTH_SHORT).show();
+                }else if(stockcheck==0)
+                {
+                    Toast.makeText(SaleProductForm.this,"库存不足,不能保存",Toast.LENGTH_LONG).show();
                 }else
 
                 {
+
+                    DecimalFormat df = new DecimalFormat("#####0.00");
+                    Log.d("lingta",df.format(fqty));
                     SimpleDateFormat format=new SimpleDateFormat("yyyyMMddHHmmss");
                     Date curData=new Date(System.currentTimeMillis());
                     String fdate=format.format(curData);
@@ -320,6 +334,8 @@ public class SaleProductForm extends CustomSearchBase implements View.OnClickLis
                         salesOutEnty.setItemprice(listdatas.get(i).getSalesprice());
                         salesOutEnty.setItemfqty(listdatas.get(i).getFqty());
                         salesOutEnty.setItemamount(listdatas.get(i).getSaleamount());
+                        salesOutEnty.setStock(number.getText().toString());
+                        salesOutEnty.setBilltype("2");
                         salesOutEntyList.add(salesOutEnty);
                     }
                     DataSupport.saveAll(salesOutEntyList);
@@ -478,6 +494,7 @@ public class SaleProductForm extends CustomSearchBase implements View.OnClickLis
             case 5:
                 if(resultCode==RESULT_OK) {
 
+
                     countall=0;
                     countamount=0.00;
                     findNumber=DataStructure.where("number = ?",data.getStringExtra("scanResult")).find(Product.class);
@@ -513,10 +530,42 @@ public class SaleProductForm extends CustomSearchBase implements View.OnClickLis
                        }
 
                        for(int i = 0; i < listdatas.size(); i++)
-                       {
+                       {   stockInitis=DataSupport.where("stock=? and number=?",number.getText().toString(),listdatas.get(i).getNumber()).find(StockIniti.class);
+                           salesOutEnties=DataSupport.where("billtype =? and stock=? and itemnumber=?","2",number.getText().toString(),listdatas.get(i).getNumber()).find(SalesOutEnty.class);
+                           supplierOutEnties=DataSupport.where("billtype =? and stock=? and itemnumber=?","1",number.getText().toString(),listdatas.get(i).getNumber()).find(SalesOutEnty.class);
+                           fqty=0;
 
+                           for(StockIniti stock:stockInitis)
+
+                           {
+
+                               fqty += stock.getFqty();
+                           }
+                           for(SalesOutEnty salesOutEnty:salesOutEnties)
+                           {
+
+                               fqty-=salesOutEnty.getItemfqty();
+
+                           }
+                           for(SalesOutEnty salesOutEnty:supplierOutEnties)
+                           {
+
+                               fqty+=salesOutEnty.getItemfqty();
+
+                           }
+                           if(listdatas.get(i).getFqty()>fqty)
+                           {
+                               Toast.makeText(SaleProductForm.this,"库存不足",Toast.LENGTH_LONG).show();
+                               stockcheck=0;
+                           }
+                           Log.d("linga",df.format(fqty));
+                           Log.d("linga",df.format(listdatas.get(i).getFqty()));
                            countall+= listdatas.get(i).getFqty();
                            countamount+=listdatas.get(i).getSaleamount();
+
+
+
+
                        }
                        adapter = new SaleProductListViewAdapter(SaleProductForm.this, R.layout.saleproduct_item, listdatas);
                        plistView.setAdapter(adapter);

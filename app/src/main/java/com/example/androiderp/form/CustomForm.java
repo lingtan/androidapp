@@ -20,6 +20,8 @@ import android.widget.Toast;
 
 import com.example.androiderp.CustomDataClass.Custom;
 import com.example.androiderp.CustomDataClass.CustomCategory;
+import com.example.androiderp.CustomDataClass.SalesOut;
+import com.example.androiderp.CustomDataClass.Supplier;
 import com.example.androiderp.R;
 import com.example.androiderp.adaper.DataStructure;
 import com.example.androiderp.adaper.PopuMenuDataStructure;
@@ -47,6 +49,7 @@ public class CustomForm extends AppCompatActivity implements View.OnClickListene
     private List<CustomCategory> customCategory;
     private String edit,customid;
     private Button buttondelete;
+    private List<SalesOut> findCustomDatas=new ArrayList<SalesOut>();
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.userform);
@@ -79,14 +82,17 @@ public class CustomForm extends AppCompatActivity implements View.OnClickListene
     {
         if(customid!=null) {
 
+
             customdata = DataSupport.find(Custom.class, Long.parseLong(customid));
             name.setText(customdata.getName());
             address.setText(customdata.getAddress());
             phone.setText(customdata.getPhone());
             fax.setText(customdata.getFax());
             category.setText(customdata.getCategory());
-            toobar_add.setVisibility(View.VISIBLE);
-            buttondelete.setVisibility(View.VISIBLE);
+
+                toobar_add.setVisibility(View.VISIBLE);
+                buttondelete.setVisibility(View.VISIBLE);
+
         }else {
          CustomCategory  cCategory  = DataSupport.find(CustomCategory.class, 1);
             if(cCategory==null)
@@ -151,19 +157,26 @@ public class CustomForm extends AppCompatActivity implements View.OnClickListene
                 dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        DataStructure.deleteAll(Custom.class,"name = ?",name.getText().toString());
+                        if(isCustom(name.getText().toString()))
+                        {
+                            Toast.makeText(CustomForm.this,"已经有业务发生，不能删除",Toast.LENGTH_SHORT).show();
 
-                        AlertDialog.Builder dialogOK=new AlertDialog.Builder(CustomForm.this);
-                        dialogOK.setMessage("该客户已经删除");
-                        dialogOK.setNegativeButton("确认", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Intent intent = new Intent();
-                                setResult(RESULT_OK,intent);
-                                finish();
-                            }
-                        });
-                        dialogOK.show();
+                        }else {
+                            DataStructure.deleteAll(Custom.class, "name = ?", name.getText().toString());
+
+                            AlertDialog.Builder dialogOK = new AlertDialog.Builder(CustomForm.this);
+                            dialogOK.setMessage("该客户已经删除");
+                            dialogOK.setNegativeButton("确认", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Intent intent = new Intent();
+                                    setResult(RESULT_OK, intent);
+                                    finish();
+
+                                }
+                            });
+                            dialogOK.show();
+                        }
 
 
 
@@ -259,6 +272,19 @@ public class CustomForm extends AppCompatActivity implements View.OnClickListene
             }
         }
         return super.onTouchEvent(event);
+    }
+    public boolean isCustom(String name)
+    {
+
+        findCustomDatas=DataSupport.where("customer=?",name).find(SalesOut.class);
+
+        if (findCustomDatas.size()>0)
+        {
+            return true;
+        }else {
+            return false;
+        }
+
     }
 
 }

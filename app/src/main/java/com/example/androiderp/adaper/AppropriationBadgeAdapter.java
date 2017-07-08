@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.example.androiderp.CustomDataClass.Product;
 import com.example.androiderp.R;
 
+import java.text.DecimalFormat;
 import java.util.HashSet;
 import java.util.List;
 
@@ -103,10 +104,11 @@ public class AppropriationBadgeAdapter extends ArrayAdapter<Product> implements 
 
         }
         // 重新获取ViewHolder
+        DecimalFormat df = new DecimalFormat("#####0.00");
         viewHolder.name.setText(data.get(position).getName().toString());
         viewHolder.number.setText(data.get(position).getNumber());
         viewHolder.model.setText(data.get(position).getModel());
-        viewHolder.salesprice.setText("10");
+        viewHolder.salesprice.setText(df.format(data.get(position).getStockfqty()));
         viewHolder.image.setImageResource(data.get(position).getImage());
         viewHolder.badgeshow.setText(data.get(position).getBadgeshow());
         viewHolder.image.setOnClickListener(this);

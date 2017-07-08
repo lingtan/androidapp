@@ -16,7 +16,11 @@ import android.widget.TextView;
 import com.example.androiderp.CustomDataClass.Product;
 import com.example.androiderp.CustomDataClass.ProductCategory;
 import com.example.androiderp.CustomDataClass.ProductShopping;
+import com.example.androiderp.CustomDataClass.SalesOut;
+import com.example.androiderp.CustomDataClass.SalesOutEnty;
 import com.example.androiderp.CustomDataClass.ShoppingData;
+import com.example.androiderp.CustomDataClass.StockIniti;
+import com.example.androiderp.CustomDataClass.StockInitiTem;
 import com.example.androiderp.R;
 import com.example.androiderp.adaper.AppropriationBadgeAdapter;
 import com.example.androiderp.adaper.CommonAdapter;
@@ -63,6 +67,10 @@ public class ProductAppropriationListView extends CustomSearchBase implements Vi
     private  int   leftlistselecte;
     private  String   leftlistselectetext;
     private LinearLayout accounts;
+    private List<StockIniti> stockInitis = new ArrayList<StockIniti>();
+    private List<SalesOutEnty> salesOutEnties;
+    private List<SalesOutEnty> supplierOutEnties;
+    private double fqty;
 
     @Override
     public void iniView(){
@@ -80,6 +88,40 @@ public class ProductAppropriationListView extends CustomSearchBase implements Vi
         search = (CustomSearch) findViewById(R.id.search);
         accounts=(LinearLayout)findViewById(R.id.product_item_layout_bottom);
         customAllDatas= DataSupport.findAll(Product.class);
+        stockInitis= DataSupport.findAll(StockIniti.class);
+        salesOutEnties=DataSupport.where("billtype =?","2").find(SalesOutEnty.class);
+        supplierOutEnties=DataSupport.where("billtype =?","1").find(SalesOutEnty.class);
+        for(Product product:customAllDatas)
+
+        {    fqty=0.00;
+            for(StockIniti stock:stockInitis)
+
+            {
+                if(product.getNumber().equals(stock.getNumber()))
+            {
+                fqty+=stock.getFqty();
+            }
+
+
+            }
+
+            for(SalesOutEnty salesOutEnty:salesOutEnties)
+            {
+                if(product.getNumber().equals(salesOutEnty.getItemnumber()))
+                {
+                    fqty-=salesOutEnty.getItemfqty();
+                }
+            }
+            for(SalesOutEnty salesOutEnty:supplierOutEnties)
+            {
+                if(product.getNumber().equals(salesOutEnty.getItemnumber()))
+                {
+                    fqty+=salesOutEnty.getItemfqty();
+                }
+            }
+            product.setStockfqty(fqty);
+
+        }
         intent= new Intent(ProductAppropriationListView.this, AppropriationShoppingForm.class);
         categoryAllDatas= DataSupport.findAll(ProductCategory.class);
         CommonDataStructure commonDataAll=new CommonDataStructure();
@@ -309,7 +351,7 @@ public class ProductAppropriationListView extends CustomSearchBase implements Vi
                         }
 
                         product.setImage(R.drawable.listvist_item_delete);
-                        product.setStockfqty(10);
+
 
                     }
                     rightAdapter.notifyDataSetChanged();

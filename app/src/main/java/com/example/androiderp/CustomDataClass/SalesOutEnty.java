@@ -15,6 +15,8 @@ public class SalesOutEnty extends DataSupport {
     private double itemfqty;
     private double itemamount;
     private SalesOut salesOut;
+    private String stock;
+    private String billtype;
 
     public int getId() {
         return id;
@@ -78,5 +80,21 @@ public class SalesOutEnty extends DataSupport {
 
     public void setSalesOut(SalesOut salesOut) {
         this.salesOut = salesOut;
+    }
+
+    public String getStock() {
+        return stock;
+    }
+
+    public void setStock(String stock) {
+        this.stock = stock;
+    }
+
+    public String getBilltype() {
+        return billtype;
+    }
+
+    public void setBilltype(String billtype) {
+        this.billtype = billtype;
     }
 }
