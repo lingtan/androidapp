@@ -12,7 +12,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.androiderp.CustomDataClass.AppropriationEnty;
 import com.example.androiderp.CustomDataClass.Product;
 import com.example.androiderp.CustomDataClass.ProductCategory;
 import com.example.androiderp.CustomDataClass.ProductShopping;
@@ -29,6 +31,7 @@ import com.example.androiderp.adaper.ProductBadgeAdapter;
 import com.example.androiderp.custom.CustomBadgeView;
 import com.example.androiderp.custom.CustomSearch;
 import com.example.androiderp.custom.CustomSearchBase;
+import com.example.androiderp.form.AppropriationForm;
 import com.example.androiderp.form.AppropriationShoppingForm;
 import com.example.androiderp.form.ProductForm;
 import com.example.androiderp.form.ProductShoppingForm;
@@ -71,6 +74,11 @@ public class ProductAppropriationListView extends CustomSearchBase implements Vi
     private List<SalesOutEnty> salesOutEnties;
     private List<SalesOutEnty> supplierOutEnties;
     private double fqty;
+    private double quantity;
+    private int  stockCheck=1;
+    private String appropriOutValue;
+    private List<Integer> stockCheckList=new ArrayList<Integer>();
+    private DecimalFormat df = new DecimalFormat("#####0.00");
 
     @Override
     public void iniView(){
@@ -85,6 +93,8 @@ public class ProductAppropriationListView extends CustomSearchBase implements Vi
         toobar_l.setOnClickListener(this);
         toobar_r.setOnClickListener(this);
         toobar_m.setOnClickListener(this);
+        Intent intentValue=getIntent();
+        appropriOutValue=intentValue.getStringExtra("appropriout");
         search = (CustomSearch) findViewById(R.id.search);
         accounts=(LinearLayout)findViewById(R.id.product_item_layout_bottom);
         customAllDatas= DataSupport.findAll(Product.class);
@@ -336,8 +346,13 @@ public class ProductAppropriationListView extends CustomSearchBase implements Vi
                     countall=0;
                     countamount=0.00;
                     for (int i = 0; i < shoppings.size(); i++) {
+
                         countall+= shoppings.get(i).getSalefqty();
                         countamount+=shoppings.get(i).getSaleamount();
+                        if(stockCheck(appropriOutValue,shoppings.get(i).getSalenumber(),shoppings.get(i).getSalefqty())==0)
+                        {
+                            Toast.makeText(ProductAppropriationListView.this,"调出仓库数量不足，实际库存为："+df.format(quantity),Toast.LENGTH_SHORT).show();
+                        }
 
                     }
                     badgeimage.setVisibility(View.VISIBLE);
@@ -555,5 +570,28 @@ public class ProductAppropriationListView extends CustomSearchBase implements Vi
         {
             badgeimage.setVisibility(View.INVISIBLE);
         }
+
+
+
+    }
+    private int stockCheck(String stockname,String number,double sfqty)
+    {
+
+        double  in=DataSupport.where("instock=? and itemnumber=?",stockname,number).sum(AppropriationEnty.class,"itemfqty",double.class);
+        double  out=DataSupport.where("outstock=? and itemnumber=?",stockname,number).sum(AppropriationEnty.class,"itemfqty",double.class);
+        double  initis=DataSupport.where("stock=? and number=?",stockname,number).sum(StockIniti.class,"fqty",double.class);
+        double   salesOut=DataSupport.where("billtype =? and stock=? and itemnumber=?","2",stockname,number).sum(SalesOutEnty.class,"itemfqty",double.class);
+        double  supplierin=DataSupport.where("billtype =? and stock=? and itemnumber=?","1",stockname,number).sum(SalesOutEnty.class,"itemfqty",double.class);
+        quantity=0.00;
+        quantity=initis+supplierin+in-salesOut-out;
+
+        if(sfqty>quantity)
+        {
+            stockCheck=0;
+            stockCheckList.add(stockCheck);
+        }else {
+            stockCheck=1;
+        }
+        return  stockCheck;
     }
 }

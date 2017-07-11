@@ -22,6 +22,7 @@ import android.widget.ListAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.androiderp.CustomDataClass.AppropriationEnty;
 import com.example.androiderp.CustomDataClass.Consignment;
 import com.example.androiderp.CustomDataClass.Custom;
 import com.example.androiderp.CustomDataClass.Employee;
@@ -98,6 +99,8 @@ public class SaleProductForm extends CustomSearchBase implements View.OnClickLis
     private List<StockIniti> stockInitis = new ArrayList<StockIniti>();
     private List<SalesOutEnty> salesOutEnties;
     private List<SalesOutEnty> supplierOutEnties;
+    private List<AppropriationEnty> appropriationin;
+    private List<AppropriationEnty> appropriationout;
     private double fqty;
     private int  stockcheck=1;
     public void iniView() {
@@ -502,7 +505,7 @@ public class SaleProductForm extends CustomSearchBase implements View.OnClickLis
                    if(findNumber.size()==0){
                        Toast.makeText(SaleProductForm.this,"找不到条码为"+data.getStringExtra("scanResult")+"商品",Toast.LENGTH_LONG).show();
                    }else {
-
+                      //产品重复就累加，否则就添加。
                        for (Product product : findNumber) {
                            boolean flag=true;
                            for (CommonDataStructure structure : listdatas) {
@@ -528,9 +531,13 @@ public class SaleProductForm extends CustomSearchBase implements View.OnClickLis
                            }
 
                        }
-
+                        //计算与库存盘点
                        for(int i = 0; i < listdatas.size(); i++)
-                       {   stockInitis=DataSupport.where("stock=? and number=?",number.getText().toString(),listdatas.get(i).getNumber()).find(StockIniti.class);
+
+                       {
+                           appropriationin=DataSupport.where("instock=? and itemnumber=?",number.getText().toString(),listdatas.get(i).getNumber()).find(AppropriationEnty.class);
+                           appropriationout=DataSupport.where("outstock=? and itemnumber=?",number.getText().toString(),listdatas.get(i).getNumber()).find(AppropriationEnty.class);
+                           stockInitis=DataSupport.where("stock=? and number=?",number.getText().toString(),listdatas.get(i).getNumber()).find(StockIniti.class);
                            salesOutEnties=DataSupport.where("billtype =? and stock=? and itemnumber=?","2",number.getText().toString(),listdatas.get(i).getNumber()).find(SalesOutEnty.class);
                            supplierOutEnties=DataSupport.where("billtype =? and stock=? and itemnumber=?","1",number.getText().toString(),listdatas.get(i).getNumber()).find(SalesOutEnty.class);
                            fqty=0;
@@ -553,10 +560,22 @@ public class SaleProductForm extends CustomSearchBase implements View.OnClickLis
                                fqty+=salesOutEnty.getItemfqty();
 
                            }
+
+                           for(AppropriationEnty appropriationEnty:appropriationin)
+                           {
+                               fqty-=appropriationEnty.getItemfqty();
+                           }
+
+                           for(AppropriationEnty appropriationEnty:appropriationout)
+                           {
+                               fqty+=appropriationEnty.getItemfqty();
+                           }
                            if(listdatas.get(i).getFqty()>fqty)
                            {
-                               Toast.makeText(SaleProductForm.this,"库存不足",Toast.LENGTH_LONG).show();
+                               Toast.makeText(SaleProductForm.this,"库存不足，实际库存为："+df.format(fqty),Toast.LENGTH_LONG).show();
                                stockcheck=0;
+                           }else {
+                               stockcheck=1;
                            }
                            Log.d("linga",df.format(fqty));
                            Log.d("linga",df.format(listdatas.get(i).getFqty()));
@@ -569,7 +588,9 @@ public class SaleProductForm extends CustomSearchBase implements View.OnClickLis
                        }
                        adapter = new SaleProductListViewAdapter(SaleProductForm.this, R.layout.saleproduct_item, listdatas);
                        plistView.setAdapter(adapter);
+                       //计算listView实际内容高度
                        setListViewHeightBasedOnChildren(plistView);
+                       //总数量与金额显示
                        if(countamount!=0) {
                            totalLayout.setVisibility(View.VISIBLE);
                            totalamout.setText("¥"+df.format(countamount));
@@ -653,7 +674,44 @@ public class SaleProductForm extends CustomSearchBase implements View.OnClickLis
 
                     for(int i = 0; i < listdatas.size(); i++)
                     {
+                        stockInitis=DataSupport.where("stock=? and number=?",number.getText().toString(),listdatas.get(i).getNumber()).find(StockIniti.class);
+                        salesOutEnties=DataSupport.where("billtype =? and stock=? and itemnumber=?","2",number.getText().toString(),listdatas.get(i).getNumber()).find(SalesOutEnty.class);
+                        supplierOutEnties=DataSupport.where("billtype =? and stock=? and itemnumber=?","1",number.getText().toString(),listdatas.get(i).getNumber()).find(SalesOutEnty.class);
+                        fqty=0;
 
+                        for(StockIniti stock:stockInitis)
+
+                        {
+
+                            fqty += stock.getFqty();
+                        }
+                        for(SalesOutEnty salesOutEnty:salesOutEnties)
+                        {
+
+                            fqty-=salesOutEnty.getItemfqty();
+
+                        }
+                        for(SalesOutEnty salesOutEnty:supplierOutEnties)
+                        {
+
+                            fqty+=salesOutEnty.getItemfqty();
+
+                        }
+                        for(AppropriationEnty appropriationEnty:appropriationin)
+                        {
+                            fqty-=appropriationEnty.getItemfqty();
+                        }
+                        for(AppropriationEnty appropriationEnty:appropriationout)
+                        {
+                            fqty+=appropriationEnty.getItemfqty();
+                        }
+                        if(listdatas.get(i).getFqty()>fqty)
+                        {
+                            Toast.makeText(SaleProductForm.this,"库存不足，实际库存为："+df.format(fqty),Toast.LENGTH_LONG).show();
+                            stockcheck=0;
+                        }else {
+                            stockcheck=1;
+                        }
                         countall+= listdatas.get(i).getFqty();
                         countamount+=listdatas.get(i).getSaleamount();
                     }

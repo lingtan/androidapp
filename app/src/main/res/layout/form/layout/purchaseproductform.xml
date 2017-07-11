@@ -26,7 +26,7 @@
 
             <TextView style="@style/usertext"
                 android:id="@+id/product_custom"
-                android:hint="请选择客户"
+                android:hint="请选择供应商"
                 android:layout_gravity="center_vertical"
                 />
             <ImageView

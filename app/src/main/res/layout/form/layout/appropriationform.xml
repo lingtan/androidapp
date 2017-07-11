@@ -20,12 +20,12 @@
     <LinearLayout style="@style/wrap_layout" >
         <!-- 无圆角-->
         <LinearLayout style="@style/mid_layout"
-            android:id="@+id/product_custom_layout">
+            android:id="@+id/appropri_out_layout">
             <TextView style="@style/usertext"
                 android:text="调出仓库：" />
 
             <TextView style="@style/usertext"
-                android:id="@+id/product_custom"
+                android:id="@+id/appropri_out"
                 android:hint="请选择仓库"
                 android:layout_gravity="center_vertical"
                 />
@@ -40,14 +40,14 @@
             android:layout_marginRight="10dp"/>
         <!-- 下圆角-->
         <LinearLayout style="@style/bottom_layout"
-            android:id="@+id/product_stock_layout">
+            android:id="@+id/appropri_in_layout">
             <TextView style="@style/usertext"
                 android:text="调入仓库："
                 />
 
 
             <TextView style="@style/usertext"
-                android:id="@+id/product_stock"
+                android:id="@+id/appropri_in"
                 android:hint="请选择仓库"
                 android:layout_gravity="center_vertical"/>
             <ImageView
@@ -75,7 +75,7 @@
             </LinearLayout>
         <LinearLayout style="@style/top_layout"
             android:gravity="center_horizontal"
-            android:id="@+id/number_screen"
+            android:id="@+id/product_screen_layout"
             android:layout_weight="0.32">
             <ImageView
                 android:layout_width="wrap_content"
@@ -92,7 +92,7 @@
                 android:layout_marginBottom="2dp"/>
             <LinearLayout style="@style/top_layout"
                 android:gravity="center_horizontal"
-                android:id="@+id/saleproduct_add"
+                android:id="@+id/product_add_layout"
                 android:layout_weight="0.32">
                 <ImageView
                     android:layout_width="wrap_content"

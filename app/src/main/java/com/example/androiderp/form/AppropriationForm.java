@@ -33,6 +33,7 @@ import com.example.androiderp.CustomDataClass.SalesOut;
 import com.example.androiderp.CustomDataClass.SalesOutEnty;
 import com.example.androiderp.CustomDataClass.ShoppingData;
 import com.example.androiderp.CustomDataClass.Stock;
+import com.example.androiderp.CustomDataClass.StockIniti;
 import com.example.androiderp.R;
 import com.example.androiderp.adaper.AppropriationListViewAdapter;
 import com.example.androiderp.adaper.CommonDataStructure;
@@ -69,31 +70,30 @@ public class AppropriationForm extends CustomSearchBase implements View.OnClickL
         SlideAndDragListView.OnMenuItemClickListener, SlideAndDragListView.OnItemDeleteListener {
     private InputMethodManager manager;
     private EditText note;
-    private LinearLayout saleproduct_add;
-    private TextView save,toobar_tile,toobar_back,toobar_add,name,number;
+    private TextView save,toobarTile,toobarBack,toobarAdd,appropriIn,appropriOut;
     private DisplayMetrics dm;
-    private LinearLayout customLayout,stockLayout,screenLayout;
-    private Custom customlist;
-    private Stock  stockList;
-    private String customid;
+    private LinearLayout appropriOutLayout,appropriInLayout,productScreenLayout,productAddLayout;
+    private Stock  stock;
     private Drawable errorIcon;
     private Common common;
-    private Intent  intentback;
-    private List<PopuMenuDataStructure> popuMenuDatas;
-    private List<Product> findNumber;
-    private List<AppropriationEnty> salesOutEntyList=new ArrayList<AppropriationEnty>();
-    private List<ProductShopping> shoppinglist = new ArrayList<ProductShopping>();
-    private List<CommonDataStructure> listdatas = new ArrayList<CommonDataStructure>();
-    private SlideAndDragListView<CommonDataStructure> plistView;
+    private List<PopuMenuDataStructure> popuMenuList;
+    private List<Product> productList;
+    private List<AppropriationEnty> appropriationEntyList=new ArrayList<AppropriationEnty>();
+    private List<ProductShopping> productShoppinglist = new ArrayList<ProductShopping>();
+    private List<CommonDataStructure> commonDataStructureList = new ArrayList<CommonDataStructure>();
+    private SlideAndDragListView<CommonDataStructure> listView;
     private AppropriationListViewAdapter adapter;
-    private Menu mMenu;
-    private List<Stock> stocks;
-    private List<Employee> employees;
-    private Calendar cal;
+    private Menu menu;
+    private List<Stock> stockList;
+    private Calendar calendar;
     private int year,month,day;
-    private int countall;
-    private double countamount;
     private Intent intent;
+    private double quantity;
+    private int  stockCheck=1;
+    private List<Integer> stockCheckList=new ArrayList<Integer>();
+    private DecimalFormat df = new DecimalFormat("#####0.00");
+
+
     public void iniView() {
         setContentView(R.layout.appropriationform);
         initMenu();
@@ -101,27 +101,26 @@ public class AppropriationForm extends CustomSearchBase implements View.OnClickL
         dm=new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         final Intent intent=getIntent();
-        customid=intent.getStringExtra("product_item");
         manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        name=(TextView)findViewById(R.id.product_custom);
-        saleproduct_add=(LinearLayout) findViewById(R.id.saleproduct_add);
-        number=(TextView)findViewById(R.id.product_stock);
+        appropriOut=(TextView)findViewById(R.id.appropri_out);
+        productAddLayout=(LinearLayout) findViewById(R.id.product_add_layout);
+        appropriIn=(TextView)findViewById(R.id.appropri_in);
         note=(EditText)findViewById(R.id.product_note);
-        screenLayout=(LinearLayout) findViewById(R.id.number_screen);
+        productScreenLayout=(LinearLayout) findViewById(R.id.product_screen_layout);
         save=(TextView)findViewById(R.id.customtoobar_right);
-        toobar_tile=(TextView)findViewById(R.id.customtoobar_midd);
-        toobar_back=(TextView)findViewById(R.id.customtoobar_left);
-        toobar_add=(TextView)findViewById(R.id.customtoobar_r) ;
-        stockLayout=(LinearLayout)findViewById(R.id.product_stock_layout);
-        customLayout=(LinearLayout)findViewById(R.id.product_custom_layout);
-        stockLayout.setOnClickListener(this);
-        customLayout.setOnClickListener(this);
+        toobarTile=(TextView)findViewById(R.id.customtoobar_midd);
+        toobarBack=(TextView)findViewById(R.id.customtoobar_left);
+        toobarAdd=(TextView)findViewById(R.id.customtoobar_r) ;
+        appropriInLayout=(LinearLayout)findViewById(R.id.appropri_in_layout);
+        appropriOutLayout=(LinearLayout)findViewById(R.id.appropri_out_layout);
+        appropriInLayout.setOnClickListener(this);
+        appropriOutLayout.setOnClickListener(this);
         save.setOnClickListener(this);
-        toobar_back.setOnClickListener(this);
-        toobar_add.setOnClickListener(this);
-        saleproduct_add.setOnClickListener(this);
+        toobarBack.setOnClickListener(this);
+        toobarAdd.setOnClickListener(this);
+        productAddLayout.setOnClickListener(this);
         save.setCompoundDrawables(null,null,null,null);
-        toobar_tile.setCompoundDrawables(null,null,null,null);
+        toobarTile.setCompoundDrawables(null,null,null,null);
         errorIcon = getResources().getDrawable(R.drawable.icon_error);
 // 设置图片大小
         errorIcon.setBounds(new Rect(0, 0, errorIcon.getIntrinsicWidth(),
@@ -130,7 +129,7 @@ public class AppropriationForm extends CustomSearchBase implements View.OnClickL
         formInit();
         getDate();
 
-        screenLayout.setOnClickListener(new View.OnClickListener() {
+        productScreenLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -139,21 +138,21 @@ public class AppropriationForm extends CustomSearchBase implements View.OnClickL
                 startActivityForResult(openCameraIntent, 5);
             }
         });
-        toobar_tile.setText("调拨单");
+        toobarTile.setText("调拨单");
 
     }
     private void  formInit()
     {
 
 
-        stockList = DataSupport.find(Stock.class, 1);
+        stock = DataSupport.find(Stock.class, 1);
 
 
-        if(stockList==null)
+        if(stock==null)
         {
 
         }else {
-            name.setText(stockList.getName());
+            appropriOut.setText(stock.getName());
         }
 
 
@@ -168,22 +167,22 @@ public class AppropriationForm extends CustomSearchBase implements View.OnClickL
     }
     //获取当前日期
     private void getDate() {
-        cal=Calendar.getInstance();
-        year=cal.get(Calendar.YEAR);       //获取年月日时分秒
-        month=cal.get(Calendar.MONTH);   //获取到的月份是从0开始计数
-        day=cal.get(Calendar.DAY_OF_MONTH);
+        calendar=Calendar.getInstance();
+        year=calendar.get(Calendar.YEAR);       //获取年月日时分秒
+        month=calendar.get(Calendar.MONTH);   //获取到的月份是从0开始计数
+        day=calendar.get(Calendar.DAY_OF_MONTH);
 
     }
     public void initMenu() {
-        mMenu = new Menu(true);
-        mMenu.addItem(new MenuItem.Builder().setWidth((int) getResources().getDimension(R.dimen.slv_item_bg_btn_width))
+        menu = new Menu(true);
+        menu.addItem(new MenuItem.Builder().setWidth((int) getResources().getDimension(R.dimen.slv_item_bg_btn_width))
                 .setBackground(Utils.getDrawable(this, R.drawable.btn_right0))
                 .setText("取消")
                 .setDirection(MenuItem.DIRECTION_RIGHT)
                 .setTextColor(Color.BLACK)
                 .setTextSize(14)
                 .build());
-        mMenu.addItem(new MenuItem.Builder().setWidth((int) getResources().getDimension(R.dimen.slv_item_bg_btn_width_img))
+        menu.addItem(new MenuItem.Builder().setWidth((int) getResources().getDimension(R.dimen.slv_item_bg_btn_width_img))
                 .setBackground(Utils.getDrawable(this, R.drawable.btn_right1))
                 .setDirection(MenuItem.DIRECTION_RIGHT)
                 .setText("删除")
@@ -192,11 +191,11 @@ public class AppropriationForm extends CustomSearchBase implements View.OnClickL
     }
 
     public void initUiAndListener() {
-        plistView = (SlideAndDragListView) findViewById(R.id.saleproduct_listview);
-        plistView.setMenu(mMenu);
-        plistView.setOnItemClickListener(this);
-        plistView.setOnMenuItemClickListener(this);
-        plistView.setOnItemDeleteListener(this);
+        listView = (SlideAndDragListView) findViewById(R.id.saleproduct_listview);
+        listView.setMenu(menu);
+        listView.setOnItemClickListener(this);
+        listView.setOnMenuItemClickListener(this);
+        listView.setOnItemDeleteListener(this);
     }
     @Override
     public int onMenuItemClick(View v, final int itemPosition, int buttonPosition, int direction) {
@@ -208,21 +207,13 @@ public class AppropriationForm extends CustomSearchBase implements View.OnClickL
                         return Menu.ITEM_SCROLL_BACK;
                     case 1:
 
-                                DataStructure.deleteAll(ProductCategory.class,"name = ?",listdatas.get(itemPosition - plistView.getHeaderViewsCount()).getName().toString());
+                                DataStructure.deleteAll(ProductCategory.class,"name = ?",commonDataStructureList.get(itemPosition - listView.getHeaderViewsCount()).getName().toString());
 
 
-                                  listdatas.remove(itemPosition - plistView.getHeaderViewsCount());
+                        commonDataStructureList.remove(itemPosition - listView.getHeaderViewsCount());
                                    adapter.notifyDataSetChanged();
-                                  setListViewHeightBasedOnChildren(plistView);
-                        countall=0;
-                        countamount=0.00;
-                        DecimalFormat df = new DecimalFormat("#####0.00");
-                        for(int i = 0; i < listdatas.size(); i++)
-                        {
+                                  setListViewHeightBasedOnChildren(listView);
 
-                            countall+= listdatas.get(i).getFqty();
-                            countamount+=listdatas.get(i).getSaleamount();
-                        }
 
 
                         return Menu.ITEM_NOTHING;
@@ -242,7 +233,7 @@ public class AppropriationForm extends CustomSearchBase implements View.OnClickL
 
         Intent intent=new Intent(AppropriationForm.this,ScrennProductShoppingForm.class);
         intent.putExtra("action", "edit");
-        intent.putExtra("product_item", String.valueOf(listdatas.get(position).getId()));
+        intent.putExtra("product_item", String.valueOf(commonDataStructureList.get(position).getId()));
         startActivityForResult(intent,7);
     }
 
@@ -260,56 +251,69 @@ public class AppropriationForm extends CustomSearchBase implements View.OnClickL
 
         {
             case R.id.customtoobar_right:
-                if (TextUtils.isEmpty(name.getText().toString())) {
-                    Toast.makeText(AppropriationForm.this,"请选择客户",Toast.LENGTH_SHORT).show();
+                if (TextUtils.isEmpty(appropriOut.getText().toString())) {
+                    Toast.makeText(AppropriationForm.this,"请选择调出仓库",Toast.LENGTH_SHORT).show();
 
-                }else if (TextUtils.isEmpty(number.getText().toString()))
+                }else if (TextUtils.isEmpty(appropriIn.getText().toString()))
                 {
-                    Toast.makeText(AppropriationForm.this,"请选择仓库",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AppropriationForm.this,"请选择调入仓库",Toast.LENGTH_SHORT).show();
                 }
-                else if (listdatas.size()==0)
-                {
-                    Toast.makeText(AppropriationForm.this,"请选择产品",Toast.LENGTH_SHORT).show();
+                else if (commonDataStructureList.size()==0) {
+                    Toast.makeText(AppropriationForm.this, "请选择产品", Toast.LENGTH_SHORT).show();
+                }else if (appropriIn.getText().equals(appropriOut.getText())) {
+                    Toast.makeText(AppropriationForm.this,"调出仓库与调入仓库，不能相同", Toast.LENGTH_SHORT).show();
                 }else
 
                 {
-                    SimpleDateFormat format=new SimpleDateFormat("yyyyMMddHHmmss");
-                    Date curData=new Date(System.currentTimeMillis());
-                    String fdate=format.format(curData);
-                    for(int i = 0; i < listdatas.size(); i++)
+                    stockCheckList.clear();
+
+                    for(int i = 0; i < commonDataStructureList.size(); i++)
                     {
+                        stockCheck(appropriOut.getText().toString(),commonDataStructureList.get(i).getNumber(),commonDataStructureList.get(i).getFqty());
 
-                        AppropriationEnty salesOutEnty=new AppropriationEnty();
-                        salesOutEnty.setItemname(listdatas.get(i).getName());
-                        salesOutEnty.setItemnumber(listdatas.get(i).getNumber());
-                        salesOutEnty.setItemfqty(listdatas.get(i).getFqty());
-                        salesOutEnty.setInstock(name.getText().toString());
-                        salesOutEnty.setOutstock(number.getText().toString());
-                        salesOutEntyList.add(salesOutEnty);
                     }
-                    DataSupport.saveAll(salesOutEntyList);
-                    Appropriation salesOut =new Appropriation();
-                    salesOut.setSalesOutEntyList(salesOutEntyList);
-                    salesOut.setInstock(number.getText().toString());
-                    salesOut.setNuber("DBD"+ fdate);
-                    salesOut.setOutstock(name.getText().toString());
-                    salesOut.setFdate(String.valueOf(year+"-"+(++month)+"-"+day));
-                    salesOut.setNote(note.getText().toString());
-                    salesOut.save();
-                    Toast.makeText(AppropriationForm.this,"新增成功",Toast.LENGTH_SHORT).show();
-                    save.setVisibility(View.GONE);
-                    toobar_add.setVisibility(View.VISIBLE);
+                    if(stockCheckList.size()>0)
+                    {
+                        Toast.makeText(AppropriationForm.this,"有产品库存不足,不能保存",Toast.LENGTH_LONG).show();
+                    }else {
 
 
+                        SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
+                        Date curData = new Date(System.currentTimeMillis());
+                        String fdate = format.format(curData);
+                        for (int i = 0; i < commonDataStructureList.size(); i++) {
+
+                            AppropriationEnty appropriationEnty = new AppropriationEnty();
+                            appropriationEnty.setItemname(commonDataStructureList.get(i).getName());
+                            appropriationEnty.setItemnumber(commonDataStructureList.get(i).getNumber());
+                            appropriationEnty.setItemfqty(commonDataStructureList.get(i).getFqty());
+                            appropriationEnty.setInstock(appropriIn.getText().toString());
+                            appropriationEnty.setOutstock(appropriOut.getText().toString());
+                            appropriationEntyList.add(appropriationEnty);
+                        }
+                        DataSupport.saveAll(appropriationEntyList);
+                        Appropriation appropriation = new Appropriation();
+                        appropriation.setSalesOutEntyList(appropriationEntyList);
+                        appropriation.setInstock(appropriIn.getText().toString());
+                        appropriation.setNuber("DBD" + fdate);
+                        appropriation.setOutstock(appropriOut.getText().toString());
+                        appropriation.setFdate(String.valueOf(year + "-" + (++month) + "-" + day));
+                        appropriation.setNote(note.getText().toString());
+                        appropriation.save();
+                        Toast.makeText(AppropriationForm.this, "新增成功", Toast.LENGTH_SHORT).show();
+                        save.setVisibility(View.GONE);
+                        toobarAdd.setVisibility(View.VISIBLE);
+
+                    }
                 }
 
             break;
-            case R.id.product_stock_layout:
+            case R.id.appropri_in_layout:
                 showStockWindow();
                 if( common.mPopWindow==null ||!common.mPopWindow.isShowing())
                 {
                     int xPos = dm.widthPixels / 3;
-                    common.mPopWindow.showAsDropDown(number,xPos,5);
+                    common.mPopWindow.showAsDropDown(appropriIn,xPos,5);
                     //mPopWindow.showAtLocation(findViewById(R.id.main), Gravity.BOTTOM, 0, 0);//从底部弹出
                 }
                 else {
@@ -318,14 +322,14 @@ public class AppropriationForm extends CustomSearchBase implements View.OnClickL
 
                 break;
 
-            case R.id.product_custom_layout:
+            case R.id.appropri_out_layout:
 
                 showEmployeeWindow();
 
                 if( common.mPopWindow==null ||!common.mPopWindow.isShowing())
                 {
                     int xPos = dm.widthPixels / 3;
-                    common.mPopWindow.showAsDropDown(name,xPos,5);
+                    common.mPopWindow.showAsDropDown(appropriOut,xPos,5);
                     //mPopWindow.showAtLocation(findViewById(R.id.main), Gravity.BOTTOM, 0, 0);//从底部弹出
                 }
                 else {
@@ -342,14 +346,14 @@ public class AppropriationForm extends CustomSearchBase implements View.OnClickL
 
             case R.id.customtoobar_r:
                 if( common.mPopWindow==null ||!common.mPopWindow.isShowing())
-                {   popuMenuDatas.clear();
+                {   popuMenuList.clear();
 
                     PopuMenuDataStructure popuMenub = new PopuMenuDataStructure(R.drawable.poppu_wrie, "销售单新增");
-                    popuMenuDatas.add(popuMenub);
+                    popuMenuList.add(popuMenub);
                     PopuMenuDataStructure popuMenua = new PopuMenuDataStructure(R.drawable.poppu_wrie, "销售单复制");
-                    popuMenuDatas.add(popuMenua);
+                    popuMenuList.add(popuMenua);
                     int xPos = dm.widthPixels / 3;
-                    showPopupWindow(popuMenuDatas);
+                    showPopupWindow(popuMenuList);
                     common.mPopWindow.showAsDropDown(v,0,5);
                     //mPopWindow.showAtLocation(findViewById(R.id.main), Gravity.BOTTOM, 0, 0);//从底部弹出
                 }
@@ -357,8 +361,9 @@ public class AppropriationForm extends CustomSearchBase implements View.OnClickL
                     common.mPopWindow.dismiss();
                 }
                 break;
-            case R.id.saleproduct_add:
+            case R.id.product_add_layout:
                 Intent intentbadge=new Intent(AppropriationForm.this, ProductAppropriationListView.class);
+                intentbadge.putExtra("appropriout",appropriOut.getText().toString());
                 startActivityForResult(intentbadge,6);
                 default:
 
@@ -374,7 +379,7 @@ public class AppropriationForm extends CustomSearchBase implements View.OnClickL
             public void onItemClick(AdapterView<?> adapterView, View view,
                                     int position, long id) {
 
-                if(popuMenuDatas.get(position).getName().equals("销售单新增"))
+                if(popuMenuList.get(position).getName().equals("销售单新增"))
                 {
                     intent = new Intent(AppropriationForm.this, AppropriationForm.class);
                     startActivity(intent);
@@ -390,7 +395,7 @@ public class AppropriationForm extends CustomSearchBase implements View.OnClickL
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        DecimalFormat df = new DecimalFormat("#####0.00");
+
         switch (requestCode){
 
             case 4:
@@ -403,18 +408,16 @@ public class AppropriationForm extends CustomSearchBase implements View.OnClickL
 
             case 5:
                 if(resultCode==RESULT_OK) {
+                    productList=DataStructure.where("number = ?",data.getStringExtra("scanResult")).find(Product.class);
 
-                    countall=0;
-                    countamount=0.00;
-                    findNumber=DataStructure.where("number = ?",data.getStringExtra("scanResult")).find(Product.class);
-
-                   if(findNumber.size()==0){
+                   if(productList.size()==0){
                        Toast.makeText(AppropriationForm.this,"找不到条码为"+data.getStringExtra("scanResult")+"商品",Toast.LENGTH_LONG).show();
                    }else {
 
-                       for (Product product : findNumber) {
+                       for (Product product : productList) {
                            boolean flag=true;
-                           for (CommonDataStructure structure : listdatas) {
+                           double  temQty=0.0;
+                           for (CommonDataStructure structure : commonDataStructureList) {
 
                                if(structure.getNumber().equals(product.getNumber()))
                                {
@@ -422,6 +425,7 @@ public class AppropriationForm extends CustomSearchBase implements View.OnClickL
                                    structure.setSaleamount(structure.getSaleamount()+structure.getSalesprice());
                                    flag=false;
                                }
+                               temQty=structure.getFqty();
                            }
                            if(flag==true)
                            {
@@ -432,21 +436,20 @@ public class AppropriationForm extends CustomSearchBase implements View.OnClickL
                                commonData.setFqty(1);
                                commonData.setSaleamount(Double.valueOf(product.getSalesprice()));
                                commonData.setSalesprice(Double.valueOf(product.getSalesprice()));
-
-                               listdatas.add(commonData);
+                              temQty=commonData.getFqty();
+                               commonDataStructureList.add(commonData);
                            }
 
+
+                           if(stockCheck(appropriOut.getText().toString(),product.getNumber(),temQty)==0)
+                           {
+                               Toast.makeText(AppropriationForm.this,"调出仓库数量不足，实际库存为："+df.format(quantity),Toast.LENGTH_SHORT).show();
+                           }
                        }
 
-                       for(int i = 0; i < listdatas.size(); i++)
-                       {
-
-                           countall+= listdatas.get(i).getFqty();
-                           countamount+=listdatas.get(i).getSaleamount();
-                       }
-                       adapter = new AppropriationListViewAdapter(AppropriationForm.this, R.layout.saleproduct_item, listdatas);
-                       plistView.setAdapter(adapter);
-                       setListViewHeightBasedOnChildren(plistView);
+                       adapter = new AppropriationListViewAdapter(AppropriationForm.this, R.layout.saleproduct_item, commonDataStructureList);
+                       listView.setAdapter(adapter);
+                       setListViewHeightBasedOnChildren(listView);
 
 
                    }
@@ -455,21 +458,18 @@ public class AppropriationForm extends CustomSearchBase implements View.OnClickL
                 break;
             case 6:
                 if(resultCode==RESULT_OK) {
-                    countall=0;
-                    countamount=0.00;
-
                     ShoppingData shoppingData=data.getParcelableExtra("shoppingdata");
 
-                    shoppinglist=shoppingData.getShoppingdata();
-                    for(ProductShopping shopping:shoppinglist)
+                    productShoppinglist=shoppingData.getShoppingdata();
+                    for(ProductShopping shopping:productShoppinglist)
                     {
-                        for(int i = 0; i < listdatas.size(); i++)
+                        for(int i = 0; i < commonDataStructureList.size(); i++)
                         {
-                            if(listdatas.get(i).getNumber().equals(shopping.getSalenumber()))
+                            if(commonDataStructureList.get(i).getNumber().equals(shopping.getSalenumber()))
                             {
 
-                                shopping.setSalefqty(shopping.getSalefqty()+listdatas.get(i).getFqty());
-                                listdatas.remove(i);
+                                shopping.setSalefqty(shopping.getSalefqty()+commonDataStructureList.get(i).getFqty());
+                                commonDataStructureList.remove(i);
                                 i--;
                             }
                         }
@@ -478,18 +478,12 @@ public class AppropriationForm extends CustomSearchBase implements View.OnClickL
                         commonData.setName(shopping.getSalename());
                         commonData.setNumber(shopping.getSalenumber());
                         commonData.setFqty(shopping.getSalefqty());
-                        listdatas.add(commonData);
-                    }
-                    for(int i = 0; i < listdatas.size(); i++)
-                    {
-
-                        countall+= listdatas.get(i).getFqty();
-                        countamount+=listdatas.get(i).getSaleamount();
+                        commonDataStructureList.add(commonData);
                     }
 
-                    adapter = new AppropriationListViewAdapter(AppropriationForm.this, R.layout.saleproduct_item, listdatas);
-                    plistView.setAdapter(adapter);
-                    setListViewHeightBasedOnChildren(plistView);
+                    adapter = new AppropriationListViewAdapter(AppropriationForm.this, R.layout.saleproduct_item, commonDataStructureList);
+                    listView.setAdapter(adapter);
+                    setListViewHeightBasedOnChildren(listView);
 
                 }
 
@@ -497,10 +491,8 @@ public class AppropriationForm extends CustomSearchBase implements View.OnClickL
 
             case 7:
                 if(resultCode==RESULT_OK) {
-                    countall=0;
-                    countamount=0.00;
                     ProductShopping shopping = (ProductShopping) data.getParcelableExtra("shop_data");
-                    for ( CommonDataStructure commonData : listdatas)
+                    for ( CommonDataStructure commonData : commonDataStructureList)
 
                     {
                         if (commonData.getNumber().toString().equals(shopping.getSalenumber().toString())) {
@@ -508,18 +500,16 @@ public class AppropriationForm extends CustomSearchBase implements View.OnClickL
                             commonData.setSalesprice(shopping.getSalesprice());
                             commonData.setSaleamount(shopping.getSaleamount());
                         }
+
+
+                        if(stockCheck(appropriOut.getText().toString(),commonData.getNumber(),commonData.getFqty())==0)
+                        {
+                            Toast.makeText(AppropriationForm.this,"调出仓库数量不足，实际库存为："+df.format(quantity),Toast.LENGTH_SHORT).show();
+                        }
                     }
 
-                    adapter = new AppropriationListViewAdapter(AppropriationForm.this, R.layout.saleproduct_item, listdatas);
-                    plistView.setAdapter(adapter);
-
-                    for(int i = 0; i < listdatas.size(); i++)
-                    {
-
-                        countall+= listdatas.get(i).getFqty();
-                        countamount+=listdatas.get(i).getSaleamount();
-                    }
-
+                    adapter = new AppropriationListViewAdapter(AppropriationForm.this, R.layout.saleproduct_item, commonDataStructureList);
+                    listView.setAdapter(adapter);
 
                 }
 
@@ -528,7 +518,7 @@ public class AppropriationForm extends CustomSearchBase implements View.OnClickL
 
             case 8:
                 if(resultCode==RESULT_OK){
-                    name.setText(data.getStringExtra("data_return"));
+                    appropriOut.setText(data.getStringExtra("data_return"));
                 }
                 break;
 
@@ -537,23 +527,23 @@ public class AppropriationForm extends CustomSearchBase implements View.OnClickL
     }
     private void showStockWindow() {
         common = new Common();
-        popuMenuDatas = new ArrayList<PopuMenuDataStructure>();
-        stocks= DataSupport.findAll(Stock.class);
-        for(Stock stock:stocks)
+        popuMenuList = new ArrayList<PopuMenuDataStructure>();
+        stockList= DataSupport.findAll(Stock.class);
+        for(Stock stock:stockList)
 
         {
             PopuMenuDataStructure popuMenua = new PopuMenuDataStructure(R.drawable.poppu_wrie, stock.getName());
-            popuMenuDatas.add(popuMenua);
+            popuMenuList.add(popuMenua);
 
         }
-        common.PopupWindow(AppropriationForm.this, dm, popuMenuDatas);
+        common.PopupWindow(AppropriationForm.this, dm, popuMenuList);
         common.listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view,
                                     int position, long id) {
 
-                number.setText(popuMenuDatas.get(position).getName());
+                appropriIn.setText(popuMenuList.get(position).getName());
                 common.mPopWindow.dismiss();
             }
         });
@@ -561,23 +551,23 @@ public class AppropriationForm extends CustomSearchBase implements View.OnClickL
 
     private void showEmployeeWindow() {
         common = new Common();
-        popuMenuDatas = new ArrayList<PopuMenuDataStructure>();
-        stocks= DataSupport.findAll(Stock.class);
-        for(Stock stock:stocks)
+        popuMenuList = new ArrayList<PopuMenuDataStructure>();
+        stockList= DataSupport.findAll(Stock.class);
+        for(Stock stock:stockList)
 
         {
             PopuMenuDataStructure popuMenua = new PopuMenuDataStructure(R.drawable.poppu_wrie, stock.getName());
-            popuMenuDatas.add(popuMenua);
+            popuMenuList.add(popuMenua);
 
         }
-        common.PopupWindow(AppropriationForm.this, dm, popuMenuDatas);
+        common.PopupWindow(AppropriationForm.this, dm, popuMenuList);
         common.listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view,
                                     int position, long id) {
 
-                name.setText(popuMenuDatas.get(position).getName());
+                appropriOut.setText(popuMenuList.get(position).getName());
                 common.mPopWindow.dismiss();
             }
         });
@@ -610,6 +600,28 @@ public class AppropriationForm extends CustomSearchBase implements View.OnClickL
         ViewGroup.LayoutParams params = listView.getLayoutParams();
         params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
         listView.setLayoutParams(params);
+    }
+
+
+    private int stockCheck(String stockname,String number,double sfqty)
+    {
+
+        double  in=DataSupport.where("instock=? and itemnumber=?",stockname,number).sum(AppropriationEnty.class,"itemfqty",double.class);
+        double  out=DataSupport.where("outstock=? and itemnumber=?",stockname,number).sum(AppropriationEnty.class,"itemfqty",double.class);
+        double  initis=DataSupport.where("stock=? and number=?",stockname,number).sum(StockIniti.class,"fqty",double.class);
+        double   salesOut=DataSupport.where("billtype =? and stock=? and itemnumber=?","2",stockname,number).sum(SalesOutEnty.class,"itemfqty",double.class);
+        double  supplierin=DataSupport.where("billtype =? and stock=? and itemnumber=?","1",stockname,number).sum(SalesOutEnty.class,"itemfqty",double.class);
+        quantity=0.00;
+        quantity=initis+supplierin+in-salesOut-out;
+
+        if(sfqty>quantity)
+        {
+            stockCheck=0;
+            stockCheckList.add(stockCheck);
+        }else {
+            stockCheck=1;
+        }
+        return  stockCheck;
     }
 
 }
