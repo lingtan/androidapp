@@ -22,40 +22,39 @@ import org.litepal.crud.DataSupport;
 
 public class BrandForm extends AppCompatActivity implements View.OnClickListener {
     private InputMethodManager manager;
-    private EditText username;
-    private TextView usersave,toobar_tile,toobar_back;
-    private Brand custom;
-    private Brand customlist;
+    private EditText userName;
+    private TextView toobarSave, toobarTile, toobarBack;
+    private Brand brand;
     private String customid,edit;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.customcategory);
         manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        username=(EditText)findViewById(R.id.customcategory_name);
+        userName =(EditText)findViewById(R.id.customcategory_name);
         final Intent intent=getIntent();
         customid=intent.getStringExtra("customid");
         edit=intent.getStringExtra("action");
-        usersave=(TextView)findViewById(R.id.custom_toobar_right);
-        toobar_tile=(TextView)findViewById(R.id.custom_toobar_midd);
-        toobar_back=(TextView)findViewById(R.id.custom_toobar_left);
-        usersave.setCompoundDrawables(null,null,null,null);
-        toobar_tile.setCompoundDrawables(null,null,null,null);
-        usersave.setText("保存");
-        usersave.setOnClickListener(this);
-        toobar_back.setOnClickListener(this);
+        toobarSave =(TextView)findViewById(R.id.custom_toobar_right);
+        toobarTile =(TextView)findViewById(R.id.custom_toobar_midd);
+        toobarBack =(TextView)findViewById(R.id.custom_toobar_left);
+        toobarSave.setCompoundDrawables(null,null,null,null);
+        toobarTile.setCompoundDrawables(null,null,null,null);
+        toobarSave.setText("保存");
+        toobarSave.setOnClickListener(this);
+        toobarBack.setOnClickListener(this);
        formInit();
 
     }
 private  void formInit()
 {if(customid!=null) {
-    customlist = DataSupport.find(Brand.class, Long.parseLong(customid));
-    username.setText(customlist.getName());
+    brand = DataSupport.find(Brand.class, Long.parseLong(customid));
+    userName.setText(brand.getName());
 }
     if(edit.equals("edit"))
     {
-        toobar_tile.setText("品牌修改");
+        toobarTile.setText("品牌修改");
     }else {
-        toobar_tile.setText("品牌新增");
+        toobarTile.setText("品牌新增");
     }
 
 }
@@ -64,21 +63,21 @@ private  void formInit()
         switch (v.getId())
         {
             case R.id.custom_toobar_right:
-                if (TextUtils.isEmpty(username.getText().toString())) {
-                    username.setError("需要输入品牌");
+                if (TextUtils.isEmpty(userName.getText().toString())) {
+                    userName.setError("需要输入品牌");
                 } else {
                     if (edit.equals("edit")) {
-                        custom = new Brand();
-                        custom.setName(username.getText().toString());
-                        custom.update(Long.parseLong(customid));
+                      Brand  brand = new Brand();
+                        brand.setName(userName.getText().toString());
+                        brand.update(Long.parseLong(customid));
                         Intent intent = new Intent();
                         setResult(RESULT_OK,intent);
                         BrandForm.this.finish();
                     } else {
-                        custom = new Brand();
-                        custom.setName(username.getText().toString());
+                      Brand  brand = new Brand();
+                        brand.setName(userName.getText().toString());
 
-                        custom.save();
+                        brand.save();
                         Intent intent = new Intent();
                         setResult(RESULT_OK,intent);
                         BrandForm.this.finish();

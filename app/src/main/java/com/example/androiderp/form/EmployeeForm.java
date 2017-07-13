@@ -12,7 +12,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.androiderp.CustomDataClass.Employee;
-import com.example.androiderp.CustomDataClass.ProductCategory;
 import com.example.androiderp.R;
 
 import org.litepal.crud.DataSupport;
@@ -23,40 +22,39 @@ import org.litepal.crud.DataSupport;
 
 public class EmployeeForm extends AppCompatActivity implements View.OnClickListener {
     private InputMethodManager manager;
-    private EditText username;
-    private TextView usersave,toobar_tile,toobar_back;
-    private Employee custom;
-    private Employee customlist;
+    private EditText userName;
+    private TextView toobarSave, toobarTile, toobarBack;
+    private Employee employee;
     private String customid,edit;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.customcategory);
         manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        username=(EditText)findViewById(R.id.customcategory_name);
+        userName =(EditText)findViewById(R.id.customcategory_name);
         final Intent intent=getIntent();
         customid=intent.getStringExtra("customid");
         edit=intent.getStringExtra("action");
-        usersave=(TextView)findViewById(R.id.custom_toobar_right);
-        toobar_tile=(TextView)findViewById(R.id.custom_toobar_midd);
-        toobar_back=(TextView)findViewById(R.id.custom_toobar_left);
-        usersave.setCompoundDrawables(null,null,null,null);
-        toobar_tile.setCompoundDrawables(null,null,null,null);
-        usersave.setText("保存");
-        usersave.setOnClickListener(this);
-        toobar_back.setOnClickListener(this);
+        toobarSave =(TextView)findViewById(R.id.custom_toobar_right);
+        toobarTile =(TextView)findViewById(R.id.custom_toobar_midd);
+        toobarBack =(TextView)findViewById(R.id.custom_toobar_left);
+        toobarSave.setCompoundDrawables(null,null,null,null);
+        toobarTile.setCompoundDrawables(null,null,null,null);
+        toobarSave.setText("保存");
+        toobarSave.setOnClickListener(this);
+        toobarBack.setOnClickListener(this);
        formInit();
 
     }
 private  void formInit()
 {if(customid!=null) {
-    customlist = DataSupport.find(Employee.class, Long.parseLong(customid));
-    username.setText(customlist.getName());
+    employee = DataSupport.find(Employee.class, Long.parseLong(customid));
+    userName.setText(employee.getName());
 }
     if(edit.equals("edit"))
     {
-        toobar_tile.setText("职员修改");
+        toobarTile.setText("职员修改");
     }else {
-        toobar_tile.setText("职员新增");
+        toobarTile.setText("职员新增");
     }
 
 }
@@ -65,20 +63,20 @@ private  void formInit()
         switch (v.getId())
         {
             case R.id.custom_toobar_right:
-                if (TextUtils.isEmpty(username.getText().toString())) {
-                    username.setError("需要输入职员");
+                if (TextUtils.isEmpty(userName.getText().toString())) {
+                    userName.setError("需要输入职员");
                 } else {
                     if (edit.equals("edit")) {
-                        custom = new Employee();
-                        custom.setName(username.getText().toString());
-                        custom.update(Long.parseLong(customid));
+                  Employee      employee = new Employee();
+                        employee.setName(userName.getText().toString());
+                        employee.update(Long.parseLong(customid));
                         Intent intent = new Intent();
                         setResult(RESULT_OK,intent);
                         EmployeeForm.this.finish();
                     } else {
-                        custom = new Employee();
-                        custom.setName(username.getText().toString());
-                        custom.save();
+                   Employee     employee = new Employee();
+                        employee.setName(userName.getText().toString());
+                        employee.save();
                         Intent intent = new Intent();
                         setResult(RESULT_OK,intent);
                         EmployeeForm.this.finish();

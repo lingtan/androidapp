@@ -1,16 +1,12 @@
 package com.example.androiderp.adaper;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.example.androiderp.CustomDataClass.Product;
 import com.example.androiderp.CustomDataClass.SalesOut;
 import com.example.androiderp.R;
 
@@ -62,7 +58,7 @@ public class SaleOutAdapter extends ArrayAdapter<SalesOut>   {
             viewHolder = new ViewHolder();
             viewHolder.customer = (TextView) view.findViewById (R.id.saleout_custom);
             viewHolder.nuber=(TextView) view.findViewById(R.id.saleout_number);
-            viewHolder.saleamount = (TextView) view.findViewById (R.id.saleout_amount);
+            viewHolder.saleAmount = (TextView) view.findViewById (R.id.saleout_amount);
             viewHolder.Fdate = (TextView) view.findViewById (R.id.saleout_fdate);
             viewHolder.stock = (TextView) view.findViewById (R.id.saleout_stock);
 
@@ -77,8 +73,8 @@ public class SaleOutAdapter extends ArrayAdapter<SalesOut>   {
         // 重新获取ViewHolder
         viewHolder.customer.setText(data.get(position).getCustomer().toString());
         viewHolder.nuber.setText(data.get(position).getNuber());
-        viewHolder.saleamount.setText("¥"+df.format(data.get(position).getSaleamount()));
-        viewHolder.Fdate.setText(data.get(position).getFdate().toString());
+        viewHolder.saleAmount.setText("¥"+df.format(data.get(position).getAmount()));
+        viewHolder.Fdate.setText(data.get(position).getDate().toString());
         viewHolder.stock.setText(data.get(position).getStock());
 
 
@@ -103,7 +99,7 @@ public void setSeclection(int position)
         TextView  customer;
         TextView  Fdate;
         TextView  nuber;
-        TextView saleamount;
+        TextView saleAmount;
         TextView stock;
 
 

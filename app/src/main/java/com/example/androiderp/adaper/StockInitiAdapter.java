@@ -1,8 +1,6 @@
 package com.example.androiderp.adaper;
 
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Color;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -12,16 +10,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.example.androiderp.CustomDataClass.Stock;
 import com.example.androiderp.CustomDataClass.StockInitiTem;
 import com.example.androiderp.R;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.List;
 
 //继承ArrayAdapter<DataStructure>
@@ -69,8 +63,8 @@ public class StockInitiAdapter extends ArrayAdapter<StockInitiTem>   {
             viewHolder = new ViewHolder();
             viewHolder.badge = (TextView) convertView.findViewById (R.id.custom_badge_item_show);
             viewHolder.name = (TextView) convertView.findViewById (R.id.custom_item_layout_one_name);
-            viewHolder.stockiniti = (EditText) convertView.findViewById (R.id.stockiniti_edit);
-            viewHolder.stockiniti.setOnTouchListener(new View.OnTouchListener() {
+            viewHolder.stockIniti = (EditText) convertView.findViewById (R.id.stockiniti_edit);
+            viewHolder.stockIniti.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
                     if(event.getAction()==MotionEvent.ACTION_UP)
@@ -90,10 +84,10 @@ public class StockInitiAdapter extends ArrayAdapter<StockInitiTem>   {
             // 重新获取ViewHolder
 
         }
-        viewHolder.stockiniti.setTag(position);
+        viewHolder.stockIniti.setTag(position);
 
 
-        viewHolder.stockiniti.addTextChangedListener(new TextWatcher() {
+        viewHolder.stockIniti.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -108,43 +102,43 @@ public class StockInitiAdapter extends ArrayAdapter<StockInitiTem>   {
             @Override
             public void afterTextChanged(Editable s) {
 
-                Integer tag = (Integer) viewHolder.stockiniti.getTag();
+                Integer tag = (Integer) viewHolder.stockIniti.getTag();
                 Log.d("lingu",String.valueOf(tag));
                 if(s!=null&&!"".equals(s.toString())) {
 
 
-                    mdata.get(tag).setSalefqty(Double.valueOf(s.toString()));
+                    mdata.get(tag).setQuantity(Double.valueOf(s.toString()));
                     Log.d("lingu",s.toString());
 
                 }
                 if(s.length()==0)
                 {
-                       mdata.get(tag).setSalefqty(0);
+                       mdata.get(tag).setQuantity(0);
                 }
 
             }
         });
         DecimalFormat df = new DecimalFormat("#####0.00");
 
-        if(mdata.get(position).getSalefqty()!=0 && !"".equals(mdata.get(position).getSalefqty()))
+        if(mdata.get(position).getQuantity()!=0 && !"".equals(mdata.get(position).getQuantity()))
         {
-            viewHolder.stockiniti.setText(df.format(mdata.get(position).getSalefqty()));
+            viewHolder.stockIniti.setText(df.format(mdata.get(position).getQuantity()));
         }else {
         }
 
 
         if(index!=-1 && index==position)
         {
-            viewHolder.stockiniti.requestFocus();
-            viewHolder.stockiniti.setSelection(viewHolder.stockiniti.getText().length());
+            viewHolder.stockIniti.requestFocus();
+            viewHolder.stockIniti.setSelection(viewHolder.stockIniti.getText().length());
 
         }else {
-            viewHolder.stockiniti.clearFocus();
+            viewHolder.stockIniti.clearFocus();
         }
 
 
         // 重新获取ViewHolder
-        viewHolder.name.setText(mdata.get(position).getSalename()+":");
+        viewHolder.name.setText(mdata.get(position).getName()+":");
         /*首先响应子控件的事件
         viewHolder.name.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -166,7 +160,7 @@ public void setSeclection(int position)
 
 
   static final   class ViewHolder {
-        EditText stockiniti;
+        EditText stockIniti;
         TextView  name;
         TextView  badge;
 

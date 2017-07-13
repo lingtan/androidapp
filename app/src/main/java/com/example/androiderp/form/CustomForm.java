@@ -21,7 +21,6 @@ import android.widget.Toast;
 import com.example.androiderp.CustomDataClass.Custom;
 import com.example.androiderp.CustomDataClass.CustomCategory;
 import com.example.androiderp.CustomDataClass.SalesOut;
-import com.example.androiderp.CustomDataClass.Supplier;
 import com.example.androiderp.R;
 import com.example.androiderp.adaper.DataStructure;
 import com.example.androiderp.adaper.PopuMenuDataStructure;
@@ -39,17 +38,16 @@ import java.util.List;
 public class CustomForm extends AppCompatActivity implements View.OnClickListener {
     private InputMethodManager manager;
     private EditText name,address,phone,fax;
-    private TextView toobar_save,toobar_tile,toobar_back,toobar_add,category;
-    private Custom custom;
+    private TextView toobarSave, toobarTile, toobarBack, toobarAdd,category;
     private Common common;
     private DisplayMetrics dm;
     private List<PopuMenuDataStructure> popuMenuDatas;
     private LinearLayout linearLayout;
-    private Custom customdata;
-    private List<CustomCategory> customCategory;
+    private Custom custom;
+    private List<CustomCategory> customCategoryList;
     private String edit,customid;
-    private Button buttondelete;
-    private List<SalesOut> findCustomDatas=new ArrayList<SalesOut>();
+    private Button deleteButton;
+    private List<SalesOut> salesOutList =new ArrayList<SalesOut>();
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.userform);
@@ -65,16 +63,16 @@ public class CustomForm extends AppCompatActivity implements View.OnClickListene
         phone=(EditText)findViewById(R.id.userphone);
         fax=(EditText)findViewById(R.id.userfax);
         category=(TextView)findViewById(R.id.usercategory);
-        toobar_save=(TextView)findViewById(R.id.customtoobar_right);
-        toobar_tile=(TextView)findViewById(R.id.customtoobar_midd);
-        toobar_back=(TextView)findViewById(R.id.customtoobar_left);
-        toobar_add=(TextView)findViewById(R.id.customtoobar_r) ;
-        buttondelete=(Button)findViewById(R.id.loginbutton);
+        toobarSave =(TextView)findViewById(R.id.customtoobar_right);
+        toobarTile =(TextView)findViewById(R.id.customtoobar_midd);
+        toobarBack =(TextView)findViewById(R.id.customtoobar_left);
+        toobarAdd =(TextView)findViewById(R.id.customtoobar_r) ;
+        deleteButton =(Button)findViewById(R.id.loginbutton);
         linearLayout=(LinearLayout)findViewById(R.id.usercategory_layout);
-        toobar_save.setOnClickListener(this);
-        toobar_add.setOnClickListener(this);
-        toobar_back.setOnClickListener(this);
-        buttondelete.setOnClickListener(this);
+        toobarSave.setOnClickListener(this);
+        toobarAdd.setOnClickListener(this);
+        toobarBack.setOnClickListener(this);
+        deleteButton.setOnClickListener(this);
         linearLayout.setOnClickListener(this);
         formInit();
     }
@@ -83,15 +81,15 @@ public class CustomForm extends AppCompatActivity implements View.OnClickListene
         if(customid!=null) {
 
 
-            customdata = DataSupport.find(Custom.class, Long.parseLong(customid));
-            name.setText(customdata.getName());
-            address.setText(customdata.getAddress());
-            phone.setText(customdata.getPhone());
-            fax.setText(customdata.getFax());
-            category.setText(customdata.getCategory());
+            custom = DataSupport.find(Custom.class, Long.parseLong(customid));
+            name.setText(custom.getName());
+            address.setText(custom.getAddress());
+            phone.setText(custom.getPhone());
+            fax.setText(custom.getFax());
+            category.setText(custom.getCategory());
 
-                toobar_add.setVisibility(View.VISIBLE);
-                buttondelete.setVisibility(View.VISIBLE);
+                toobarAdd.setVisibility(View.VISIBLE);
+                deleteButton.setVisibility(View.VISIBLE);
 
         }else {
          CustomCategory  cCategory  = DataSupport.find(CustomCategory.class, 1);
@@ -105,9 +103,9 @@ public class CustomForm extends AppCompatActivity implements View.OnClickListene
         }
         if(edit.equals("edit"))
         {
-            toobar_tile.setText("客户信息");
+            toobarTile.setText("客户信息");
         }else {
-            toobar_tile.setText("客户新增");
+            toobarTile.setText("客户新增");
         }
 
 
@@ -120,7 +118,7 @@ public class CustomForm extends AppCompatActivity implements View.OnClickListene
                     name.setError("需要输入客户名称");
                 } else {
                     if (edit.equals("edit")) {
-                        custom = new Custom();
+                  Custom      custom = new Custom();
                         custom.setName(name.getText().toString());
                         custom.setAddress(address.getText().toString());
                         custom.setPhone(phone.getText().toString());
@@ -132,7 +130,7 @@ public class CustomForm extends AppCompatActivity implements View.OnClickListene
                         Toast.makeText(CustomForm.this,"修改成功",Toast.LENGTH_SHORT).show();
                         hintKbTwo();
                     } else {
-                        custom = new Custom();
+                  Custom      custom = new Custom();
                         custom.setName(name.getText().toString());
                         custom.setAddress(address.getText().toString());
                         custom.setPhone(phone.getText().toString());
@@ -141,8 +139,8 @@ public class CustomForm extends AppCompatActivity implements View.OnClickListene
                         custom.save();
                         Toast.makeText(CustomForm.this,"新增成功",Toast.LENGTH_SHORT).show();
                         edit="edit";
-                        toobar_add.setVisibility(View.VISIBLE);
-                        buttondelete.setVisibility(View.VISIBLE);
+                        toobarAdd.setVisibility(View.VISIBLE);
+                        deleteButton.setVisibility(View.VISIBLE);
                         hintKbTwo();
                         Intent intent = new Intent();
                         setResult(RESULT_OK,intent);
@@ -223,9 +221,9 @@ public class CustomForm extends AppCompatActivity implements View.OnClickListene
                 phone.setText("");
                 fax.setText("");
                 category.setText("");
-                toobar_add.setVisibility(View.INVISIBLE);
-                toobar_tile.setText("客户新增");
-                buttondelete.setVisibility(View.INVISIBLE);
+                toobarAdd.setVisibility(View.INVISIBLE);
+                toobarTile.setText("客户新增");
+                deleteButton.setVisibility(View.INVISIBLE);
                 edit="";
                 break;
 
@@ -243,8 +241,8 @@ public class CustomForm extends AppCompatActivity implements View.OnClickListene
     private void showPopupWindow() {
         common = new Common();
         popuMenuDatas = new ArrayList<PopuMenuDataStructure>();
-        customCategory= DataSupport.findAll(CustomCategory.class);
-        for(CustomCategory category:customCategory)
+        customCategoryList = DataSupport.findAll(CustomCategory.class);
+        for(CustomCategory category: customCategoryList)
 
         {
             PopuMenuDataStructure popuMenua = new PopuMenuDataStructure(R.drawable.poppu_wrie, category.getName());
@@ -276,9 +274,9 @@ public class CustomForm extends AppCompatActivity implements View.OnClickListene
     public boolean isCustom(String name)
     {
 
-        findCustomDatas=DataSupport.where("customer=?",name).find(SalesOut.class);
+        salesOutList =DataSupport.where("customer=?",name).find(SalesOut.class);
 
-        if (findCustomDatas.size()>0)
+        if (salesOutList.size()>0)
         {
             return true;
         }else {

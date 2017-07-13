@@ -8,11 +8,11 @@ import org.litepal.crud.DataSupport;
 
 public class AppropriationEnty extends DataSupport {
     private int id;
-    private String itemname;
-    private String itemnumber;
-    private double itemfqty;
-    private String instock;
-    private String outstock;
+    private String name;
+    private String number;
+    private double quantity;
+    private String stockIn;
+    private String stockOut;
 
 
     public int getId() {
@@ -23,43 +23,43 @@ public class AppropriationEnty extends DataSupport {
         this.id = id;
     }
 
-    public String getItemname() {
-        return itemname;
+    public String getName() {
+        return name;
     }
 
-    public void setItemname(String itemname) {
-        this.itemname = itemname;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getItemnumber() {
-        return itemnumber;
+    public String getNumber() {
+        return number;
     }
 
-    public void setItemnumber(String itemnumber) {
-        this.itemnumber = itemnumber;
+    public void setNumber(String number) {
+        this.number = number;
     }
 
-    public double getItemfqty() {
-        return itemfqty;
+    public double getQuantity() {
+        return quantity;
     }
 
-    public void setItemfqty(double itemfqty) {
-        this.itemfqty = itemfqty;
+    public void setQuantity(double quantity) {
+        this.quantity = quantity;
     }
 
-    public String getInstock() {
-        return instock;
+    public String getStockIn() {
+        return stockIn;
     }
 
-    public void setInstock(String instock) {
-        this.instock = instock;
+    public void setStockIn(String stockIn) {
+        this.stockIn = stockIn;
     }
 
-    public String getOutstock() {
-        return outstock;
+    public String getStockOut() {
+        return stockOut;
     }
 
-    public void setOutstock(String outstock) {
-        this.outstock = outstock;
+    public void setStockOut(String stockOut) {
+        this.stockOut = stockOut;
     }
 }

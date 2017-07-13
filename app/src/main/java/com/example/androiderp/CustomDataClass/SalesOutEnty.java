@@ -8,12 +8,12 @@ import org.litepal.crud.DataSupport;
 
 public class SalesOutEnty extends DataSupport {
     private int id;
-    private String itemname;
-    private String itemnumber;
-    private String itemcategory;
-    private double itemprice;
-    private double itemfqty;
-    private double itemamount;
+    private String name;
+    private String number;
+    private String category;
+    private double price;
+    private double quantity;
+    private double amount;
     private SalesOut salesOut;
     private String stock;
     private String billtype;
@@ -26,52 +26,52 @@ public class SalesOutEnty extends DataSupport {
         this.id = id;
     }
 
-    public String getItemname() {
-        return itemname;
+    public String getName() {
+        return name;
     }
 
-    public void setItemname(String itemname) {
-        this.itemname = itemname;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getItemnumber() {
-        return itemnumber;
+    public String getNumber() {
+        return number;
     }
 
-    public void setItemnumber(String itemnumber) {
-        this.itemnumber = itemnumber;
+    public void setNumber(String number) {
+        this.number = number;
     }
 
-    public String getItemcategory() {
-        return itemcategory;
+    public String getCategory() {
+        return category;
     }
 
-    public void setItemcategory(String itemcategory) {
-        this.itemcategory = itemcategory;
+    public void setCategory(String category) {
+        this.category = category;
     }
 
-    public double getItemprice() {
-        return itemprice;
+    public double getPrice() {
+        return price;
     }
 
-    public void setItemprice(double itemprice) {
-        this.itemprice = itemprice;
+    public void setPrice(double price) {
+        this.price = price;
     }
 
-    public double getItemfqty() {
-        return itemfqty;
+    public double getQuantity() {
+        return quantity;
     }
 
-    public void setItemfqty(double itemfqty) {
-        this.itemfqty = itemfqty;
+    public void setQuantity(double quantity) {
+        this.quantity = quantity;
     }
 
-    public double getItemamount() {
-        return itemamount;
+    public double getAmount() {
+        return amount;
     }
 
-    public void setItemamount(double itemamount) {
-        this.itemamount = itemamount;
+    public void setAmount(double amount) {
+        this.amount = amount;
     }
 
     public SalesOut getSalesOut() {

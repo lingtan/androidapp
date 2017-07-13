@@ -10,12 +10,12 @@ import android.os.Parcelable;
 
 public class ProductShopping implements Parcelable {
     private int id;
-    private String salename;
-    private String salenumber;
+    private String name;
+    private String number;
     private String category;
-    private double salesprice;
-    private double salefqty;
-    private double saleamount;
+    private double price;
+    private double quantity;
+    private double amount;
 
     public int getId() {
         return id;
@@ -25,20 +25,20 @@ public class ProductShopping implements Parcelable {
         this.id = id;
     }
 
-    public String getSalename() {
-        return salename;
+    public String getName() {
+        return name;
     }
 
-    public void setSalename(String salename) {
-        this.salename = salename;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getSalenumber() {
-        return salenumber;
+    public String getNumber() {
+        return number;
     }
 
-    public void setSalenumber(String salenumber) {
-        this.salenumber = salenumber;
+    public void setNumber(String number) {
+        this.number = number;
     }
 
     public String getCategory() {
@@ -49,28 +49,28 @@ public class ProductShopping implements Parcelable {
         this.category = category;
     }
 
-    public double getSalesprice() {
-        return salesprice;
+    public double getPrice() {
+        return price;
     }
 
-    public void setSalesprice(double salesprice) {
-        this.salesprice = salesprice;
+    public void setPrice(double price) {
+        this.price = price;
     }
 
-    public double getSalefqty() {
-        return salefqty;
+    public double getQuantity() {
+        return quantity;
     }
 
-    public void setSalefqty(double salefqty) {
-        this.salefqty = salefqty;
+    public void setQuantity(double quantity) {
+        this.quantity = quantity;
     }
 
-    public double getSaleamount() {
-        return saleamount;
+    public double getAmount() {
+        return amount;
     }
 
-    public void setSaleamount(double saleamount) {
-        this.saleamount = saleamount;
+    public void setAmount(double amount) {
+        this.amount = amount;
     }
 
     @Override
@@ -80,25 +80,25 @@ public class ProductShopping implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(salename);
-        dest.writeString(salenumber);
+        dest.writeString(name);
+        dest.writeString(number);
         dest.writeString(category);
-        dest.writeDouble(salesprice);
-        dest.writeDouble(salefqty);
+        dest.writeDouble(price);
+        dest.writeDouble(quantity);
         dest.writeInt(id);
-        dest.writeDouble(saleamount);
+        dest.writeDouble(amount);
     }
     public static final Parcelable.Creator<ProductShopping> CREATOR=new Parcelable.Creator<ProductShopping>(){
         @Override
         public ProductShopping createFromParcel(Parcel source) {
             ProductShopping productShopping=new ProductShopping();
-            productShopping.salename=source.readString();
-            productShopping.salenumber=source.readString();
+            productShopping.name =source.readString();
+            productShopping.number =source.readString();
             productShopping.category=source.readString();
-            productShopping.salesprice=source.readDouble();
-            productShopping.salefqty=source.readDouble();
+            productShopping.price =source.readDouble();
+            productShopping.quantity =source.readDouble();
             productShopping.id=source.readInt();
-            productShopping.saleamount=source.readDouble();
+            productShopping.amount =source.readDouble();
             return productShopping;
         }
 

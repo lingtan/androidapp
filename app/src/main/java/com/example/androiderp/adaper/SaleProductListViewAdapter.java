@@ -59,9 +59,9 @@ public class SaleProductListViewAdapter extends ArrayAdapter<CommonDataStructure
             view = LayoutInflater.from(getContext()).inflate(resourceId, parent, false);
             viewHolder = new ViewHolder();
             viewHolder.name = (TextView) view.findViewById (R.id.custom_item_layout_one_name);
-            viewHolder.fqty = (TextView) view.findViewById (R.id.custom_item_layout_one_fqty);
-            viewHolder.saleamount = (TextView) view.findViewById (R.id.custom_item_layout_one_saleamount);
-            viewHolder.salesprice = (TextView) view.findViewById (R.id.custom_item_layout_one_salesprice);
+            viewHolder.quantity = (TextView) view.findViewById (R.id.custom_item_layout_one_fqty);
+            viewHolder.saleAmount = (TextView) view.findViewById (R.id.custom_item_layout_one_saleamount);
+            viewHolder.salesPrice = (TextView) view.findViewById (R.id.custom_item_layout_one_salesprice);
             viewHolder.image=(ImageView) view.findViewById(R.id.custom_item_layout_one_image);
 
             view.setTag(viewHolder); // 将ViewHolder存储在View中
@@ -89,9 +89,9 @@ public class SaleProductListViewAdapter extends ArrayAdapter<CommonDataStructure
         // 重新获取ViewHolder
         DecimalFormat df = new DecimalFormat("#####0.00");
         viewHolder.name.setText(data.get(position).getName());
-        viewHolder.fqty.setText(String.valueOf(data.get(position).getFqty()));
-        viewHolder.saleamount.setText("¥"+df.format(data.get(position).getSaleamount()));
-        viewHolder.salesprice.setText("¥"+df.format(data.get(position).getSalesprice()));
+        viewHolder.quantity.setText(String.valueOf(data.get(position).getFqty()));
+        viewHolder.saleAmount.setText("¥"+df.format(data.get(position).getSaleamount()));
+        viewHolder.salesPrice.setText("¥"+df.format(data.get(position).getSalesprice()));
         viewHolder.image.setImageResource(data.get(position).getImage());
 
 
@@ -115,9 +115,9 @@ public void setSeclection(int position)
 
         ImageView image;
         TextView  name;
-        TextView  fqty;
-        TextView  saleamount;
-        TextView  salesprice;
+        TextView  quantity;
+        TextView  saleAmount;
+        TextView  salesPrice;
 
 
     }

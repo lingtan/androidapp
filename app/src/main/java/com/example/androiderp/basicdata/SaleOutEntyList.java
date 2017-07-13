@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 import com.example.androiderp.CustomDataClass.SalesOut;
@@ -27,7 +26,6 @@ import com.example.androiderp.listview.SlideAndDragListView;
 import org.litepal.crud.DataSupport;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -37,20 +35,20 @@ import java.util.List;
 public class SaleOutEntyList extends CustomSearchBase implements View.OnClickListener, AdapterView.OnItemClickListener,
         SlideAndDragListView.OnMenuItemClickListener, SlideAndDragListView.OnItemDeleteListener {
     private InputMethodManager manager;
-    private TextView note,save,toobar_tile,toobar_back,toobar_add,category,name,number,data,consignment,totalamout,totalfqty;
+    private TextView note,save, toobarTile, toobarBack, toobarAdd,category,name,number,data,consignment, totalAmout, totalQuantity;
     private DisplayMetrics dm;
-    private SalesOut customlist;
+    private SalesOut salesOutlist;
     private String customid;
     private Drawable errorIcon;
     private Common common;
     private Intent  intentback;
     private List<PopuMenuDataStructure> popuMenuDatas;
     private List<SalesOutEnty> salesOutEntyList=new ArrayList<SalesOutEnty>();
-    private List<CommonDataStructure> listdatas = new ArrayList<CommonDataStructure>();
-    private SlideAndDragListView<CommonDataStructure> plistView;
+    private List<CommonDataStructure> commonDataStructureList = new ArrayList<CommonDataStructure>();
+    private SlideAndDragListView<CommonDataStructure> listView;
     private SaleProductListViewAdapter adapter;
-    private Menu mMenu;
-    private List<Stock> stocks;
+    private Menu menu;
+    private List<Stock> stockList;
     public void iniView() {
         setContentView(R.layout.saleoutentyform);
         initMenu();
@@ -69,18 +67,18 @@ public class SaleOutEntyList extends CustomSearchBase implements View.OnClickLis
         note=(TextView)findViewById(R.id.product_note);
         category=(TextView)findViewById(R.id.product_category);
         save=(TextView)findViewById(R.id.customtoobar_right);
-        toobar_tile=(TextView)findViewById(R.id.customtoobar_midd);
-        toobar_back=(TextView)findViewById(R.id.customtoobar_left);
-        toobar_add=(TextView)findViewById(R.id.customtoobar_r) ;
-        totalfqty=(TextView)findViewById(R.id.saleoutenty_fqty);
-        totalamout=(TextView)findViewById(R.id.saleoutenty_amount);
+        toobarTile =(TextView)findViewById(R.id.customtoobar_midd);
+        toobarBack =(TextView)findViewById(R.id.customtoobar_left);
+        toobarAdd =(TextView)findViewById(R.id.customtoobar_r) ;
+        totalQuantity =(TextView)findViewById(R.id.saleoutenty_fqty);
+        totalAmout =(TextView)findViewById(R.id.saleoutenty_amount);
         save.setOnClickListener(this);
-        toobar_back.setOnClickListener(this);
-        toobar_add.setOnClickListener(this);
+        toobarBack.setOnClickListener(this);
+        toobarAdd.setOnClickListener(this);
         Drawable more= getResources().getDrawable(R.drawable.toobar_more);
         more.setBounds(0, 0, more.getMinimumWidth(), more.getMinimumHeight());
         save.setCompoundDrawables(more,null,null,null);
-        toobar_tile.setCompoundDrawables(null,null,null,null);
+        toobarTile.setCompoundDrawables(null,null,null,null);
         errorIcon = getResources().getDrawable(R.drawable.icon_error);
 // 设置图片大小
         errorIcon.setBounds(new Rect(0, 0, errorIcon.getIntrinsicWidth(),
@@ -89,7 +87,7 @@ public class SaleOutEntyList extends CustomSearchBase implements View.OnClickLis
         formInit();
 
 
-        toobar_tile.setText("销售明细");
+        toobarTile.setText("销售明细");
 
     }
     private void  formInit()
@@ -97,44 +95,44 @@ public class SaleOutEntyList extends CustomSearchBase implements View.OnClickLis
         DecimalFormat df = new DecimalFormat("#####0.00");
         if(customid!=null) {
 
-            customlist = DataSupport.find(SalesOut.class, Long.parseLong(customid),true);
-            salesOutEntyList=customlist.getSalesOutEntyList();
-            name.setText(customlist.getCustomer());
-            number.setText(customlist.getStock());
-            data.setText(customlist.getFdate().toString().trim());
-            category.setText(customlist.getSalesman());
-            consignment.setText(customlist.getConsignment());
-            totalamout.setText("¥"+df.format(customlist.getSaleamount()));
-            totalfqty.setText(df.format(customlist.getSalefqty()));
-            note.setText(customlist.getNote());
+            salesOutlist = DataSupport.find(SalesOut.class, Long.parseLong(customid),true);
+            salesOutEntyList= salesOutlist.getSalesOutEntyList();
+            name.setText(salesOutlist.getCustomer());
+            number.setText(salesOutlist.getStock());
+            data.setText(salesOutlist.getDate().toString().trim());
+            category.setText(salesOutlist.getSalesman());
+            consignment.setText(salesOutlist.getConsignment());
+            totalAmout.setText("¥"+df.format(salesOutlist.getAmount()));
+            totalQuantity.setText(df.format(salesOutlist.getQuantity()));
+            note.setText(salesOutlist.getNote());
           for(SalesOutEnty salesOutEnty:salesOutEntyList) {
               CommonDataStructure commonData = new CommonDataStructure();
               commonData.setId(salesOutEnty.getId());
-              commonData.setNumber(salesOutEnty.getItemnumber());
-              commonData.setName(salesOutEnty.getItemname());
-              commonData.setFqty(salesOutEnty.getItemfqty());
-              commonData.setSaleamount(salesOutEnty.getItemamount());
-              commonData.setSalesprice(salesOutEnty.getItemprice());
+              commonData.setNumber(salesOutEnty.getNumber());
+              commonData.setName(salesOutEnty.getName());
+              commonData.setFqty(salesOutEnty.getQuantity());
+              commonData.setSaleamount(salesOutEnty.getAmount());
+              commonData.setSalesprice(salesOutEnty.getPrice());
 
-              listdatas.add(commonData);
+              commonDataStructureList.add(commonData);
           }
-            adapter = new SaleProductListViewAdapter(SaleOutEntyList.this, R.layout.saleproduct_item, listdatas);
-            plistView.setAdapter(adapter);
-            setListViewHeightBasedOnChildren(plistView);
+            adapter = new SaleProductListViewAdapter(SaleOutEntyList.this, R.layout.saleproduct_item, commonDataStructureList);
+            listView.setAdapter(adapter);
+            setListViewHeightBasedOnChildren(listView);
 
         }
     }
     public void initMenu() {
-        mMenu = new Menu(true);
+        menu = new Menu(true);
 
     }
 
     public void initUiAndListener() {
-        plistView = (SlideAndDragListView) findViewById(R.id.saleproduct_listview);
-        plistView.setMenu(mMenu);
-        plistView.setOnItemClickListener(this);
-        plistView.setOnMenuItemClickListener(this);
-        plistView.setOnItemDeleteListener(this);
+        listView = (SlideAndDragListView) findViewById(R.id.saleproduct_listview);
+        listView.setMenu(menu);
+        listView.setOnItemClickListener(this);
+        listView.setOnMenuItemClickListener(this);
+        listView.setOnItemDeleteListener(this);
     }
     @Override
     public int onMenuItemClick(View v, final int itemPosition, int buttonPosition, int direction) {
@@ -257,8 +255,8 @@ public class SaleOutEntyList extends CustomSearchBase implements View.OnClickLis
     private void showStockWindow() {
         common = new Common();
         popuMenuDatas = new ArrayList<PopuMenuDataStructure>();
-        stocks= DataSupport.findAll(Stock.class);
-        for(Stock stock:stocks)
+        stockList = DataSupport.findAll(Stock.class);
+        for(Stock stock: stockList)
 
         {
             PopuMenuDataStructure popuMenua = new PopuMenuDataStructure(R.drawable.poppu_wrie, stock.getName());

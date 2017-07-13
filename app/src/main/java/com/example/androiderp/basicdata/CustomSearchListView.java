@@ -16,7 +16,6 @@ import com.example.androiderp.CustomDataClass.Custom;
 import com.example.androiderp.R;
 import com.example.androiderp.adaper.CommonAdapter;
 import com.example.androiderp.adaper.CommonDataStructure;
-import com.example.androiderp.adaper.DataStructure;
 import com.example.androiderp.adaper.PopuMenuDataStructure;
 import com.example.androiderp.common.Common;
 import com.example.androiderp.custom.CustomHomeSearch;
@@ -29,16 +28,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CustomSearchListView extends CustomSearchBase implements View.OnClickListener {
-    private List<CommonDataStructure> customListDatas = new ArrayList<CommonDataStructure>();
-    private List<DataStructure> fruit = new ArrayList<DataStructure>();
+    private List<CommonDataStructure> commonDataStructureList = new ArrayList<CommonDataStructure>();
     private List<PopuMenuDataStructure> popuMenuDatas;
     private CommonAdapter adapter;
     private ListView listView;
     private DisplayMetrics dm;
-    private List<CommonDataStructure> searchDatas= new ArrayList<CommonDataStructure>();
-    private List<Custom> customAllDatas;
+    private List<CommonDataStructure> commonDataStructureSearch = new ArrayList<CommonDataStructure>();
+    private List<Custom> customList;
     private Common common;
-    private CustomHomeSearch toobar_search;
+    private CustomHomeSearch customHomeSearch;
     private Intent intent;
 
     @Override
@@ -46,18 +44,18 @@ public class CustomSearchListView extends CustomSearchBase implements View.OnCli
         setContentView(R.layout.custom_search_layout);
         Toolbar toolbar = (Toolbar) findViewById(R.id.custom_search_toolbar);
         setSupportActionBar(toolbar);//加载工具栏
-        toobar_search = (CustomHomeSearch) findViewById(R.id.home_custom_search);
-        toobar_search.setVisibility(View.VISIBLE);
-        customAllDatas= DataSupport.findAll(Custom.class);
+        customHomeSearch = (CustomHomeSearch) findViewById(R.id.home_custom_search);
+        customHomeSearch.setVisibility(View.VISIBLE);
+        customList = DataSupport.findAll(Custom.class);
         intent= new Intent(CustomSearchListView.this, CustomForm.class);
-        for(Custom custom:customAllDatas)
+        for(Custom custom: customList)
 
         {
             CommonDataStructure commonData=new CommonDataStructure();
             commonData.setName(custom.getName());
             commonData.setCategory(custom.getCategory());
             commonData.setId(custom.getId());
-            customListDatas.add(commonData);
+            commonDataStructureList.add(commonData);
 
 
 
@@ -74,16 +72,16 @@ public class CustomSearchListView extends CustomSearchBase implements View.OnCli
             public void onItemClick(AdapterView<?> adapterView, View view,
                                     int position, long id) {
                 intent.removeExtra("action");
-                        if(searchDatas.size()!=0) {
+                        if(commonDataStructureSearch.size()!=0) {
 
                             intent.putExtra("action", "edit");
-                            intent.putExtra("custom_item", String.valueOf(searchDatas.get(position).getId()));
+                            intent.putExtra("custom_item", String.valueOf(commonDataStructureSearch.get(position).getId()));
 
 
                         }else {
 
                             intent.putExtra("action", "edit");
-                            intent.putExtra("custom_item", String.valueOf(customListDatas.get(position).getId()));
+                            intent.putExtra("custom_item", String.valueOf(commonDataStructureList.get(position).getId()));
 
                         }
                 startActivityForResult(intent,1);
@@ -91,14 +89,14 @@ public class CustomSearchListView extends CustomSearchBase implements View.OnCli
 
             }
         });
-        if(customListDatas.size()!=0) {
+        if(commonDataStructureList.size()!=0) {
 
-                 adapter = new CommonAdapter(CustomSearchListView.this, R.layout.custom_item, customListDatas);
+                 adapter = new CommonAdapter(CustomSearchListView.this, R.layout.custom_item, commonDataStructureList);
                  listView.setAdapter(adapter);
             
         }
 
-        toobar_search.addTextChangedListener(textWatcher);
+        customHomeSearch.addTextChangedListener(textWatcher);
 
         popuMenuDatas = new ArrayList<PopuMenuDataStructure>();
         PopuMenuDataStructure popuMenua = new PopuMenuDataStructure(android.R.drawable.ic_menu_edit, "美的");
@@ -111,50 +109,50 @@ public class CustomSearchListView extends CustomSearchBase implements View.OnCli
 
     //筛选条件
     public Object[] search(String name) {
-        if(searchDatas!=null) {
-            searchDatas.clear();
+        if(commonDataStructureSearch !=null) {
+            commonDataStructureSearch.clear();
         }
-        for (int i = 0; i < customListDatas.size(); i++) {
-            int index = customListDatas.get(i).getName().indexOf(name);
+        for (int i = 0; i < commonDataStructureList.size(); i++) {
+            int index = commonDataStructureList.get(i).getName().indexOf(name);
 
             // 存在匹配的数据
             if (index != -1) {
-                searchDatas.add(customListDatas.get(i));
+                commonDataStructureSearch.add(commonDataStructureList.get(i));
             }
         }
-        return searchDatas.toArray();
+        return commonDataStructureSearch.toArray();
     }
 
     public Object[] categorySearch(String name) {
 
-        if(searchDatas!=null) {
-            searchDatas.clear();
+        if(commonDataStructureSearch !=null) {
+            commonDataStructureSearch.clear();
         }
         if(name.equals("全部类别"))
         {
-            for (int i = 0; i < customListDatas.size(); i++) {
-               if(customListDatas.get(i).getCategory()!=null)
+            for (int i = 0; i < commonDataStructureList.size(); i++) {
+               if(commonDataStructureList.get(i).getCategory()!=null)
                {
-                    searchDatas.add(customListDatas.get(i));
+                    commonDataStructureSearch.add(commonDataStructureList.get(i));
                }
             }
 
         }else {
-        for (int i = 0; i < customListDatas.size(); i++) {
-              if(customListDatas.get(i).getCategory()!=null){
-                int index = customListDatas.get(i).getCategory().indexOf(name);
+        for (int i = 0; i < commonDataStructureList.size(); i++) {
+              if(commonDataStructureList.get(i).getCategory()!=null){
+                int index = commonDataStructureList.get(i).getCategory().indexOf(name);
                 // 存在匹配的数据
                 if (index != -1) {
-                    searchDatas.add(customListDatas.get(i));
+                    commonDataStructureSearch.add(commonDataStructureList.get(i));
                 }
             }
         }}
-        return searchDatas.toArray();
+        return commonDataStructureSearch.toArray();
     }
 //adapter刷新,重写Filter方式会出现BUG.
     public void updateLayout(Object[] obj) {
-        if(searchDatas!=null) {
-            adapter = new CommonAdapter(CustomSearchListView.this, R.layout.custom_item, searchDatas);
+        if(commonDataStructureSearch !=null) {
+            adapter = new CommonAdapter(CustomSearchListView.this, R.layout.custom_item, commonDataStructureSearch);
             listView.setAdapter(adapter);
         }
     }
@@ -189,23 +187,23 @@ public class CustomSearchListView extends CustomSearchBase implements View.OnCli
             case 1:
                 if(resultCode==RESULT_OK)
                 {
-                    if(customListDatas.size()!=0) {
-                        customListDatas.clear();
+                    if(commonDataStructureList.size()!=0) {
+                        commonDataStructureList.clear();
                     }
-                    customAllDatas= DataSupport.findAll(Custom.class);
-                    for(Custom category:customAllDatas)
+                    customList = DataSupport.findAll(Custom.class);
+                    for(Custom category: customList)
 
                     {
                         CommonDataStructure commonData=new CommonDataStructure();
                         commonData.setName(category.getName());
                         commonData.setCategory(category.getCategory());
                         commonData.setId(category.getId());
-                        customListDatas.add(commonData);
+                        commonDataStructureList.add(commonData);
 
 
 
                     }
-                    adapter = new CommonAdapter(CustomSearchListView.this, R.layout.custom_item, customListDatas);
+                    adapter = new CommonAdapter(CustomSearchListView.this, R.layout.custom_item, commonDataStructureList);
                     listView.setAdapter(adapter);
                 }
                 break;
@@ -290,7 +288,7 @@ public class CustomSearchListView extends CustomSearchBase implements View.OnCli
         @Override
         public void afterTextChanged(Editable s) {
 
-            Object[] obj = search(toobar_search.getText().toString());
+            Object[] obj = search(customHomeSearch.getText().toString());
             updateLayout(obj);
 
         }

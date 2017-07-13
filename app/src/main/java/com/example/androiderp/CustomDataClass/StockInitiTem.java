@@ -10,8 +10,8 @@ import android.os.Parcelable;
 
 public class StockInitiTem implements Parcelable {
     private int id;
-    private String salename;
-    private double salefqty;
+    private String name;
+    private double quantity;
 
 
     public int getId() {
@@ -22,20 +22,20 @@ public class StockInitiTem implements Parcelable {
         this.id = id;
     }
 
-    public String getSalename() {
-        return salename;
+    public String getName() {
+        return name;
     }
 
-    public void setSalename(String salename) {
-        this.salename = salename;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public double getSalefqty() {
-        return salefqty;
+    public double getQuantity() {
+        return quantity;
     }
 
-    public void setSalefqty(double salefqty) {
-        this.salefqty = salefqty;
+    public void setQuantity(double quantity) {
+        this.quantity = quantity;
     }
 
     @Override
@@ -45,16 +45,16 @@ public class StockInitiTem implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(salename);
-        dest.writeDouble(salefqty);
+        dest.writeString(name);
+        dest.writeDouble(quantity);
         dest.writeInt(id);
     }
     public static final Creator<StockInitiTem> CREATOR=new Creator<StockInitiTem>(){
         @Override
         public StockInitiTem createFromParcel(Parcel source) {
             StockInitiTem productShopping=new StockInitiTem();
-            productShopping.salename=source.readString();
-            productShopping.salefqty=source.readDouble();
+            productShopping.name =source.readString();
+            productShopping.quantity =source.readDouble();
             productShopping.id=source.readInt();
 
             return productShopping;

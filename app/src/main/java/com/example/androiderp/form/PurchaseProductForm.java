@@ -22,7 +22,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.androiderp.CustomDataClass.Consignment;
-import com.example.androiderp.CustomDataClass.Custom;
 import com.example.androiderp.CustomDataClass.Employee;
 import com.example.androiderp.CustomDataClass.Product;
 import com.example.androiderp.CustomDataClass.ProductCategory;
@@ -38,9 +37,7 @@ import com.example.androiderp.adaper.DataStructure;
 import com.example.androiderp.adaper.PopuMenuDataStructure;
 import com.example.androiderp.adaper.SaleProductListViewAdapter;
 import com.example.androiderp.basicdata.ConsignmentListview;
-import com.example.androiderp.basicdata.EmployeeListview;
 import com.example.androiderp.basicdata.ProductBadgeListView;
-import com.example.androiderp.basicdata.SelectCustomListView;
 import com.example.androiderp.basicdata.SelectSupplierListView;
 import com.example.androiderp.common.Common;
 import com.example.androiderp.custom.CustomSearchBase;
@@ -68,32 +65,31 @@ public class PurchaseProductForm extends CustomSearchBase implements View.OnClic
         SlideAndDragListView.OnMenuItemClickListener, SlideAndDragListView.OnItemDeleteListener {
     private InputMethodManager manager;
     private EditText note;
-    private LinearLayout saleproduct_add;
-    private TextView save,toobar_tile,toobar_back,toobar_add,category,name,number,data,consignment,totalamout,totalfqty;
+    private LinearLayout productAddLayout;
+    private TextView toobarSave, toobarTile, toobarBack, toobarAdd,category,name,number,data, consign, totalAmout, totalQuantity;
     private DisplayMetrics dm;
     private LinearLayout categoryLayout,customLayout,stockLayout,dataLayout,consignmentLayout,screenLayout,totalLayout;
-    private Supplier customlist;
-    private Stock  stockList;
-    private Employee employeelist;
-    private Consignment consignmentList;
+    private Supplier supplier;
+    private Stock stock;
+    private Employee employee;
+    private Consignment consignment;
     private String customid;
     private Drawable errorIcon;
     private Common common;
-    private Intent  intentback;
     private List<PopuMenuDataStructure> popuMenuDatas;
-    private List<Product> findNumber;
+    private List<Product> productList;
     private List<SalesOutEnty> salesOutEntyList=new ArrayList<SalesOutEnty>();
-    private List<ProductShopping> shoppinglist = new ArrayList<ProductShopping>();
+    private List<ProductShopping> productShoppingList = new ArrayList<ProductShopping>();
     private List<CommonDataStructure> listdatas = new ArrayList<CommonDataStructure>();
-    private SlideAndDragListView<CommonDataStructure> plistView;
+    private SlideAndDragListView<CommonDataStructure> listView;
     private SaleProductListViewAdapter adapter;
-    private Menu mMenu;
-    private List<Stock> stocks;
-    private List<Employee> employees;
-    private Calendar cal;
+    private Menu menu;
+    private List<Stock> stockList;
+    private List<Employee> employeeList;
+    private Calendar calendar;
     private int year,month,day;
     private int countall;
-    private double countamount;
+    private double amountCount;
     private Intent intent;
     public void iniView() {
         setContentView(R.layout.purchaseproductform);
@@ -106,41 +102,41 @@ public class PurchaseProductForm extends CustomSearchBase implements View.OnClic
         customid=intent.getStringExtra("product_item");
         manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         name=(TextView)findViewById(R.id.product_custom);
-        saleproduct_add=(LinearLayout) findViewById(R.id.saleproduct_add);
+        productAddLayout =(LinearLayout) findViewById(R.id.saleproduct_add);
         number=(TextView)findViewById(R.id.product_stock);
         data=(TextView)findViewById(R.id.product_data);
-        consignment=(TextView)findViewById(R.id.product_consignment);
+        consign =(TextView)findViewById(R.id.product_consignment);
         note=(EditText)findViewById(R.id.product_note);
         screenLayout=(LinearLayout) findViewById(R.id.number_screen);
         category=(TextView)findViewById(R.id.product_category);
-        save=(TextView)findViewById(R.id.customtoobar_right);
-        toobar_tile=(TextView)findViewById(R.id.customtoobar_midd);
-        toobar_back=(TextView)findViewById(R.id.customtoobar_left);
+        toobarSave =(TextView)findViewById(R.id.customtoobar_right);
+        toobarTile =(TextView)findViewById(R.id.customtoobar_midd);
+        toobarBack =(TextView)findViewById(R.id.customtoobar_left);
         categoryLayout=(LinearLayout)findViewById(R.id.product_category_layout);
-        toobar_add=(TextView)findViewById(R.id.customtoobar_r) ;
+        toobarAdd =(TextView)findViewById(R.id.customtoobar_r) ;
         stockLayout=(LinearLayout)findViewById(R.id.product_stock_layout);
         customLayout=(LinearLayout)findViewById(R.id.product_custom_layout);
         dataLayout=(LinearLayout)findViewById(R.id.product_data_layout);
         consignmentLayout=(LinearLayout)findViewById(R.id.product_consignment_layout);
-        totalfqty=(TextView)findViewById(R.id.product_totalfqty);
-        totalamout=(TextView)findViewById(R.id.product_totalamount);
+        totalQuantity =(TextView)findViewById(R.id.product_totalfqty);
+        totalAmout =(TextView)findViewById(R.id.product_totalamount);
         totalLayout=(LinearLayout)findViewById(R.id.product_total_layout);
         stockLayout.setOnClickListener(this);
         customLayout.setOnClickListener(this);
         dataLayout.setOnClickListener(this);
         consignmentLayout.setOnClickListener(this);
-        save.setOnClickListener(this);
-        toobar_back.setOnClickListener(this);
+        toobarSave.setOnClickListener(this);
+        toobarBack.setOnClickListener(this);
         categoryLayout.setOnClickListener(this);
-        toobar_add.setOnClickListener(this);
-        saleproduct_add.setOnClickListener(this);
-        save.setCompoundDrawables(null,null,null,null);
-        toobar_tile.setCompoundDrawables(null,null,null,null);
+        toobarAdd.setOnClickListener(this);
+        productAddLayout.setOnClickListener(this);
+        toobarSave.setCompoundDrawables(null,null,null,null);
+        toobarTile.setCompoundDrawables(null,null,null,null);
         errorIcon = getResources().getDrawable(R.drawable.icon_error);
 // 设置图片大小
         errorIcon.setBounds(new Rect(0, 0, errorIcon.getIntrinsicWidth(),
                 errorIcon.getIntrinsicHeight()));
-        save.setText("保存");
+        toobarSave.setText("保存");
         formInit();
         getDate();
 
@@ -153,40 +149,40 @@ public class PurchaseProductForm extends CustomSearchBase implements View.OnClic
                 startActivityForResult(openCameraIntent, 5);
             }
         });
-        toobar_tile.setText("采购单");
+        toobarTile.setText("采购单");
 
     }
     private void  formInit()
     {
 
-            customlist = DataSupport.find(Supplier.class, 1);
-        stockList = DataSupport.find(Stock.class, 1);
-        employeelist = DataSupport.find(Employee.class, 1);
-        consignmentList = DataSupport.find(Consignment.class, 1);
-        if(customlist==null)
+            supplier = DataSupport.find(Supplier.class, 1);
+        stock = DataSupport.find(Stock.class, 1);
+        employee = DataSupport.find(Employee.class, 1);
+        consignment = DataSupport.find(Consignment.class, 1);
+        if(supplier ==null)
         {
 
         }else {
-            name.setText(customlist.getName());
+            name.setText(supplier.getName());
         }
 
-        if(stockList==null)
+        if(stock ==null)
         {
 
         }else {
-            number.setText(stockList.getName());
+            number.setText(stock.getName());
         }
-        if(employeelist==null)
+        if(employee ==null)
         {
 
         }else {
-            category.setText(employeelist.getName());
+            category.setText(employee.getName());
         }
-        if(consignmentList==null)
+        if(consignment ==null)
         {
 
         }else {
-            consignment.setText(consignmentList.getName());
+            consign.setText(consignment.getName());
         }
 
 
@@ -194,22 +190,22 @@ public class PurchaseProductForm extends CustomSearchBase implements View.OnClic
     }
     //获取当前日期
     private void getDate() {
-        cal=Calendar.getInstance();
-        year=cal.get(Calendar.YEAR);       //获取年月日时分秒
-        month=cal.get(Calendar.MONTH);   //获取到的月份是从0开始计数
-        day=cal.get(Calendar.DAY_OF_MONTH);
+        calendar =Calendar.getInstance();
+        year= calendar.get(Calendar.YEAR);       //获取年月日时分秒
+        month= calendar.get(Calendar.MONTH);   //获取到的月份是从0开始计数
+        day= calendar.get(Calendar.DAY_OF_MONTH);
         data.setText(year+"-"+(++month)+"-"+day);
     }
     public void initMenu() {
-        mMenu = new Menu(true);
-        mMenu.addItem(new MenuItem.Builder().setWidth((int) getResources().getDimension(R.dimen.slv_item_bg_btn_width))
+        menu = new Menu(true);
+        menu.addItem(new MenuItem.Builder().setWidth((int) getResources().getDimension(R.dimen.slv_item_bg_btn_width))
                 .setBackground(Utils.getDrawable(this, R.drawable.btn_right0))
                 .setText("取消")
                 .setDirection(MenuItem.DIRECTION_RIGHT)
                 .setTextColor(Color.BLACK)
                 .setTextSize(14)
                 .build());
-        mMenu.addItem(new MenuItem.Builder().setWidth((int) getResources().getDimension(R.dimen.slv_item_bg_btn_width_img))
+        menu.addItem(new MenuItem.Builder().setWidth((int) getResources().getDimension(R.dimen.slv_item_bg_btn_width_img))
                 .setBackground(Utils.getDrawable(this, R.drawable.btn_right1))
                 .setDirection(MenuItem.DIRECTION_RIGHT)
                 .setText("删除")
@@ -218,11 +214,11 @@ public class PurchaseProductForm extends CustomSearchBase implements View.OnClic
     }
 
     public void initUiAndListener() {
-        plistView = (SlideAndDragListView) findViewById(R.id.saleproduct_listview);
-        plistView.setMenu(mMenu);
-        plistView.setOnItemClickListener(this);
-        plistView.setOnMenuItemClickListener(this);
-        plistView.setOnItemDeleteListener(this);
+        listView = (SlideAndDragListView) findViewById(R.id.saleproduct_listview);
+        listView.setMenu(menu);
+        listView.setOnItemClickListener(this);
+        listView.setOnMenuItemClickListener(this);
+        listView.setOnItemDeleteListener(this);
     }
     @Override
     public int onMenuItemClick(View v, final int itemPosition, int buttonPosition, int direction) {
@@ -234,25 +230,25 @@ public class PurchaseProductForm extends CustomSearchBase implements View.OnClic
                         return Menu.ITEM_SCROLL_BACK;
                     case 1:
 
-                                DataStructure.deleteAll(ProductCategory.class,"name = ?",listdatas.get(itemPosition - plistView.getHeaderViewsCount()).getName().toString());
+                                DataStructure.deleteAll(ProductCategory.class,"name = ?",listdatas.get(itemPosition - listView.getHeaderViewsCount()).getName().toString());
 
 
-                                  listdatas.remove(itemPosition - plistView.getHeaderViewsCount());
+                                  listdatas.remove(itemPosition - listView.getHeaderViewsCount());
                                    adapter.notifyDataSetChanged();
-                                  setListViewHeightBasedOnChildren(plistView);
+                                  setListViewHeightBasedOnChildren(listView);
                         countall=0;
-                        countamount=0.00;
+                        amountCount =0.00;
                         DecimalFormat df = new DecimalFormat("#####0.00");
                         for(int i = 0; i < listdatas.size(); i++)
                         {
 
                             countall+= listdatas.get(i).getFqty();
-                            countamount+=listdatas.get(i).getSaleamount();
+                            amountCount +=listdatas.get(i).getSaleamount();
                         }
-                        if(countamount!=0) {
+                        if(amountCount !=0) {
                             totalLayout.setVisibility(View.VISIBLE);
-                            totalamout.setText("¥"+df.format(countamount));
-                            totalfqty.setText(String.valueOf(countall));
+                            totalAmout.setText("¥"+df.format(amountCount));
+                            totalQuantity.setText(String.valueOf(countall));
                         }else {
                             totalLayout.setVisibility(View.GONE);
                         }
@@ -313,11 +309,11 @@ public class PurchaseProductForm extends CustomSearchBase implements View.OnClic
                     {
 
                         SalesOutEnty salesOutEnty=new SalesOutEnty();
-                        salesOutEnty.setItemname(listdatas.get(i).getName());
-                        salesOutEnty.setItemnumber(listdatas.get(i).getNumber());
-                        salesOutEnty.setItemprice(listdatas.get(i).getSalesprice());
-                        salesOutEnty.setItemfqty(listdatas.get(i).getFqty());
-                        salesOutEnty.setItemamount(listdatas.get(i).getSaleamount());
+                        salesOutEnty.setName(listdatas.get(i).getName());
+                        salesOutEnty.setNumber(listdatas.get(i).getNumber());
+                        salesOutEnty.setPrice(listdatas.get(i).getSalesprice());
+                        salesOutEnty.setQuantity(listdatas.get(i).getFqty());
+                        salesOutEnty.setAmount(listdatas.get(i).getSaleamount());
                         salesOutEnty.setStock(number.getText().toString());
                         salesOutEnty.setBilltype("1");
                         salesOutEntyList.add(salesOutEnty);
@@ -327,18 +323,18 @@ public class PurchaseProductForm extends CustomSearchBase implements View.OnClic
                     salesOut.setSalesOutEntyList(salesOutEntyList);
                     salesOut.setCustomer(name.getText().toString());
                     salesOut.setNuber("CGRK"+ fdate);
-                    salesOut.setFdate(data.getText().toString());
+                    salesOut.setDate(data.getText().toString());
                     salesOut.setStock(number.getText().toString());
-                    salesOut.setSaleamount(countamount);
-                    salesOut.setSalefqty(countall);
+                    salesOut.setAmount(amountCount);
+                    salesOut.setQuantity(countall);
                     salesOut.setSalesman(category.getText().toString());
-                    salesOut.setConsignment(consignment.getText().toString());
+                    salesOut.setConsignment(consign.getText().toString());
                     salesOut.setNote(note.getText().toString().trim());
                     salesOut.setBilltype("1");
                     salesOut.save();
                     Toast.makeText(PurchaseProductForm.this,"新增成功",Toast.LENGTH_SHORT).show();
-                    save.setVisibility(View.GONE);
-                    toobar_add.setVisibility(View.VISIBLE);
+                    toobarSave.setVisibility(View.GONE);
+                    toobarAdd.setVisibility(View.VISIBLE);
 
 
                 }
@@ -403,7 +399,7 @@ public class PurchaseProductForm extends CustomSearchBase implements View.OnClic
                 break;
             case R.id.product_consignment_layout:
                 Intent intentconsignment=new Intent(PurchaseProductForm.this, ConsignmentListview.class);
-                intentconsignment.putExtra("index",consignment.getText().toString());
+                intentconsignment.putExtra("index", consign.getText().toString());
                 startActivityForResult(intentconsignment,9);
                 break;
             case R.id.customtoobar_r:
@@ -465,7 +461,7 @@ public class PurchaseProductForm extends CustomSearchBase implements View.OnClic
                 break;
             case 9:
                 if(resultCode==RESULT_OK){
-                    consignment.setText(data.getStringExtra("data_return"));
+                    consign.setText(data.getStringExtra("data_return"));
                 }
                 break;
             case 4:
@@ -480,14 +476,14 @@ public class PurchaseProductForm extends CustomSearchBase implements View.OnClic
                 if(resultCode==RESULT_OK) {
 
                     countall=0;
-                    countamount=0.00;
-                    findNumber=DataStructure.where("number = ?",data.getStringExtra("scanResult")).find(Product.class);
+                    amountCount =0.00;
+                    productList =DataStructure.where("number = ?",data.getStringExtra("scanResult")).find(Product.class);
 
-                   if(findNumber.size()==0){
+                   if(productList.size()==0){
                        Toast.makeText(PurchaseProductForm.this,"找不到条码为"+data.getStringExtra("scanResult")+"商品",Toast.LENGTH_LONG).show();
                    }else {
 
-                       for (Product product : findNumber) {
+                       for (Product product : productList) {
                            boolean flag=true;
                            for (CommonDataStructure structure : listdatas) {
 
@@ -505,8 +501,8 @@ public class PurchaseProductForm extends CustomSearchBase implements View.OnClic
                                commonData.setNumber(product.getNumber());
                                commonData.setName(product.getName());
                                commonData.setFqty(1);
-                               commonData.setSaleamount(Double.valueOf(product.getSalesprice()));
-                               commonData.setSalesprice(Double.valueOf(product.getSalesprice()));
+                               commonData.setSaleamount(Double.valueOf(product.getSalesPrice()));
+                               commonData.setSalesprice(Double.valueOf(product.getSalesPrice()));
 
                                listdatas.add(commonData);
                            }
@@ -517,15 +513,15 @@ public class PurchaseProductForm extends CustomSearchBase implements View.OnClic
                        {
 
                            countall+= listdatas.get(i).getFqty();
-                           countamount+=listdatas.get(i).getSaleamount();
+                           amountCount +=listdatas.get(i).getSaleamount();
                        }
                        adapter = new SaleProductListViewAdapter(PurchaseProductForm.this, R.layout.saleproduct_item, listdatas);
-                       plistView.setAdapter(adapter);
-                       setListViewHeightBasedOnChildren(plistView);
-                       if(countamount!=0) {
+                       listView.setAdapter(adapter);
+                       setListViewHeightBasedOnChildren(listView);
+                       if(amountCount !=0) {
                            totalLayout.setVisibility(View.VISIBLE);
-                           totalamout.setText("¥"+df.format(countamount));
-                           totalfqty.setText(String.valueOf(countall));
+                           totalAmout.setText("¥"+df.format(amountCount));
+                           totalQuantity.setText(String.valueOf(countall));
                        }else {
                            totalLayout.setVisibility(View.GONE);
                        }
@@ -537,47 +533,47 @@ public class PurchaseProductForm extends CustomSearchBase implements View.OnClic
             case 6:
                 if(resultCode==RESULT_OK) {
                     countall=0;
-                    countamount=0.00;
+                    amountCount =0.00;
 
                     ShoppingData shoppingData=data.getParcelableExtra("shoppingdata");
 
-                    shoppinglist=shoppingData.getShoppingdata();
-                    for(ProductShopping shopping:shoppinglist)
+                    productShoppingList =shoppingData.getProductShoppingList();
+                    for(ProductShopping shopping: productShoppingList)
                     {
                         for(int i = 0; i < listdatas.size(); i++)
                         {
-                            if(listdatas.get(i).getNumber().equals(shopping.getSalenumber()))
+                            if(listdatas.get(i).getNumber().equals(shopping.getNumber()))
                             {
 
-                                shopping.setSalefqty(shopping.getSalefqty()+listdatas.get(i).getFqty());
-                                shopping.setSaleamount(shopping.getSaleamount()+listdatas.get(i).getSaleamount());
+                                shopping.setQuantity(shopping.getQuantity()+listdatas.get(i).getFqty());
+                                shopping.setAmount(shopping.getAmount()+listdatas.get(i).getSaleamount());
                                 listdatas.remove(i);
                                 i--;
                             }
                         }
                         CommonDataStructure commonData=new CommonDataStructure();
                         commonData.setId(shopping.getId());
-                        commonData.setName(shopping.getSalename());
-                        commonData.setNumber(shopping.getSalenumber());
-                        commonData.setFqty(shopping.getSalefqty());
-                        commonData.setSaleamount(shopping.getSaleamount());
-                        commonData.setSalesprice(shopping.getSalesprice());
+                        commonData.setName(shopping.getName());
+                        commonData.setNumber(shopping.getNumber());
+                        commonData.setFqty(shopping.getQuantity());
+                        commonData.setSaleamount(shopping.getAmount());
+                        commonData.setSalesprice(shopping.getPrice());
                         listdatas.add(commonData);
                     }
                     for(int i = 0; i < listdatas.size(); i++)
                     {
 
                         countall+= listdatas.get(i).getFqty();
-                        countamount+=listdatas.get(i).getSaleamount();
+                        amountCount +=listdatas.get(i).getSaleamount();
                     }
 
                     adapter = new SaleProductListViewAdapter(PurchaseProductForm.this, R.layout.saleproduct_item, listdatas);
-                    plistView.setAdapter(adapter);
-                    setListViewHeightBasedOnChildren(plistView);
-                    if(countamount!=0) {
+                    listView.setAdapter(adapter);
+                    setListViewHeightBasedOnChildren(listView);
+                    if(amountCount !=0) {
                         totalLayout.setVisibility(View.VISIBLE);
-                        totalamout.setText("¥"+df.format(countamount));
-                        totalfqty.setText(String.valueOf(countall));
+                        totalAmout.setText("¥"+df.format(amountCount));
+                        totalQuantity.setText(String.valueOf(countall));
                     }else {
                         totalLayout.setVisibility(View.GONE);
                     }
@@ -588,32 +584,32 @@ public class PurchaseProductForm extends CustomSearchBase implements View.OnClic
             case 7:
                 if(resultCode==RESULT_OK) {
                     countall=0;
-                    countamount=0.00;
+                    amountCount =0.00;
                     ProductShopping shopping = (ProductShopping) data.getParcelableExtra("shop_data");
                     for ( CommonDataStructure commonData : listdatas)
 
                     {
-                        if (commonData.getNumber().toString().equals(shopping.getSalenumber().toString())) {
-                            commonData.setFqty(shopping.getSalefqty());
-                            commonData.setSalesprice(shopping.getSalesprice());
-                            commonData.setSaleamount(shopping.getSaleamount());
+                        if (commonData.getNumber().toString().equals(shopping.getNumber().toString())) {
+                            commonData.setFqty(shopping.getQuantity());
+                            commonData.setSalesprice(shopping.getPrice());
+                            commonData.setSaleamount(shopping.getAmount());
                         }
                     }
 
                     adapter = new SaleProductListViewAdapter(PurchaseProductForm.this, R.layout.saleproduct_item, listdatas);
-                    plistView.setAdapter(adapter);
+                    listView.setAdapter(adapter);
 
                     for(int i = 0; i < listdatas.size(); i++)
                     {
 
                         countall+= listdatas.get(i).getFqty();
-                        countamount+=listdatas.get(i).getSaleamount();
+                        amountCount +=listdatas.get(i).getSaleamount();
                     }
 
-                    if(countamount!=0) {
+                    if(amountCount !=0) {
                         totalLayout.setVisibility(View.VISIBLE);
-                        totalamout.setText("¥"+df.format(countamount));
-                        totalfqty.setText(String.valueOf(countall));
+                        totalAmout.setText("¥"+df.format(amountCount));
+                        totalQuantity.setText(String.valueOf(countall));
                     }else {
                         totalLayout.setVisibility(View.GONE);
                     }
@@ -635,8 +631,8 @@ public class PurchaseProductForm extends CustomSearchBase implements View.OnClic
     private void showStockWindow() {
         common = new Common();
         popuMenuDatas = new ArrayList<PopuMenuDataStructure>();
-        stocks= DataSupport.findAll(Stock.class);
-        for(Stock stock:stocks)
+        stockList = DataSupport.findAll(Stock.class);
+        for(Stock stock: stockList)
 
         {
             PopuMenuDataStructure popuMenua = new PopuMenuDataStructure(R.drawable.poppu_wrie, stock.getName());
@@ -658,8 +654,8 @@ public class PurchaseProductForm extends CustomSearchBase implements View.OnClic
     private void showEmployeeWindow() {
         common = new Common();
         popuMenuDatas = new ArrayList<PopuMenuDataStructure>();
-        employees= DataSupport.findAll(Employee.class);
-        for(Employee employee:employees)
+        employeeList = DataSupport.findAll(Employee.class);
+        for(Employee employee: employeeList)
 
         {
             PopuMenuDataStructure popuMenua = new PopuMenuDataStructure(R.drawable.poppu_wrie, employee.getName());

@@ -13,9 +13,9 @@ public class Custom extends DataSupport {
     private String name;
     private String number;
     private String address;
-    private String    phone;
-    private String   fax;
-    private String   category;
+    private String phone;
+    private String fax;
+    private String category;
 
     public int getId() {
         return id;

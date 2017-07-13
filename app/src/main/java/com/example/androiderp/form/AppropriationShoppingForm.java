@@ -23,22 +23,20 @@ import com.example.androiderp.R;
 
 import org.litepal.crud.DataSupport;
 
-import java.text.DecimalFormat;
-
 /**
  * Created by lingtan on 2017/5/15.
  */
 
 public class AppropriationShoppingForm extends AppCompatActivity implements View.OnClickListener {
     private InputMethodManager manager;
-    private EditText name,number,salesfqty,category;
-    private TextView save,toobar_tile,toobar_back,toobar_add;
-    private ProductShopping shopping;
+    private EditText name,number, quantity,category;
+    private TextView save, toobarTile, toobarBack, toobarAdd;
+    private ProductShopping productShopping;
     private DisplayMetrics dm;
-    private Product customlist;
+    private Product product;
     private String customid,edit;
     private Drawable errorIcon;
-    private Button shopsave;
+    private Button saveButton;
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
@@ -55,33 +53,33 @@ public class AppropriationShoppingForm extends AppCompatActivity implements View
         number.setKeyListener(null);
         category=(EditText)findViewById(R.id.product_category);
         category.setKeyListener(null);
-        salesfqty=(EditText)findViewById(R.id.product_fqty);
+        quantity =(EditText)findViewById(R.id.product_fqty);
         save=(TextView)findViewById(R.id.customtoobar_right);
-        toobar_tile=(TextView)findViewById(R.id.customtoobar_midd);
-        toobar_back=(TextView)findViewById(R.id.customtoobar_left);
-        toobar_add=(TextView)findViewById(R.id.customtoobar_r) ;
-        shopsave=(Button)findViewById(R.id.shopping_button);
-        shopsave.setOnClickListener(this);
+        toobarTile =(TextView)findViewById(R.id.customtoobar_midd);
+        toobarBack =(TextView)findViewById(R.id.customtoobar_left);
+        toobarAdd =(TextView)findViewById(R.id.customtoobar_r) ;
+        saveButton =(Button)findViewById(R.id.shopping_button);
+        saveButton.setOnClickListener(this);
         save.setOnClickListener(this);
-        toobar_back.setOnClickListener(this);
-        toobar_add.setCompoundDrawables(null,null,null,null);
-        toobar_tile.setCompoundDrawables(null,null,null,null);
+        toobarBack.setOnClickListener(this);
+        toobarAdd.setCompoundDrawables(null,null,null,null);
+        toobarTile.setCompoundDrawables(null,null,null,null);
         errorIcon = getResources().getDrawable(R.drawable.icon_error);
 // 设置图片大小
         errorIcon.setBounds(new Rect(0, 0, errorIcon.getIntrinsicWidth(),
                 errorIcon.getIntrinsicHeight()));
-        toobar_tile.setText("调拨数量");
+        toobarTile.setText("调拨数量");
         Drawable del= getResources().getDrawable(R.drawable.suppliercategory_delete);
         del.setBounds(0, 0, del.getMinimumWidth(), del.getMinimumHeight());
         Drawable more= getResources().getDrawable(R.drawable.toobar_more);
         more.setBounds(0, 0, more.getMinimumWidth(), more.getMinimumHeight());
-        toobar_back.setCompoundDrawables(del,null,null,null);
+        toobarBack.setCompoundDrawables(del,null,null,null);
         save.setCompoundDrawables(more,null,null,null);
-        toobar_back.setText("");
+        toobarBack.setText("");
         save.setText("");
         formInit();
 
-        salesfqty.addTextChangedListener(new TextWatcher() {
+        quantity.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -108,14 +106,14 @@ public class AppropriationShoppingForm extends AppCompatActivity implements View
 
         if(customid!=null) {
 
-            customlist = DataSupport.find(Product.class, Long.parseLong(customid));
-            name.setText(customlist.getName());
-            number.setText(customlist.getNumber());
-            category.setText(customlist.getCategory());
+            product = DataSupport.find(Product.class, Long.parseLong(customid));
+            name.setText(product.getName());
+            number.setText(product.getNumber());
+            category.setText(product.getCategory());
             if(edit.equals("edit")) {
-                toobar_add.setVisibility(View.VISIBLE);
+                toobarAdd.setVisibility(View.VISIBLE);
             }else {
-                toobar_add.setVisibility(View.INVISIBLE);
+                toobarAdd.setVisibility(View.INVISIBLE);
             }
         }
     }
@@ -132,19 +130,19 @@ public class AppropriationShoppingForm extends AppCompatActivity implements View
 
             case R.id.shopping_button:
 
-                 if (TextUtils.isEmpty(salesfqty.getText().toString()))
+                 if (TextUtils.isEmpty(quantity.getText().toString()))
                 {
-                    salesfqty.setError("销售数量不能为0",errorIcon);
+                    quantity.setError("销售数量不能为0",errorIcon);
                 }else {
-                    shopping = new ProductShopping();
-                    shopping.setId(customlist.getId());
-                    shopping.setSalename(name.getText().toString());
-                    shopping.setSalenumber(number.getText().toString());
-                    shopping.setCategory(category.getText().toString());
-                    shopping.setSalefqty(Double.valueOf(salesfqty.getText().toString().trim()));
-                    toobar_add.setVisibility(View.VISIBLE);
+                    productShopping = new ProductShopping();
+                    productShopping.setId(product.getId());
+                    productShopping.setName(name.getText().toString());
+                    productShopping.setNumber(number.getText().toString());
+                    productShopping.setCategory(category.getText().toString());
+                    productShopping.setQuantity(Double.valueOf(quantity.getText().toString().trim()));
+                    toobarAdd.setVisibility(View.VISIBLE);
                     Intent intentsave = new Intent();
-                    intentsave.putExtra("shop_data",shopping);
+                    intentsave.putExtra("shop_data", productShopping);
                     setResult(RESULT_OK,intentsave);
                     finish();
                 }

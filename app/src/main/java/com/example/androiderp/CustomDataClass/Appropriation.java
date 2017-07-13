@@ -11,10 +11,10 @@ import java.util.List;
 
 public class Appropriation extends DataSupport {
     private int id;
-    private String Fdate;
+    private String date;
     private String nuber;
-    private String instock;
-    private String outstock;
+    private String stockIn;
+    private String stockOut;
     private String note;
 
     private List<AppropriationEnty> salesOutEntyList=new ArrayList<AppropriationEnty>();
@@ -27,12 +27,12 @@ public class Appropriation extends DataSupport {
         this.id = id;
     }
 
-    public String getFdate() {
-        return Fdate;
+    public String getDate() {
+        return date;
     }
 
-    public void setFdate(String fdate) {
-        Fdate = fdate;
+    public void setDate(String date) {
+        this.date = date;
     }
 
     public String getNuber() {
@@ -43,20 +43,20 @@ public class Appropriation extends DataSupport {
         this.nuber = nuber;
     }
 
-    public String getInstock() {
-        return instock;
+    public String getStockIn() {
+        return stockIn;
     }
 
-    public void setInstock(String instock) {
-        this.instock = instock;
+    public void setStockIn(String stockIn) {
+        this.stockIn = stockIn;
     }
 
-    public String getOutstock() {
-        return outstock;
+    public String getStockOut() {
+        return stockOut;
     }
 
-    public void setOutstock(String outstock) {
-        this.outstock = outstock;
+    public void setStockOut(String stockOut) {
+        this.stockOut = stockOut;
     }
 
     public String getNote() {

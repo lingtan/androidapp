@@ -1,10 +1,7 @@
 package com.example.androiderp.adaper;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.provider.ContactsContract;
 import android.text.TextUtils;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,12 +12,9 @@ import android.widget.TextView;
 
 import com.example.androiderp.CustomDataClass.Product;
 import com.example.androiderp.R;
-import com.example.androiderp.custom.CustomBadgeView;
 
 import java.util.HashSet;
 import java.util.List;
-
-import okhttp3.Callback;
 
 //继承ArrayAdapter<DataStructure>
 public class ProductBadgeAdapter extends ArrayAdapter<Product> implements View.OnClickListener {
@@ -79,8 +73,8 @@ public class ProductBadgeAdapter extends ArrayAdapter<Product> implements View.O
             viewHolder.image=(ImageView) view.findViewById(R.id.custom_item_layout_one_image);
             viewHolder.number = (TextView) view.findViewById (R.id.custom_item_layout_number);
             viewHolder.model = (TextView) view.findViewById (R.id.custom_item_layout_model);
-            viewHolder.salesprice = (TextView) view.findViewById (R.id.custom_item_layout_salesprice);
-            viewHolder.badgeshow = (TextView) view.findViewById (R.id.product_badge_item_show);
+            viewHolder.salesPrice = (TextView) view.findViewById (R.id.custom_item_layout_salesprice);
+            viewHolder.badgeShow = (TextView) view.findViewById (R.id.product_badge_item_show);
 
             view.setTag(viewHolder); // 将ViewHolder存储在View中
         } else {
@@ -97,7 +91,7 @@ public class ProductBadgeAdapter extends ArrayAdapter<Product> implements View.O
         RelativeLayout itemLayout=(RelativeLayout)view.findViewById(R.id.badge_item_layout);
 
 
-            if(!TextUtils.isEmpty(data.get(position).getBadgeshow())) {
+            if(!TextUtils.isEmpty(data.get(position).getBadgeShow())) {
                 viewHolder.image.setVisibility(View.VISIBLE);
             }
 
@@ -112,9 +106,9 @@ public class ProductBadgeAdapter extends ArrayAdapter<Product> implements View.O
         viewHolder.name.setText(data.get(position).getName().toString());
         viewHolder.number.setText(data.get(position).getNumber());
         viewHolder.model.setText(data.get(position).getModel());
-        viewHolder.salesprice.setText("¥"+data.get(position).getSalesprice().toString());
+        viewHolder.salesPrice.setText("¥"+data.get(position).getSalesPrice().toString());
         viewHolder.image.setImageResource(data.get(position).getImage());
-        viewHolder.badgeshow.setText(data.get(position).getBadgeshow());
+        viewHolder.badgeShow.setText(data.get(position).getBadgeShow());
         viewHolder.image.setOnClickListener(this);
         viewHolder.image.setTag(position);
 
@@ -141,8 +135,8 @@ public void setSeclection(int position,int i)
         TextView  name;
         TextView  number;
         TextView  model;
-        TextView  salesprice;
-        TextView  badgeshow;
+        TextView  salesPrice;
+        TextView  badgeShow;
 
 
 

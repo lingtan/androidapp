@@ -3,7 +3,6 @@ package com.example.androiderp.CustomDataClass;
 import org.litepal.crud.DataSupport;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -13,10 +12,10 @@ import java.util.List;
 public class SalesOut extends DataSupport {
     private int id;
     private String customer;
-    private String Fdate;
+    private String date;
     private String nuber;
-    private double saleamount;
-    private double salefqty;
+    private double amount;
+    private double quantity;
     private String stock;
     private String consignment;
     private String salesman;
@@ -40,12 +39,12 @@ public class SalesOut extends DataSupport {
         this.customer = customer;
     }
 
-    public String getFdate() {
-        return Fdate;
+    public String getDate() {
+        return date;
     }
 
-    public void setFdate(String fdate) {
-        Fdate = fdate;
+    public void setDate(String date) {
+        this.date = date;
     }
 
     public String getNuber() {
@@ -56,20 +55,20 @@ public class SalesOut extends DataSupport {
         this.nuber = nuber;
     }
 
-    public double getSaleamount() {
-        return saleamount;
+    public double getAmount() {
+        return amount;
     }
 
-    public void setSaleamount(double saleamount) {
-        this.saleamount = saleamount;
+    public void setAmount(double amount) {
+        this.amount = amount;
     }
 
-    public double getSalefqty() {
-        return salefqty;
+    public double getQuantity() {
+        return quantity;
     }
 
-    public void setSalefqty(double salefqty) {
-        this.salefqty = salefqty;
+    public void setQuantity(double quantity) {
+        this.quantity = quantity;
     }
 
     public String getStock() {

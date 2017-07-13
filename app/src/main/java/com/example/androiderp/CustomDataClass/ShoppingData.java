@@ -12,14 +12,14 @@ import java.util.List;
  */
 
 public class ShoppingData implements Parcelable {
-    private List<ProductShopping> shoppingdata;
+    private List<ProductShopping> productShoppingList;
 
-    public List<ProductShopping> getShoppingdata() {
-        return shoppingdata;
+    public List<ProductShopping> getProductShoppingList() {
+        return productShoppingList;
     }
 
-    public void setShoppingdata(List<ProductShopping> shoppingdata) {
-        this.shoppingdata = shoppingdata;
+    public void setProductShoppingList(List<ProductShopping> productShoppingList) {
+        this.productShoppingList = productShoppingList;
     }
 
 
@@ -31,14 +31,14 @@ public class ShoppingData implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
 
-        dest.writeList(shoppingdata);
+        dest.writeList(productShoppingList);
     }
     public static final Creator<ShoppingData> CREATOR=new Creator<ShoppingData>(){
         @Override
         public ShoppingData createFromParcel(Parcel source) {
             ShoppingData productShopping=new ShoppingData();
-            productShopping.shoppingdata=new ArrayList();
-            source.readList(productShopping.shoppingdata,getClass().getClassLoader());
+            productShopping.productShoppingList =new ArrayList();
+            source.readList(productShopping.productShoppingList,getClass().getClassLoader());
             return productShopping;
         }
 

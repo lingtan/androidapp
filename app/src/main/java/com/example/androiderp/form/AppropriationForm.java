@@ -1,8 +1,6 @@
 package com.example.androiderp.form;
 
-import android.app.DatePickerDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Rect;
@@ -14,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
@@ -23,13 +20,9 @@ import android.widget.Toast;
 
 import com.example.androiderp.CustomDataClass.Appropriation;
 import com.example.androiderp.CustomDataClass.AppropriationEnty;
-import com.example.androiderp.CustomDataClass.Consignment;
-import com.example.androiderp.CustomDataClass.Custom;
-import com.example.androiderp.CustomDataClass.Employee;
 import com.example.androiderp.CustomDataClass.Product;
 import com.example.androiderp.CustomDataClass.ProductCategory;
 import com.example.androiderp.CustomDataClass.ProductShopping;
-import com.example.androiderp.CustomDataClass.SalesOut;
 import com.example.androiderp.CustomDataClass.SalesOutEnty;
 import com.example.androiderp.CustomDataClass.ShoppingData;
 import com.example.androiderp.CustomDataClass.Stock;
@@ -39,11 +32,7 @@ import com.example.androiderp.adaper.AppropriationListViewAdapter;
 import com.example.androiderp.adaper.CommonDataStructure;
 import com.example.androiderp.adaper.DataStructure;
 import com.example.androiderp.adaper.PopuMenuDataStructure;
-import com.example.androiderp.adaper.SaleProductListViewAdapter;
-import com.example.androiderp.basicdata.ConsignmentListview;
 import com.example.androiderp.basicdata.ProductAppropriationListView;
-import com.example.androiderp.basicdata.ProductBadgeListView;
-import com.example.androiderp.basicdata.SelectCustomListView;
 import com.example.androiderp.common.Common;
 import com.example.androiderp.custom.CustomSearchBase;
 import com.example.androiderp.listview.Menu;
@@ -284,20 +273,20 @@ public class AppropriationForm extends CustomSearchBase implements View.OnClickL
                         for (int i = 0; i < commonDataStructureList.size(); i++) {
 
                             AppropriationEnty appropriationEnty = new AppropriationEnty();
-                            appropriationEnty.setItemname(commonDataStructureList.get(i).getName());
-                            appropriationEnty.setItemnumber(commonDataStructureList.get(i).getNumber());
-                            appropriationEnty.setItemfqty(commonDataStructureList.get(i).getFqty());
-                            appropriationEnty.setInstock(appropriIn.getText().toString());
-                            appropriationEnty.setOutstock(appropriOut.getText().toString());
+                            appropriationEnty.setName(commonDataStructureList.get(i).getName());
+                            appropriationEnty.setNumber(commonDataStructureList.get(i).getNumber());
+                            appropriationEnty.setQuantity(commonDataStructureList.get(i).getFqty());
+                            appropriationEnty.setStockIn(appropriIn.getText().toString());
+                            appropriationEnty.setStockOut(appropriOut.getText().toString());
                             appropriationEntyList.add(appropriationEnty);
                         }
                         DataSupport.saveAll(appropriationEntyList);
                         Appropriation appropriation = new Appropriation();
                         appropriation.setSalesOutEntyList(appropriationEntyList);
-                        appropriation.setInstock(appropriIn.getText().toString());
+                        appropriation.setStockIn(appropriIn.getText().toString());
                         appropriation.setNuber("DBD" + fdate);
-                        appropriation.setOutstock(appropriOut.getText().toString());
-                        appropriation.setFdate(String.valueOf(year + "-" + (++month) + "-" + day));
+                        appropriation.setStockOut(appropriOut.getText().toString());
+                        appropriation.setDate(String.valueOf(year + "-" + (++month) + "-" + day));
                         appropriation.setNote(note.getText().toString());
                         appropriation.save();
                         Toast.makeText(AppropriationForm.this, "新增成功", Toast.LENGTH_SHORT).show();
@@ -434,8 +423,8 @@ public class AppropriationForm extends CustomSearchBase implements View.OnClickL
                                commonData.setNumber(product.getNumber());
                                commonData.setName(product.getName());
                                commonData.setFqty(1);
-                               commonData.setSaleamount(Double.valueOf(product.getSalesprice()));
-                               commonData.setSalesprice(Double.valueOf(product.getSalesprice()));
+                               commonData.setSaleamount(Double.valueOf(product.getSalesPrice()));
+                               commonData.setSalesprice(Double.valueOf(product.getSalesPrice()));
                               temQty=commonData.getFqty();
                                commonDataStructureList.add(commonData);
                            }
@@ -460,24 +449,24 @@ public class AppropriationForm extends CustomSearchBase implements View.OnClickL
                 if(resultCode==RESULT_OK) {
                     ShoppingData shoppingData=data.getParcelableExtra("shoppingdata");
 
-                    productShoppinglist=shoppingData.getShoppingdata();
+                    productShoppinglist=shoppingData.getProductShoppingList();
                     for(ProductShopping shopping:productShoppinglist)
                     {
                         for(int i = 0; i < commonDataStructureList.size(); i++)
                         {
-                            if(commonDataStructureList.get(i).getNumber().equals(shopping.getSalenumber()))
+                            if(commonDataStructureList.get(i).getNumber().equals(shopping.getNumber()))
                             {
 
-                                shopping.setSalefqty(shopping.getSalefqty()+commonDataStructureList.get(i).getFqty());
+                                shopping.setQuantity(shopping.getQuantity()+commonDataStructureList.get(i).getFqty());
                                 commonDataStructureList.remove(i);
                                 i--;
                             }
                         }
                         CommonDataStructure commonData=new CommonDataStructure();
                         commonData.setId(shopping.getId());
-                        commonData.setName(shopping.getSalename());
-                        commonData.setNumber(shopping.getSalenumber());
-                        commonData.setFqty(shopping.getSalefqty());
+                        commonData.setName(shopping.getName());
+                        commonData.setNumber(shopping.getNumber());
+                        commonData.setFqty(shopping.getQuantity());
                         commonDataStructureList.add(commonData);
                     }
 
@@ -495,10 +484,10 @@ public class AppropriationForm extends CustomSearchBase implements View.OnClickL
                     for ( CommonDataStructure commonData : commonDataStructureList)
 
                     {
-                        if (commonData.getNumber().toString().equals(shopping.getSalenumber().toString())) {
-                            commonData.setFqty(shopping.getSalefqty());
-                            commonData.setSalesprice(shopping.getSalesprice());
-                            commonData.setSaleamount(shopping.getSaleamount());
+                        if (commonData.getNumber().toString().equals(shopping.getNumber().toString())) {
+                            commonData.setFqty(shopping.getQuantity());
+                            commonData.setSalesprice(shopping.getPrice());
+                            commonData.setSaleamount(shopping.getAmount());
                         }
 
 

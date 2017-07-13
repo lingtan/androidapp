@@ -38,15 +38,14 @@ import java.util.List;
 public class SupplierForm extends AppCompatActivity implements View.OnClickListener {
     private InputMethodManager manager;
     private EditText name,address,phone,fax;
-    private TextView save,toobar_tile,toobar_back,toobar_add,category;
-    private Supplier supplier;
+    private TextView toobarSave, toobarTile, toobarBack, toobarAdd,category;
     private DisplayMetrics dm;
     private LinearLayout linearLayout;
-    private Supplier customlist;
+    private Supplier supplier;
     private String categoryid,customid,edit;
-    private Button buttondelete;
+    private Button deleteButton;
     private Drawable errorIcon;
-    private List<SalesOut> findCustomDatas=new ArrayList<SalesOut>();
+    private List<SalesOut> salesOutList =new ArrayList<SalesOut>();
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
@@ -62,24 +61,24 @@ public class SupplierForm extends AppCompatActivity implements View.OnClickListe
         phone=(EditText)findViewById(R.id.supplierform_phone);
         fax=(EditText)findViewById(R.id.supplierform_fax);
         category=(TextView)findViewById(R.id.supplierform_category);
-        save=(TextView)findViewById(R.id.customtoobar_right);
-        toobar_tile=(TextView)findViewById(R.id.customtoobar_midd);
-        toobar_back=(TextView)findViewById(R.id.customtoobar_left);
+        toobarSave =(TextView)findViewById(R.id.customtoobar_right);
+        toobarTile =(TextView)findViewById(R.id.customtoobar_midd);
+        toobarBack =(TextView)findViewById(R.id.customtoobar_left);
         linearLayout=(LinearLayout)findViewById(R.id.supplierform_category_layout);
-        toobar_add=(TextView)findViewById(R.id.customtoobar_r) ;
-        buttondelete=(Button)findViewById(R.id.loginbutton);
-        save.setOnClickListener(this);
-        toobar_back.setOnClickListener(this);
+        toobarAdd =(TextView)findViewById(R.id.customtoobar_r) ;
+        deleteButton =(Button)findViewById(R.id.loginbutton);
+        toobarSave.setOnClickListener(this);
+        toobarBack.setOnClickListener(this);
         linearLayout.setOnClickListener(this);
-        toobar_add.setOnClickListener(this);
-        buttondelete.setOnClickListener(this);
-        save.setCompoundDrawables(null,null,null,null);
-        toobar_tile.setCompoundDrawables(null,null,null,null);
+        toobarAdd.setOnClickListener(this);
+        deleteButton.setOnClickListener(this);
+        toobarSave.setCompoundDrawables(null,null,null,null);
+        toobarTile.setCompoundDrawables(null,null,null,null);
         errorIcon = getResources().getDrawable(R.drawable.icon_error);
 // 设置图片大小
         errorIcon.setBounds(new Rect(0, 0, errorIcon.getIntrinsicWidth(),
                 errorIcon.getIntrinsicHeight()));
-        save.setText("保存");
+        toobarSave.setText("保存");
         formInit();
 
     }
@@ -88,14 +87,14 @@ public class SupplierForm extends AppCompatActivity implements View.OnClickListe
 
         if(customid!=null) {
 
-            customlist = DataSupport.find(Supplier.class, Long.parseLong(customid));
-            name.setText(customlist.getName());
-            address.setText(customlist.getAddress());
-            phone.setText(customlist.getPhone());
-            fax.setText(customlist.getFax());
-            category.setText(customlist.getCategory());
-            toobar_add.setVisibility(View.VISIBLE);
-            buttondelete.setVisibility(View.VISIBLE);
+            supplier = DataSupport.find(Supplier.class, Long.parseLong(customid));
+            name.setText(supplier.getName());
+            address.setText(supplier.getAddress());
+            phone.setText(supplier.getPhone());
+            fax.setText(supplier.getFax());
+            category.setText(supplier.getCategory());
+            toobarAdd.setVisibility(View.VISIBLE);
+            deleteButton.setVisibility(View.VISIBLE);
         }else {
 
             SupplierCategory sCategory  = DataSupport.find(SupplierCategory.class, 1);
@@ -108,9 +107,9 @@ public class SupplierForm extends AppCompatActivity implements View.OnClickListe
         }
         if(edit!=null) {
             if (edit.equals("edit")) {
-                toobar_tile.setText("供应商修改");
+                toobarTile.setText("供应商修改");
             } else {
-                toobar_tile.setText("供应商新增");
+                toobarTile.setText("供应商新增");
             }
         }
     }
@@ -135,7 +134,7 @@ public class SupplierForm extends AppCompatActivity implements View.OnClickListe
                     category.setError("请选择供应商分类",errorIcon);
                 }
                 else if (edit.equals("edit")) {
-                    supplier = new Supplier();
+             Supplier       supplier = new Supplier();
                     supplier.setName(name.getText().toString());
                     supplier.setAddress(address.getText().toString());
                     supplier.setPhone(phone.getText().toString());
@@ -148,7 +147,7 @@ public class SupplierForm extends AppCompatActivity implements View.OnClickListe
                     hintKbTwo();
 
                 } else {
-                    supplier = new Supplier();
+             Supplier       supplier = new Supplier();
                     supplier.setName(name.getText().toString());
                     supplier.setAddress(address.getText().toString());
                     supplier.setPhone(phone.getText().toString());
@@ -157,8 +156,8 @@ public class SupplierForm extends AppCompatActivity implements View.OnClickListe
                     supplier.save();
                     Toast.makeText(SupplierForm.this,"新增成功",Toast.LENGTH_SHORT).show();
                     edit="edit";
-                    toobar_add.setVisibility(View.VISIBLE);
-                    buttondelete.setVisibility(View.VISIBLE);
+                    toobarAdd.setVisibility(View.VISIBLE);
+                    deleteButton.setVisibility(View.VISIBLE);
                     Intent intent = new Intent();
                     setResult(RESULT_OK,intent);
                     hintKbTwo();
@@ -228,9 +227,9 @@ public class SupplierForm extends AppCompatActivity implements View.OnClickListe
                 phone.setText("");
                 fax.setText("");
                 category.setText("");
-                toobar_add.setVisibility(View.INVISIBLE);
-                toobar_tile.setText("供应商新增");
-                buttondelete.setVisibility(View.INVISIBLE);
+                toobarAdd.setVisibility(View.INVISIBLE);
+                toobarTile.setText("供应商新增");
+                deleteButton.setVisibility(View.INVISIBLE);
                 edit="";
                 hintKbTwo();
                 break;
@@ -262,9 +261,9 @@ public class SupplierForm extends AppCompatActivity implements View.OnClickListe
     public boolean isCustom(String name)
     {
 
-        findCustomDatas=DataSupport.where("customer=?",name).find(SalesOut.class);
+        salesOutList =DataSupport.where("customer=?",name).find(SalesOut.class);
 
-        if (findCustomDatas.size()>0)
+        if (salesOutList.size()>0)
         {
             return true;
         }else {

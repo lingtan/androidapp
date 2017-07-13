@@ -11,7 +11,7 @@ public class StockIniti extends DataSupport {
     private String name;
     private String number;
     private String stock;
-    private double fqty;
+    private double quantity;
 
 
     public int getId() {
@@ -46,11 +46,11 @@ public class StockIniti extends DataSupport {
         this.stock = stock;
     }
 
-    public double getFqty() {
-        return fqty;
+    public double getQuantity() {
+        return quantity;
     }
 
-    public void setFqty(double fqty) {
-        this.fqty = fqty;
+    public void setQuantity(double quantity) {
+        this.quantity = quantity;
     }
 }

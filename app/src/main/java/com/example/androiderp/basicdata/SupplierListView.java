@@ -24,37 +24,37 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SupplierListView extends CustomSearchBase implements View.OnClickListener {
-    private List<CommonDataStructure> supplierlistdatas = new ArrayList<CommonDataStructure>();
+    private List<CommonDataStructure> commonDataStructureList = new ArrayList<CommonDataStructure>();
     private List<DataStructure> fruit = new ArrayList<DataStructure>();
     private CommonAdapter adapter;
     private ListView listView;
     private DisplayMetrics dm;
-    private List<CommonDataStructure> suppliersearchdatas= new ArrayList<CommonDataStructure>();
-    private List<Supplier> supplieralldatas;
-    private TextView toobar_l,toobar_r,toobar_m;
-    private CustomSearch search;
+    private List<CommonDataStructure> commonDataStructureSearch = new ArrayList<CommonDataStructure>();
+    private List<Supplier> supplierList;
+    private TextView toobarBack, toobarAdd, toobarTile;
+    private CustomSearch customSearch;
     private Intent intent;
     @Override
     public void iniView(){
         setContentView(R.layout.custom_layout);
-        toobar_l=(TextView)findViewById(R.id.custom_toobar_left) ;
-        toobar_m=(TextView)findViewById(R.id.custom_toobar_midd);
-        toobar_m.setText("供应商");
-        toobar_r=(TextView)findViewById(R.id.custom_toobar_right);
-        toobar_l.setOnClickListener(this);
-        toobar_r.setOnClickListener(this);
-        toobar_m.setOnClickListener(this);
-        search = (CustomSearch) findViewById(R.id.search);
-        toobar_m.setCompoundDrawables(null,null,null,null);
-        supplieralldatas= DataSupport.findAll(Supplier.class);
+        toobarBack =(TextView)findViewById(R.id.custom_toobar_left) ;
+        toobarTile =(TextView)findViewById(R.id.custom_toobar_midd);
+        toobarTile.setText("供应商");
+        toobarAdd =(TextView)findViewById(R.id.custom_toobar_right);
+        toobarBack.setOnClickListener(this);
+        toobarAdd.setOnClickListener(this);
+        toobarTile.setOnClickListener(this);
+        customSearch = (CustomSearch) findViewById(R.id.search);
+        toobarTile.setCompoundDrawables(null,null,null,null);
+        supplierList = DataSupport.findAll(Supplier.class);
         intent=new Intent(SupplierListView.this,SupplierForm.class);
-        for(Supplier supplier:supplieralldatas)
+        for(Supplier supplier: supplierList)
 
         {
             CommonDataStructure commonData=new CommonDataStructure();
             commonData.setName(supplier.getName());
             commonData.setId(supplier.getId());
-            supplierlistdatas.add(commonData);
+            commonDataStructureList.add(commonData);
 
 
 
@@ -71,53 +71,53 @@ public class SupplierListView extends CustomSearchBase implements View.OnClickLi
             public void onItemClick(AdapterView<?> adapterView, View view,
                                     int position, long id) {
 
-                        if(suppliersearchdatas.size()!=0) {
+                        if(commonDataStructureSearch.size()!=0) {
 
                             intent.putExtra("action", "edit");
-                            intent.putExtra("supller_item", String.valueOf(suppliersearchdatas.get(position).getId()));
+                            intent.putExtra("supller_item", String.valueOf(commonDataStructureSearch.get(position).getId()));
 
 
                         }else {
 
                             intent.putExtra("action", "edit");
-                            intent.putExtra("supller_item", String.valueOf(supplierlistdatas.get(position).getId()));
+                            intent.putExtra("supller_item", String.valueOf(commonDataStructureList.get(position).getId()));
 
                         }
                 startActivityForResult(intent,1);
 
             }
         });
-        if(supplierlistdatas.size()!=0) {
+        if(commonDataStructureList.size()!=0) {
 
-                 adapter = new CommonAdapter(SupplierListView.this, R.layout.custom_item, supplierlistdatas);
+                 adapter = new CommonAdapter(SupplierListView.this, R.layout.custom_item, commonDataStructureList);
                  listView.setAdapter(adapter);
 
         }
 
-        search.addTextChangedListener(textWatcher);
+        customSearch.addTextChangedListener(textWatcher);
 
 
     }
 
     //筛选条件
     public Object[] search(String name) {
-        if(suppliersearchdatas!=null) {
-            suppliersearchdatas.clear();
+        if(commonDataStructureSearch !=null) {
+            commonDataStructureSearch.clear();
         }
-        for (int i = 0; i < supplierlistdatas.size(); i++) {
-            int index = supplierlistdatas.get(i).getName().indexOf(name);
+        for (int i = 0; i < commonDataStructureList.size(); i++) {
+            int index = commonDataStructureList.get(i).getName().indexOf(name);
             // 存在匹配的数据
             if (index != -1) {
-                suppliersearchdatas.add(supplierlistdatas.get(i));
+                commonDataStructureSearch.add(commonDataStructureList.get(i));
             }
         }
-        return suppliersearchdatas.toArray();
+        return commonDataStructureSearch.toArray();
     }
 
 //adapter刷新,重写Filter方式会出现BUG.
     public void updateLayout(Object[] obj) {
-        if(suppliersearchdatas!=null) {
-            adapter = new CommonAdapter(SupplierListView.this, R.layout.custom_item, suppliersearchdatas);
+        if(commonDataStructureSearch !=null) {
+            adapter = new CommonAdapter(SupplierListView.this, R.layout.custom_item, commonDataStructureSearch);
             listView.setAdapter(adapter);
         }
     }
@@ -152,22 +152,22 @@ public class SupplierListView extends CustomSearchBase implements View.OnClickLi
             case 1:
                 if(resultCode==RESULT_OK)
                 {
-                    if(supplierlistdatas.size()!=0) {
-                        supplierlistdatas.clear();
+                    if(commonDataStructureList.size()!=0) {
+                        commonDataStructureList.clear();
                     }
-                    supplieralldatas= DataSupport.findAll(Supplier.class);
-                    for(Supplier category:supplieralldatas)
+                    supplierList = DataSupport.findAll(Supplier.class);
+                    for(Supplier category: supplierList)
 
                     {
                         CommonDataStructure commonData=new CommonDataStructure();
                         commonData.setName(category.getName());
                         commonData.setId(category.getId());
-                        supplierlistdatas.add(commonData);
+                        commonDataStructureList.add(commonData);
 
 
 
                     }
-                    adapter = new CommonAdapter(SupplierListView.this, R.layout.custom_item, supplierlistdatas);
+                    adapter = new CommonAdapter(SupplierListView.this, R.layout.custom_item, commonDataStructureList);
                     listView.setAdapter(adapter);
                 }
                 break;
@@ -195,7 +195,7 @@ public class SupplierListView extends CustomSearchBase implements View.OnClickLi
         @Override
         public void afterTextChanged(Editable s) {
 
-            Object[] obj = search(search.getText().toString());
+            Object[] obj = search(customSearch.getText().toString());
             updateLayout(obj);
 
         }

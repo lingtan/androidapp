@@ -22,40 +22,39 @@ import org.litepal.crud.DataSupport;
 
 public class CustomCategoryForm extends AppCompatActivity implements View.OnClickListener {
     private InputMethodManager manager;
-    private EditText username;
-    private TextView usersave,toobar_tile,toobar_back;
-    private CustomCategory custom;
-    private CustomCategory customlist;
+    private EditText userName;
+    private TextView toobarSave, toobarTile, toobarBack;
+    private CustomCategory customCategory;
     private String customid,edit;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.customcategory);
         manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        username=(EditText)findViewById(R.id.customcategory_name);
+        userName =(EditText)findViewById(R.id.customcategory_name);
         final Intent intent=getIntent();
         customid=intent.getStringExtra("customid");
         edit=intent.getStringExtra("action");
-        usersave=(TextView)findViewById(R.id.custom_toobar_right);
-        toobar_tile=(TextView)findViewById(R.id.custom_toobar_midd);
-        toobar_back=(TextView)findViewById(R.id.custom_toobar_left);
-        usersave.setCompoundDrawables(null,null,null,null);
-        toobar_tile.setCompoundDrawables(null,null,null,null);
-        usersave.setText("保存");
-        usersave.setOnClickListener(this);
-        toobar_back.setOnClickListener(this);
+        toobarSave =(TextView)findViewById(R.id.custom_toobar_right);
+        toobarTile =(TextView)findViewById(R.id.custom_toobar_midd);
+        toobarBack =(TextView)findViewById(R.id.custom_toobar_left);
+        toobarSave.setCompoundDrawables(null,null,null,null);
+        toobarTile.setCompoundDrawables(null,null,null,null);
+        toobarSave.setText("保存");
+        toobarSave.setOnClickListener(this);
+        toobarBack.setOnClickListener(this);
        formInit();
 
     }
 private  void formInit()
 {if(customid!=null) {
-    customlist = DataSupport.find(CustomCategory.class, Long.parseLong(customid));
-    username.setText(customlist.getName());
+    customCategory = DataSupport.find(CustomCategory.class, Long.parseLong(customid));
+    userName.setText(customCategory.getName());
 }
     if(edit.equals("edit"))
     {
-        toobar_tile.setText("客户分类修改");
+        toobarTile.setText("客户分类修改");
     }else {
-        toobar_tile.setText("客户分类新增");
+        toobarTile.setText("客户分类新增");
     }
 
 }
@@ -64,21 +63,21 @@ private  void formInit()
         switch (v.getId())
         {
             case R.id.custom_toobar_right:
-                if (TextUtils.isEmpty(username.getText().toString())) {
-                    username.setError("需要输入客户分类名称");
+                if (TextUtils.isEmpty(userName.getText().toString())) {
+                    userName.setError("需要输入客户分类名称");
                 } else {
                     if (edit.equals("edit")) {
-                        custom = new CustomCategory();
-                        custom.setName(username.getText().toString());
-                        custom.update(Long.parseLong(customid));
+               CustomCategory     customCategory = new CustomCategory();
+                        customCategory.setName(userName.getText().toString());
+                        customCategory.update(Long.parseLong(customid));
                         Intent intent = new Intent();
                         setResult(RESULT_OK,intent);
                         CustomCategoryForm.this.finish();
                     } else {
-                        custom = new CustomCategory();
-                        custom.setName(username.getText().toString());
+               CustomCategory     customCategory = new CustomCategory();
+                        customCategory.setName(userName.getText().toString());
 
-                        custom.save();
+                        customCategory.save();
                         Intent intent = new Intent();
                         setResult(RESULT_OK,intent);
                         CustomCategoryForm.this.finish();

@@ -26,7 +26,6 @@ import com.example.androiderp.CustomDataClass.User;
 import com.example.androiderp.R;
 import com.example.androiderp.common.Common;
 import com.example.androiderp.home.ErpHome;
-import com.example.androiderp.utili.SenHome;
 
 /**
  * Created by lingtan on 2017/5/8.
@@ -34,14 +33,14 @@ import com.example.androiderp.utili.SenHome;
 
 public class Login extends AppCompatActivity implements View.OnClickListener {
 
-    private EditText input_name, input_password, input_email;
-    private CheckBox input_checked;
-    private TextInputLayout layout_name, layout_password, layout_email;
-    private Button btn_login;
+    private EditText name, password, email;
+    private CheckBox checked;
+    private TextInputLayout layoutName, layoutPassword, layoutEmail;
+    private Button loginButton;
     private InputMethodManager manager;
     private SharedPreferences preferences;
     private SharedPreferences.Editor editor;
-    private Dialog mDialog;
+    private Dialog dialog;
 
 
     @Override
@@ -66,10 +65,10 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
             String nane = preferences.getString("name", "");
             String password = preferences.getString("password", "");
             String email = preferences.getString("email", "");
-            input_name.setText(nane);
-            input_password.setText(password);
-            input_email.setText(email);
-            input_checked.setChecked(true);
+            name.setText(nane);
+            this.password.setText(password);
+            this.email.setText(email);
+            checked.setChecked(true);
         }
     }
 
@@ -90,22 +89,22 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         editor.apply();
     }
     private void initWidget() {
-        input_name = (EditText) findViewById(R.id.login_layout_one_one_name);
-        input_password = (EditText) findViewById(R.id.login_layout_one_tow_password);
-        input_email = (EditText) findViewById(R.id.login_layout_one_three_email);
-        input_checked=(CheckBox)findViewById(R.id.login_layout_one_four_remenberpaw);
-        input_password.setTransformationMethod(PasswordTransformationMethod.getInstance());
-        layout_name = (TextInputLayout) findViewById(R.id.login_layout_one_one);
-        layout_password = (TextInputLayout) findViewById(R.id.login_layout_one_tow);
-        layout_email = (TextInputLayout) findViewById(R.id.login_layout_one_three);
+        name = (EditText) findViewById(R.id.login_layout_one_one_name);
+        password = (EditText) findViewById(R.id.login_layout_one_tow_password);
+        email = (EditText) findViewById(R.id.login_layout_one_three_email);
+        checked =(CheckBox)findViewById(R.id.login_layout_one_four_remenberpaw);
+        password.setTransformationMethod(PasswordTransformationMethod.getInstance());
+        layoutName = (TextInputLayout) findViewById(R.id.login_layout_one_one);
+        layoutPassword = (TextInputLayout) findViewById(R.id.login_layout_one_tow);
+        layoutEmail = (TextInputLayout) findViewById(R.id.login_layout_one_three);
 
-        btn_login = (Button) findViewById(R.id.login_layout_one_login);
-        btn_login.setOnClickListener(this);
+        loginButton = (Button) findViewById(R.id.login_layout_one_login);
+        loginButton.setOnClickListener(this);
 
         //添加监听
-        input_name.addTextChangedListener(new MyTextWatcher(input_name));
-        input_password.addTextChangedListener(new MyTextWatcher(input_password));
-        input_email.addTextChangedListener(new MyTextWatcher(input_email));
+        name.addTextChangedListener(new MyTextWatcher(name));
+        password.addTextChangedListener(new MyTextWatcher(password));
+        email.addTextChangedListener(new MyTextWatcher(email));
     }
 
     @Override
@@ -137,7 +136,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
             return;
         }
 
-       goIntent(input_name.getText().toString(),input_password.getText().toString(),input_email.getText().toString());
+       goIntent(name.getText().toString(), password.getText().toString(), email.getText().toString());
 
     }
     /**
@@ -145,9 +144,9 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
      */
     private void showDialog() {
 
-           mDialog = Common.createLoadingDialog(this, "正在加载中...");
-            mDialog.setCancelable(true);//允许返回
-            mDialog.show();//显示
+           dialog = Common.createLoadingDialog(this, "正在加载中...");
+            dialog.setCancelable(true);//允许返回
+            dialog.show();//显示
 
     }
 
@@ -155,14 +154,14 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
      * 关闭进度对话框
      */
     private void closeDialog() {
-        if (mDialog != null) {
-            mDialog.dismiss();
+        if (dialog != null) {
+            dialog.dismiss();
         }
     }
     private void goIntent(String name,String password,String email)
     {
         Intent intent=new Intent(Login.this,ErpHome.class);
-        refWrite(input_checked.isChecked(),name,password,email);
+        refWrite(checked.isChecked(),name,password,email);
         User user=new User();
         user.setName(name);
         user.setPassword(password);
@@ -174,35 +173,35 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     }
     public boolean isNameValid() {
 
-        if (!input_name.getText().toString().trim().equals("lingtan") || input_name.getText().toString().trim().isEmpty()) {
-            layout_name.setError(getString(R.string.error_name));
-            input_name.requestFocus();
+        if (!name.getText().toString().trim().equals("lingtan") || name.getText().toString().trim().isEmpty()) {
+            layoutName.setError(getString(R.string.error_name));
+            name.requestFocus();
             return false;
         }
-        layout_name.setErrorEnabled(false);
+        layoutName.setErrorEnabled(false);
         return true;
     }
 
     public boolean isPasswordValid() {
-        if (!input_password.getText().toString().trim().equals("123") || input_password.getText().toString().trim().isEmpty()) {
-            layout_password.setErrorEnabled(true);
-            layout_password.setError(getResources().getString(R.string.error_password));
-            input_password.requestFocus();
+        if (!password.getText().toString().trim().equals("123") || password.getText().toString().trim().isEmpty()) {
+            layoutPassword.setErrorEnabled(true);
+            layoutPassword.setError(getResources().getString(R.string.error_password));
+            password.requestFocus();
             return false;
         }
-        layout_password.setErrorEnabled(false);
+        layoutPassword.setErrorEnabled(false);
         return true;
     }
 
     public boolean isEmailValid() {
-        String email = input_email.getText().toString().trim();
+        String email = this.email.getText().toString().trim();
         if (TextUtils.isEmpty(email) || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            layout_email.setErrorEnabled(true);
-            layout_email.setError(getString(R.string.error_email));
-            layout_email.requestFocus();
+            layoutEmail.setErrorEnabled(true);
+            layoutEmail.setError(getString(R.string.error_email));
+            layoutEmail.requestFocus();
             return false;
         }
-        layout_email.setErrorEnabled(false);
+        layoutEmail.setErrorEnabled(false);
         return true;
     }
 

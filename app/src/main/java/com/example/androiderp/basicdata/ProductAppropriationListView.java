@@ -18,23 +18,18 @@ import com.example.androiderp.CustomDataClass.AppropriationEnty;
 import com.example.androiderp.CustomDataClass.Product;
 import com.example.androiderp.CustomDataClass.ProductCategory;
 import com.example.androiderp.CustomDataClass.ProductShopping;
-import com.example.androiderp.CustomDataClass.SalesOut;
 import com.example.androiderp.CustomDataClass.SalesOutEnty;
 import com.example.androiderp.CustomDataClass.ShoppingData;
 import com.example.androiderp.CustomDataClass.StockIniti;
-import com.example.androiderp.CustomDataClass.StockInitiTem;
 import com.example.androiderp.R;
 import com.example.androiderp.adaper.AppropriationBadgeAdapter;
 import com.example.androiderp.adaper.CommonAdapter;
 import com.example.androiderp.adaper.CommonDataStructure;
-import com.example.androiderp.adaper.ProductBadgeAdapter;
 import com.example.androiderp.custom.CustomBadgeView;
 import com.example.androiderp.custom.CustomSearch;
 import com.example.androiderp.custom.CustomSearchBase;
-import com.example.androiderp.form.AppropriationForm;
 import com.example.androiderp.form.AppropriationShoppingForm;
 import com.example.androiderp.form.ProductForm;
-import com.example.androiderp.form.ProductShoppingForm;
 import com.example.androiderp.form.SaleProductForm;
 import com.example.androiderp.scanning.CommonScanActivity;
 import com.example.androiderp.scanning.utils.Constant;
@@ -52,27 +47,26 @@ public class ProductAppropriationListView extends CustomSearchBase implements Vi
     private ListView rightListView;
     private ListView leftListView;
     private DisplayMetrics dm;
-    private List<Product> searchDatas= new ArrayList<Product>();
-    private List<Product> customAllDatas;
-    private TextView toobar_l,toobar_r,toobar_m,toobar_screen;
-    private CustomSearch search;
+    private List<Product> productSearch = new ArrayList<Product>();
+    private List<Product> productList;
+    private TextView toobarBack, toobarAdd, toobarTile, toobarScreen;
+    private CustomSearch customSearch;
     private Intent intent;
-    private List<ProductCategory> categoryAllDatas;
-    private List<CommonDataStructure> categorylistdatas = new ArrayList<CommonDataStructure>();
-    private double countall;
+    private List<ProductCategory> productCategoryList;
+    private List<CommonDataStructure> categorylist = new ArrayList<CommonDataStructure>();
+    private double quantityCount;
     private double categorycount;
-    private double countamount;
-   private ImageView imageView;
-    private HashSet<Long> pselectedItems = new HashSet<Long>();
+    private double amountCount;
+    private HashSet<Long> selectedItems = new HashSet<Long>();
     private CustomBadgeView badgeView;
-    private List<ProductShopping> shoppings = new ArrayList<ProductShopping>();
-    private ImageView badgeimage;
-    private  int   leftlistselecte;
-    private  String   leftlistselectetext;
-    private LinearLayout accounts;
-    private List<StockIniti> stockInitis = new ArrayList<StockIniti>();
-    private List<SalesOutEnty> salesOutEnties;
-    private List<SalesOutEnty> supplierOutEnties;
+    private List<ProductShopping> productShoppingList = new ArrayList<ProductShopping>();
+    private ImageView badgeImage;
+    private  int leftListSelecte;
+    private  String leftListSelecteText;
+    private LinearLayout account;
+    private List<StockIniti> stockInitiList = new ArrayList<StockIniti>();
+    private List<SalesOutEnty> salesOutEntyList;
+    private List<SalesOutEnty> supplierOutEntieList;
     private double fqty;
     private double quantity;
     private int  stockCheck=1;
@@ -83,75 +77,75 @@ public class ProductAppropriationListView extends CustomSearchBase implements Vi
     @Override
     public void iniView(){
         setContentView(R.layout.appropriation_listview_layout);
-        toobar_l=(TextView)findViewById(R.id.custom_toobar_left) ;
-        toobar_m=(TextView)findViewById(R.id.custom_toobar_midd);
-        toobar_r=(TextView)findViewById(R.id.custom_toobar_right);
-        toobar_screen=(TextView)findViewById(R.id.customtoobar_screen);
-        toobar_screen.setOnClickListener(this);
-        toobar_m.setText("商品信息");
-        toobar_m.setCompoundDrawables(null,null,null,null);
-        toobar_l.setOnClickListener(this);
-        toobar_r.setOnClickListener(this);
-        toobar_m.setOnClickListener(this);
+        toobarBack =(TextView)findViewById(R.id.custom_toobar_left) ;
+        toobarTile =(TextView)findViewById(R.id.custom_toobar_midd);
+        toobarAdd =(TextView)findViewById(R.id.custom_toobar_right);
+        toobarScreen =(TextView)findViewById(R.id.customtoobar_screen);
+        toobarScreen.setOnClickListener(this);
+        toobarTile.setText("商品信息");
+        toobarTile.setCompoundDrawables(null,null,null,null);
+        toobarBack.setOnClickListener(this);
+        toobarAdd.setOnClickListener(this);
+        toobarTile.setOnClickListener(this);
         Intent intentValue=getIntent();
         appropriOutValue=intentValue.getStringExtra("appropriout");
-        search = (CustomSearch) findViewById(R.id.search);
-        accounts=(LinearLayout)findViewById(R.id.product_item_layout_bottom);
-        customAllDatas= DataSupport.findAll(Product.class);
-        stockInitis= DataSupport.findAll(StockIniti.class);
-        salesOutEnties=DataSupport.where("billtype =?","2").find(SalesOutEnty.class);
-        supplierOutEnties=DataSupport.where("billtype =?","1").find(SalesOutEnty.class);
-        for(Product product:customAllDatas)
+        customSearch = (CustomSearch) findViewById(R.id.search);
+        account =(LinearLayout)findViewById(R.id.product_item_layout_bottom);
+        productList = DataSupport.findAll(Product.class);
+        stockInitiList = DataSupport.findAll(StockIniti.class);
+        salesOutEntyList =DataSupport.where("billtype =?","2").find(SalesOutEnty.class);
+        supplierOutEntieList =DataSupport.where("billtype =?","1").find(SalesOutEnty.class);
+        for(Product product: productList)
 
         {    fqty=0.00;
-            for(StockIniti stock:stockInitis)
+            for(StockIniti stock: stockInitiList)
 
             {
                 if(product.getNumber().equals(stock.getNumber()))
             {
-                fqty+=stock.getFqty();
+                fqty+=stock.getQuantity();
             }
 
 
             }
 
-            for(SalesOutEnty salesOutEnty:salesOutEnties)
+            for(SalesOutEnty salesOutEnty: salesOutEntyList)
             {
-                if(product.getNumber().equals(salesOutEnty.getItemnumber()))
+                if(product.getNumber().equals(salesOutEnty.getNumber()))
                 {
-                    fqty-=salesOutEnty.getItemfqty();
+                    fqty-=salesOutEnty.getQuantity();
                 }
             }
-            for(SalesOutEnty salesOutEnty:supplierOutEnties)
+            for(SalesOutEnty salesOutEnty: supplierOutEntieList)
             {
-                if(product.getNumber().equals(salesOutEnty.getItemnumber()))
+                if(product.getNumber().equals(salesOutEnty.getNumber()))
                 {
-                    fqty+=salesOutEnty.getItemfqty();
+                    fqty+=salesOutEnty.getQuantity();
                 }
             }
-            product.setStockfqty(fqty);
+            product.setQuantity(fqty);
 
         }
         intent= new Intent(ProductAppropriationListView.this, AppropriationShoppingForm.class);
-        categoryAllDatas= DataSupport.findAll(ProductCategory.class);
+        productCategoryList = DataSupport.findAll(ProductCategory.class);
         CommonDataStructure commonDataAll=new CommonDataStructure();
         commonDataAll.setName("全部产品");
-        categorylistdatas.add(commonDataAll);
+        categorylist.add(commonDataAll);
         CommonDataStructure commonDataN=new CommonDataStructure();
         commonDataN.setName("未分类");
-        categorylistdatas.add(commonDataN);
+        categorylist.add(commonDataN);
         badgeView = new CustomBadgeView(this);
-        badgeimage=(ImageView)findViewById(R.id.product_shopping_badge);
-        badgeView.setTargetView(badgeimage);
+        badgeImage =(ImageView)findViewById(R.id.product_shopping_badge);
+        badgeView.setTargetView(badgeImage);
         badgeView.setBadgeMargin(25,0,0,0);
         badgeView.setBadgeGravity(Gravity.RIGHT & Gravity.TOP);
-        for(ProductCategory productCategory:categoryAllDatas)
+        for(ProductCategory productCategory: productCategoryList)
 
         {
             CommonDataStructure commonData=new CommonDataStructure();
             commonData.setName(productCategory.getName());
             commonData.setId(productCategory.getId());
-            categorylistdatas.add(commonData);
+            categorylist.add(commonData);
 
         }
         //构造函数第一参数是类的对象，第二个是布局文件，第三个是数据源
@@ -162,13 +156,13 @@ public class ProductAppropriationListView extends CustomSearchBase implements Vi
         leftListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                leftlistselecte=position;
+                leftListSelecte =position;
                 leftAdapter.setSeclection(position);
                 leftAdapter.notifyDataSetInvalidated();
-                Object[] obj = categorySearch(categorylistdatas.get(position).getName().toString());
+                Object[] obj = categorySearch(categorylist.get(position).getName().toString());
                 updateLayout(obj);
-                toobar_m.setText(categorylistdatas.get(position).getName().toString());
-                leftlistselectetext=categorylistdatas.get(position).getName().toString();
+                toobarTile.setText(categorylist.get(position).getName().toString());
+                leftListSelecteText = categorylist.get(position).getName().toString();
             }
         });
         dm=new DisplayMetrics();
@@ -184,20 +178,20 @@ public class ProductAppropriationListView extends CustomSearchBase implements Vi
                 }else{
                     rightAdapter.selectedItems.add((long)position);
                 }
-                pselectedItems=rightAdapter.selectedItems;
+                selectedItems =rightAdapter.selectedItems;
 
 
                 intent.removeExtra("action");
-                if(searchDatas.size()!=0) {
+                if(productSearch.size()!=0) {
 
                     intent.putExtra("action", "edit");
-                    intent.putExtra("product_item", String.valueOf(searchDatas.get(position).getId()));
+                    intent.putExtra("product_item", String.valueOf(productSearch.get(position).getId()));
 
 
                 }else {
 
                     intent.putExtra("action", "edit");
-                    intent.putExtra("product_item", String.valueOf(customAllDatas.get(position).getId()));
+                    intent.putExtra("product_item", String.valueOf(productList.get(position).getId()));
 
                 }
                 startActivityForResult(intent,1);
@@ -205,24 +199,24 @@ public class ProductAppropriationListView extends CustomSearchBase implements Vi
             }
         });
 
-            leftAdapter = new CommonAdapter(ProductAppropriationListView.this, R.layout.custom_item, categorylistdatas);
+            leftAdapter = new CommonAdapter(ProductAppropriationListView.this, R.layout.custom_item, categorylist);
             leftAdapter.setSeclection(0);
             leftListView.setAdapter(leftAdapter);
-            Object[] obj = categorySearch(categorylistdatas.get(0).getName().toString());
+            Object[] obj = categorySearch(categorylist.get(0).getName().toString());
             updateLayout(obj);
 
 
 
-        search.addTextChangedListener(textWatcher);
+        customSearch.addTextChangedListener(textWatcher);
 
-        accounts.setOnClickListener(new View.OnClickListener() {
+        account.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                if(shoppings!=null&shoppings.size()!=0){
+                if(productShoppingList !=null& productShoppingList.size()!=0){
                     Intent intentdata=new Intent(ProductAppropriationListView.this, SaleProductForm.class);
                     ShoppingData shoppingData=new ShoppingData();
-                    shoppingData.setShoppingdata(shoppings);
+                    shoppingData.setProductShoppingList(productShoppingList);
                     intentdata.putExtra("shoppingdata",shoppingData);
                     setResult(RESULT_OK,intentdata);
                     ProductAppropriationListView.this.finish();
@@ -235,30 +229,30 @@ public class ProductAppropriationListView extends CustomSearchBase implements Vi
 
     //筛选条件
     public Object[] search(String name) {
-        if(searchDatas!=null) {
-            searchDatas.clear();
+        if(productSearch !=null) {
+            productSearch.clear();
         }
-        if(leftlistselectetext==null){
-            leftlistselectetext="全部产品";
+        if(leftListSelecteText ==null){
+            leftListSelecteText ="全部产品";
         }
-        if(leftlistselectetext.equals("未分类"))
+        if(leftListSelecteText.equals("未分类"))
         {
-            for (int i = 0; i < customAllDatas.size(); i++) {
-                if(customAllDatas.get(i).getCategory()==null)
-                { int index = customAllDatas.get(i).getNumber().indexOf(name);
+            for (int i = 0; i < productList.size(); i++) {
+                if(productList.get(i).getCategory()==null)
+                { int index = productList.get(i).getNumber().indexOf(name);
                     if (index != -1) {
-                        searchDatas.add(customAllDatas.get(i));
+                        productSearch.add(productList.get(i));
                     }
 
                 }
             }
 
-        }else if (leftlistselectetext.equals("全部产品"))
+        }else if (leftListSelecteText.equals("全部产品"))
         {
-            for (int i = 0; i < customAllDatas.size(); i++) {
-                int index = customAllDatas.get(i).getNumber().indexOf(name);
+            for (int i = 0; i < productList.size(); i++) {
+                int index = productList.get(i).getNumber().indexOf(name);
                 if (index != -1) {
-                    searchDatas.add(customAllDatas.get(i));
+                    productSearch.add(productList.get(i));
                 }
 
             }
@@ -266,60 +260,60 @@ public class ProductAppropriationListView extends CustomSearchBase implements Vi
         }
 
         else {
-            for (int i = 0; i < customAllDatas.size(); i++) {
-                int index = customAllDatas.get(i).getNumber().indexOf(name);
-                int indey = customAllDatas.get(i).getCategory().indexOf(leftlistselectetext);
+            for (int i = 0; i < productList.size(); i++) {
+                int index = productList.get(i).getNumber().indexOf(name);
+                int indey = productList.get(i).getCategory().indexOf(leftListSelecteText);
                 // 存在匹配的数据
                 if (index != -1 & indey != -1) {
-                    searchDatas.add(customAllDatas.get(i));
+                    productSearch.add(productList.get(i));
                 }
             }
         }
-        return searchDatas.toArray();
+        return productSearch.toArray();
     }
 
     public Object[] categorySearch(String name) {
 
-        if(searchDatas!=null) {
-            searchDatas.clear();
+        if(productSearch !=null) {
+            productSearch.clear();
         }
         if(name.equals("未分类"))
         {
-            for (int i = 0; i < customAllDatas.size(); i++) {
-               if(customAllDatas.get(i).getCategory()==null)
+            for (int i = 0; i < productList.size(); i++) {
+               if(productList.get(i).getCategory()==null)
                {
-                    searchDatas.add(customAllDatas.get(i));
+                    productSearch.add(productList.get(i));
                }
             }
 
         }else if (name.equals("全部产品"))
         {
-            for (int i = 0; i < customAllDatas.size(); i++) {
+            for (int i = 0; i < productList.size(); i++) {
 
-                    searchDatas.add(customAllDatas.get(i));
+                    productSearch.add(productList.get(i));
 
             }
 
         }
 
         else {
-        for (int i = 0; i < customAllDatas.size(); i++) {
-              if(customAllDatas.get(i).getCategory()!=null){
-                int index = customAllDatas.get(i).getCategory().indexOf(name);
+        for (int i = 0; i < productList.size(); i++) {
+              if(productList.get(i).getCategory()!=null){
+                int index = productList.get(i).getCategory().indexOf(name);
                 // 存在匹配的数据
                 if (index != -1) {
-                    searchDatas.add(customAllDatas.get(i));
+                    productSearch.add(productList.get(i));
                 }
             }
         }}
-        return searchDatas.toArray();
+        return productSearch.toArray();
     }
 //adapter刷新,重写Filter方式会出现BUG.
     public void updateLayout(Object[] obj) {
-        if(searchDatas!=null) {
+        if(productSearch !=null) {
 
-            rightAdapter = new AppropriationBadgeAdapter(ProductAppropriationListView.this, R.layout.appropriation_badge_item, searchDatas,this);
-            rightAdapter.selectedItems=pselectedItems;
+            rightAdapter = new AppropriationBadgeAdapter(ProductAppropriationListView.this, R.layout.appropriation_badge_item, productSearch,this);
+            rightAdapter.selectedItems= selectedItems;
             rightListView.setAdapter(rightAdapter);
         }
     }
@@ -333,36 +327,36 @@ public class ProductAppropriationListView extends CustomSearchBase implements Vi
 
                     ProductShopping shopping=(ProductShopping) data.getParcelableExtra("shop_data");
                     Log.d("tongtan",String.valueOf(shopping.getId()));
-                    Log.d("tongtan",shopping.getSalename());
-                    for(ProductShopping shop:shoppings)
+                    Log.d("tongtan",shopping.getName());
+                    for(ProductShopping shop: productShoppingList)
                     {
 
-                       if(shop.getSalenumber().equals(shopping.getSalenumber())){
-                           shoppings.remove(shop);
+                       if(shop.getNumber().equals(shopping.getNumber())){
+                           productShoppingList.remove(shop);
                        }
                     }
 
-                    shoppings.add(shopping);
-                    countall=0;
-                    countamount=0.00;
-                    for (int i = 0; i < shoppings.size(); i++) {
+                    productShoppingList.add(shopping);
+                    quantityCount =0;
+                    amountCount =0.00;
+                    for (int i = 0; i < productShoppingList.size(); i++) {
 
-                        countall+= shoppings.get(i).getSalefqty();
-                        countamount+=shoppings.get(i).getSaleamount();
-                        if(stockCheck(appropriOutValue,shoppings.get(i).getSalenumber(),shoppings.get(i).getSalefqty())==0)
+                        quantityCount += productShoppingList.get(i).getQuantity();
+                        amountCount += productShoppingList.get(i).getAmount();
+                        if(stockCheck(appropriOutValue, productShoppingList.get(i).getNumber(), productShoppingList.get(i).getQuantity())==0)
                         {
                             Toast.makeText(ProductAppropriationListView.this,"调出仓库数量不足，实际库存为："+df.format(quantity),Toast.LENGTH_SHORT).show();
                         }
 
                     }
-                    badgeimage.setVisibility(View.VISIBLE);
-                    badgeView.setBadgeCount(countall);
-                    for(Product product:searchDatas)
+                    badgeImage.setVisibility(View.VISIBLE);
+                    badgeView.setBadgeCount(quantityCount);
+                    for(Product product: productSearch)
 
                     {
-                        if(product.getNumber().equals(shopping.getSalenumber()))
+                        if(product.getNumber().equals(shopping.getNumber()))
                         {
-                            product.setBadgeshow(String.valueOf(shopping.getSalefqty()));
+                            product.setBadgeShow(String.valueOf(shopping.getQuantity()));
                         }
 
                         product.setImage(R.drawable.listvist_item_delete);
@@ -372,26 +366,26 @@ public class ProductAppropriationListView extends CustomSearchBase implements Vi
                     rightAdapter.notifyDataSetChanged();
 
 
-                    if(categorylistdatas.size()!=0)
+                    if(categorylist.size()!=0)
                     {
-                        categorylistdatas.clear();
+                        categorylist.clear();
                     }
-                    categoryAllDatas= DataSupport.findAll(ProductCategory.class);
+                    productCategoryList = DataSupport.findAll(ProductCategory.class);
                     CommonDataStructure commonDataAll=new CommonDataStructure();
                     commonDataAll.setName("全部产品");
-                    commonDataAll.setBadge(String.valueOf(countall));
-                    categorylistdatas.add(commonDataAll);
+                    commonDataAll.setBadge(String.valueOf(quantityCount));
+                    categorylist.add(commonDataAll);
                     CommonDataStructure commonDataN=new CommonDataStructure();
                     commonDataN.setName("未分类");
-                    categorylistdatas.add(commonDataN);
-                    for(ProductCategory productCategory:categoryAllDatas)
+                    categorylist.add(commonDataN);
+                    for(ProductCategory productCategory: productCategoryList)
                     {
                         categorycount=0;
-                        for(ProductShopping shop:shoppings)
+                        for(ProductShopping shop: productShoppingList)
                     {
                         if(shop.getCategory().equals(productCategory.getName()))
                         {
-                            categorycount+=shop.getSalefqty();
+                            categorycount+=shop.getQuantity();
                         }
 
 
@@ -403,12 +397,12 @@ public class ProductAppropriationListView extends CustomSearchBase implements Vi
                         if(categorycount>0) {
                             commonData.setBadge(String.valueOf(categorycount));
                         }
-                        categorylistdatas.add(commonData);
+                        categorylist.add(commonData);
 
                     }
 
-                    leftAdapter = new CommonAdapter(ProductAppropriationListView.this, R.layout.custom_item, categorylistdatas);
-                    leftAdapter.setSeclection(leftlistselecte);
+                    leftAdapter = new CommonAdapter(ProductAppropriationListView.this, R.layout.custom_item, categorylist);
+                    leftAdapter.setSeclection(leftListSelecte);
                     leftListView.setAdapter(leftAdapter);
                     DecimalFormat df = new DecimalFormat("#####0.00");
                 }
@@ -421,7 +415,7 @@ public class ProductAppropriationListView extends CustomSearchBase implements Vi
                 if(resultCode==RESULT_OK) {
 
                     Product lastProduct = DataSupport.findLast(Product.class);
-                    searchDatas.add(lastProduct);
+                    productSearch.add(lastProduct);
                     rightAdapter.notifyDataSetChanged();
 
                 }
@@ -434,7 +428,7 @@ public class ProductAppropriationListView extends CustomSearchBase implements Vi
             case 3:
                 if(resultCode==RESULT_OK) {
 
-                    for(Product product:searchDatas)
+                    for(Product product: productSearch)
 
                     {
                         if(product.getNumber().equals(data.getStringExtra("scanResult")))
@@ -502,7 +496,7 @@ public class ProductAppropriationListView extends CustomSearchBase implements Vi
         @Override
         public void afterTextChanged(Editable s) {
 
-            Object[] obj = search(search.getText().toString());
+            Object[] obj = search(customSearch.getText().toString());
             updateLayout(obj);
 
         }
@@ -511,43 +505,43 @@ public class ProductAppropriationListView extends CustomSearchBase implements Vi
     @Override
     public void click(View v) {
         DecimalFormat df = new DecimalFormat("#####0.00");
-        searchDatas.get((Integer) v.getTag()).setBadgeshow("");
-        searchDatas.get((Integer) v.getTag()).setImage(0);
-        countall=0;
-        countamount=0.00;
-        for (int i = 0; i < shoppings.size(); i++) {
+        productSearch.get((Integer) v.getTag()).setBadgeShow("");
+        productSearch.get((Integer) v.getTag()).setImage(0);
+        quantityCount =0;
+        amountCount =0.00;
+        for (int i = 0; i < productShoppingList.size(); i++) {
 
-            if(shoppings.get(i).getSalenumber().equals(searchDatas.get((Integer) v.getTag()).getNumber()))
+            if(productShoppingList.get(i).getNumber().equals(productSearch.get((Integer) v.getTag()).getNumber()))
             {
-                shoppings.remove(i);
+                productShoppingList.remove(i);
             }
         }
 
-        for(int i = 0; i < shoppings.size(); i++)
+        for(int i = 0; i < productShoppingList.size(); i++)
         {
 
-            countall+= shoppings.get(i).getSalefqty();
-            countamount+=shoppings.get(i).getSaleamount();
+            quantityCount += productShoppingList.get(i).getQuantity();
+            amountCount += productShoppingList.get(i).getAmount();
         }
-        if(categorylistdatas.size()!=0)
+        if(categorylist.size()!=0)
         {
-            categorylistdatas.clear();
+            categorylist.clear();
         }
-        categoryAllDatas= DataSupport.findAll(ProductCategory.class);
+        productCategoryList = DataSupport.findAll(ProductCategory.class);
         CommonDataStructure commonDataAll=new CommonDataStructure();
         commonDataAll.setName("全部产品");
-        categorylistdatas.add(commonDataAll);
+        categorylist.add(commonDataAll);
         CommonDataStructure commonDataN=new CommonDataStructure();
         commonDataN.setName("未分类");
-        categorylistdatas.add(commonDataN);
-        for(ProductCategory productCategory:categoryAllDatas)
+        categorylist.add(commonDataN);
+        for(ProductCategory productCategory: productCategoryList)
         {
             categorycount=0;
-            for(ProductShopping shop:shoppings)
+            for(ProductShopping shop: productShoppingList)
             {
                 if(shop.getCategory().equals(productCategory.getName()))
                 {
-                    categorycount+=shop.getSalefqty();
+                    categorycount+=shop.getQuantity();
                 }
 
 
@@ -559,16 +553,16 @@ public class ProductAppropriationListView extends CustomSearchBase implements Vi
             if(categorycount>0) {
                 commonData.setCategory(String.valueOf(categorycount));
             }
-            categorylistdatas.add(commonData);
+            categorylist.add(commonData);
 
         }
 
        rightAdapter.notifyDataSetChanged();
        leftAdapter.notifyDataSetChanged();
-        badgeView.setBadgeCount(countall);
-        if(countamount==0.00)
+        badgeView.setBadgeCount(quantityCount);
+        if(amountCount ==0.00)
         {
-            badgeimage.setVisibility(View.INVISIBLE);
+            badgeImage.setVisibility(View.INVISIBLE);
         }
 
 

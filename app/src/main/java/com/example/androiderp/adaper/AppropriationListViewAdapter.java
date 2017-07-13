@@ -59,7 +59,7 @@ public class AppropriationListViewAdapter extends ArrayAdapter<CommonDataStructu
             view = LayoutInflater.from(getContext()).inflate(resourceId, parent, false);
             viewHolder = new ViewHolder();
             viewHolder.name = (TextView) view.findViewById (R.id.custom_item_layout_one_name);
-            viewHolder.fqty = (TextView) view.findViewById (R.id.custom_item_layout_one_fqty);
+            viewHolder.quantity = (TextView) view.findViewById (R.id.custom_item_layout_one_fqty);
             viewHolder.image=(ImageView) view.findViewById(R.id.custom_item_layout_one_image);
 
             view.setTag(viewHolder); // 将ViewHolder存储在View中
@@ -87,7 +87,7 @@ public class AppropriationListViewAdapter extends ArrayAdapter<CommonDataStructu
         // 重新获取ViewHolder
         DecimalFormat df = new DecimalFormat("#####0.00");
         viewHolder.name.setText(data.get(position).getName());
-        viewHolder.fqty.setText(df.format(data.get(position).getFqty()));
+        viewHolder.quantity.setText(df.format(data.get(position).getFqty()));
         viewHolder.image.setImageResource(data.get(position).getImage());
 
 
@@ -111,7 +111,7 @@ public void setSeclection(int position)
 
         ImageView image;
         TextView  name;
-        TextView  fqty;
+        TextView  quantity;
 
 
 

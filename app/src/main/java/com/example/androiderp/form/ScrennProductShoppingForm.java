@@ -31,15 +31,15 @@ import java.text.DecimalFormat;
 
 public class ScrennProductShoppingForm extends AppCompatActivity implements View.OnClickListener {
     private InputMethodManager manager;
-    private EditText name,number,salesfqty,salesprice,category;
-    private TextView save,toobar_tile,toobar_back,toobar_add;
-    private ProductShopping shopping;
+    private EditText name,number, quantity, price,category;
+    private TextView toobarSave, toobarTile, toobarBack, toobarAdd;
+    private ProductShopping productShopping;
     private DisplayMetrics dm;
-    private Product customlist;
+    private Product product;
     private String customid,edit;
     private Drawable errorIcon;
-    private String  amounttext;
-    private Button shopsave;
+    private String  amountString;
+    private Button saveButton;
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
@@ -56,33 +56,33 @@ public class ScrennProductShoppingForm extends AppCompatActivity implements View
         number.setKeyListener(null);
         category=(EditText)findViewById(R.id.product_category);
         category.setKeyListener(null);
-        salesfqty=(EditText)findViewById(R.id.product_fqty);
-        salesprice=(EditText)findViewById(R.id.product_salesprice);
-        save=(TextView)findViewById(R.id.customtoobar_right);
-        shopsave=(Button)findViewById(R.id.shopping_button);
-        toobar_tile=(TextView)findViewById(R.id.customtoobar_midd);
-        toobar_back=(TextView)findViewById(R.id.customtoobar_left);
-        toobar_add=(TextView)findViewById(R.id.customtoobar_r) ;
-        save.setOnClickListener(this);
-        toobar_back.setOnClickListener(this);
-        shopsave.setOnClickListener(this);
-        toobar_add.setCompoundDrawables(null,null,null,null);
-        toobar_tile.setCompoundDrawables(null,null,null,null);
+        quantity =(EditText)findViewById(R.id.product_fqty);
+        price =(EditText)findViewById(R.id.product_salesprice);
+        toobarSave =(TextView)findViewById(R.id.customtoobar_right);
+        saveButton =(Button)findViewById(R.id.shopping_button);
+        toobarTile =(TextView)findViewById(R.id.customtoobar_midd);
+        toobarBack =(TextView)findViewById(R.id.customtoobar_left);
+        toobarAdd =(TextView)findViewById(R.id.customtoobar_r) ;
+        toobarSave.setOnClickListener(this);
+        toobarBack.setOnClickListener(this);
+        saveButton.setOnClickListener(this);
+        toobarAdd.setCompoundDrawables(null,null,null,null);
+        toobarTile.setCompoundDrawables(null,null,null,null);
         errorIcon = getResources().getDrawable(R.drawable.icon_error);
 // 设置图片大小
         errorIcon.setBounds(new Rect(0, 0, errorIcon.getIntrinsicWidth(),
                 errorIcon.getIntrinsicHeight()));
-        save.setText("");
-        toobar_tile.setText("商品销售");
+        toobarSave.setText("");
+        toobarTile.setText("商品销售");
         Drawable del= getResources().getDrawable(R.drawable.suppliercategory_delete);
         del.setBounds(0, 0, del.getMinimumWidth(), del.getMinimumHeight());
         Drawable more= getResources().getDrawable(R.drawable.toobar_more);
         more.setBounds(0, 0, more.getMinimumWidth(), more.getMinimumHeight());
-        save.setCompoundDrawables(more,null,null,null);
-        toobar_back.setCompoundDrawables(del,null,null,null);
-        toobar_back.setText("");
+        toobarSave.setCompoundDrawables(more,null,null,null);
+        toobarBack.setCompoundDrawables(del,null,null,null);
+        toobarBack.setText("");
         formInit();
-        salesprice.addTextChangedListener(new TextWatcher() {
+        price.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -96,21 +96,21 @@ public class ScrennProductShoppingForm extends AppCompatActivity implements View
             @Override
             public void afterTextChanged(Editable s) {
 
-                if(s.toString().trim().length()==0|salesfqty.getText().toString().trim().length()==0)
+                if(s.toString().trim().length()==0| quantity.getText().toString().trim().length()==0)
                 {
-                    toobar_tile.setText("商品销售");
+                    toobarTile.setText("商品销售");
                 }else {
 
                     DecimalFormat df = new DecimalFormat("#####0.00");
-                    amounttext=df.format(Double.valueOf(salesprice.getText().toString().trim()) * Integer.parseInt(salesfqty.getText().toString().trim()));
+                    amountString=df.format(Double.valueOf(price.getText().toString().trim()) * Integer.parseInt(quantity.getText().toString().trim()));
 
-                    toobar_tile.setText("金额：¥"+amounttext);
+                    toobarTile.setText("金额：¥"+amountString);
                 }
 
 
             }
         });
-        salesfqty.addTextChangedListener(new TextWatcher() {
+        quantity.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -124,15 +124,15 @@ public class ScrennProductShoppingForm extends AppCompatActivity implements View
             @Override
             public void afterTextChanged(Editable s) {
 
-                if(s.toString().trim().length()==0|salesprice.getText().toString().trim().length()==0)
+                if(s.toString().trim().length()==0| price.getText().toString().trim().length()==0)
                 {
-                    toobar_tile.setText("商品销售");
+                    toobarTile.setText("商品销售");
                 }else {
 
                     DecimalFormat df = new DecimalFormat("#####0.00");
-                    amounttext=df.format(Double.valueOf(salesprice.getText().toString().trim()) * Integer.parseInt(salesfqty.getText().toString().trim()));
+                    amountString=df.format(Double.valueOf(price.getText().toString().trim()) * Integer.parseInt(quantity.getText().toString().trim()));
 
-                    toobar_tile.setText("金额：¥"+amounttext);
+                    toobarTile.setText("金额：¥"+amountString);
                 }
                 }
 
@@ -146,15 +146,15 @@ public class ScrennProductShoppingForm extends AppCompatActivity implements View
 
         if(customid!=null) {
 
-            customlist = DataSupport.find(Product.class, Long.parseLong(customid));
-            name.setText(customlist.getName());
-            number.setText(customlist.getNumber());
-            salesprice.setText(customlist.getSalesprice());
-            category.setText(customlist.getCategory());
+            product = DataSupport.find(Product.class, Long.parseLong(customid));
+            name.setText(product.getName());
+            number.setText(product.getNumber());
+            price.setText(product.getSalesPrice());
+            category.setText(product.getCategory());
             if(edit.equals("edit")) {
-                toobar_add.setVisibility(View.VISIBLE);
+                toobarAdd.setVisibility(View.VISIBLE);
             }else {
-                toobar_add.setVisibility(View.INVISIBLE);
+                toobarAdd.setVisibility(View.INVISIBLE);
             }
         }
     }
@@ -164,22 +164,22 @@ public class ScrennProductShoppingForm extends AppCompatActivity implements View
 
         {
            case R.id.shopping_button:
-                if (TextUtils.isEmpty(salesprice.getText().toString())) {
-                    salesprice.setError("销售价格不能为0",errorIcon);
-                }else if (TextUtils.isEmpty(salesfqty.getText().toString()))
+                if (TextUtils.isEmpty(price.getText().toString())) {
+                    price.setError("销售价格不能为0",errorIcon);
+                }else if (TextUtils.isEmpty(quantity.getText().toString()))
                 {
-                    salesfqty.setError("销售数量不能为0",errorIcon);
+                    quantity.setError("销售数量不能为0",errorIcon);
                 }else {
-                    shopping = new ProductShopping();
-                    shopping.setSalename(name.getText().toString());
-                    shopping.setSalenumber(number.getText().toString());
-                    shopping.setCategory(category.getText().toString());
-                    shopping.setSalesprice(Double.valueOf(salesprice.getText().toString().trim()));
-                    shopping.setSalefqty(Integer.parseInt(salesfqty.getText().toString().trim()));
-                    shopping.setSaleamount(Double.valueOf(salesprice.getText().toString().trim())*Integer.parseInt(salesfqty.getText().toString().trim()));
-                    toobar_add.setVisibility(View.VISIBLE);
+                    productShopping = new ProductShopping();
+                    productShopping.setName(name.getText().toString());
+                    productShopping.setNumber(number.getText().toString());
+                    productShopping.setCategory(category.getText().toString());
+                    productShopping.setPrice(Double.valueOf(price.getText().toString().trim()));
+                    productShopping.setQuantity(Integer.parseInt(quantity.getText().toString().trim()));
+                    productShopping.setAmount(Double.valueOf(price.getText().toString().trim())*Integer.parseInt(quantity.getText().toString().trim()));
+                    toobarAdd.setVisibility(View.VISIBLE);
                     Intent intent = new Intent();
-                    intent.putExtra("shop_data",shopping);
+                    intent.putExtra("shop_data", productShopping);
                     setResult(RESULT_OK,intent);
                     finish();
                 }

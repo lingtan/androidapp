@@ -28,27 +28,27 @@ public class AppropriationListView extends CustomSearchBase implements View.OnCl
     private AppropriationAdapter adapter;
     private ListView listView;
     private DisplayMetrics dm;
-    private List<Appropriation> searchDatas= new ArrayList<Appropriation>();
-    private List<Appropriation> customAllDatas;
-    private TextView toobar_l,toobar_r,toobar_m;
-    private CustomSearch search;
-    private Intent intent;
-    private Intent intentadd;
+    private List<Appropriation> appropriationSearch= new ArrayList<Appropriation>();
+    private List<Appropriation> appropriationList;
+    private TextView toobarBack,toobarAdd,toobarTile;
+    private CustomSearch customSearch;
+    private Intent intentEdit;
+    private Intent intentAdd;
 
     @Override
     public void iniView(){
         setContentView(R.layout.custom_layout);
-        toobar_l=(TextView)findViewById(R.id.custom_toobar_left) ;
-        toobar_m=(TextView)findViewById(R.id.custom_toobar_midd);
-        toobar_r=(TextView)findViewById(R.id.custom_toobar_right);
-        toobar_l.setOnClickListener(this);
-        toobar_r.setOnClickListener(this);
-        toobar_m.setOnClickListener(this);
-        search = (CustomSearch) findViewById(R.id.search);
-        customAllDatas=DataSupport.findAll(Appropriation.class);
-        intent= new Intent(AppropriationListView.this, AppropriationEntyList.class);
-        toobar_m.setText("调拨流水");
-        toobar_l.setText("首页");
+        toobarBack=(TextView)findViewById(R.id.custom_toobar_left) ;
+        toobarTile=(TextView)findViewById(R.id.custom_toobar_midd);
+        toobarAdd=(TextView)findViewById(R.id.custom_toobar_right);
+        toobarBack.setOnClickListener(this);
+        toobarAdd.setOnClickListener(this);
+        toobarTile.setOnClickListener(this);
+        customSearch = (CustomSearch) findViewById(R.id.search);
+        appropriationList=DataSupport.findAll(Appropriation.class);
+        intentEdit= new Intent(AppropriationListView.this, AppropriationEntyList.class);
+        toobarTile.setText("调拨流水");
+        toobarBack.setText("首页");
 
         //构造函数第一参数是类的对象，第二个是布局文件，第三个是数据源
         listView = (ListView) findViewById(R.id.list);
@@ -60,66 +60,66 @@ public class AppropriationListView extends CustomSearchBase implements View.OnCl
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view,
                                     int position, long id) {
-                intent.removeExtra("action");
-                        if(searchDatas.size()!=0) {
+                intentEdit.removeExtra("action");
+                        if(appropriationSearch.size()!=0) {
 
-                            intent.putExtra("action", "edit");
-                            intent.putExtra("custom_item", String.valueOf(searchDatas.get(position).getId()));
+                            intentEdit.putExtra("action", "edit");
+                            intentEdit.putExtra("custom_item", String.valueOf(appropriationSearch.get(position).getId()));
 
 
                         }else {
 
-                            intent.putExtra("action", "edit");
-                            intent.putExtra("custom_item", String.valueOf(customAllDatas.get(position).getId()));
+                            intentEdit.putExtra("action", "edit");
+                            intentEdit.putExtra("custom_item", String.valueOf(appropriationList.get(position).getId()));
 
                         }
-                startActivityForResult(intent,1);
+                startActivityForResult(intentEdit,1);
 
 
             }
         });
-        if(customAllDatas.size()!=0) {
+        if(appropriationList.size()!=0) {
 
-                 adapter = new AppropriationAdapter(AppropriationListView.this, R.layout.appropriation_item, customAllDatas);
+                 adapter = new AppropriationAdapter(AppropriationListView.this, R.layout.appropriation_item, appropriationList);
                  listView.setAdapter(adapter);
             
         }
 
-        search.addTextChangedListener(textWatcher);
+        customSearch.addTextChangedListener(textWatcher);
 
     }
 
     //筛选条件
     public Object[] search(String name) {
-        if(searchDatas!=null) {
-            searchDatas.clear();
+        if(appropriationSearch!=null) {
+            appropriationSearch.clear();
         }
-        for (int i = 0; i < customAllDatas.size(); i++) {
-            int index = customAllDatas.get(i).getNuber().indexOf(name);
+        for (int i = 0; i < appropriationList.size(); i++) {
+            int index = appropriationList.get(i).getNuber().indexOf(name);
 
             // 存在匹配的数据
             if (index != -1) {
-                searchDatas.add(customAllDatas.get(i));
+                appropriationSearch.add(appropriationList.get(i));
             }
         }
-        return searchDatas.toArray();
+        return appropriationSearch.toArray();
     }
 
     public Object[] categorySearch(String name) {
 
-        if(searchDatas!=null) {
-            searchDatas.clear();
+        if(appropriationSearch!=null) {
+            appropriationSearch.clear();
         }
 
-        for (int i = 0; i < customAllDatas.size(); i++) {
+        for (int i = 0; i < appropriationList.size(); i++) {
 
         }
-        return searchDatas.toArray();
+        return appropriationSearch.toArray();
     }
 //adapter刷新,重写Filter方式会出现BUG.
     public void updateLayout(Object[] obj) {
-        if(searchDatas!=null) {
-            adapter = new AppropriationAdapter(AppropriationListView.this, R.layout.saleout_item, searchDatas);
+        if(appropriationSearch!=null) {
+            adapter = new AppropriationAdapter(AppropriationListView.this, R.layout.saleout_item, appropriationSearch);
             listView.setAdapter(adapter);
         }
     }
@@ -131,12 +131,12 @@ public class AppropriationListView extends CustomSearchBase implements View.OnCl
             case 1:
                 if(resultCode==RESULT_OK)
                 {
-                    if(customAllDatas.size()!=0) {
-                        customAllDatas.clear();
+                    if(appropriationList.size()!=0) {
+                        appropriationList.clear();
                     }
-                    customAllDatas=DataSupport.findAll(Appropriation.class);
+                    appropriationList=DataSupport.findAll(Appropriation.class);
 
-                    adapter = new AppropriationAdapter(AppropriationListView.this, R.layout.saleout_item, customAllDatas);
+                    adapter = new AppropriationAdapter(AppropriationListView.this, R.layout.saleout_item, appropriationList);
                     listView.setAdapter(adapter);
                 }
                 break;
@@ -154,8 +154,8 @@ public class AppropriationListView extends CustomSearchBase implements View.OnCl
                 break;
 
             case R.id.custom_toobar_right:
-                intentadd = new Intent(AppropriationListView.this, AppropriationForm.class);
-                startActivity(intentadd);
+                intentAdd = new Intent(AppropriationListView.this, AppropriationForm.class);
+                startActivity(intentAdd);
                 break;
 
 
@@ -183,7 +183,7 @@ public class AppropriationListView extends CustomSearchBase implements View.OnCl
         @Override
         public void afterTextChanged(Editable s) {
 
-            Object[] obj = search(search.getText().toString());
+            Object[] obj = search(customSearch.getText().toString());
             updateLayout(obj);
 
         }

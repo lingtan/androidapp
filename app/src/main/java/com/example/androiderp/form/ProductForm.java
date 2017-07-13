@@ -24,9 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.androiderp.CustomDataClass.Product;
-import com.example.androiderp.CustomDataClass.SalesOut;
 import com.example.androiderp.CustomDataClass.SalesOutEnty;
-import com.example.androiderp.CustomDataClass.ShoppingData;
 import com.example.androiderp.CustomDataClass.StockIniti;
 import com.example.androiderp.CustomDataClass.StockInitiData;
 import com.example.androiderp.CustomDataClass.StockInitiTem;
@@ -53,74 +51,73 @@ import java.util.List;
 
 public class ProductForm extends AppCompatActivity implements View.OnClickListener {
     private InputMethodManager manager;
-    private EditText name,number,purchaseprice,salesprice,barcode,model,note;
-    private ImageView numberscreen;
-    private TextView save,toobar_tile,toobar_back,toobar_add,category,brand,unit,stock_initi;
-    private Product supplier;
+    private EditText name,number, purchasePrice, salesPrice,barcode,model,note;
+    private ImageView numberScreen;
+    private TextView toobarSave, toobarTile, toobarBack, toobarAdd,category,brand,unit, stockIniti;
     private DisplayMetrics dm;
     private LinearLayout categoryLayout,brandLayout,unitLayout,hideLayoutOne,hideLayoutTow,hideLayoutthree;
     private RelativeLayout moreLayout;
     private Product customlist;
     private String categoryid,customid,edit;
-    private Button buttondelete;
+    private Button deleteButton;
     private Drawable errorIcon;
     private Common common;
-    private Intent  intentback;
+    private Intent intentBack;
     private List<PopuMenuDataStructure> popuMenuDatas;
-    private List<Product> findNumber;
-    private List<SalesOutEnty> findCustomDatas=new ArrayList<SalesOutEnty>();
-    List<StockInitiTem> stockInitiTems = new ArrayList<StockInitiTem>();
+    private List<Product> productList;
+    private List<SalesOutEnty> salesOutEntyList =new ArrayList<SalesOutEnty>();
+    List<StockInitiTem> stockInitiTemList = new ArrayList<StockInitiTem>();
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.productform);
         dm=new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
-        intentback= new Intent(ProductForm.this, ProductForm.class);
+        intentBack = new Intent(ProductForm.this, ProductForm.class);
         final Intent intent=getIntent();
         customid=intent.getStringExtra("product_item");
         edit=intent.getStringExtra("action");
         manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         name=(EditText)findViewById(R.id.product_name);
         number=(EditText)findViewById(R.id.product_number);
-        purchaseprice=(EditText)findViewById(R.id.product_purchaseprice);
-        salesprice=(EditText)findViewById(R.id.product_salesprice);
+        purchasePrice =(EditText)findViewById(R.id.product_purchaseprice);
+        salesPrice =(EditText)findViewById(R.id.product_salesprice);
         barcode=(EditText)findViewById(R.id.product_barcode);
         model=(EditText)findViewById(R.id.product_model);
         note=(EditText)findViewById(R.id.product_note);
-        numberscreen=(ImageView)findViewById(R.id.number_screen);
+        numberScreen =(ImageView)findViewById(R.id.number_screen);
         category=(TextView)findViewById(R.id.product_category);
         brand=(TextView)findViewById(R.id.product_brand);
         unit=(TextView)findViewById(R.id.product_unit);
-        stock_initi=(TextView)findViewById(R.id.product_stock_initi);
-        save=(TextView)findViewById(R.id.customtoobar_right);
-        toobar_tile=(TextView)findViewById(R.id.customtoobar_midd);
-        toobar_back=(TextView)findViewById(R.id.customtoobar_left);
+        stockIniti =(TextView)findViewById(R.id.product_stock_initi);
+        toobarSave =(TextView)findViewById(R.id.customtoobar_right);
+        toobarTile =(TextView)findViewById(R.id.customtoobar_midd);
+        toobarBack =(TextView)findViewById(R.id.customtoobar_left);
         categoryLayout=(LinearLayout)findViewById(R.id.product_category_layout);
         brandLayout=(LinearLayout)findViewById(R.id.product_brand_layout);
         unitLayout=(LinearLayout)findViewById(R.id.product_unit_layout);
-        toobar_add=(TextView)findViewById(R.id.customtoobar_r) ;
-        buttondelete=(Button)findViewById(R.id.loginbutton);
+        toobarAdd =(TextView)findViewById(R.id.customtoobar_r) ;
+        deleteButton =(Button)findViewById(R.id.loginbutton);
         moreLayout=(RelativeLayout)findViewById(R.id.productform_layout_more);
         hideLayoutOne=(LinearLayout)findViewById(R.id.productform_layout_hide_one);
         hideLayoutTow=(LinearLayout)findViewById(R.id.productform_layout_hide_tow);
         hideLayoutthree=(LinearLayout)findViewById(R.id.productform_layout_hide_three);
-        save.setOnClickListener(this);
-        toobar_back.setOnClickListener(this);
+        toobarSave.setOnClickListener(this);
+        toobarBack.setOnClickListener(this);
         categoryLayout.setOnClickListener(this);
         brandLayout.setOnClickListener(this);
         unitLayout.setOnClickListener(this);
-        toobar_add.setOnClickListener(this);
-        buttondelete.setOnClickListener(this);
+        toobarAdd.setOnClickListener(this);
+        deleteButton.setOnClickListener(this);
         moreLayout.setOnClickListener(this);
-        stock_initi.setOnClickListener(this);
-        save.setCompoundDrawables(null,null,null,null);
-        toobar_tile.setCompoundDrawables(null,null,null,null);
+        stockIniti.setOnClickListener(this);
+        toobarSave.setCompoundDrawables(null,null,null,null);
+        toobarTile.setCompoundDrawables(null,null,null,null);
         errorIcon = getResources().getDrawable(R.drawable.icon_error);
 // 设置图片大小
         errorIcon.setBounds(new Rect(0, 0, errorIcon.getIntrinsicWidth(),
                 errorIcon.getIntrinsicHeight()));
-        save.setText("保存");
+        toobarSave.setText("保存");
         formInit();
 
         popuMenuDatas = new ArrayList<PopuMenuDataStructure>();
@@ -129,7 +126,7 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
         PopuMenuDataStructure popuMenub = new PopuMenuDataStructure(android.R.drawable.ic_menu_edit, "松下");
         popuMenuDatas.add(popuMenub);
         showPopupWindow(popuMenuDatas);
-        numberscreen.setOnClickListener(new View.OnClickListener() {
+        numberScreen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -148,8 +145,8 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
             customlist = DataSupport.find(Product.class, Long.parseLong(customid));
             name.setText(customlist.getName());
             number.setText(customlist.getNumber());
-            purchaseprice.setText(customlist.getPurchaseprice());
-            salesprice.setText(customlist.getSalesprice());
+            purchasePrice.setText(customlist.getPurchasePrice());
+            salesPrice.setText(customlist.getSalesPrice());
             barcode.setText(customlist.getBarcode());
             model.setText(customlist.getModel());
             note.setText(customlist.getNote());
@@ -158,18 +155,18 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
             unit.setText(customlist.getUnit());
             if(edit.equals("edit")) {
                 number.setKeyListener(null);
-                toobar_add.setVisibility(View.VISIBLE);
-                buttondelete.setVisibility(View.VISIBLE);
+                toobarAdd.setVisibility(View.VISIBLE);
+                deleteButton.setVisibility(View.VISIBLE);
             }else {
-                toobar_add.setVisibility(View.GONE);
-                buttondelete.setVisibility(View.GONE);
+                toobarAdd.setVisibility(View.GONE);
+                deleteButton.setVisibility(View.GONE);
             }
         }
         if(edit!=null) {
             if (edit.equals("edit")) {
-                toobar_tile.setText("商品修改");
+                toobarTile.setText("商品修改");
             } else {
-                toobar_tile.setText("商品新增");
+                toobarTile.setText("商品新增");
             }
         }
     }
@@ -187,7 +184,7 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
 
         {
             case R.id.customtoobar_right:
-                findNumber=DataStructure.where("number = ?",number.getText().toString()).find(Product.class);
+                productList =DataStructure.where("number = ?",number.getText().toString()).find(Product.class);
                 if (TextUtils.isEmpty(name.getText().toString())) {
                     name.setError("需要输入商品名称",errorIcon);
                 }else if (TextUtils.isEmpty(category.getText().toString()))
@@ -195,52 +192,52 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                     category.setError("请选择分类",errorIcon);
                 }
                 else if (edit.equals("edit")) {
-                    supplier = new Product();
-                    supplier.setName(name.getText().toString());
-                    supplier.setNumber(number.getText().toString());
-                    supplier.setPurchaseprice(purchaseprice.getText().toString());
-                    supplier.setSalesprice(salesprice.getText().toString());
-                    supplier.setBarcode(barcode.getText().toString());
-                    supplier.setModel(model.getText().toString());
-                    supplier.setNote(note.getText().toString());
-                    supplier.setCategory(category.getText().toString());
-                    supplier.setBrand(brand.getText().toString());
-                    supplier.setUnit(unit.getText().toString());
-                    supplier.update(Long.parseLong(customid));
+              Product      product = new Product();
+                    product.setName(name.getText().toString());
+                    product.setNumber(number.getText().toString());
+                    product.setPurchasePrice(purchasePrice.getText().toString());
+                    product.setSalesPrice(salesPrice.getText().toString());
+                    product.setBarcode(barcode.getText().toString());
+                    product.setModel(model.getText().toString());
+                    product.setNote(note.getText().toString());
+                    product.setCategory(category.getText().toString());
+                    product.setBrand(brand.getText().toString());
+                    product.setUnit(unit.getText().toString());
+                    product.update(Long.parseLong(customid));
                     Toast.makeText(ProductForm.this,"修改成功",Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent();
                     setResult(RESULT_OK,intent);
                     hintKbTwo();
 
-                } else if (findNumber.size()>0)
+                } else if (productList.size()>0)
                 {
                     Toast.makeText(ProductForm.this,"货号已经存在",Toast.LENGTH_SHORT).show();
                 }else
 
                 {
-                    supplier = new Product();
-                    supplier.setName(name.getText().toString());
-                    supplier.setNumber(number.getText().toString());
-                    supplier.setPurchaseprice(purchaseprice.getText().toString());
-                    supplier.setSalesprice(salesprice.getText().toString());
-                    supplier.setBarcode(barcode.getText().toString());
-                    supplier.setModel(model.getText().toString());
-                    supplier.setNote(note.getText().toString());
-                    supplier.setCategory(category.getText().toString());
-                    supplier.setBrand(brand.getText().toString());
-                    supplier.setUnit(unit.getText().toString());
-                    supplier.setImage(R.drawable.listvist_item_delete);
-                    supplier.setBadgeshow("");
-                    supplier.save();
+              Product      product = new Product();
+                    product.setName(name.getText().toString());
+                    product.setNumber(number.getText().toString());
+                    product.setPurchasePrice(purchasePrice.getText().toString());
+                    product.setSalesPrice(salesPrice.getText().toString());
+                    product.setBarcode(barcode.getText().toString());
+                    product.setModel(model.getText().toString());
+                    product.setNote(note.getText().toString());
+                    product.setCategory(category.getText().toString());
+                    product.setBrand(brand.getText().toString());
+                    product.setUnit(unit.getText().toString());
+                    product.setImage(R.drawable.listvist_item_delete);
+                    product.setBadgeShow("");
+                    product.save();
 
-                    for(int i = 0; i < stockInitiTems.size(); i++) {
+                    for(int i = 0; i < stockInitiTemList.size(); i++) {
 
-                        if(stockInitiTems.get(i).getSalefqty()>0) {
+                        if(stockInitiTemList.get(i).getQuantity()>0) {
                             StockIniti stockIniti=new StockIniti();
                             stockIniti.setName(name.getText().toString());
                             stockIniti.setNumber(number.getText().toString());
-                            stockIniti.setStock(stockInitiTems.get(i).getSalename());
-                            stockIniti.setFqty(stockInitiTems.get(i).getSalefqty());
+                            stockIniti.setStock(stockInitiTemList.get(i).getName());
+                            stockIniti.setQuantity(stockInitiTemList.get(i).getQuantity());
                             stockIniti.save();
 
                         }
@@ -252,8 +249,8 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                     customid=String.valueOf(DataSupport.findLast(Product.class).getId());
                     edit="edit";
                     hideLayoutthree.setVisibility(View.GONE);
-                    toobar_add.setVisibility(View.VISIBLE);
-                    buttondelete.setVisibility(View.VISIBLE);
+                    toobarAdd.setVisibility(View.VISIBLE);
+                    deleteButton.setVisibility(View.VISIBLE);
                     Intent intent = new Intent();
                     setResult(RESULT_OK,intent);
                     hintKbTwo();
@@ -366,7 +363,7 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
 
                 Intent intentstock=new Intent(ProductForm.this, StockInitiListView.class);
                 StockInitiData stockInitiData=new StockInitiData();
-                stockInitiData.setShoppingdata(stockInitiTems);
+                stockInitiData.setShoppingdata(stockInitiTemList);
                 intentstock.putExtra("stockinitidata",stockInitiData);
                 startActivityForResult(intentstock,10);
 
@@ -385,17 +382,17 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                 if(popuMenuDatas.get(position).getName().equals("商品新增"))
                 {
 
-                    intentback.removeExtra("product_item");
-                    intentback.putExtra("action","add");
-                    startActivityForResult(intentback,4);
+                    intentBack.removeExtra("product_item");
+                    intentBack.putExtra("action","add");
+                    startActivityForResult(intentBack,4);
                 }
                 else if(popuMenuDatas.get(position).getName().equals("商品复制"))
 
                 {
-                    intentback.removeExtra("product_item");
-                    intentback.putExtra("action","add");
-                    intentback.putExtra("product_item", customid);
-                    startActivityForResult(intentback,4);
+                    intentBack.removeExtra("product_item");
+                    intentBack.putExtra("action","add");
+                    intentBack.putExtra("product_item", customid);
+                    startActivityForResult(intentBack,4);
 
                 }else
                 {
@@ -445,14 +442,14 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                 if(resultCode==RESULT_OK) {
 
                     StockInitiData stockInitiData=data.getParcelableExtra("stockinitidata");
-                    stockInitiTems=stockInitiData.getShoppingdata();
+                    stockInitiTemList =stockInitiData.getShoppingdata();
 
-                    for(StockInitiTem stock:stockInitiTems)
+                    for(StockInitiTem stock: stockInitiTemList)
 
                     {
                         DecimalFormat df = new DecimalFormat("#####0.00");
-                        Log.d("linga",stock.getSalename());
-                        Log.d("linga",df.format(stock.getSalefqty()));
+                        Log.d("linga",stock.getName());
+                        Log.d("linga",df.format(stock.getQuantity()));
 
 
 
@@ -479,9 +476,9 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
     public boolean isCustom(String name)
     {
 
-        findCustomDatas=DataSupport.where("itemname =?",name).find(SalesOutEnty.class);
+        salesOutEntyList =DataSupport.where("itemname =?",name).find(SalesOutEnty.class);
 
-        if (findCustomDatas.size()>0)
+        if (salesOutEntyList.size()>0)
         {
             return true;
         }else {

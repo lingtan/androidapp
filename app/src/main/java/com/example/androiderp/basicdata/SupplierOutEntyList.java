@@ -39,20 +39,20 @@ import java.util.List;
 public class SupplierOutEntyList extends CustomSearchBase implements View.OnClickListener, AdapterView.OnItemClickListener,
         SlideAndDragListView.OnMenuItemClickListener, SlideAndDragListView.OnItemDeleteListener {
     private InputMethodManager manager;
-    private TextView note,save,toobar_tile,toobar_back,toobar_add,category,name,number,data,consignment,totalamout,totalfqty;
+    private TextView note,save, toobarTile, toobarBack, toobarAdd,category,name,number,data,consignment, totalAmout, totalQuantity;
     private DisplayMetrics dm;
-    private SalesOut customlist;
+    private SalesOut salesOutlist;
     private String customid;
     private Drawable errorIcon;
     private Common common;
-    private Intent  intentback;
+    private Intent intentBack;
     private List<PopuMenuDataStructure> popuMenuDatas;
     private List<SalesOutEnty> salesOutEntyList=new ArrayList<SalesOutEnty>();
     private List<CommonDataStructure> listdatas = new ArrayList<CommonDataStructure>();
-    private SlideAndDragListView<CommonDataStructure> plistView;
+    private SlideAndDragListView<CommonDataStructure> listView;
     private SaleProductListViewAdapter adapter;
-    private Menu mMenu;
-    private List<Stock> stocks;
+    private Menu menu;
+    private List<Stock> stockList;
     public void iniView() {
         setContentView(R.layout.saleoutentyform);
         initMenu();
@@ -60,7 +60,7 @@ public class SupplierOutEntyList extends CustomSearchBase implements View.OnClic
         dm=new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         showStockWindow();
-        intentback= new Intent(SupplierOutEntyList.this, SupplierOutEntyList.class);
+        intentBack = new Intent(SupplierOutEntyList.this, SupplierOutEntyList.class);
         final Intent intent=getIntent();
         customid=intent.getStringExtra("custom_item");
         manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -71,18 +71,18 @@ public class SupplierOutEntyList extends CustomSearchBase implements View.OnClic
         note=(TextView)findViewById(R.id.product_note);
         category=(TextView)findViewById(R.id.product_category);
         save=(TextView)findViewById(R.id.customtoobar_right);
-        toobar_tile=(TextView)findViewById(R.id.customtoobar_midd);
-        toobar_back=(TextView)findViewById(R.id.customtoobar_left);
-        toobar_add=(TextView)findViewById(R.id.customtoobar_r) ;
-        totalfqty=(TextView)findViewById(R.id.saleoutenty_fqty);
-        totalamout=(TextView)findViewById(R.id.saleoutenty_amount);
+        toobarTile =(TextView)findViewById(R.id.customtoobar_midd);
+        toobarBack =(TextView)findViewById(R.id.customtoobar_left);
+        toobarAdd =(TextView)findViewById(R.id.customtoobar_r) ;
+        totalQuantity =(TextView)findViewById(R.id.saleoutenty_fqty);
+        totalAmout =(TextView)findViewById(R.id.saleoutenty_amount);
         save.setOnClickListener(this);
-        toobar_back.setOnClickListener(this);
-        toobar_add.setOnClickListener(this);
+        toobarBack.setOnClickListener(this);
+        toobarAdd.setOnClickListener(this);
         Drawable more= getResources().getDrawable(R.drawable.toobar_more);
         more.setBounds(0, 0, more.getMinimumWidth(), more.getMinimumHeight());
         save.setCompoundDrawables(more,null,null,null);
-        toobar_tile.setCompoundDrawables(null,null,null,null);
+        toobarTile.setCompoundDrawables(null,null,null,null);
         errorIcon = getResources().getDrawable(R.drawable.icon_error);
 // 设置图片大小
         errorIcon.setBounds(new Rect(0, 0, errorIcon.getIntrinsicWidth(),
@@ -91,7 +91,7 @@ public class SupplierOutEntyList extends CustomSearchBase implements View.OnClic
         formInit();
 
 
-        toobar_tile.setText("采购明细");
+        toobarTile.setText("采购明细");
 
     }
     private void  formInit()
@@ -99,44 +99,44 @@ public class SupplierOutEntyList extends CustomSearchBase implements View.OnClic
         DecimalFormat df = new DecimalFormat("#####0.00");
         if(customid!=null) {
 
-            customlist = DataSupport.find(SalesOut.class, Long.parseLong(customid),true);
-            salesOutEntyList=customlist.getSalesOutEntyList();
-            name.setText(customlist.getCustomer());
-            number.setText(customlist.getStock());
-            data.setText(customlist.getFdate().toString().trim());
-            category.setText(customlist.getSalesman());
-            consignment.setText(customlist.getConsignment());
-            totalamout.setText("¥"+df.format(customlist.getSaleamount()));
-            totalfqty.setText(String.valueOf(customlist.getSalefqty()));
-            note.setText(customlist.getNote());
+            salesOutlist = DataSupport.find(SalesOut.class, Long.parseLong(customid),true);
+            salesOutEntyList= salesOutlist.getSalesOutEntyList();
+            name.setText(salesOutlist.getCustomer());
+            number.setText(salesOutlist.getStock());
+            data.setText(salesOutlist.getDate().toString().trim());
+            category.setText(salesOutlist.getSalesman());
+            consignment.setText(salesOutlist.getConsignment());
+            totalAmout.setText("¥"+df.format(salesOutlist.getAmount()));
+            totalQuantity.setText(String.valueOf(salesOutlist.getQuantity()));
+            note.setText(salesOutlist.getNote());
           for(SalesOutEnty salesOutEnty:salesOutEntyList) {
               CommonDataStructure commonData = new CommonDataStructure();
               commonData.setId(salesOutEnty.getId());
-              commonData.setNumber(salesOutEnty.getItemnumber());
-              commonData.setName(salesOutEnty.getItemname());
-              commonData.setFqty(salesOutEnty.getItemfqty());
-              commonData.setSaleamount(salesOutEnty.getItemamount());
-              commonData.setSalesprice(salesOutEnty.getItemprice());
+              commonData.setNumber(salesOutEnty.getNumber());
+              commonData.setName(salesOutEnty.getName());
+              commonData.setFqty(salesOutEnty.getQuantity());
+              commonData.setSaleamount(salesOutEnty.getAmount());
+              commonData.setSalesprice(salesOutEnty.getPrice());
 
               listdatas.add(commonData);
           }
             adapter = new SaleProductListViewAdapter(SupplierOutEntyList.this, R.layout.saleproduct_item, listdatas);
-            plistView.setAdapter(adapter);
-            setListViewHeightBasedOnChildren(plistView);
+            listView.setAdapter(adapter);
+            setListViewHeightBasedOnChildren(listView);
 
         }
     }
     public void initMenu() {
-        mMenu = new Menu(true);
+        menu = new Menu(true);
 
     }
 
     public void initUiAndListener() {
-        plistView = (SlideAndDragListView) findViewById(R.id.saleproduct_listview);
-        plistView.setMenu(mMenu);
-        plistView.setOnItemClickListener(this);
-        plistView.setOnMenuItemClickListener(this);
-        plistView.setOnItemDeleteListener(this);
+        listView = (SlideAndDragListView) findViewById(R.id.saleproduct_listview);
+        listView.setMenu(menu);
+        listView.setOnItemClickListener(this);
+        listView.setOnMenuItemClickListener(this);
+        listView.setOnItemDeleteListener(this);
     }
     @Override
     public int onMenuItemClick(View v, final int itemPosition, int buttonPosition, int direction) {
@@ -222,17 +222,17 @@ public class SupplierOutEntyList extends CustomSearchBase implements View.OnClic
                 if(popuMenuDatas.get(position).getName().equals("商品新增"))
                 {
 
-                    intentback.removeExtra("product_item");
-                    intentback.putExtra("action","add");
-                    startActivityForResult(intentback,4);
+                    intentBack.removeExtra("product_item");
+                    intentBack.putExtra("action","add");
+                    startActivityForResult(intentBack,4);
                 }
                 else if(popuMenuDatas.get(position).getName().equals("商品复制"))
 
                 {
-                    intentback.removeExtra("product_item");
-                    intentback.putExtra("action","add");
-                    intentback.putExtra("product_item", customid);
-                    startActivityForResult(intentback,4);
+                    intentBack.removeExtra("product_item");
+                    intentBack.putExtra("action","add");
+                    intentBack.putExtra("product_item", customid);
+                    startActivityForResult(intentBack,4);
 
                 }else
                 {
@@ -259,8 +259,8 @@ public class SupplierOutEntyList extends CustomSearchBase implements View.OnClic
     private void showStockWindow() {
         common = new Common();
         popuMenuDatas = new ArrayList<PopuMenuDataStructure>();
-        stocks= DataSupport.findAll(Stock.class);
-        for(Stock stock:stocks)
+        stockList = DataSupport.findAll(Stock.class);
+        for(Stock stock: stockList)
 
         {
             PopuMenuDataStructure popuMenua = new PopuMenuDataStructure(R.drawable.poppu_wrie, stock.getName());

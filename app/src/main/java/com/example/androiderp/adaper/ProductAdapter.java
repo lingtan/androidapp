@@ -2,7 +2,6 @@ package com.example.androiderp.adaper;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,7 +62,7 @@ public class ProductAdapter extends ArrayAdapter<Product>   {
             viewHolder.image=(ImageView) view.findViewById(R.id.custom_item_layout_one_image);
             viewHolder.number = (TextView) view.findViewById (R.id.custom_item_layout_number);
             viewHolder.model = (TextView) view.findViewById (R.id.custom_item_layout_model);
-            viewHolder.salesprice = (TextView) view.findViewById (R.id.custom_item_layout_salesprice);
+            viewHolder.salesPrice = (TextView) view.findViewById (R.id.custom_item_layout_salesprice);
 
             view.setTag(viewHolder); // 将ViewHolder存储在View中
         } else {
@@ -91,7 +90,7 @@ public class ProductAdapter extends ArrayAdapter<Product>   {
         viewHolder.name.setText(data.get(position).getName().toString());
         viewHolder.number.setText(data.get(position).getNumber());
         viewHolder.model.setText(data.get(position).getModel());
-        viewHolder.salesprice.setText("¥"+data.get(position).getSalesprice().toString());
+        viewHolder.salesPrice.setText("¥"+data.get(position).getSalesPrice().toString());
         viewHolder.image.setImageResource(data.get(position).getImage());
 
 
@@ -118,7 +117,7 @@ public void setSeclection(int position)
         TextView  name;
         TextView  number;
         TextView  model;
-        TextView  salesprice;
+        TextView  salesPrice;
 
 
 

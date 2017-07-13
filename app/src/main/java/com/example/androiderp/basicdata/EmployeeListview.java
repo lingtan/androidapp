@@ -9,7 +9,6 @@ import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,9 +21,7 @@ import com.example.androiderp.adaper.CommonListViewAdapter;
 import com.example.androiderp.adaper.DataStructure;
 import com.example.androiderp.custom.CustomSearch;
 import com.example.androiderp.custom.CustomSearchBase;
-import com.example.androiderp.form.CustomForm;
 import com.example.androiderp.form.EmployeeForm;
-import com.example.androiderp.form.ProductCategoryForm;
 import com.example.androiderp.listview.Menu;
 import com.example.androiderp.listview.MenuItem;
 import com.example.androiderp.listview.SlideAndDragListView;
@@ -40,33 +37,33 @@ public class EmployeeListview extends CustomSearchBase implements View.OnClickLi
         SlideAndDragListView.OnMenuItemClickListener, SlideAndDragListView.OnItemDeleteListener {
     private List<CommonDataStructure> listdatas = new ArrayList<CommonDataStructure>();
     private CommonListViewAdapter adapter;
-    private SlideAndDragListView<CommonDataStructure>  plistView;
+    private SlideAndDragListView<CommonDataStructure> listView;
     private DisplayMetrics dm;
-    private List<CommonDataStructure> searchdatas= new ArrayList<CommonDataStructure>();
-    private List<Employee> customlist;
-    private TextView custom_toobar_l,custom_toobar_r,custom_toobar_m;
-    private CustomSearch custom_search;
+    private List<CommonDataStructure> commonDataStructureSearch = new ArrayList<CommonDataStructure>();
+    private List<Employee> employeeList;
+    private TextView toobarBack, toobarAdd, toobarTile;
+    private CustomSearch customSearch;
     private String categoryid;
-    private Menu mMenu;
-    private List<SalesOut> findCustomDatas=new ArrayList<SalesOut>();
+    private Menu menu;
+    private List<SalesOut> salesOutList =new ArrayList<SalesOut>();
     @Override
     public void iniView(){
         setContentView(R.layout.customlistview_category_layout);
         initMenu();
         initUiAndListener();
-        custom_toobar_l=(TextView)findViewById(R.id.custom_toobar_left) ;
-        custom_toobar_m=(TextView)findViewById(R.id.custom_toobar_midd);
-        custom_toobar_m.setText("职员");
-        custom_toobar_r=(TextView)findViewById(R.id.custom_toobar_right);
-        custom_toobar_l.setOnClickListener(this);
-        custom_toobar_r.setOnClickListener(this);
-        custom_toobar_m.setOnClickListener(this);
-        custom_search = (CustomSearch) findViewById(R.id.search);
+        toobarBack =(TextView)findViewById(R.id.custom_toobar_left) ;
+        toobarTile =(TextView)findViewById(R.id.custom_toobar_midd);
+        toobarTile.setText("职员");
+        toobarAdd =(TextView)findViewById(R.id.custom_toobar_right);
+        toobarBack.setOnClickListener(this);
+        toobarAdd.setOnClickListener(this);
+        toobarTile.setOnClickListener(this);
+        customSearch = (CustomSearch) findViewById(R.id.search);
         Intent intent=getIntent();
         categoryid=intent.getStringExtra("category");
-        customlist= DataSupport.findAll(Employee.class);
-        custom_toobar_m.setCompoundDrawables(null,null,null,null);
-        for(Employee employee:customlist)
+        employeeList = DataSupport.findAll(Employee.class);
+        toobarTile.setCompoundDrawables(null,null,null,null);
+        for(Employee employee: employeeList)
 
         {
 
@@ -88,30 +85,30 @@ public class EmployeeListview extends CustomSearchBase implements View.OnClickLi
              if(categoryid!=null) {
                  Object[] obj = searchCategory(categoryid);
                  updateLayout("10");
-                 custom_toobar_m.setText(categoryid);
+                 toobarTile.setText(categoryid);
              }else {
                  adapter = new CommonListViewAdapter(EmployeeListview.this, R.layout.custom_item, listdatas);
-                 plistView.setAdapter(adapter);
+                 listView.setAdapter(adapter);
              }
 
         }
 
-        custom_search.addTextChangedListener(textWatcher);
+        customSearch.addTextChangedListener(textWatcher);
 
 
 
 
     }
     public void initMenu() {
-        mMenu = new Menu(true);
-        mMenu.addItem(new MenuItem.Builder().setWidth((int) getResources().getDimension(R.dimen.slv_item_bg_btn_width))
+        menu = new Menu(true);
+        menu.addItem(new MenuItem.Builder().setWidth((int) getResources().getDimension(R.dimen.slv_item_bg_btn_width))
                 .setBackground(Utils.getDrawable(this, R.drawable.btn_right0))
                 .setText("编辑")
                 .setDirection(MenuItem.DIRECTION_RIGHT)
                 .setTextColor(Color.BLACK)
                 .setTextSize(14)
                 .build());
-        mMenu.addItem(new MenuItem.Builder().setWidth((int) getResources().getDimension(R.dimen.slv_item_bg_btn_width_img))
+        menu.addItem(new MenuItem.Builder().setWidth((int) getResources().getDimension(R.dimen.slv_item_bg_btn_width_img))
                 .setBackground(Utils.getDrawable(this, R.drawable.btn_right1))
                 .setDirection(MenuItem.DIRECTION_RIGHT)
                 .setText("删除")
@@ -120,11 +117,11 @@ public class EmployeeListview extends CustomSearchBase implements View.OnClickLi
     }
 
     public void initUiAndListener() {
-        plistView = (SlideAndDragListView) findViewById(R.id.custom_listview_category);
-        plistView.setMenu(mMenu);
-        plistView.setOnItemClickListener(this);
-        plistView.setOnMenuItemClickListener(this);
-        plistView.setOnItemDeleteListener(this);
+        listView = (SlideAndDragListView) findViewById(R.id.custom_listview_category);
+        listView.setMenu(menu);
+        listView.setOnItemClickListener(this);
+        listView.setOnMenuItemClickListener(this);
+        listView.setOnItemDeleteListener(this);
     }
     @Override
     public int onMenuItemClick(View v, final int itemPosition, int buttonPosition, int direction) {
@@ -133,10 +130,10 @@ public class EmployeeListview extends CustomSearchBase implements View.OnClickLi
                 switch (buttonPosition) {
                     case 0:
                         Intent intent=new Intent(EmployeeListview.this,EmployeeForm.class);
-                        if(searchdatas.size()!=0) {
+                        if(commonDataStructureSearch.size()!=0) {
 
                             intent.putExtra("action", "edit");
-                            intent.putExtra("customid", String.valueOf(searchdatas.get(itemPosition).getId()));
+                            intent.putExtra("customid", String.valueOf(commonDataStructureSearch.get(itemPosition).getId()));
 
 
                         }else {
@@ -155,13 +152,13 @@ public class EmployeeListview extends CustomSearchBase implements View.OnClickLi
                         dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                if(isCustom(listdatas.get(itemPosition - plistView.getHeaderViewsCount()).getName().toString()))
+                                if(isCustom(listdatas.get(itemPosition - listView.getHeaderViewsCount()).getName().toString()))
                                 {
                                     Toast.makeText(EmployeeListview.this,"已经有业务发生，不能删除",Toast.LENGTH_SHORT).show();
                                     adapter.notifyDataSetChanged();
                                 }else {
 
-                                    DataStructure.deleteAll(ProductCategory.class, "name = ?", listdatas.get(itemPosition - plistView.getHeaderViewsCount()).getName().toString());
+                                    DataStructure.deleteAll(ProductCategory.class, "name = ?", listdatas.get(itemPosition - listView.getHeaderViewsCount()).getName().toString());
 
                                     AlertDialog.Builder dialogOK = new AlertDialog.Builder(EmployeeListview.this);
                                     dialogOK.setMessage("该职员已经删除");
@@ -169,7 +166,7 @@ public class EmployeeListview extends CustomSearchBase implements View.OnClickLi
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
 
-                                            listdatas.remove(itemPosition - plistView.getHeaderViewsCount());
+                                            listdatas.remove(itemPosition - listView.getHeaderViewsCount());
                                             adapter.notifyDataSetChanged();
                                         }
                                     });
@@ -206,41 +203,41 @@ public class EmployeeListview extends CustomSearchBase implements View.OnClickLi
     }
     //筛选条件
     public Object[] searchItem(String name) {
-        if(searchdatas!=null) {
-            searchdatas.clear();
+        if(commonDataStructureSearch !=null) {
+            commonDataStructureSearch.clear();
         }
         for (int i = 0; i < listdatas.size(); i++) {
             int index = listdatas.get(i).getName().indexOf(name);
             // 存在匹配的数据
             if (index != -1) {
-                searchdatas.add(listdatas.get(i));
+                commonDataStructureSearch.add(listdatas.get(i));
             }
         }
-        return searchdatas.toArray();
+        return commonDataStructureSearch.toArray();
     }
 
     public Object[] searchCategory(String name) {
 
-        if(searchdatas!=null) {
-            searchdatas.clear();
+        if(commonDataStructureSearch !=null) {
+            commonDataStructureSearch.clear();
         }
         for (int i = 0; i < listdatas.size(); i++) {
             if(listdatas.get(i).getCategory()!=null) {
                 int index = listdatas.get(i).getCategory().indexOf(name);
                 // 存在匹配的数据
                 if (index != -1) {
-                    searchdatas.add(listdatas.get(i));
+                    commonDataStructureSearch.add(listdatas.get(i));
                 }
             }
         }
-        return searchdatas.toArray();
+        return commonDataStructureSearch.toArray();
     }
 //adapter刷新,重写Filter方式会出现BUG.
     public void updateLayout(String name) {
-        if(searchdatas!=null) {
+        if(commonDataStructureSearch !=null) {
 
-            adapter = new CommonListViewAdapter(EmployeeListview.this, R.layout.custom_item, searchdatas);
-            plistView.setAdapter(adapter);
+            adapter = new CommonListViewAdapter(EmployeeListview.this, R.layout.custom_item, commonDataStructureSearch);
+            listView.setAdapter(adapter);
         }
     }
 
@@ -277,8 +274,8 @@ public class EmployeeListview extends CustomSearchBase implements View.OnClickLi
                     if(listdatas.size()!=0) {
                         listdatas.clear();
                     }
-                    customlist= DataSupport.findAll(Employee.class);
-                    for(Employee employee:customlist)
+                    employeeList = DataSupport.findAll(Employee.class);
+                    for(Employee employee: employeeList)
 
                     {
                         CommonDataStructure commonData=new CommonDataStructure();
@@ -291,7 +288,7 @@ public class EmployeeListview extends CustomSearchBase implements View.OnClickLi
 
                     }
                     adapter = new CommonListViewAdapter(EmployeeListview.this, R.layout.custom_item, listdatas);
-                    plistView.setAdapter(adapter);
+                    listView.setAdapter(adapter);
 
 
                 }
@@ -318,8 +315,8 @@ public class EmployeeListview extends CustomSearchBase implements View.OnClickLi
         @Override
         public void afterTextChanged(Editable s) {
 
-            Object[] obj = searchItem(custom_search.getText().toString());
-            updateLayout(custom_search.getText().toString());
+            Object[] obj = searchItem(customSearch.getText().toString());
+            updateLayout(customSearch.getText().toString());
 
         }
     };
@@ -327,9 +324,9 @@ public class EmployeeListview extends CustomSearchBase implements View.OnClickLi
     public boolean isCustom(String name)
     {
 
-        findCustomDatas=DataSupport.where("salesman =?",name).find(SalesOut.class);
+        salesOutList =DataSupport.where("salesman =?",name).find(SalesOut.class);
 
-        if (findCustomDatas.size()>0)
+        if (salesOutList.size()>0)
         {
             return true;
         }else {

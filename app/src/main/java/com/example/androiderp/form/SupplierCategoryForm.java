@@ -9,7 +9,6 @@ import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -24,11 +23,9 @@ import org.litepal.crud.DataSupport;
 
 public class SupplierCategoryForm extends AppCompatActivity implements View.OnClickListener {
     private InputMethodManager manager;
-    private EditText username;
-    private TextView usersave,toobar_tile,toobar_back;
-    private Button save;
-    private SupplierCategory custom;
-    private SupplierCategory customlist;
+    private EditText userName;
+    private TextView toobarSave, toobarTile, toobarBack;
+    private SupplierCategory supplierCategory;
     private String customid,edit;
     private Intent intent;
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,18 +33,18 @@ public class SupplierCategoryForm extends AppCompatActivity implements View.OnCl
         super.onCreate(savedInstanceState);
         setContentView(R.layout.suppliercategory);
         manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        username=(EditText)findViewById(R.id.suppliercategory_name);
+        userName =(EditText)findViewById(R.id.suppliercategory_name);
         intent=getIntent();
         customid=intent.getStringExtra("customid");
         edit=intent.getStringExtra("action");
-        usersave=(TextView)findViewById(R.id.custom_toobar_right);
-        toobar_tile=(TextView)findViewById(R.id.custom_toobar_midd);
-        toobar_back=(TextView)findViewById(R.id.custom_toobar_left);
-        usersave.setCompoundDrawables(null,null,null,null);
-        toobar_tile.setCompoundDrawables(null,null,null,null);
-        usersave.setText("保存");
-        usersave.setOnClickListener(this);
-        toobar_back.setOnClickListener(this);
+        toobarSave =(TextView)findViewById(R.id.custom_toobar_right);
+        toobarTile =(TextView)findViewById(R.id.custom_toobar_midd);
+        toobarBack =(TextView)findViewById(R.id.custom_toobar_left);
+        toobarSave.setCompoundDrawables(null,null,null,null);
+        toobarTile.setCompoundDrawables(null,null,null,null);
+        toobarSave.setText("保存");
+        toobarSave.setOnClickListener(this);
+        toobarBack.setOnClickListener(this);
         formInit();
 
 
@@ -55,14 +52,14 @@ public class SupplierCategoryForm extends AppCompatActivity implements View.OnCl
     }
     private  void  formInit()
     {if(customid!=null) {
-        customlist = DataSupport.find(SupplierCategory.class, Long.parseLong(customid));
-        username.setText(customlist.getName());
+        supplierCategory = DataSupport.find(SupplierCategory.class, Long.parseLong(customid));
+        userName.setText(supplierCategory.getName());
     }
         if(edit.equals("edit"))
         {
-            toobar_tile.setText("供应商分类修改");
+            toobarTile.setText("供应商分类修改");
         }else {
-            toobar_tile.setText("供应商分类新增");
+            toobarTile.setText("供应商分类新增");
         }
     }
     @Override
@@ -71,20 +68,20 @@ public class SupplierCategoryForm extends AppCompatActivity implements View.OnCl
         {
             case R.id.custom_toobar_right:
 
-                if (TextUtils.isEmpty(username.getText().toString())) {
-                    username.setError("需要输入供应商分类名称");
+                if (TextUtils.isEmpty(userName.getText().toString())) {
+                    userName.setError("需要输入供应商分类名称");
                 } else {
                     if (edit.equals("edit")) {
-                        custom = new SupplierCategory();
-                        custom.setName(username.getText().toString());
-                        custom.update(Long.parseLong(customid));
+               SupplierCategory         supplierCategory = new SupplierCategory();
+                        supplierCategory.setName(userName.getText().toString());
+                        supplierCategory.update(Long.parseLong(customid));
 
                         setResult(RESULT_OK,intent);
                         SupplierCategoryForm.this.finish();
                     } else {
-                        custom = new SupplierCategory();
-                        custom.setName(username.getText().toString());
-                        custom.save();
+              SupplierCategory          supplierCategory = new SupplierCategory();
+                        supplierCategory.setName(userName.getText().toString());
+                        supplierCategory.save();
                         setResult(RESULT_OK,intent);
                         SupplierCategoryForm.this.finish();
                     }

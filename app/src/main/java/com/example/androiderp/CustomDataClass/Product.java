@@ -10,17 +10,17 @@ public class Product extends DataSupport {
     private int id;
     private String name;
     private String number;
-    private String purchaseprice;
-    private String salesprice;
+    private String purchasePrice;
+    private String salesPrice;
     private String barcode;
     private String  model;
     private String  note;
     private String category;
     private String brand;
     private String unit;
-    private int image;
-    private double stockfqty;
-    private String badgeshow;
+    private int    image;
+    private double quantity;
+    private String badgeShow;
 
     public int getId() {
         return id;
@@ -46,20 +46,20 @@ public class Product extends DataSupport {
         this.number = number;
     }
 
-    public String getPurchaseprice() {
-        return purchaseprice;
+    public String getPurchasePrice() {
+        return purchasePrice;
     }
 
-    public void setPurchaseprice(String purchaseprice) {
-        this.purchaseprice = purchaseprice;
+    public void setPurchasePrice(String purchasePrice) {
+        this.purchasePrice = purchasePrice;
     }
 
-    public String getSalesprice() {
-        return salesprice;
+    public String getSalesPrice() {
+        return salesPrice;
     }
 
-    public void setSalesprice(String salesprice) {
-        this.salesprice = salesprice;
+    public void setSalesPrice(String salesPrice) {
+        this.salesPrice = salesPrice;
     }
 
     public String getBarcode() {
@@ -118,19 +118,19 @@ public class Product extends DataSupport {
         this.image = image;
     }
 
-    public double getStockfqty() {
-        return stockfqty;
+    public double getQuantity() {
+        return quantity;
     }
 
-    public void setStockfqty(double stockfqty) {
-        this.stockfqty = stockfqty;
+    public void setQuantity(double quantity) {
+        this.quantity = quantity;
     }
 
-    public String getBadgeshow() {
-        return badgeshow;
+    public String getBadgeShow() {
+        return badgeShow;
     }
 
-    public void setBadgeshow(String badgeshow) {
-        this.badgeshow = badgeshow;
+    public void setBadgeShow(String badgeShow) {
+        this.badgeShow = badgeShow;
     }
 }

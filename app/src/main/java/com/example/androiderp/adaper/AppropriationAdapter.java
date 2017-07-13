@@ -9,7 +9,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.androiderp.CustomDataClass.Appropriation;
-import com.example.androiderp.CustomDataClass.SalesOut;
 import com.example.androiderp.R;
 
 import java.text.DecimalFormat;
@@ -59,7 +58,7 @@ public class AppropriationAdapter extends ArrayAdapter<Appropriation>   {
             view = LayoutInflater.from(getContext()).inflate(resourceId, parent, false);
             viewHolder = new ViewHolder();
             viewHolder.nuber=(TextView) view.findViewById(R.id.saleout_number);
-            viewHolder.saleamount = (TextView) view.findViewById (R.id.saleout_amount);
+            viewHolder.saleAmount = (TextView) view.findViewById (R.id.saleout_amount);
             viewHolder.Fdate = (TextView) view.findViewById (R.id.saleout_fdate);
             viewHolder.stock = (TextView) view.findViewById (R.id.saleout_stock);
             viewHolder.image=(ImageView) view.findViewById(R.id.appropriation_arrow);
@@ -74,9 +73,9 @@ public class AppropriationAdapter extends ArrayAdapter<Appropriation>   {
         DecimalFormat df = new DecimalFormat("#####0.00");
         // 重新获取ViewHolder
         viewHolder.nuber.setText(data.get(position).getNuber());
-        viewHolder.saleamount.setText(data.get(position).getInstock());
-        viewHolder.Fdate.setText(data.get(position).getFdate().toString());
-        viewHolder.stock.setText(data.get(position).getOutstock());
+        viewHolder.saleAmount.setText(data.get(position).getStockIn());
+        viewHolder.Fdate.setText(data.get(position).getDate().toString());
+        viewHolder.stock.setText(data.get(position).getStockOut());
         viewHolder.image.setImageResource(R.drawable.appropriation_arrow);
 
 
@@ -100,7 +99,7 @@ public void setSeclection(int position)
     class ViewHolder {
         TextView  Fdate;
         TextView  nuber;
-        TextView saleamount;
+        TextView saleAmount;
         TextView stock;
         ImageView image;
 

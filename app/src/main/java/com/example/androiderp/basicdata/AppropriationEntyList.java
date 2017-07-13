@@ -16,14 +16,11 @@ import android.widget.TextView;
 import com.example.androiderp.CustomDataClass.Appropriation;
 import com.example.androiderp.CustomDataClass.AppropriationEnty;
 import com.example.androiderp.CustomDataClass.Employee;
-import com.example.androiderp.CustomDataClass.SalesOut;
-import com.example.androiderp.CustomDataClass.SalesOutEnty;
 import com.example.androiderp.CustomDataClass.Stock;
 import com.example.androiderp.R;
 import com.example.androiderp.adaper.AppropriationListViewAdapter;
 import com.example.androiderp.adaper.CommonDataStructure;
 import com.example.androiderp.adaper.PopuMenuDataStructure;
-import com.example.androiderp.adaper.SaleProductListViewAdapter;
 import com.example.androiderp.common.Common;
 import com.example.androiderp.custom.CustomSearchBase;
 import com.example.androiderp.listview.Menu;
@@ -43,21 +40,21 @@ import java.util.List;
 public class AppropriationEntyList extends CustomSearchBase implements View.OnClickListener, AdapterView.OnItemClickListener,
         SlideAndDragListView.OnMenuItemClickListener, SlideAndDragListView.OnItemDeleteListener {
     private InputMethodManager manager;
-    private TextView note,save,toobar_tile,toobar_back,toobar_add,category,name,number,data,consignment,totalfqty;
+    private TextView note,save,toobarTile,toobarBack,toobarAdd,category,name,number,data,consignment,totalQuantity;
     private DisplayMetrics dm;
-    private Appropriation customlist;
-    private String customid;
+    private Appropriation appropriation;
+    private String appropriatinId;
     private Drawable errorIcon;
     private Common common;
-    private double countall;
-    private Intent  intentback;
+    private double quantityCount;
+    private Intent  intentBack;
     private List<PopuMenuDataStructure> popuMenuDatas;
-    private List<AppropriationEnty> salesOutEntyList=new ArrayList<AppropriationEnty>();
+    private List<AppropriationEnty> appropriationEntyList=new ArrayList<AppropriationEnty>();
     private List<CommonDataStructure> listdatas = new ArrayList<CommonDataStructure>();
-    private SlideAndDragListView<CommonDataStructure> plistView;
+    private SlideAndDragListView<CommonDataStructure> listView;
     private AppropriationListViewAdapter adapter;
-    private Menu mMenu;
-    private List<Stock> stocks;
+    private Menu menu;
+    private List<Stock> stockList;
     public void iniView() {
         setContentView(R.layout.appropriationentyform);
         initMenu();
@@ -65,9 +62,9 @@ public class AppropriationEntyList extends CustomSearchBase implements View.OnCl
         dm=new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         showStockWindow();
-        intentback= new Intent(AppropriationEntyList.this, AppropriationEntyList.class);
+        intentBack= new Intent(AppropriationEntyList.this, AppropriationEntyList.class);
         final Intent intent=getIntent();
-        customid=intent.getStringExtra("custom_item");
+        appropriatinId=intent.getStringExtra("custom_item");
         manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         name=(TextView)findViewById(R.id.product_custom);
         number=(TextView)findViewById(R.id.product_stock);
@@ -76,17 +73,17 @@ public class AppropriationEntyList extends CustomSearchBase implements View.OnCl
         note=(TextView)findViewById(R.id.product_note);
         category=(TextView)findViewById(R.id.product_category);
         save=(TextView)findViewById(R.id.customtoobar_right);
-        toobar_tile=(TextView)findViewById(R.id.customtoobar_midd);
-        toobar_back=(TextView)findViewById(R.id.customtoobar_left);
-        toobar_add=(TextView)findViewById(R.id.customtoobar_r) ;
-        totalfqty=(TextView)findViewById(R.id.saleoutenty_fqty);
+        toobarTile=(TextView)findViewById(R.id.customtoobar_midd);
+        toobarBack=(TextView)findViewById(R.id.customtoobar_left);
+        toobarAdd=(TextView)findViewById(R.id.customtoobar_r) ;
+        totalQuantity=(TextView)findViewById(R.id.saleoutenty_fqty);
         save.setOnClickListener(this);
-        toobar_back.setOnClickListener(this);
-        toobar_add.setOnClickListener(this);
+        toobarBack.setOnClickListener(this);
+        toobarAdd.setOnClickListener(this);
         Drawable more= getResources().getDrawable(R.drawable.toobar_more);
         more.setBounds(0, 0, more.getMinimumWidth(), more.getMinimumHeight());
         save.setCompoundDrawables(more,null,null,null);
-        toobar_tile.setCompoundDrawables(null,null,null,null);
+        toobarTile.setCompoundDrawables(null,null,null,null);
         errorIcon = getResources().getDrawable(R.drawable.icon_error);
 // 设置图片大小
         errorIcon.setBounds(new Rect(0, 0, errorIcon.getIntrinsicWidth(),
@@ -97,13 +94,13 @@ public class AppropriationEntyList extends CustomSearchBase implements View.OnCl
         formInit();
 
 
-        toobar_tile.setText("调拨明细");
+        toobarTile.setText("调拨明细");
 
     }
     private void  formInit()
-    {  countall=0;
+    {  quantityCount=0;
         DecimalFormat df = new DecimalFormat("#####0.00");
-        if(customid!=null) {
+        if(appropriatinId!=null) {
             Employee  employeelist = DataSupport.find(Employee.class, 1);
             if(employeelist==null)
             {
@@ -111,41 +108,41 @@ public class AppropriationEntyList extends CustomSearchBase implements View.OnCl
             }else {
                 category.setText(employeelist.getName());
             }
-            customlist = DataSupport.find(Appropriation.class, Long.parseLong(customid),true);
-            salesOutEntyList=customlist.getSalesOutEntyList();
-            name.setText(customlist.getOutstock());
-            number.setText(customlist.getInstock());
-            data.setText(customlist.getFdate().toString().trim());
-            consignment.setText(customlist.getNuber());
-            note.setText(customlist.getNote());
-          for(AppropriationEnty appropriationEnty:salesOutEntyList) {
+            appropriation = DataSupport.find(Appropriation.class, Long.parseLong(appropriatinId),true);
+            appropriationEntyList=appropriation.getSalesOutEntyList();
+            name.setText(appropriation.getStockOut());
+            number.setText(appropriation.getStockIn());
+            data.setText(appropriation.getDate().toString().trim());
+            consignment.setText(appropriation.getNuber());
+            note.setText(appropriation.getNote());
+          for(AppropriationEnty appropriationEnty:appropriationEntyList) {
               CommonDataStructure commonData = new CommonDataStructure();
               commonData.setId(appropriationEnty.getId());
-              commonData.setNumber(appropriationEnty.getItemnumber());
-              commonData.setName(appropriationEnty.getItemname());
-              commonData.setFqty(appropriationEnty.getItemfqty());
-              countall+=appropriationEnty.getItemfqty();
+              commonData.setNumber(appropriationEnty.getNumber());
+              commonData.setName(appropriationEnty.getName());
+              commonData.setFqty(appropriationEnty.getQuantity());
+              quantityCount+=appropriationEnty.getQuantity();
               listdatas.add(commonData);
           }
 
-          totalfqty.setText(df.format(countall));
+            totalQuantity.setText(df.format(quantityCount));
             adapter = new AppropriationListViewAdapter(AppropriationEntyList.this, R.layout.saleproduct_item, listdatas);
-            plistView.setAdapter(adapter);
-            setListViewHeightBasedOnChildren(plistView);
+            listView.setAdapter(adapter);
+            setListViewHeightBasedOnChildren(listView);
 
         }
     }
     public void initMenu() {
-        mMenu = new Menu(true);
+        menu = new Menu(true);
 
     }
 
     public void initUiAndListener() {
-        plistView = (SlideAndDragListView) findViewById(R.id.saleproduct_listview);
-        plistView.setMenu(mMenu);
-        plistView.setOnItemClickListener(this);
-        plistView.setOnMenuItemClickListener(this);
-        plistView.setOnItemDeleteListener(this);
+        listView = (SlideAndDragListView) findViewById(R.id.saleproduct_listview);
+        listView.setMenu(menu);
+        listView.setOnItemClickListener(this);
+        listView.setOnMenuItemClickListener(this);
+        listView.setOnItemDeleteListener(this);
     }
     @Override
     public int onMenuItemClick(View v, final int itemPosition, int buttonPosition, int direction) {
@@ -231,17 +228,17 @@ public class AppropriationEntyList extends CustomSearchBase implements View.OnCl
                 if(popuMenuDatas.get(position).getName().equals("商品新增"))
                 {
 
-                    intentback.removeExtra("product_item");
-                    intentback.putExtra("action","add");
-                    startActivityForResult(intentback,4);
+                    intentBack.removeExtra("product_item");
+                    intentBack.putExtra("action","add");
+                    startActivityForResult(intentBack,4);
                 }
                 else if(popuMenuDatas.get(position).getName().equals("商品复制"))
 
                 {
-                    intentback.removeExtra("product_item");
-                    intentback.putExtra("action","add");
-                    intentback.putExtra("product_item", customid);
-                    startActivityForResult(intentback,4);
+                    intentBack.removeExtra("product_item");
+                    intentBack.putExtra("action","add");
+                    intentBack.putExtra("product_item", quantityCount);
+                    startActivityForResult(intentBack,4);
 
                 }else
                 {
@@ -268,8 +265,8 @@ public class AppropriationEntyList extends CustomSearchBase implements View.OnCl
     private void showStockWindow() {
         common = new Common();
         popuMenuDatas = new ArrayList<PopuMenuDataStructure>();
-        stocks= DataSupport.findAll(Stock.class);
-        for(Stock stock:stocks)
+        stockList= DataSupport.findAll(Stock.class);
+        for(Stock stock:stockList)
 
         {
             PopuMenuDataStructure popuMenua = new PopuMenuDataStructure(R.drawable.poppu_wrie, stock.getName());
