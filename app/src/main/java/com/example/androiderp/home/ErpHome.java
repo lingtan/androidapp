@@ -35,6 +35,8 @@ import com.ashokvarma.bottomnavigation.BadgeItem;
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 import com.example.androiderp.Fragment.FirstFragment;
+import com.example.androiderp.Fragment.FiveFragment;
+import com.example.androiderp.Fragment.FouthFragment;
 import com.example.androiderp.Fragment.SecondFragment;
 import com.example.androiderp.Fragment.ThressFragment;
 import com.example.androiderp.R;
@@ -108,6 +110,13 @@ public class ErpHome extends CustomSearchBase implements  BottomNavigationBar.On
                 transaction = fragmentManager.beginTransaction();
                 transaction.replace(R.id.tab, new ThressFragment());
                 lastSelectedPosition=2;
+                transaction.commit();
+                break;
+            case "fouth":
+                fragmentManager = getSupportFragmentManager();
+                transaction = fragmentManager.beginTransaction();
+                transaction.replace(R.id.tab, new FouthFragment());
+                lastSelectedPosition=3;
                 transaction.commit();
                 break;
 
@@ -187,14 +196,26 @@ public class ErpHome extends CustomSearchBase implements  BottomNavigationBar.On
                 hiddenEditMenu();
                 break;
             case 3:
+                fragmentManager=getSupportFragmentManager();
+                transaction=fragmentManager.beginTransaction();
+                transaction.replace(R.id.tab,new FouthFragment());
                 if (badgeItem != null) {
                     badgeItem.setText(Integer.toString(position));
                 }
+                transaction.commit();
+                ab.setDisplayHomeAsUpEnabled(false);
+                hiddenEditMenu();
                 break;
             case 4:
+                fragmentManager=getSupportFragmentManager();
+                transaction=fragmentManager.beginTransaction();
+                transaction.replace(R.id.tab,new FiveFragment());
                 if (badgeItem != null) {
                     badgeItem.setText(Integer.toString(position));
                 }
+                transaction.commit();
+                ab.setDisplayHomeAsUpEnabled(false);
+                hiddenEditMenu();
                 break;
             default:
                 break;

@@ -88,7 +88,16 @@
         <activity android:name="com.example.androiderp.form.ProductCategoryForm">
 
         </activity>
+        <activity android:name="com.example.androiderp.form.ReturnPurchaseProductForm">
+
+        </activity>
+        <activity android:name="com.example.androiderp.form.ReturnSaleProductForm">
+
+        </activity>
         <activity android:name="com.example.androiderp.form.BrandForm">
+
+        </activity>
+        <activity android:name="com.example.androiderp.form.StockTakingForm">
 
         </activity>
         <activity android:name="com.example.androiderp.form.UnitForm">

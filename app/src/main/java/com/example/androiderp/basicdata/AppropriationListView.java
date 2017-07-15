@@ -48,7 +48,7 @@ public class AppropriationListView extends CustomSearchBase implements View.OnCl
         appropriationList=DataSupport.findAll(Appropriation.class);
         intentEdit= new Intent(AppropriationListView.this, AppropriationEntyList.class);
         toobarTile.setText("调拨流水");
-        toobarBack.setText("首页");
+        toobarBack.setText("返回");
 
         //构造函数第一参数是类的对象，第二个是布局文件，第三个是数据源
         listView = (ListView) findViewById(R.id.list);

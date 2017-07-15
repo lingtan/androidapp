@@ -21,15 +21,7 @@ public class FiveFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater,  ViewGroup container,  Bundle savedInstanceState) {
 
         View view=inflater.inflate(R.layout.fourthfragment_layout,container,false);
-        LinearLayout layoutInflater=(LinearLayout) view.findViewById(R.id.fourthfragmnet_custom);
-        layoutInflater.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Context context = v.getContext();
-                Intent intent = new Intent(context, CustomListView.class);
-                startActivity(intent);
-            }
-        });
+
         return view;
     }
 

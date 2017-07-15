@@ -571,11 +571,11 @@ public class ProductAppropriationListView extends CustomSearchBase implements Vi
     private int stockCheck(String stockname,String number,double sfqty)
     {
 
-        double  in=DataSupport.where("instock=? and itemnumber=?",stockname,number).sum(AppropriationEnty.class,"itemfqty",double.class);
-        double  out=DataSupport.where("outstock=? and itemnumber=?",stockname,number).sum(AppropriationEnty.class,"itemfqty",double.class);
-        double  initis=DataSupport.where("stock=? and number=?",stockname,number).sum(StockIniti.class,"fqty",double.class);
-        double   salesOut=DataSupport.where("billtype =? and stock=? and itemnumber=?","2",stockname,number).sum(SalesOutEnty.class,"itemfqty",double.class);
-        double  supplierin=DataSupport.where("billtype =? and stock=? and itemnumber=?","1",stockname,number).sum(SalesOutEnty.class,"itemfqty",double.class);
+        double  in=DataSupport.where("stockIn=? and number=?",stockname,number).sum(AppropriationEnty.class,"quantity",double.class);
+        double  out=DataSupport.where("stockOut=? and number=?",stockname,number).sum(AppropriationEnty.class,"quantity",double.class);
+        double  initis=DataSupport.where("stock=? and number=?",stockname,number).sum(StockIniti.class,"quantity",double.class);
+        double   salesOut=DataSupport.where("billtype =? and stock=? and number=?","2",stockname,number).sum(SalesOutEnty.class,"quantity",double.class);
+        double  supplierin=DataSupport.where("billtype =? and stock=? and number=?","1",stockname,number).sum(SalesOutEnty.class,"quantity",double.class);
         quantity=0.00;
         quantity=initis+supplierin+in-salesOut-out;
 

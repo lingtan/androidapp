@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#F0F3F6"
+    >
+    <include layout="@layout/customtoobar_d" android:id="@+id/supplierform_toobar"/>
+    <ScrollView
+        android:id="@+id/tab"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:fillViewport="true"
+        android:scrollbars="none" >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+             >
+    <LinearLayout style="@style/wrap_layout" >
+        <!-- 无圆角-->
+        <LinearLayout style="@style/mid_layout"
+            android:id="@+id/appropri_out_layout">
+            <TextView style="@style/usertext"
+                android:text="仓库：" />
+
+            <TextView style="@style/usertext"
+                android:id="@+id/appropri_out"
+                android:hint="请选择仓库"
+                android:layout_gravity="center_vertical"
+                />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/from_arrow"
+                android:gravity="right"/>
+        </LinearLayout>
+        <View style="@style/bg_line"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"/>
+        <!-- 下圆角-->
+        <LinearLayout style="@style/bottom_layout"
+            android:id="@+id/appropri_in_layout">
+            <TextView style="@style/usertext"
+                android:hint="全部盘点："
+                />
+
+            <TextView style="@style/usertext"
+                android:id="@+id/appropri_in"
+                android:text="请选择仓库"
+                android:layout_gravity="right"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout style="@style/wrap_layout_to"
+        android:layout_marginTop="20dp">
+        <!-- 上圆角-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="1">
+            <LinearLayout style="@style/top_layout"
+
+                android:layout_weight="0.36">
+                <TextView style="@style/usertext"
+                    android:text="选择商品"
+                    android:layout_gravity="center_vertical"/>
+            </LinearLayout>
+        <LinearLayout style="@style/top_layout"
+            android:gravity="center_horizontal"
+            android:id="@+id/product_screen_layout"
+            android:layout_weight="0.32">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@drawable/number_screen"/>
+
+        </LinearLayout>
+            <View
+                android:layout_width="1px"
+                android:layout_height="match_parent"
+                android:background="#C2C2C2"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"/>
+            <LinearLayout style="@style/top_layout"
+                android:gravity="center_horizontal"
+                android:id="@+id/product_add_layout"
+                android:layout_weight="0.32">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@drawable/saleproduct_add"/>
+            </LinearLayout>
+        </LinearLayout>
+        <!-- 分割线 -->
+        <View style="@style/bg_line"  android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"/>
+        <!-- 下圆角-->
+        <LinearLayout android:layout_height="wrap_content"
+            android:layout_width="match_parent">
+            <com.example.androiderp.listview.SlideAndDragListView
+                android:id="@+id/saleproduct_listview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:divider="#c9cabb"
+                android:dividerHeight="1px">
+            </com.example.androiderp.listview.SlideAndDragListView>
+        </LinearLayout>
+
+    </LinearLayout>
+
+            <LinearLayout style="@style/hide_layout_to"
+                android:layout_marginTop="10dp">
+        <LinearLayout style="@style/bottom_layout"
+            android:layout_marginTop="10dp"
+            android:gravity="top">
+            <TextView style="@style/usertext"
+                android:text="备注" />
+            <EditText
+                android:layout_width="300dp"
+                android:layout_height="match_parent"
+                android:id="@+id/product_note"
+                android:textSize="14dp"
+                android:hint="商品备注信息"
+                android:background="@null"
+                android:gravity="top"
+                android:minLines="3"
+                android:inputType="text"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+ </LinearLayout>
+    </ScrollView>
+</LinearLayout>
+

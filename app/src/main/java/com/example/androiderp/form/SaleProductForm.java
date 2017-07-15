@@ -528,11 +528,11 @@ public class SaleProductForm extends CustomSearchBase implements View.OnClickLis
                        for(int i = 0; i < listdatas.size(); i++)
 
                        {
-                           appropriationInList=DataSupport.where("instock=? and itemnumber=?",number.getText().toString(),listdatas.get(i).getNumber()).find(AppropriationEnty.class);
-                           appropriationOutList=DataSupport.where("outstock=? and itemnumber=?",number.getText().toString(),listdatas.get(i).getNumber()).find(AppropriationEnty.class);
+                           appropriationInList=DataSupport.where("stockIn=? and number=?",number.getText().toString(),listdatas.get(i).getNumber()).find(AppropriationEnty.class);
+                           appropriationOutList=DataSupport.where("stockOut=? and number=?",number.getText().toString(),listdatas.get(i).getNumber()).find(AppropriationEnty.class);
                            stockInitiList=DataSupport.where("stock=? and number=?",number.getText().toString(),listdatas.get(i).getNumber()).find(StockIniti.class);
-                           salesOutEnties=DataSupport.where("billtype =? and stock=? and itemnumber=?","2",number.getText().toString(),listdatas.get(i).getNumber()).find(SalesOutEnty.class);
-                           supplierOutEnties=DataSupport.where("billtype =? and stock=? and itemnumber=?","1",number.getText().toString(),listdatas.get(i).getNumber()).find(SalesOutEnty.class);
+                           salesOutEnties=DataSupport.where("billtype =? and stock=? and number=?","2",number.getText().toString(),listdatas.get(i).getNumber()).find(SalesOutEnty.class);
+                           supplierOutEnties=DataSupport.where("billtype =? and stock=? and number=?","1",number.getText().toString(),listdatas.get(i).getNumber()).find(SalesOutEnty.class);
                            quantity=0;
 
                            for(StockIniti stock:stockInitiList)
@@ -666,8 +666,8 @@ public class SaleProductForm extends CustomSearchBase implements View.OnClickLis
                     for(int i = 0; i < listdatas.size(); i++)
                     {
                         stockInitiList=DataSupport.where("stock=? and number=?",number.getText().toString(),listdatas.get(i).getNumber()).find(StockIniti.class);
-                        salesOutEnties=DataSupport.where("billtype =? and stock=? and itemnumber=?","2",number.getText().toString(),listdatas.get(i).getNumber()).find(SalesOutEnty.class);
-                        supplierOutEnties=DataSupport.where("billtype =? and stock=? and itemnumber=?","1",number.getText().toString(),listdatas.get(i).getNumber()).find(SalesOutEnty.class);
+                        salesOutEnties=DataSupport.where("billtype =? and stock=? and number=?","2",number.getText().toString(),listdatas.get(i).getNumber()).find(SalesOutEnty.class);
+                        supplierOutEnties=DataSupport.where("billtype =? and stock=? and number=?","1",number.getText().toString(),listdatas.get(i).getNumber()).find(SalesOutEnty.class);
                         quantity=0;
 
                         for(StockIniti stock:stockInitiList)

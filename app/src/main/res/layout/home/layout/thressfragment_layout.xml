@@ -11,49 +11,6 @@
     <LinearLayout style="@style/wrap_layout"
         android:orientation="horizontal"
         android:weightSum="1">
-        <RelativeLayout
-            android:id="@+id/thressfragmnet_khgllayout"
-            style="@style/secondfragment_layout"
-            android:layout_weight="0.5">
-            <ImageView
-                android:id="@+id/thressfragmnet_khglimag"
-                android:layout_height="30.dp"
-                android:layout_width="30.dp"
-                android:layout_alignParentTop="true"
-                android:src="@drawable/home_firstfragment_kh"
-                android:layout_marginRight="20dp"
-                />
-
-            <TextView
-                android:id="@+id/thressfragmnet_khglname"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="14dp"
-                android:text="客户管理"
-                android:layout_alignTop="@id/thressfragmnet_khglimag"
-                android:layout_toRightOf="@+id/thressfragmnet_khglimag"
-                />
-            <TextView
-                android:id="@+id/thressfragmnet_khgltis"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="12dp"
-                android:text="客户管理"
-                android:layout_below="@+id/thressfragmnet_khglimag"
-                android:layout_toRightOf="@+id/thressfragmnet_khglimag"
-                />
-        </RelativeLayout>
-        <LinearLayout
-            android:layout_width="1px"
-            android:layout_height="match_parent"
-            android:layout_marginTop="5dp">
-            <View
-                android:layout_width="1px"
-                android:layout_height="match_parent"
-                android:background="#C2C2C2"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="5dp"/>
-        </LinearLayout>
         <RelativeLayout style="@style/secondfragment_layout"
             android:id="@+id/thressfragmnet_xscklayout"
             android:layout_weight="0.5">
@@ -71,7 +28,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="14dp"
-                android:text="销售出库"
+                android:text="销售新增"
                 android:layout_alignTop="@id/thressfragmnet_xsckmag"
                 android:layout_toRightOf="@+id/thressfragmnet_xsckmag"
                 />
@@ -80,11 +37,55 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="12dp"
-                android:text="销售新增"
+                android:text="卖货、出库"
                 android:layout_below="@+id/thressfragmnet_xsckmag"
                 android:layout_toRightOf="@+id/thressfragmnet_xsckmag"/>
 
 
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:layout_marginTop="5dp">
+            <View
+                android:layout_width="1px"
+                android:layout_height="match_parent"
+                android:background="#C2C2C2"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="5dp"/>
+        </LinearLayout>
+        <RelativeLayout
+            android:id="@+id/thressfragmnet_xsthlayout"
+            style="@style/secondfragment_layout"
+            android:layout_weight="0.5">
+            <ImageView
+                android:id="@+id/thressfragmnet_khglimag"
+                android:layout_height="30.dp"
+                android:layout_width="30.dp"
+                android:layout_alignParentTop="true"
+                android:src="@drawable/thressfragmnet_xsth"
+                android:layout_marginRight="20dp"
+                />
+
+            <TextView
+                android:id="@+id/thressfragmnet_khglname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14dp"
+                android:text="销售退货"
+                android:layout_alignTop="@id/thressfragmnet_khglimag"
+                android:layout_toRightOf="@+id/thressfragmnet_khglimag"
+                />
+            <TextView
+                android:id="@+id/thressfragmnet_khgltis"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12dp"
+                android:text="换货、退货"
+                android:layout_below="@+id/thressfragmnet_khglimag"
+                android:layout_toRightOf="@+id/thressfragmnet_khglimag"
+                />
         </RelativeLayout>
 
         </LinearLayout>
@@ -94,18 +95,16 @@
         android:orientation="horizontal"
         android:weightSum="1">
 
-
-
         <RelativeLayout
             style="@style/secondfragment_layout"
-            android:id="@+id/thressfragmnet_layout_kccxlayout"
+            android:id="@+id/thressfragmnet_dblayout"
             android:layout_weight="0.5">
             <ImageView
                 android:id="@+id/thressfragmnet_kccximage"
                 android:layout_height="30.dp"
                 android:layout_width="30.dp"
                 android:layout_alignParentTop="true"
-                android:src="@drawable/hoem_fistfragment_search"
+                android:src="@drawable/home_fistfragment_db"
                 android:layout_marginRight="20dp"
                 />
 
@@ -114,7 +113,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="14dp"
-                android:text="库存查询"
+                android:text="库存调拨"
                 android:layout_alignTop="@id/thressfragmnet_kccximage"
                 android:layout_toRightOf="@+id/thressfragmnet_kccximage"
                 />
@@ -123,7 +122,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="12dp"
-                android:text="库存查询"
+                android:text="仓库之间调拨"
                 android:layout_below="@+id/thressfragmnet_kccximage"
                 android:layout_toRightOf="@+id/thressfragmnet_kccximage"
                 />
@@ -142,7 +141,7 @@
                 android:layout_marginBottom="5dp"/>
         </LinearLayout>
         <RelativeLayout style="@style/secondfragment_layout"
-            android:id="@+id/thressfragmnet_kcpdlayout"
+            android:id="@+id/thressfragmnet_dblslayout"
             android:layout_weight="0.5">
 
             <ImageView
@@ -150,7 +149,7 @@
                 android:layout_height="30.dp"
                 android:layout_width="30.dp"
                 android:layout_alignParentTop="true"
-                android:src="@drawable/home_fisrfragment_pd"
+                android:src="@drawable/home_dbls"
                 android:layout_marginRight="20dp"
                 />
 
@@ -159,7 +158,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="14dp"
-                android:text="库存盘点"
+                android:text="调拨流水"
                 android:layout_alignTop="@id/thressfragmnet_kcpdimag"
                 android:layout_toRightOf="@+id/thressfragmnet_kcpdimag"
                 android:layout_marginBottom="22dp"
@@ -191,7 +190,7 @@
         android:orientation="horizontal"
         android:weightSum="1">
         <RelativeLayout
-            android:id="@+id/thressfragmnet_kcdblayout"
+            android:id="@+id/thressfragmnet_kccxlayout"
             style="@style/secondfragment_layout"
             android:layout_weight="0.5">
             <ImageView
@@ -208,7 +207,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="14dp"
-                android:text="库存调拨"
+                android:text="库存查询"
                 android:layout_alignTop="@id/thressfragmnet_kcdbimag"
                 android:layout_toRightOf="@+id/thressfragmnet_kcdbimag"
                 />
@@ -217,7 +216,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="12dp"
-                android:text="产品移库"
+                android:text="库存状况"
                 android:layout_below="@+id/thressfragmnet_kcdbimag"
                 android:layout_toRightOf="@+id/thressfragmnet_kcdbimag"
                 />
@@ -235,14 +234,14 @@
         </LinearLayout>
         <RelativeLayout style="@style/secondfragment_layout"
             android:layout_weight="0.5"
-            android:id="@+id/thressfragmnet_xsthlayout">
+            android:id="@+id/thressfragmnet_khlayout">
 
             <ImageView
                 android:id="@+id/thressfragmnet_xsthimag"
                 android:layout_height="30.dp"
                 android:layout_width="30.dp"
                 android:layout_alignParentTop="true"
-                android:src="@drawable/home_fisrfragment_pd"
+                android:src="@drawable/home_firstfragment_kh"
                 android:layout_marginRight="20dp"
                 />
 
@@ -251,7 +250,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="14dp"
-                android:text="销售退货"
+                android:text="客户管理"
                 android:layout_alignTop="@id/thressfragmnet_xsthimag"
                 android:layout_toRightOf="@+id/thressfragmnet_xsthimag"
                 android:layout_marginBottom="22dp"

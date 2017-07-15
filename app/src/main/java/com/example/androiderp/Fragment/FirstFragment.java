@@ -30,6 +30,7 @@ import com.example.androiderp.custom.CustomGridView;
 import com.example.androiderp.form.AppropriationForm;
 import com.example.androiderp.form.PurchaseProductForm;
 import com.example.androiderp.form.SaleProductForm;
+import com.example.androiderp.form.StockTakingForm;
 
 /**
  * Created by lingtan on 2017/5/18.
@@ -79,7 +80,7 @@ public class FirstFragment extends Fragment {
                         startActivity(intent);
                         break;
                     case 5:
-                        intent = new Intent(context, AppropriationListView.class);
+                        intent = new Intent(context, StockTakingForm.class);
                         startActivity(intent);
                         break;
                     case 6:

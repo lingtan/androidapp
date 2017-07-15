@@ -45,7 +45,7 @@ public class SupplierOutListView extends CustomSearchBase implements View.OnClic
         salesOutList =DataSupport.where("billtype =?","1").find(SalesOut.class);
         intentEdit = new Intent(SupplierOutListView.this, SupplierOutEntyList.class);
         toobarTile.setText("采购流水");
-        toobarBack.setText("首页");
+        toobarBack.setText("返回");
 
         //构造函数第一参数是类的对象，第二个是布局文件，第三个是数据源
         listView = (ListView) findViewById(R.id.list);
