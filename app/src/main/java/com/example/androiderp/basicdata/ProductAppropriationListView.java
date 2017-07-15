@@ -21,6 +21,7 @@ import com.example.androiderp.CustomDataClass.ProductShopping;
 import com.example.androiderp.CustomDataClass.SalesOutEnty;
 import com.example.androiderp.CustomDataClass.ShoppingData;
 import com.example.androiderp.CustomDataClass.StockIniti;
+import com.example.androiderp.CustomDataClass.StockTakingEnty;
 import com.example.androiderp.R;
 import com.example.androiderp.adaper.AppropriationBadgeAdapter;
 import com.example.androiderp.adaper.CommonAdapter;
@@ -65,6 +66,7 @@ public class ProductAppropriationListView extends CustomSearchBase implements Vi
     private  String leftListSelecteText;
     private LinearLayout account;
     private List<StockIniti> stockInitiList = new ArrayList<StockIniti>();
+    private List<StockTakingEnty> stockTakingEntyList = new ArrayList<StockTakingEnty>();
     private List<SalesOutEnty> salesOutEntyList;
     private List<SalesOutEnty> supplierOutEntieList;
     private double fqty;
@@ -93,6 +95,7 @@ public class ProductAppropriationListView extends CustomSearchBase implements Vi
         account =(LinearLayout)findViewById(R.id.product_item_layout_bottom);
         productList = DataSupport.findAll(Product.class);
         stockInitiList = DataSupport.findAll(StockIniti.class);
+        stockTakingEntyList = DataSupport.findAll(StockTakingEnty.class);
         salesOutEntyList =DataSupport.where("billtype =?","2").find(SalesOutEnty.class);
         supplierOutEntieList =DataSupport.where("billtype =?","1").find(SalesOutEnty.class);
         for(Product product: productList)
@@ -105,6 +108,16 @@ public class ProductAppropriationListView extends CustomSearchBase implements Vi
             {
                 fqty+=stock.getQuantity();
             }
+
+
+            }
+            for(StockTakingEnty stockTakingEnty: stockTakingEntyList)
+
+            {
+                if(product.getNumber().equals(stockTakingEnty.getNumber()))
+                {
+                    fqty+=stockTakingEnty.getQuantity();
+                }
 
 
             }
@@ -573,11 +586,12 @@ public class ProductAppropriationListView extends CustomSearchBase implements Vi
 
         double  in=DataSupport.where("stockIn=? and number=?",stockname,number).sum(AppropriationEnty.class,"quantity",double.class);
         double  out=DataSupport.where("stockOut=? and number=?",stockname,number).sum(AppropriationEnty.class,"quantity",double.class);
+        double  stocktaking=DataSupport.where("stock=? and number=?",stockname,number).sum(StockTakingEnty.class,"quantity",double.class);
         double  initis=DataSupport.where("stock=? and number=?",stockname,number).sum(StockIniti.class,"quantity",double.class);
         double   salesOut=DataSupport.where("billtype =? and stock=? and number=?","2",stockname,number).sum(SalesOutEnty.class,"quantity",double.class);
         double  supplierin=DataSupport.where("billtype =? and stock=? and number=?","1",stockname,number).sum(SalesOutEnty.class,"quantity",double.class);
         quantity=0.00;
-        quantity=initis+supplierin+in-salesOut-out;
+        quantity=initis+supplierin+in+stocktaking-salesOut-out;
 
         if(sfqty>quantity)
         {

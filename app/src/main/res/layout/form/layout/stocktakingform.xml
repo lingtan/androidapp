@@ -40,15 +40,16 @@
             android:layout_marginRight="10dp"/>
         <!-- 下圆角-->
         <LinearLayout style="@style/bottom_layout"
-            android:id="@+id/appropri_in_layout">
+            android:id="@+id/appropri_in_layout"
+            android:gravity="right">
             <TextView style="@style/usertext"
                 android:hint="全部盘点："
-                />
+                android:layout_gravity="center_vertical"/>
 
             <TextView style="@style/usertext"
                 android:id="@+id/appropri_in"
-                android:text="请选择仓库"
-                android:layout_gravity="right"/>
+                android:text="未盘点产品"
+                android:layout_gravity="center_vertical"/>
         </LinearLayout>
 
     </LinearLayout>

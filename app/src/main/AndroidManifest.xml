@@ -73,6 +73,12 @@
         <activity android:name="com.example.androiderp.basicdata.AppropriationEntyList">
 
         </activity>
+        <activity android:name="com.example.androiderp.basicdata.StockTakingListView">
+
+        </activity>
+        <activity android:name="com.example.androiderp.basicdata.StockTakingEntyList">
+
+        </activity>
         <activity android:name="com.example.androiderp.basicdata.CustomSearchListView">
 
         </activity>

@@ -27,6 +27,8 @@ import com.example.androiderp.CustomDataClass.SalesOutEnty;
 import com.example.androiderp.CustomDataClass.ShoppingData;
 import com.example.androiderp.CustomDataClass.Stock;
 import com.example.androiderp.CustomDataClass.StockIniti;
+import com.example.androiderp.CustomDataClass.StockTaking;
+import com.example.androiderp.CustomDataClass.StockTakingEnty;
 import com.example.androiderp.R;
 import com.example.androiderp.adaper.AppropriationListViewAdapter;
 import com.example.androiderp.adaper.CommonDataStructure;
@@ -66,6 +68,7 @@ public class StockTakingForm extends CustomSearchBase implements View.OnClickLis
     private Drawable errorIcon;
     private Common common;
     private List<PopuMenuDataStructure> popuMenuList;
+    private List<StockTakingEnty> stockTakingEntyList=new ArrayList<StockTakingEnty>();
     private List<Product> productList;
     private List<ProductShopping> productShoppinglist = new ArrayList<ProductShopping>();
     private List<CommonDataStructure> commonDataStructureList = new ArrayList<CommonDataStructure>();
@@ -74,6 +77,7 @@ public class StockTakingForm extends CustomSearchBase implements View.OnClickLis
     private Menu menu;
     private List<Stock> stockList;
     private Calendar calendar;
+    private int year,month,day;
     private Intent intent;
     private double quantity;
     private DecimalFormat df = new DecimalFormat("#####0.00");
@@ -111,6 +115,7 @@ public class StockTakingForm extends CustomSearchBase implements View.OnClickLis
                 errorIcon.getIntrinsicHeight()));
         save.setText("保存");
         formInit();
+        getDate();
 
 
         productScreenLayout.setOnClickListener(new View.OnClickListener() {
@@ -149,7 +154,14 @@ public class StockTakingForm extends CustomSearchBase implements View.OnClickLis
 
 
     }
+    //获取当前日期
+    private void getDate() {
+        calendar=Calendar.getInstance();
+        year=calendar.get(Calendar.YEAR);       //获取年月日时分秒
+        month=calendar.get(Calendar.MONTH);   //获取到的月份是从0开始计数
+        day=calendar.get(Calendar.DAY_OF_MONTH);
 
+    }
     public void initMenu() {
         menu = new Menu(true);
         menu.addItem(new MenuItem.Builder().setWidth((int) getResources().getDimension(R.dimen.slv_item_bg_btn_width))
@@ -236,14 +248,23 @@ public class StockTakingForm extends CustomSearchBase implements View.OnClickLis
                     Toast.makeText(StockTakingForm.this, "请选择产品", Toast.LENGTH_SHORT).show();
                 }else
 
-                {
-
+                { SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
+                    Date curData = new Date(System.currentTimeMillis());
+                    String fdate = format.format(curData);
                     for(int i = 0; i < commonDataStructureList.size(); i++)
                     {
                         stockCheck(stockname.getText().toString(),commonDataStructureList.get(i).getName(),commonDataStructureList.get(i).getNumber(),commonDataStructureList.get(i).getFqty());
 
                     }
-
+                    DataSupport.saveAll(stockTakingEntyList);
+                    StockTaking stockTaking = new StockTaking();
+                    stockTaking.setStockTakingEntyList(stockTakingEntyList);
+                    stockTaking.setStock(stockname.getText().toString());
+                    stockTaking.setNuber("DBD" + fdate);
+                    stockTaking.setStock(stockname.getText().toString());
+                    stockTaking.setDate(String.valueOf(year + "-" + (++month) + "-" + day));
+                    stockTaking.setNote(note.getText().toString());
+                    stockTaking.save();
 
                         Toast.makeText(StockTakingForm.this, "新增成功", Toast.LENGTH_SHORT).show();
                         save.setVisibility(View.GONE);
@@ -515,12 +536,12 @@ public class StockTakingForm extends CustomSearchBase implements View.OnClickLis
         quantity=0.00;
         quantity=initis+supplierin+in-salesOut-out;
 
-        StockIniti stockIniti=new StockIniti();
-        stockIniti.setName(name);
-        stockIniti.setNumber(number);
-        stockIniti.setStock(stockname);
-        stockIniti.setQuantity(sfqty-quantity);
-        stockIniti.save();
+        StockTakingEnty stockTakingEnty=new StockTakingEnty();
+        stockTakingEnty.setName(name);
+        stockTakingEnty.setNumber(number);
+        stockTakingEnty.setStock(stockname);
+        stockTakingEnty.setQuantity(sfqty-quantity);
+        stockTakingEntyList.add(stockTakingEnty);
     }
 
 }

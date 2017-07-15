@@ -53,4 +53,6 @@ public class StockIniti extends DataSupport {
     public void setQuantity(double quantity) {
         this.quantity = quantity;
     }
+
+
 }
