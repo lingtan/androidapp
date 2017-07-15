@@ -26,7 +26,7 @@
         <LinearLayout style="@style/bottom_layout"
             android:id="@+id/product_stock_layout">
             <TextView style="@style/usertext"
-                android:hint="调入仓库"
+                android:hint="仓库"
                 />
 
 
