@@ -14,8 +14,10 @@ import com.example.androiderp.R;
 import com.example.androiderp.basicdata.AppropriationListView;
 import com.example.androiderp.basicdata.CustomListView;
 import com.example.androiderp.basicdata.CustomTowListView;
+import com.example.androiderp.basicdata.InventoryListView;
 import com.example.androiderp.basicdata.ProductAppropriationListView;
 import com.example.androiderp.basicdata.SaleOutListView;
+import com.example.androiderp.basicdata.StockListView;
 import com.example.androiderp.basicdata.StockTakingListView;
 import com.example.androiderp.form.AppropriationForm;
 import com.example.androiderp.form.ReturnSaleProductForm;
@@ -57,7 +59,7 @@ public class FouthFragment extends Fragment implements View.OnClickListener {
 
         {
             case R.id.fourthfragment_kccxlayout:
-                intent = new Intent(context, ProductAppropriationListView.class);
+                intent = new Intent(context, InventoryListView.class);
                 startActivity(intent);
                 break;
 
@@ -82,7 +84,7 @@ public class FouthFragment extends Fragment implements View.OnClickListener {
                 startActivity(intent);
                 break;
             case R.id.thressfragmnet_khlayout:
-                intent = new Intent(context,   CustomTowListView.class);
+                intent = new Intent(context,   StockListView.class);
                 startActivity(intent);
                 break;
             default:

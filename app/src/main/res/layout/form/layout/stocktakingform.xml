@@ -20,12 +20,12 @@
     <LinearLayout style="@style/wrap_layout" >
         <!-- 无圆角-->
         <LinearLayout style="@style/mid_layout"
-            android:id="@+id/appropri_out_layout">
+            android:id="@+id/stockout_layout">
             <TextView style="@style/usertext"
                 android:text="仓库：" />
 
             <TextView style="@style/usertext"
-                android:id="@+id/appropri_out"
+                android:id="@+id/stockout"
                 android:hint="请选择仓库"
                 android:layout_gravity="center_vertical"
                 />
@@ -40,14 +40,14 @@
             android:layout_marginRight="10dp"/>
         <!-- 下圆角-->
         <LinearLayout style="@style/bottom_layout"
-            android:id="@+id/appropri_in_layout"
+            android:id="@+id/stockin_layout"
             android:gravity="right">
             <TextView style="@style/usertext"
                 android:hint="全部盘点："
                 android:layout_gravity="center_vertical"/>
 
             <TextView style="@style/usertext"
-                android:id="@+id/appropri_in"
+                android:id="@+id/stockin"
                 android:text="未盘点产品"
                 android:layout_gravity="center_vertical"/>
         </LinearLayout>
@@ -70,7 +70,7 @@
             </LinearLayout>
         <LinearLayout style="@style/top_layout"
             android:gravity="center_horizontal"
-            android:id="@+id/product_screen_layout"
+            android:id="@+id/screen_layout"
             android:layout_weight="0.32">
             <ImageView
                 android:layout_width="wrap_content"
@@ -87,7 +87,7 @@
                 android:layout_marginBottom="2dp"/>
             <LinearLayout style="@style/top_layout"
                 android:gravity="center_horizontal"
-                android:id="@+id/product_add_layout"
+                android:id="@+id/add_layout"
                 android:layout_weight="0.32">
                 <ImageView
                     android:layout_width="wrap_content"
@@ -123,7 +123,7 @@
             <EditText
                 android:layout_width="300dp"
                 android:layout_height="match_parent"
-                android:id="@+id/product_note"
+                android:id="@+id/note"
                 android:textSize="14dp"
                 android:hint="商品备注信息"
                 android:background="@null"

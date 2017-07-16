@@ -24,14 +24,14 @@
             android:layout_marginRight="10dp"/>
         <!-- 下圆角-->
         <LinearLayout style="@style/bottom_layout"
-            android:id="@+id/product_stock_layout">
+            android:id="@+id/stockin_layout">
             <TextView style="@style/usertext"
                 android:hint="仓库"
                 />
 
 
             <TextView style="@style/usertext"
-                android:id="@+id/product_stock"
+                android:id="@+id/stockin"
                 android:hint="请选择仓库"
                 android:layout_gravity="center_vertical"/>
         </LinearLayout>
@@ -72,7 +72,7 @@
                     />
                 <TextView android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/saleoutenty_fqty"
+                    android:id="@+id/totalquantity"
                     android:textSize="11dp"
                     android:layout_marginRight="10dp"
                     />
@@ -101,14 +101,14 @@
         android:layout_marginTop="20dp">
         <!-- 上圆角-->
         <LinearLayout style="@style/top_layout"
-            android:id="@+id/product_category_layout">
+            android:id="@+id/documentmaker_layout">
             <TextView style="@style/usertext"
                 android:hint="制单人"
                 android:layout_gravity="center_vertical"
                 />
 
             <TextView style="@style/usertext"
-                android:id="@+id/product_category"
+                android:id="@+id/documentmaker"
                 android:layout_gravity="center_vertical"
                 />
         </LinearLayout>
@@ -116,13 +116,13 @@
         <View style="@style/bg_line"  android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"/>
         <LinearLayout style="@style/top_layout"
-            android:id="@+id/product_data_layout"
+            android:id="@+id/businessdata_layout"
             android:gravity="left">
             <TextView style="@style/usertext"
                 android:hint="业务日期"
                 android:layout_gravity="center_vertical"/>
             <TextView style="@style/usertext"
-                android:id="@+id/product_data"
+                android:id="@+id/businessdata"
                 android:layout_gravity="center_vertical" />
         </LinearLayout>
 
@@ -131,14 +131,14 @@
             android:layout_marginRight="10dp"/>
         <!-- 下圆角-->
         <LinearLayout style="@style/top_layout"
-            android:id="@+id/product_consignment_layout">
+            android:id="@+id/billnumber_layout">
             <TextView style="@style/usertext"
                 android:hint="单号编号"
                 android:layout_gravity="center_vertical"
                 />
 
             <TextView style="@style/usertext"
-                android:id="@+id/product_consignment"
+                android:id="@+id/billnumber"
                 android:layout_gravity="center_vertical"
                 />
         </LinearLayout>
@@ -152,7 +152,7 @@
                 />
 
             <TextView style="@style/usertext"
-                android:id="@+id/product_note"
+                android:id="@+id/note"
                 android:layout_gravity="center_vertical"/>
         </LinearLayout>
 

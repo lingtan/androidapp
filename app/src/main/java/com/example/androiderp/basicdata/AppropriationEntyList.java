@@ -40,7 +40,7 @@ import java.util.List;
 public class AppropriationEntyList extends CustomSearchBase implements View.OnClickListener, AdapterView.OnItemClickListener,
         SlideAndDragListView.OnMenuItemClickListener, SlideAndDragListView.OnItemDeleteListener {
     private InputMethodManager manager;
-    private TextView note,save,toobarTile,toobarBack,toobarAdd,category,name,number,data,consignment,totalQuantity;
+    private TextView note,save,toobarTile,toobarBack,toobarAdd, documentmaker,stockout, stockin, businessdata, billnumber,totalQuantity;
     private DisplayMetrics dm;
     private Appropriation appropriation;
     private String appropriatinId;
@@ -66,17 +66,17 @@ public class AppropriationEntyList extends CustomSearchBase implements View.OnCl
         final Intent intent=getIntent();
         appropriatinId=intent.getStringExtra("custom_item");
         manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        name=(TextView)findViewById(R.id.product_custom);
-        number=(TextView)findViewById(R.id.product_stock);
-        data=(TextView)findViewById(R.id.product_data);
-        consignment=(TextView)findViewById(R.id.product_consignment);
-        note=(TextView)findViewById(R.id.product_note);
-        category=(TextView)findViewById(R.id.product_category);
+        stockout =(TextView)findViewById(R.id.stockout);
+        stockin =(TextView)findViewById(R.id.stockin);
+        businessdata =(TextView)findViewById(R.id.businessdata);
+        billnumber =(TextView)findViewById(R.id.billnumber);
+        note=(TextView)findViewById(R.id.note);
+        documentmaker =(TextView)findViewById(R.id.documentmaker);
         save=(TextView)findViewById(R.id.customtoobar_right);
         toobarTile=(TextView)findViewById(R.id.customtoobar_midd);
         toobarBack=(TextView)findViewById(R.id.customtoobar_left);
         toobarAdd=(TextView)findViewById(R.id.customtoobar_r) ;
-        totalQuantity=(TextView)findViewById(R.id.saleoutenty_fqty);
+        totalQuantity=(TextView)findViewById(R.id.totalquantity);
         save.setOnClickListener(this);
         toobarBack.setOnClickListener(this);
         toobarAdd.setOnClickListener(this);
@@ -89,8 +89,8 @@ public class AppropriationEntyList extends CustomSearchBase implements View.OnCl
         errorIcon.setBounds(new Rect(0, 0, errorIcon.getIntrinsicWidth(),
                 errorIcon.getIntrinsicHeight()));
         save.setText("");
-        name.setText("调出仓库");
-        number.setText("调入仓库");
+        stockout.setText("调出仓库");
+        stockin.setText("调入仓库");
         formInit();
 
 
@@ -106,14 +106,14 @@ public class AppropriationEntyList extends CustomSearchBase implements View.OnCl
             {
 
             }else {
-                category.setText(employeelist.getName());
+                documentmaker.setText(employeelist.getName());
             }
             appropriation = DataSupport.find(Appropriation.class, Long.parseLong(appropriatinId),true);
             appropriationEntyList=appropriation.getSalesOutEntyList();
-            name.setText(appropriation.getStockOut());
-            number.setText(appropriation.getStockIn());
-            data.setText(appropriation.getDate().toString().trim());
-            consignment.setText(appropriation.getNuber());
+            stockout.setText(appropriation.getStockOut());
+            stockin.setText(appropriation.getStockIn());
+            businessdata.setText(appropriation.getDate().toString().trim());
+            billnumber.setText(appropriation.getNuber());
             note.setText(appropriation.getNote());
           for(AppropriationEnty appropriationEnty:appropriationEntyList) {
               CommonDataStructure commonData = new CommonDataStructure();
@@ -280,7 +280,7 @@ public class AppropriationEntyList extends CustomSearchBase implements View.OnCl
             public void onItemClick(AdapterView<?> adapterView, View view,
                                     int position, long id) {
 
-                number.setText(popuMenuDatas.get(position).getName());
+                stockin.setText(popuMenuDatas.get(position).getName());
                 common.mPopWindow.dismiss();
             }
         });

@@ -79,6 +79,18 @@
         <activity android:name="com.example.androiderp.basicdata.StockTakingEntyList">
 
         </activity>
+        <activity android:name="com.example.androiderp.basicdata.InventoryListView">
+
+        </activity>
+        <activity android:name="com.example.androiderp.basicdata.InventoryEntyList">
+
+        </activity>
+        <activity android:name="com.example.androiderp.basicdata.StockIntentListview">
+
+        </activity>
+        <activity android:name="com.example.androiderp.basicdata.EmployeeIntentListview">
+
+        </activity>
         <activity android:name="com.example.androiderp.basicdata.CustomSearchListView">
 
         </activity>

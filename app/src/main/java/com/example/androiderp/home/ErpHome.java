@@ -81,10 +81,6 @@ public class ErpHome extends CustomSearchBase implements  BottomNavigationBar.On
         ab.setHomeAsUpIndicator(R.drawable.home_toobar_menu);//设置主页按钮
         ab.setDisplayHomeAsUpEnabled(true);//显示主页按钮
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);//加载滑动布置
-        badgeItem = new BadgeItem()
-                .setBorderWidth(4)
-                .setBackgroundColorResource(R.color.holo_red_light)
-                .setText("0");
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);//加载导向内容
         if (navigationView != null) {
             setupDrawerContent(navigationView);
@@ -102,7 +98,7 @@ public class ErpHome extends CustomSearchBase implements  BottomNavigationBar.On
                 transaction = fragmentManager.beginTransaction();
                 transaction.replace(R.id.tab, new FirstFragment());
                 lastSelectedPosition=0;
-                customHomeSearch.setHint("查找商品");
+                customHomeSearch.setHint("查询商品 | 输入名称");
                 transaction.commit();
                 break;
             case "thress":
@@ -144,7 +140,7 @@ public class ErpHome extends CustomSearchBase implements  BottomNavigationBar.On
         bottomNavigationBar
                 .setBackgroundStyle(BottomNavigationBar.BACKGROUND_STYLE_STATIC);
         bottomNavigationBar
-                .addItem(new BottomNavigationItem(R.drawable.home, "主页").setActiveColorResource(R.color.bottom).setBadgeItem(badgeItem))
+                .addItem(new BottomNavigationItem(R.drawable.home, "主页").setActiveColorResource(R.color.bottom))
                 .addItem(new BottomNavigationItem(R.drawable.purchase, "采购").setActiveColorResource(R.color.bottom))
                 .addItem(new BottomNavigationItem(R.drawable.home_sales, "销售").setActiveColorResource(R.color.bottom))
                 .addItem(new BottomNavigationItem(R.drawable.hoem_stock, "库存").setActiveColorResource(R.color.bottom))
@@ -164,11 +160,9 @@ public class ErpHome extends CustomSearchBase implements  BottomNavigationBar.On
                 fragmentManager=getSupportFragmentManager();
                 transaction=fragmentManager.beginTransaction();
                 transaction.replace(R.id.tab,new FirstFragment());
+                customHomeSearch.setHint("查询商品 | 输入名称");
                 transaction.commit();
                 ab.setDisplayHomeAsUpEnabled(true);
-                if (badgeItem != null) {
-                    badgeItem.setText(Integer.toString(position));
-                }
                  showEditMenu();
                 break;
             case 1:
@@ -176,11 +170,9 @@ public class ErpHome extends CustomSearchBase implements  BottomNavigationBar.On
                 fragmentManager=getSupportFragmentManager();
                 transaction=fragmentManager.beginTransaction();
                 transaction.replace(R.id.tab,new SecondFragment());
-                if (badgeItem != null) {
-                    badgeItem.setText(Integer.toString(position));
-                }
                 transaction.commit();
-                ab.setDisplayHomeAsUpEnabled(false);
+                customHomeSearch.setHint("采购流水 | 输入供应商");
+                ab.setDisplayHomeAsUpEnabled(true);
                 hiddenEditMenu();
 
                 break;
@@ -188,33 +180,26 @@ public class ErpHome extends CustomSearchBase implements  BottomNavigationBar.On
                 fragmentManager=getSupportFragmentManager();
                 transaction=fragmentManager.beginTransaction();
                 transaction.replace(R.id.tab,new ThressFragment());
-                if (badgeItem != null) {
-                    badgeItem.setText(Integer.toString(position));
-                }
+                customHomeSearch.setHint("销售流水 | 输入客户");
                 transaction.commit();
-                ab.setDisplayHomeAsUpEnabled(false);
+                ab.setDisplayHomeAsUpEnabled(true);
                 hiddenEditMenu();
                 break;
             case 3:
                 fragmentManager=getSupportFragmentManager();
                 transaction=fragmentManager.beginTransaction();
                 transaction.replace(R.id.tab,new FouthFragment());
-                if (badgeItem != null) {
-                    badgeItem.setText(Integer.toString(position));
-                }
+                customHomeSearch.setHint("查询库存 | 输入名称");
                 transaction.commit();
-                ab.setDisplayHomeAsUpEnabled(false);
+                ab.setDisplayHomeAsUpEnabled(true);
                 hiddenEditMenu();
                 break;
             case 4:
                 fragmentManager=getSupportFragmentManager();
                 transaction=fragmentManager.beginTransaction();
                 transaction.replace(R.id.tab,new FiveFragment());
-                if (badgeItem != null) {
-                    badgeItem.setText(Integer.toString(position));
-                }
                 transaction.commit();
-                ab.setDisplayHomeAsUpEnabled(false);
+                ab.setDisplayHomeAsUpEnabled(true);
                 hiddenEditMenu();
                 break;
             default:
@@ -254,7 +239,6 @@ public class ErpHome extends CustomSearchBase implements  BottomNavigationBar.On
     private void hiddenEditMenu(){
         if(null != mMenu){
             mMenu.clear();
-            ab.setDisplayHomeAsUpEnabled(false);
             getMenuInflater().inflate(R.menu.custom_menu, mMenu);
             }
 

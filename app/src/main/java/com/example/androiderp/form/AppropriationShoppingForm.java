@@ -47,11 +47,11 @@ public class AppropriationShoppingForm extends AppCompatActivity implements View
         customid=intent.getStringExtra("product_item");
         edit=intent.getStringExtra("action");
         manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        name=(EditText)findViewById(R.id.product_name);
+        name=(EditText)findViewById(R.id.name);
         name.setKeyListener(null);
-        number=(EditText)findViewById(R.id.product_number);
+        number=(EditText)findViewById(R.id.number);
         number.setKeyListener(null);
-        category=(EditText)findViewById(R.id.product_category);
+        category=(EditText)findViewById(R.id.documentmaker);
         category.setKeyListener(null);
         quantity =(EditText)findViewById(R.id.product_fqty);
         save=(TextView)findViewById(R.id.customtoobar_right);

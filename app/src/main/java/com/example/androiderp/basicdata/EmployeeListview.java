@@ -158,7 +158,7 @@ public class EmployeeListview extends CustomSearchBase implements View.OnClickLi
                                     adapter.notifyDataSetChanged();
                                 }else {
 
-                                    DataStructure.deleteAll(ProductCategory.class, "name = ?", listdatas.get(itemPosition - listView.getHeaderViewsCount()).getName().toString());
+                                    DataStructure.deleteAll(Employee.class, "name = ?", listdatas.get(itemPosition - listView.getHeaderViewsCount()).getName().toString());
 
                                     AlertDialog.Builder dialogOK = new AlertDialog.Builder(EmployeeListview.this);
                                     dialogOK.setMessage("该职员已经删除");

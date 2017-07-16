@@ -29,7 +29,7 @@
                 android:layout_height="wrap_content"
                 android:hint="商品名称"
                 android:textSize="14dp"
-                android:id="@+id/product_name"
+                android:id="@+id/name"
                 android:maxLines="1"
                 android:imeOptions="actionDone"
                 android:inputType="text"/>
@@ -52,7 +52,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="14dp"
                 android:hint="商品编码唯一，保存后不能修改"
-                android:id="@+id/product_number"
+                android:id="@+id/number"
                 android:maxLines="1"
                 android:imeOptions="actionDone"
                 android:inputType="text"/>
@@ -154,7 +154,7 @@
             <EditText
                 android:layout_width="240dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/product_note"
+                android:id="@+id/note"
                 android:textSize="14dp"
                 android:hint="商品备注信息"
                 android:maxLines="1"
@@ -170,7 +170,7 @@
                 android:layout_marginRight="10dp"/>
             <!-- 下圆角-->
             <LinearLayout style="@style/top_layout"
-                android:id="@+id/product_stock_layout">
+                android:id="@+id/stockin_layout">
                 <TextView style="@style/usertext"
                     android:text="库存初始化："
                     android:layout_gravity="center_vertical"
@@ -191,14 +191,14 @@
         android:visibility="gone">
         <!-- 上圆角-->
         <LinearLayout style="@style/top_layout"
-            android:id="@+id/product_category_layout">
+            android:id="@+id/documentmaker_layout">
             <TextView style="@style/usertext"
                 android:text="分类"
                 android:layout_gravity="center_vertical"
                 />
 
             <TextView style="@style/usertext"
-                android:id="@+id/product_category"
+                android:id="@+id/documentmaker"
                 android:hint="请选择分类"
                 android:layout_gravity="center_vertical"
                 />

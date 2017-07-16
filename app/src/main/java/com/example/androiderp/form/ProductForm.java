@@ -78,22 +78,22 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
         customid=intent.getStringExtra("product_item");
         edit=intent.getStringExtra("action");
         manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        name=(EditText)findViewById(R.id.product_name);
-        number=(EditText)findViewById(R.id.product_number);
+        name=(EditText)findViewById(R.id.name);
+        number=(EditText)findViewById(R.id.number);
         purchasePrice =(EditText)findViewById(R.id.product_purchaseprice);
         salesPrice =(EditText)findViewById(R.id.product_salesprice);
         barcode=(EditText)findViewById(R.id.product_barcode);
         model=(EditText)findViewById(R.id.product_model);
-        note=(EditText)findViewById(R.id.product_note);
+        note=(EditText)findViewById(R.id.note);
         numberScreen =(ImageView)findViewById(R.id.number_screen);
-        category=(TextView)findViewById(R.id.product_category);
+        category=(TextView)findViewById(R.id.documentmaker);
         brand=(TextView)findViewById(R.id.product_brand);
         unit=(TextView)findViewById(R.id.product_unit);
         stockIniti =(TextView)findViewById(R.id.product_stock_initi);
         toobarSave =(TextView)findViewById(R.id.customtoobar_right);
         toobarTile =(TextView)findViewById(R.id.customtoobar_midd);
         toobarBack =(TextView)findViewById(R.id.customtoobar_left);
-        categoryLayout=(LinearLayout)findViewById(R.id.product_category_layout);
+        categoryLayout=(LinearLayout)findViewById(R.id.documentmaker_layout);
         brandLayout=(LinearLayout)findViewById(R.id.product_brand_layout);
         unitLayout=(LinearLayout)findViewById(R.id.product_unit_layout);
         toobarAdd =(TextView)findViewById(R.id.customtoobar_r) ;
@@ -271,7 +271,7 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                     ProductForm.this.finish();
                 }
              break;
-            case R.id.product_category_layout:
+            case R.id.documentmaker_layout:
 
                 Intent intentcategory=new Intent(ProductForm.this, ProductCategoryListview.class);
                 intentcategory.putExtra("index",category.getText().toString());

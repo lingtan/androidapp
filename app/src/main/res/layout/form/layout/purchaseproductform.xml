@@ -20,12 +20,12 @@
     <LinearLayout style="@style/wrap_layout" >
         <!-- 无圆角-->
         <LinearLayout style="@style/mid_layout"
-            android:id="@+id/product_custom_layout">
+            android:id="@+id/stockout_layout">
             <TextView style="@style/usertext"
                 android:text="采购：" />
 
             <TextView style="@style/usertext"
-                android:id="@+id/product_custom"
+                android:id="@+id/stockout"
                 android:hint="请选择供应商"
                 android:layout_gravity="center_vertical"
                 />
@@ -40,14 +40,14 @@
             android:layout_marginRight="10dp"/>
         <!-- 下圆角-->
         <LinearLayout style="@style/bottom_layout"
-            android:id="@+id/product_stock_layout">
+            android:id="@+id/stockin_layout">
             <TextView style="@style/usertext"
                 android:text="仓库："
                 />
 
 
             <TextView style="@style/usertext"
-                android:id="@+id/product_stock"
+                android:id="@+id/stockin"
                 android:hint="请选择仓库"
                 android:layout_gravity="center_vertical"/>
             <ImageView
@@ -145,14 +145,14 @@
         android:layout_marginTop="20dp">
         <!-- 上圆角-->
         <LinearLayout style="@style/top_layout"
-            android:id="@+id/product_category_layout">
+            android:id="@+id/documentmaker_layout">
             <TextView style="@style/usertext"
                 android:text="采购员"
                 android:layout_gravity="center_vertical"
                 />
 
             <TextView style="@style/usertext"
-                android:id="@+id/product_category"
+                android:id="@+id/documentmaker"
                 android:hint="请选择采购员"
                 android:layout_gravity="center_vertical"
                 />
@@ -166,12 +166,12 @@
         <View style="@style/bg_line"  android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"/>
         <LinearLayout style="@style/top_layout"
-            android:id="@+id/product_data_layout">
+            android:id="@+id/businessdata_layout">
             <TextView style="@style/usertext"
                 android:text="采购日期"
                 android:layout_gravity="center_vertical"/>
             <TextView style="@style/usertext"
-                android:id="@+id/product_data"
+                android:id="@+id/businessdata"
                 android:layout_gravity="center_vertical" />
             <ImageView
                 android:layout_width="wrap_content"
@@ -185,14 +185,14 @@
             android:layout_marginRight="10dp"/>
         <!-- 下圆角-->
         <LinearLayout style="@style/bottom_layout"
-            android:id="@+id/product_consignment_layout">
+            android:id="@+id/billnumber_layout">
             <TextView style="@style/usertext"
                 android:text="发货方式"
                 android:layout_gravity="center_vertical"
                 />
 
             <TextView style="@style/usertext"
-                android:id="@+id/product_consignment"
+                android:id="@+id/billnumber"
                 android:hint="请选择发货方式"
                 android:layout_gravity="center_vertical"
                 />
@@ -213,7 +213,7 @@
             <EditText
                 android:layout_width="300dp"
                 android:layout_height="match_parent"
-                android:id="@+id/product_note"
+                android:id="@+id/note"
                 android:textSize="14dp"
                 android:hint="商品备注信息"
                 android:background="@null"

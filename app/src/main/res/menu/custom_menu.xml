@@ -10,11 +10,5 @@
         app:actionViewClass="android.support.v7.widget.SearchView"
         android:layout_width="wrap_content"
         android:icon="@drawable/toobar_search"/>
-    <item
-        android:id="@+id/custom_menu_add"
-        android:title="setting"
-        android:icon="@drawable/toobar_add"
-        app:showAsAction="always"
-        />
 
 </menu>

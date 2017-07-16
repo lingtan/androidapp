@@ -41,6 +41,7 @@ import com.example.androiderp.adaper.SaleProductListViewAdapter;
 import com.example.androiderp.basicdata.ConsignmentListview;
 import com.example.androiderp.basicdata.ProductBadgeListView;
 import com.example.androiderp.basicdata.SelectCustomListView;
+import com.example.androiderp.basicdata.StockIntentListview;
 import com.example.androiderp.common.Common;
 import com.example.androiderp.custom.CustomSearchBase;
 import com.example.androiderp.listview.Menu;
@@ -107,23 +108,23 @@ public class ReturnSaleProductForm extends CustomSearchBase implements View.OnCl
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         final Intent intent=getIntent();
         manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        name=(TextView)findViewById(R.id.product_custom);
+        name=(TextView)findViewById(R.id.stockout);
         productAddLayout =(LinearLayout) findViewById(R.id.saleproduct_add);
-        number=(TextView)findViewById(R.id.product_stock);
-        data=(TextView)findViewById(R.id.product_data);
-        consign=(TextView)findViewById(R.id.product_consignment);
-        note=(EditText)findViewById(R.id.product_note);
+        number=(TextView)findViewById(R.id.stockin);
+        data=(TextView)findViewById(R.id.businessdata);
+        consign=(TextView)findViewById(R.id.billnumber);
+        note=(EditText)findViewById(R.id.note);
         screenLayout=(LinearLayout) findViewById(R.id.number_screen);
-        category=(TextView)findViewById(R.id.product_category);
+        category=(TextView)findViewById(R.id.documentmaker);
         toobarSave =(TextView)findViewById(R.id.customtoobar_right);
         toobarTile=(TextView)findViewById(R.id.customtoobar_midd);
         toobarBack=(TextView)findViewById(R.id.customtoobar_left);
-        categoryLayout=(LinearLayout)findViewById(R.id.product_category_layout);
+        categoryLayout=(LinearLayout)findViewById(R.id.documentmaker_layout);
         toobarAdd=(TextView)findViewById(R.id.customtoobar_r) ;
-        stockLayout=(LinearLayout)findViewById(R.id.product_stock_layout);
-        customLayout=(LinearLayout)findViewById(R.id.product_custom_layout);
-        dataLayout=(LinearLayout)findViewById(R.id.product_data_layout);
-        consignmentLayout=(LinearLayout)findViewById(R.id.product_consignment_layout);
+        stockLayout=(LinearLayout)findViewById(R.id.stockin_layout);
+        customLayout=(LinearLayout)findViewById(R.id.stockout_layout);
+        dataLayout=(LinearLayout)findViewById(R.id.businessdata_layout);
+        consignmentLayout=(LinearLayout)findViewById(R.id.billnumber_layout);
         totalQuantity=(TextView)findViewById(R.id.product_totalfqty);
         totalAmout=(TextView)findViewById(R.id.product_totalamount);
         totalLayout=(LinearLayout)findViewById(R.id.product_total_layout);
@@ -357,21 +358,25 @@ public class ReturnSaleProductForm extends CustomSearchBase implements View.OnCl
                 }
 
             break;
-            case R.id.product_stock_layout:
+            case R.id.stockin_layout:
                 showStockWindow();
-                if( common.mPopWindow==null ||!common.mPopWindow.isShowing())
-                {
-                    int xPos = dm.widthPixels / 3;
-                    common.mPopWindow.showAsDropDown(number,xPos,5);
-                    //mPopWindow.showAtLocation(findViewById(R.id.main), Gravity.BOTTOM, 0, 0);//从底部弹出
-                }
-                else {
-                    common.mPopWindow.dismiss();
-                }
+                if(stockList.size()>0) {
+                    if (common.mPopWindow == null || !common.mPopWindow.isShowing()) {
+                        int xPos = dm.widthPixels / 3;
+                        common.mPopWindow.showAsDropDown(number, xPos, 5);
+                        //mPopWindow.showAtLocation(findViewById(R.id.main), Gravity.BOTTOM, 0, 0);//从底部弹出
+                    } else {
+                        common.mPopWindow.dismiss();
+                    }
+                }else {
+                    Intent intentstock=new Intent(ReturnSaleProductForm.this, StockIntentListview.class);
+                    intentstock.putExtra("index",number.getText().toString());
+                    startActivityForResult(intentstock,11);
 
+                }
                 break;
 
-            case R.id.product_custom_layout:
+            case R.id.stockout_layout:
                 Intent intentcustom=new Intent(ReturnSaleProductForm.this, SelectCustomListView.class);
                 intentcustom.putExtra("index",name.getText().toString());
                 startActivityForResult(intentcustom,8);
@@ -383,7 +388,7 @@ public class ReturnSaleProductForm extends CustomSearchBase implements View.OnCl
                     ReturnSaleProductForm.this.finish();
 
              break;
-            case R.id.product_category_layout:
+            case R.id.documentmaker_layout:
                 showEmployeeWindow();
 
                 if( common.mPopWindow==null ||!common.mPopWindow.isShowing())
@@ -396,7 +401,7 @@ public class ReturnSaleProductForm extends CustomSearchBase implements View.OnCl
                     common.mPopWindow.dismiss();
                 }
                 break;
-            case R.id.product_data_layout:
+            case R.id.businessdata_layout:
 
                 DatePickerDialog.OnDateSetListener listener=new DatePickerDialog.OnDateSetListener() {
                     @Override
@@ -413,7 +418,7 @@ public class ReturnSaleProductForm extends CustomSearchBase implements View.OnCl
                 });
                 dialog.show();
                 break;
-            case R.id.product_consignment_layout:
+            case R.id.billnumber_layout:
                 Intent intentconsignment=new Intent(ReturnSaleProductForm.this, ConsignmentListview.class);
                 intentconsignment.putExtra("index",consign.getText().toString());
                 startActivityForResult(intentconsignment,9);
@@ -478,6 +483,11 @@ public class ReturnSaleProductForm extends CustomSearchBase implements View.OnCl
             case 9:
                 if(resultCode==RESULT_OK){
                     consign.setText(data.getStringExtra("data_return"));
+                }
+                break;
+            case 11:
+                if(resultCode==RESULT_OK){
+                    number.setText(data.getStringExtra("data_return"));
                 }
                 break;
             case 4:

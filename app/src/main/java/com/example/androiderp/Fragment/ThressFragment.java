@@ -14,6 +14,7 @@ import com.example.androiderp.R;
 import com.example.androiderp.basicdata.AppropriationListView;
 import com.example.androiderp.basicdata.CustomListView;
 import com.example.androiderp.basicdata.CustomTowListView;
+import com.example.androiderp.basicdata.InventoryListView;
 import com.example.androiderp.basicdata.ProductAppropriationListView;
 import com.example.androiderp.basicdata.SaleOutListView;
 import com.example.androiderp.basicdata.SupplierOutListView;
@@ -77,7 +78,7 @@ public class ThressFragment extends Fragment implements View.OnClickListener {
                 startActivity(intent);
                 break;
             case R.id.thressfragmnet_kccxlayout:
-                intent = new Intent(context, ProductAppropriationListView.class);
+                intent = new Intent(context, InventoryListView.class);
                 startActivity(intent);
                 break;
             case R.id.thressfragmnet_khlayout:

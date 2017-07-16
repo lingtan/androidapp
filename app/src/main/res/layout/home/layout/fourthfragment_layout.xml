@@ -240,7 +240,7 @@
                 android:layout_height="30.dp"
                 android:layout_width="30.dp"
                 android:layout_alignParentTop="true"
-                android:src="@drawable/home_firstfragment_kh"
+                android:src="@drawable/home_fisrtfragment_kc"
                 android:layout_marginRight="20dp"
                 />
 
@@ -249,7 +249,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="14dp"
-                android:text="客户管理"
+                android:text="仓库管理"
                 android:layout_alignTop="@id/thressfragmnet_xsthimag"
                 android:layout_toRightOf="@+id/thressfragmnet_xsthimag"
                 android:layout_marginBottom="22dp"

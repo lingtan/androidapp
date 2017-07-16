@@ -33,6 +33,7 @@ import com.example.androiderp.adaper.CommonDataStructure;
 import com.example.androiderp.adaper.DataStructure;
 import com.example.androiderp.adaper.PopuMenuDataStructure;
 import com.example.androiderp.basicdata.ProductAppropriationListView;
+import com.example.androiderp.basicdata.StockIntentListview;
 import com.example.androiderp.common.Common;
 import com.example.androiderp.custom.CustomSearchBase;
 import com.example.androiderp.listview.Menu;
@@ -91,17 +92,17 @@ public class AppropriationForm extends CustomSearchBase implements View.OnClickL
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         final Intent intent=getIntent();
         manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        appropriOut=(TextView)findViewById(R.id.appropri_out);
-        productAddLayout=(LinearLayout) findViewById(R.id.product_add_layout);
-        appropriIn=(TextView)findViewById(R.id.appropri_in);
-        note=(EditText)findViewById(R.id.product_note);
-        productScreenLayout=(LinearLayout) findViewById(R.id.product_screen_layout);
+        appropriOut=(TextView)findViewById(R.id.stockout);
+        productAddLayout=(LinearLayout) findViewById(R.id.add_layout);
+        appropriIn=(TextView)findViewById(R.id.stockin);
+        note=(EditText)findViewById(R.id.note);
+        productScreenLayout=(LinearLayout) findViewById(R.id.screen_layout);
         save=(TextView)findViewById(R.id.customtoobar_right);
         toobarTile=(TextView)findViewById(R.id.customtoobar_midd);
         toobarBack=(TextView)findViewById(R.id.customtoobar_left);
         toobarAdd=(TextView)findViewById(R.id.customtoobar_r) ;
-        appropriInLayout=(LinearLayout)findViewById(R.id.appropri_in_layout);
-        appropriOutLayout=(LinearLayout)findViewById(R.id.appropri_out_layout);
+        appropriInLayout=(LinearLayout)findViewById(R.id.stockin_layout);
+        appropriOutLayout=(LinearLayout)findViewById(R.id.stockout_layout);
         appropriInLayout.setOnClickListener(this);
         appropriOutLayout.setOnClickListener(this);
         save.setOnClickListener(this);
@@ -297,32 +298,38 @@ public class AppropriationForm extends CustomSearchBase implements View.OnClickL
                 }
 
             break;
-            case R.id.appropri_in_layout:
+            case R.id.stockin_layout:
                 showStockWindow();
-                if( common.mPopWindow==null ||!common.mPopWindow.isShowing())
-                {
-                    int xPos = dm.widthPixels / 3;
-                    common.mPopWindow.showAsDropDown(appropriIn,xPos,5);
-                    //mPopWindow.showAtLocation(findViewById(R.id.main), Gravity.BOTTOM, 0, 0);//从底部弹出
+                if(stockList.size()>1) {
+                    if (common.mPopWindow == null || !common.mPopWindow.isShowing()) {
+                        int xPos = dm.widthPixels / 3;
+                        common.mPopWindow.showAsDropDown(appropriIn, xPos, 5);
+                        //mPopWindow.showAtLocation(findViewById(R.id.main), Gravity.BOTTOM, 0, 0);//从底部弹出
+                    } else {
+                        common.mPopWindow.dismiss();
+                    }
+                }else {
+                    Intent intentstock=new Intent(AppropriationForm.this, StockIntentListview.class);
+                    intentstock.putExtra("index",appropriIn.getText().toString());
+                    startActivityForResult(intentstock,11);
                 }
-                else {
-                    common.mPopWindow.dismiss();
-                }
-
                 break;
 
-            case R.id.appropri_out_layout:
+            case R.id.stockout_layout:
 
                 showEmployeeWindow();
-
-                if( common.mPopWindow==null ||!common.mPopWindow.isShowing())
-                {
-                    int xPos = dm.widthPixels / 3;
-                    common.mPopWindow.showAsDropDown(appropriOut,xPos,5);
-                    //mPopWindow.showAtLocation(findViewById(R.id.main), Gravity.BOTTOM, 0, 0);//从底部弹出
-                }
-                else {
-                    common.mPopWindow.dismiss();
+                if(stockList.size()>1) {
+                    if (common.mPopWindow == null || !common.mPopWindow.isShowing()) {
+                        int xPos = dm.widthPixels / 3;
+                        common.mPopWindow.showAsDropDown(appropriOut, xPos, 5);
+                        //mPopWindow.showAtLocation(findViewById(R.id.main), Gravity.BOTTOM, 0, 0);//从底部弹出
+                    } else {
+                        common.mPopWindow.dismiss();
+                    }
+                }else {
+                    Intent intentstock=new Intent(AppropriationForm.this, StockIntentListview.class);
+                    intentstock.putExtra("index",appropriOut.getText().toString());
+                    startActivityForResult(intentstock,12);
                 }
                 break;
 
@@ -350,7 +357,7 @@ public class AppropriationForm extends CustomSearchBase implements View.OnClickL
                     common.mPopWindow.dismiss();
                 }
                 break;
-            case R.id.product_add_layout:
+            case R.id.add_layout:
                 Intent intentbadge=new Intent(AppropriationForm.this, ProductAppropriationListView.class);
                 intentbadge.putExtra("appropriout",appropriOut.getText().toString());
                 startActivityForResult(intentbadge,6);
@@ -505,12 +512,16 @@ public class AppropriationForm extends CustomSearchBase implements View.OnClickL
 
                 break;
 
-            case 8:
+            case 11:
+                if(resultCode==RESULT_OK){
+                    appropriIn.setText(data.getStringExtra("data_return"));
+                }
+                break;
+            case 12:
                 if(resultCode==RESULT_OK){
                     appropriOut.setText(data.getStringExtra("data_return"));
                 }
                 break;
-
             default:
         }
     }
