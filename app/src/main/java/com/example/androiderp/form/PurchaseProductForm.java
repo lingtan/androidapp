@@ -37,6 +37,7 @@ import com.example.androiderp.adaper.DataStructure;
 import com.example.androiderp.adaper.PopuMenuDataStructure;
 import com.example.androiderp.adaper.SaleProductListViewAdapter;
 import com.example.androiderp.basicdata.ConsignmentListview;
+import com.example.androiderp.basicdata.EmployeeIntentListview;
 import com.example.androiderp.basicdata.ProductBadgeListView;
 import com.example.androiderp.basicdata.SelectSupplierListView;
 import com.example.androiderp.basicdata.StockIntentListview;
@@ -156,10 +157,10 @@ public class PurchaseProductForm extends CustomSearchBase implements View.OnClic
     private void  formInit()
     {
 
-            supplier = DataSupport.find(Supplier.class, 1);
-        stock = DataSupport.find(Stock.class, 1);
-        employee = DataSupport.find(Employee.class, 1);
-        consignment = DataSupport.find(Consignment.class, 1);
+            supplier = DataSupport.findFirst(Supplier.class);
+        stock = DataSupport.findFirst(Stock.class);
+        employee = DataSupport.findFirst(Employee.class);
+        consignment = DataSupport.findFirst(Consignment.class);
         if(supplier ==null)
         {
 
@@ -373,15 +374,18 @@ public class PurchaseProductForm extends CustomSearchBase implements View.OnClic
             case R.id.documentmaker_layout:
 
                 showEmployeeWindow();
-
-                if( common.mPopWindow==null ||!common.mPopWindow.isShowing())
-                {
-                    int xPos = dm.widthPixels / 3;
-                    common.mPopWindow.showAsDropDown(category,xPos,5);
-                    //mPopWindow.showAtLocation(findViewById(R.id.main), Gravity.BOTTOM, 0, 0);//从底部弹出
-                }
-                else {
-                    common.mPopWindow.dismiss();
+                if(employeeList.size()>0) {
+                    if (common.mPopWindow == null || !common.mPopWindow.isShowing()) {
+                        int xPos = dm.widthPixels / 3;
+                        common.mPopWindow.showAsDropDown(category, xPos, 5);
+                        //mPopWindow.showAtLocation(findViewById(R.id.main), Gravity.BOTTOM, 0, 0);//从底部弹出
+                    } else {
+                        common.mPopWindow.dismiss();
+                    }
+                }else {
+                    Intent intentemployee=new Intent(PurchaseProductForm.this, EmployeeIntentListview.class);
+                    intentemployee.putExtra("index",category.getText().toString());
+                    startActivityForResult(intentemployee,12);
                 }
                 break;
             case R.id.businessdata_layout:
@@ -471,6 +475,11 @@ public class PurchaseProductForm extends CustomSearchBase implements View.OnClic
             case 11:
                 if(resultCode==RESULT_OK){
                     number.setText(data.getStringExtra("data_return"));
+                }
+                break;
+            case 12:
+                if(resultCode==RESULT_OK){
+                    category.setText(data.getStringExtra("data_return"));
                 }
                 break;
             case 4:
@@ -626,12 +635,6 @@ public class PurchaseProductForm extends CustomSearchBase implements View.OnClic
                 }
 
 
-                break;
-
-            case 8:
-                if(resultCode==RESULT_OK){
-                    name.setText(data.getStringExtra("data_return"));
-                }
                 break;
 
             default:

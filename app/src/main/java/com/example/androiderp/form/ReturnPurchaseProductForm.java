@@ -37,6 +37,7 @@ import com.example.androiderp.adaper.DataStructure;
 import com.example.androiderp.adaper.PopuMenuDataStructure;
 import com.example.androiderp.adaper.SaleProductListViewAdapter;
 import com.example.androiderp.basicdata.ConsignmentListview;
+import com.example.androiderp.basicdata.EmployeeIntentListview;
 import com.example.androiderp.basicdata.ProductBadgeListView;
 import com.example.androiderp.basicdata.SelectSupplierListView;
 import com.example.androiderp.basicdata.StockIntentListview;
@@ -156,10 +157,10 @@ public class ReturnPurchaseProductForm extends CustomSearchBase implements View.
     private void  formInit()
     {
 
-            supplier = DataSupport.find(Supplier.class, 1);
-        stock = DataSupport.find(Stock.class, 1);
-        employee = DataSupport.find(Employee.class, 1);
-        consignment = DataSupport.find(Consignment.class, 1);
+            supplier = DataSupport.findFirst(Supplier.class);
+        stock = DataSupport.findFirst(Stock.class);
+        employee = DataSupport.findFirst(Employee.class);
+        consignment = DataSupport.findFirst(Consignment.class);
         if(supplier ==null)
         {
 
@@ -373,7 +374,7 @@ public class ReturnPurchaseProductForm extends CustomSearchBase implements View.
             case R.id.documentmaker_layout:
 
                 showEmployeeWindow();
-
+                if(employeeList.size()>0) {
                 if( common.mPopWindow==null ||!common.mPopWindow.isShowing())
                 {
                     int xPos = dm.widthPixels / 3;
@@ -382,6 +383,10 @@ public class ReturnPurchaseProductForm extends CustomSearchBase implements View.
                 }
                 else {
                     common.mPopWindow.dismiss();
+                }}else {
+                    Intent intentemployee=new Intent(ReturnPurchaseProductForm.this, EmployeeIntentListview.class);
+                    intentemployee.putExtra("index",category.getText().toString());
+                    startActivityForResult(intentemployee,12);
                 }
                 break;
             case R.id.businessdata_layout:
@@ -471,6 +476,11 @@ public class ReturnPurchaseProductForm extends CustomSearchBase implements View.
             case 11:
                 if(resultCode==RESULT_OK){
                     number.setText(data.getStringExtra("data_return"));
+                }
+                break;
+            case 12:
+                if(resultCode==RESULT_OK){
+                    category.setText(data.getStringExtra("data_return"));
                 }
                 break;
             case 4:

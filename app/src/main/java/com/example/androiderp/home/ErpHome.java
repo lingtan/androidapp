@@ -41,6 +41,7 @@ import com.example.androiderp.Fragment.SecondFragment;
 import com.example.androiderp.Fragment.ThressFragment;
 import com.example.androiderp.R;
 import com.example.androiderp.basicdata.CustomSearchListView;
+import com.example.androiderp.basicdata.ProductSearchListView;
 import com.example.androiderp.basicdata.ProductTowListView;
 import com.example.androiderp.custom.CustomHomeSearch;
 import com.example.androiderp.custom.CustomSearchBase;
@@ -123,7 +124,7 @@ public class ErpHome extends CustomSearchBase implements  BottomNavigationBar.On
         public void onFocusChange(View v, boolean hasFocus) {
 
             if (hasFocus) {
-            Intent    intent = new Intent(ErpHome.this, CustomSearchListView.class);
+            Intent    intent = new Intent(ErpHome.this, ProductSearchListView.class);
                 startActivity(intent);
                 v.clearFocus();
             }

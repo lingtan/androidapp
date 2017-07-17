@@ -154,7 +154,7 @@
     </style>
     <style name="home_search_Style">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">30sp</item>
+        <item name="android:layout_height">28sp</item>
         <item name="android:background">@drawable/custom_home_search_shape</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:imeOptions">actionSearch</item>

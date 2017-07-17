@@ -164,10 +164,10 @@ public class SaleProductForm extends CustomSearchBase implements View.OnClickLis
     private void  formInit()
     {
 
-            custom = DataSupport.find(Custom.class, 1);
-        stock = DataSupport.find(Stock.class, 1);
-        employee = DataSupport.find(Employee.class, 1);
-        consignment = DataSupport.find(Consignment.class, 1);
+            custom = DataSupport.findFirst(Custom.class);
+        stock = DataSupport.findFirst(Stock.class);
+        employee = DataSupport.findFirst(Employee.class);
+        consignment = DataSupport.findFirst(Consignment.class);
 
         if(custom==null)
         {
@@ -742,12 +742,6 @@ public class SaleProductForm extends CustomSearchBase implements View.OnClickLis
                 }
 
 
-                break;
-
-            case 8:
-                if(resultCode==RESULT_OK){
-                    name.setText(data.getStringExtra("data_return"));
-                }
                 break;
 
             default:

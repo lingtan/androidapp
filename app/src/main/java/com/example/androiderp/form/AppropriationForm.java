@@ -135,7 +135,7 @@ public class AppropriationForm extends CustomSearchBase implements View.OnClickL
     {
 
 
-        stock = DataSupport.find(Stock.class, 1);
+        stock = DataSupport.findFirst(Stock.class);
 
 
         if(stock==null)
@@ -318,6 +318,7 @@ public class AppropriationForm extends CustomSearchBase implements View.OnClickL
             case R.id.stockout_layout:
 
                 showEmployeeWindow();
+
                 if(stockList.size()>1) {
                     if (common.mPopWindow == null || !common.mPopWindow.isShowing()) {
                         int xPos = dm.widthPixels / 3;

@@ -134,7 +134,7 @@ public class StockTakingForm extends CustomSearchBase implements View.OnClickLis
     {
 
 
-        stock = DataSupport.find(Stock.class, 1);
+        stock = DataSupport.findFirst(Stock.class);
 
 
         if(stock==null)
