@@ -12,11 +12,8 @@ import android.widget.RelativeLayout;
 
 import com.example.androiderp.R;
 import com.example.androiderp.basicdata.AppropriationListView;
-import com.example.androiderp.basicdata.CustomListView;
 import com.example.androiderp.basicdata.InventoryListView;
-import com.example.androiderp.basicdata.ProductAppropriationListView;
-import com.example.androiderp.basicdata.SupplierListView;
-import com.example.androiderp.basicdata.SupplierOutListView;
+import com.example.androiderp.basicdata.PurchaseOutListView;
 import com.example.androiderp.basicdata.SupplierTowListView;
 import com.example.androiderp.form.AppropriationForm;
 import com.example.androiderp.form.PurchaseProductForm;
@@ -68,7 +65,7 @@ public class SecondFragment extends Fragment implements View.OnClickListener {
                 startActivity(intent);
                 break;
             case R.id.secondfragmnet_cglslayout:
-                intent = new Intent(context, SupplierOutListView.class);
+                intent = new Intent(context, PurchaseOutListView.class);
                 startActivity(intent);
                 break;
             case R.id.secondfragment_ckxclayout:

@@ -94,6 +94,15 @@
         <activity android:name="com.example.androiderp.basicdata.ProductSearchListView">
 
         </activity>
+        <activity android:name="com.example.androiderp.basicdata.SaleOutSearchListView">
+
+        </activity>
+        <activity android:name="com.example.androiderp.basicdata.SupplierOutSearchListView">
+
+        </activity>
+        <activity android:name="com.example.androiderp.basicdata.InventorySearchListView">
+
+        </activity>
         <activity android:name="com.example.androiderp.basicdata.CustomSearchListView">
 
         </activity>
@@ -179,10 +188,10 @@
         <activity android:name="com.example.androiderp.basicdata.StockListView">
 
         </activity>
-        <activity android:name="com.example.androiderp.basicdata.SupplierOutListView">
+        <activity android:name="com.example.androiderp.basicdata.PurchaseOutListView">
 
         </activity>
-        <activity android:name="com.example.androiderp.basicdata.SupplierOutEntyList">
+        <activity android:name="com.example.androiderp.basicdata.PurchaseOutEntyList">
 
         </activity>
         <activity android:name="com.example.androiderp.basicdata.BrandBadgeListView">

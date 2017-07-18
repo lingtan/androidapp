@@ -41,8 +41,11 @@ import com.example.androiderp.Fragment.SecondFragment;
 import com.example.androiderp.Fragment.ThressFragment;
 import com.example.androiderp.R;
 import com.example.androiderp.basicdata.CustomSearchListView;
+import com.example.androiderp.basicdata.InventorySearchListView;
 import com.example.androiderp.basicdata.ProductSearchListView;
 import com.example.androiderp.basicdata.ProductTowListView;
+import com.example.androiderp.basicdata.SaleOutSearchListView;
+import com.example.androiderp.basicdata.SupplierOutSearchListView;
 import com.example.androiderp.custom.CustomHomeSearch;
 import com.example.androiderp.custom.CustomSearchBase;
 import com.example.androiderp.scanning.CommonScanActivity;
@@ -62,8 +65,7 @@ public class ErpHome extends CustomSearchBase implements  BottomNavigationBar.On
     private String edit;
     private CustomHomeSearch customHomeSearch;
     private InputMethodManager manager;
-    private BadgeItem  badgeItem;
-
+    private int searchPosition=0;
 
     @Override
     public void iniView(){
@@ -99,7 +101,7 @@ public class ErpHome extends CustomSearchBase implements  BottomNavigationBar.On
                 transaction = fragmentManager.beginTransaction();
                 transaction.replace(R.id.tab, new FirstFragment());
                 lastSelectedPosition=0;
-                customHomeSearch.setHint("查询商品 | 输入名称");
+                customHomeSearch.setHint("输入名称 | 产品货号");
                 transaction.commit();
                 break;
             case "thress":
@@ -123,11 +125,50 @@ public class ErpHome extends CustomSearchBase implements  BottomNavigationBar.On
         @Override
         public void onFocusChange(View v, boolean hasFocus) {
 
-            if (hasFocus) {
-            Intent    intent = new Intent(ErpHome.this, ProductSearchListView.class);
-                startActivity(intent);
-                v.clearFocus();
+            switch (searchPosition) {
+                case 0:
+                    if (hasFocus) {
+                        Intent    intent = new Intent(ErpHome.this, ProductSearchListView.class);
+                        startActivity(intent);
+                        v.clearFocus();
+                    }
+
+                 break;
+                case 1:
+                    if (hasFocus) {
+                        Intent    intent = new Intent(ErpHome.this, SupplierOutSearchListView.class);
+                        startActivity(intent);
+                        v.clearFocus();
+                    }
+
+                    break;
+
+                case 2:
+                    if (hasFocus) {
+                        Intent    intent = new Intent(ErpHome.this, SaleOutSearchListView.class);
+                        startActivity(intent);
+                        v.clearFocus();
+                    }
+
+                    break;
+                case 3:
+                    if (hasFocus) {
+                        Intent    intent = new Intent(ErpHome.this, InventorySearchListView.class);
+                        startActivity(intent);
+                        v.clearFocus();
+                    }
+
+                    break;
+
+
+                default:
+                    break;
+
             }
+
+
+
+
         }
     });
     }
@@ -155,24 +196,24 @@ public class ErpHome extends CustomSearchBase implements  BottomNavigationBar.On
 
 
     public void onTabSelected(int position) {
-
+        searchPosition=position;
         switch (position) {
             case 0:
+
                 fragmentManager=getSupportFragmentManager();
                 transaction=fragmentManager.beginTransaction();
                 transaction.replace(R.id.tab,new FirstFragment());
-                customHomeSearch.setHint("查询商品 | 输入名称");
+                customHomeSearch.setHint("输入名称 | 产品货号");
                 transaction.commit();
                 ab.setDisplayHomeAsUpEnabled(true);
                  showEditMenu();
                 break;
             case 1:
-
                 fragmentManager=getSupportFragmentManager();
                 transaction=fragmentManager.beginTransaction();
                 transaction.replace(R.id.tab,new SecondFragment());
                 transaction.commit();
-                customHomeSearch.setHint("采购流水 | 输入供应商");
+                customHomeSearch.setHint("输入供应商 | 单据编号");
                 ab.setDisplayHomeAsUpEnabled(true);
                 hiddenEditMenu();
 
@@ -181,7 +222,7 @@ public class ErpHome extends CustomSearchBase implements  BottomNavigationBar.On
                 fragmentManager=getSupportFragmentManager();
                 transaction=fragmentManager.beginTransaction();
                 transaction.replace(R.id.tab,new ThressFragment());
-                customHomeSearch.setHint("销售流水 | 输入客户");
+                customHomeSearch.setHint("输入客户 | 单据编号");
                 transaction.commit();
                 ab.setDisplayHomeAsUpEnabled(true);
                 hiddenEditMenu();
@@ -190,7 +231,7 @@ public class ErpHome extends CustomSearchBase implements  BottomNavigationBar.On
                 fragmentManager=getSupportFragmentManager();
                 transaction=fragmentManager.beginTransaction();
                 transaction.replace(R.id.tab,new FouthFragment());
-                customHomeSearch.setHint("查询库存 | 输入名称");
+                customHomeSearch.setHint("输入名称 | 产品货号");
                 transaction.commit();
                 ab.setDisplayHomeAsUpEnabled(true);
                 hiddenEditMenu();
@@ -302,7 +343,7 @@ public class ErpHome extends CustomSearchBase implements  BottomNavigationBar.On
                 if (resultCode == RESULT_OK) {
 
 
-                    Intent intent = new Intent(ErpHome.this, ProductTowListView.class);
+                    Intent intent = new Intent(ErpHome.this, ProductSearchListView.class);
                     intent.putExtra("scanResult",data.getStringExtra("scanResult"));
                     startActivity(intent);
                 }

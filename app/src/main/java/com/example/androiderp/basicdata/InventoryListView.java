@@ -64,7 +64,6 @@ public class InventoryListView extends CustomSearchBase implements View.OnClickL
     private ImageView badgeImage;
     private  int leftListSelecte;
     private  String leftListSelecteText;
-    private LinearLayout account;
     private List<StockIniti> stockInitiList = new ArrayList<StockIniti>();
     private List<StockTakingEnty> stockTakingEntyList = new ArrayList<StockTakingEnty>();
     private List<SalesOutEnty> salesOutEntyList;
@@ -78,7 +77,7 @@ public class InventoryListView extends CustomSearchBase implements View.OnClickL
 
     @Override
     public void iniView(){
-        setContentView(R.layout.appropriation_listview_layout);
+        setContentView(R.layout.inventory_listview_layout);
         toobarBack =(TextView)findViewById(R.id.custom_toobar_left) ;
         toobarTile =(TextView)findViewById(R.id.custom_toobar_midd);
         toobarAdd =(TextView)findViewById(R.id.custom_toobar_right);
@@ -92,7 +91,6 @@ public class InventoryListView extends CustomSearchBase implements View.OnClickL
         Intent intentValue=getIntent();
         appropriOutValue=intentValue.getStringExtra("appropriout");
         customSearch = (CustomSearch) findViewById(R.id.search);
-        account =(LinearLayout)findViewById(R.id.product_item_layout_bottom);
         productList = DataSupport.findAll(Product.class);
         stockInitiList = DataSupport.findAll(StockIniti.class);
         stockTakingEntyList = DataSupport.findAll(StockTakingEnty.class);
@@ -222,21 +220,6 @@ public class InventoryListView extends CustomSearchBase implements View.OnClickL
 
         customSearch.addTextChangedListener(textWatcher);
 
-        account.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if(productShoppingList !=null& productShoppingList.size()!=0){
-                    Intent intentdata=new Intent(InventoryListView.this, SaleProductForm.class);
-                    ShoppingData shoppingData=new ShoppingData();
-                    shoppingData.setProductShoppingList(productShoppingList);
-                    intentdata.putExtra("shoppingdata",shoppingData);
-                    setResult(RESULT_OK,intentdata);
-                    InventoryListView.this.finish();
-                }
-            }
-        });
-
 
     }
 
@@ -253,7 +236,8 @@ public class InventoryListView extends CustomSearchBase implements View.OnClickL
             for (int i = 0; i < productList.size(); i++) {
                 if(productList.get(i).getCategory()==null)
                 { int index = productList.get(i).getNumber().indexOf(name);
-                    if (index != -1) {
+                    int indey = productList.get(i).getName().indexOf(name);
+                    if (index != -1||indey!=-1) {
                         productSearch.add(productList.get(i));
                     }
 
@@ -264,7 +248,8 @@ public class InventoryListView extends CustomSearchBase implements View.OnClickL
         {
             for (int i = 0; i < productList.size(); i++) {
                 int index = productList.get(i).getNumber().indexOf(name);
-                if (index != -1) {
+                int indey = productList.get(i).getName().indexOf(name);
+                if (index != -1||indey!=-1) {
                     productSearch.add(productList.get(i));
                 }
 
@@ -441,20 +426,8 @@ public class InventoryListView extends CustomSearchBase implements View.OnClickL
             case 3:
                 if(resultCode==RESULT_OK) {
 
-                    for(Product product: productSearch)
-
-                    {
-                        if(product.getNumber().equals(data.getStringExtra("scanResult")))
-                        {
-                            intent.removeExtra("action");
-                            intent.putExtra("action", "edit");
-                            intent.putExtra("product_item", String.valueOf(product.getId()));
-                            startActivityForResult(intent,1);
-                        }
-
-
-                    }
-
+                    customSearch.requestFocusFromTouch();
+                    customSearch.setText(data.getStringExtra("scanResult"));
                 }
                 break;
 

@@ -498,6 +498,11 @@ public class SaleProductForm extends CustomSearchBase implements View.OnClickLis
                     number.setText(data.getStringExtra("data_return"));
                 }
                 break;
+            case 8:
+                if(resultCode==RESULT_OK){
+                    name.setText(data.getStringExtra("data_return"));
+                }
+                break;
             case 12:
                 if(resultCode==RESULT_OK){
                     category.setText(data.getStringExtra("data_return"));

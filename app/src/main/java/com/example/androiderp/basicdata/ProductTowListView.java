@@ -201,15 +201,19 @@ public class ProductTowListView extends CustomSearchBase implements View.OnClick
         switch (requestCode){
             case 1:
                 if(resultCode==RESULT_OK)
+                { if(productSearch.size()>0)
                 {
-                    if(productList.size()!=0) {
+                    rightAdapter = new ProductAdapter(ProductTowListView.this, R.layout.product_item, productSearch);
+                    rightListView.setAdapter(rightAdapter);
+                }else {
+                    if (productList.size() != 0) {
                         productList.clear();
                     }
                     productList = DataSupport.findAll(Product.class);
 
                     rightAdapter = new ProductAdapter(ProductTowListView.this, R.layout.product_item, productList);
                     rightListView.setAdapter(rightAdapter);
-
+                }
                     if(categorylist.size()!=0)
                     {
                         categorylist.clear();

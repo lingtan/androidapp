@@ -9,24 +9,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 
-import com.example.androiderp.CustomDataClass.Employee;
 import com.example.androiderp.R;
 import com.example.androiderp.adaper.CusteomGridAdapter;
-import com.example.androiderp.basicdata.AppropriationListView;
-import com.example.androiderp.basicdata.BrandBadgeListView;
-import com.example.androiderp.basicdata.CustomCategoryListview;
 import com.example.androiderp.basicdata.CustomListView;
 import com.example.androiderp.basicdata.CustomTowListView;
 import com.example.androiderp.basicdata.EmployeeListview;
 import com.example.androiderp.basicdata.InventoryListView;
-import com.example.androiderp.basicdata.ProductAppropriationListView;
-import com.example.androiderp.basicdata.ProductBadgeListView;
 import com.example.androiderp.basicdata.ProductTowListView;
 import com.example.androiderp.basicdata.SaleOutListView;
 import com.example.androiderp.basicdata.StockListView;
-import com.example.androiderp.basicdata.SupplierOutListView;
+import com.example.androiderp.basicdata.PurchaseOutListView;
 import com.example.androiderp.basicdata.SupplierTowListView;
-import com.example.androiderp.basicdata.UnitListView;
 import com.example.androiderp.custom.CustomGridView;
 import com.example.androiderp.form.AppropriationForm;
 import com.example.androiderp.form.PurchaseProductForm;
@@ -106,7 +99,7 @@ public class FirstFragment extends Fragment {
                         startActivity(intent);
                         break;
                     case 11:
-                        intent = new Intent(context, SupplierOutListView.class);
+                        intent = new Intent(context, PurchaseOutListView.class);
                         startActivity(intent);
                         break;
                     case 12:

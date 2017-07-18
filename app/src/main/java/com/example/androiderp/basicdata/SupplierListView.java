@@ -45,6 +45,7 @@ public class SupplierListView extends CustomSearchBase implements View.OnClickLi
         toobarAdd.setOnClickListener(this);
         toobarTile.setOnClickListener(this);
         customSearch = (CustomSearch) findViewById(R.id.search);
+
         toobarTile.setCompoundDrawables(null,null,null,null);
         supplierList = DataSupport.findAll(Supplier.class);
         intent=new Intent(SupplierListView.this,SupplierForm.class);

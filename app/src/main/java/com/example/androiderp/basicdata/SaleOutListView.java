@@ -40,6 +40,7 @@ public class SaleOutListView extends CustomSearchBase implements View.OnClickLis
         toobarAdd.setOnClickListener(this);
         toobarTile.setOnClickListener(this);
         customSearch = (CustomSearch) findViewById(R.id.search);
+        customSearch.setHint("销售流水 | 输入客户");
         salesOutList =DataSupport.where("billtype =?","2").find(SalesOut.class);
         intentEdit = new Intent(SaleOutListView.this, SaleOutEntyList.class);
         toobarTile.setText("销售流水");

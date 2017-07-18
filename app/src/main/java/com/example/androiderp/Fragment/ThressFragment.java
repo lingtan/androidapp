@@ -12,16 +12,10 @@ import android.widget.RelativeLayout;
 
 import com.example.androiderp.R;
 import com.example.androiderp.basicdata.AppropriationListView;
-import com.example.androiderp.basicdata.CustomListView;
 import com.example.androiderp.basicdata.CustomTowListView;
 import com.example.androiderp.basicdata.InventoryListView;
-import com.example.androiderp.basicdata.ProductAppropriationListView;
 import com.example.androiderp.basicdata.SaleOutListView;
-import com.example.androiderp.basicdata.SupplierOutListView;
-import com.example.androiderp.basicdata.SupplierTowListView;
 import com.example.androiderp.form.AppropriationForm;
-import com.example.androiderp.form.PurchaseProductForm;
-import com.example.androiderp.form.ReturnPurchaseProductForm;
 import com.example.androiderp.form.ReturnSaleProductForm;
 import com.example.androiderp.form.SaleProductForm;
 
