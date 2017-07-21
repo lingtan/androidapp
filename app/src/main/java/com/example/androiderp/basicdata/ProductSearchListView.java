@@ -17,6 +17,7 @@ import android.widget.ListView;
 import com.example.androiderp.CustomDataClass.Custom;
 import com.example.androiderp.CustomDataClass.Product;
 import com.example.androiderp.R;
+import com.example.androiderp.adaper.AppropriationBadgeAdapter;
 import com.example.androiderp.adaper.CommonAdapter;
 import com.example.androiderp.adaper.CommonDataStructure;
 import com.example.androiderp.adaper.PopuMenuDataStructure;
@@ -92,7 +93,12 @@ public class ProductSearchListView extends CustomSearchBase implements View.OnCl
 
             }
         });
+        if(productList.size()!=0) {
 
+            adapter = new ProductAdapter(ProductSearchListView.this, R.layout.product_item, productList);
+            listView.setAdapter(adapter);
+
+        }
         customHomeSearch.addTextChangedListener(textWatcher);
         if(scanResult!=null) {
 

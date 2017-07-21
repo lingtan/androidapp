@@ -104,7 +104,7 @@ public class AppropriationBadgeAdapter extends ArrayAdapter<Product> implements 
 
         }
         // 重新获取ViewHolder
-        DecimalFormat df = new DecimalFormat("#####0.00");
+        DecimalFormat df = new DecimalFormat("#####0.##");
         viewHolder.name.setText(data.get(position).getName().toString());
         viewHolder.number.setText(data.get(position).getNumber());
         viewHolder.model.setText(data.get(position).getModel());

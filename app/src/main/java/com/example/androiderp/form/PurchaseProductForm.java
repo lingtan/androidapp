@@ -90,7 +90,7 @@ public class PurchaseProductForm extends CustomSearchBase implements View.OnClic
     private List<Employee> employeeList;
     private Calendar calendar;
     private int year,month,day;
-    private int countall;
+    private double countall;
     private double amountCount;
     private Intent intent;
     public void iniView() {

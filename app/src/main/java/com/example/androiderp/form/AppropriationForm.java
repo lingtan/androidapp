@@ -27,6 +27,8 @@ import com.example.androiderp.CustomDataClass.SalesOutEnty;
 import com.example.androiderp.CustomDataClass.ShoppingData;
 import com.example.androiderp.CustomDataClass.Stock;
 import com.example.androiderp.CustomDataClass.StockIniti;
+import com.example.androiderp.CustomDataClass.StockTaking;
+import com.example.androiderp.CustomDataClass.StockTakingEnty;
 import com.example.androiderp.R;
 import com.example.androiderp.adaper.AppropriationListViewAdapter;
 import com.example.androiderp.adaper.CommonDataStructure;
@@ -610,10 +612,11 @@ public class AppropriationForm extends CustomSearchBase implements View.OnClickL
         double  in=DataSupport.where("stockIn=? and number=?",stockname,number).sum(AppropriationEnty.class,"quantity",double.class);
         double  out=DataSupport.where("stockOut=? and number=?",stockname,number).sum(AppropriationEnty.class,"quantity",double.class);
         double  initis=DataSupport.where("stock=? and number=?",stockname,number).sum(StockIniti.class,"quantity",double.class);
+        double  stocktaking=DataSupport.where("stock=? and number=?",stockname,number).sum(StockTakingEnty.class,"quantity",double.class);
         double   salesOut=DataSupport.where("billtype =? and stock=? and number=?","2",stockname,number).sum(SalesOutEnty.class,"quantity",double.class);
         double  supplierin=DataSupport.where("billtype =? and stock=? and number=?","1",stockname,number).sum(SalesOutEnty.class,"quantity",double.class);
         quantity=0.00;
-        quantity=initis+supplierin+in-salesOut-out;
+        quantity=initis+supplierin+in+stocktaking-salesOut-out;
 
         if(sfqty>quantity)
         {

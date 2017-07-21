@@ -34,6 +34,7 @@ import com.example.androiderp.adaper.CommonDataStructure;
 import com.example.androiderp.adaper.DataStructure;
 import com.example.androiderp.adaper.PopuMenuDataStructure;
 import com.example.androiderp.basicdata.ProductAppropriationListView;
+import com.example.androiderp.basicdata.ProductStockTakingListView;
 import com.example.androiderp.basicdata.StockIntentListview;
 import com.example.androiderp.common.Common;
 import com.example.androiderp.custom.CustomSearchBase;
@@ -317,7 +318,7 @@ public class StockTakingForm extends CustomSearchBase implements View.OnClickLis
                 }
                 break;
             case R.id.add_layout:
-                Intent intentbadge=new Intent(StockTakingForm.this, ProductAppropriationListView.class);
+                Intent intentbadge=new Intent(StockTakingForm.this, ProductStockTakingListView.class);
                 intentbadge.putExtra("appropriout",stockname.getText().toString());
                 startActivityForResult(intentbadge,6);
                 default:
@@ -534,10 +535,11 @@ public class StockTakingForm extends CustomSearchBase implements View.OnClickLis
         double  in=DataSupport.where("stockIn=? and number=?",stockname,number).sum(AppropriationEnty.class,"quantity",double.class);
         double  out=DataSupport.where("stockOut=? and number=?",stockname,number).sum(AppropriationEnty.class,"quantity",double.class);
         double  initis=DataSupport.where("stock=? and number=?",stockname,number).sum(StockIniti.class,"quantity",double.class);
+        double  stocktaking=DataSupport.where("stock=? and number=?",stockname,number).sum(StockTakingEnty.class,"quantity",double.class);
         double   salesOut=DataSupport.where("billtype =? and stock=? and number=?","2",stockname,number).sum(SalesOutEnty.class,"quantity",double.class);
         double  supplierin=DataSupport.where("billtype =? and stock=? and number=?","1",stockname,number).sum(SalesOutEnty.class,"quantity",double.class);
         quantity=0.00;
-        quantity=initis+supplierin+in-salesOut-out;
+        quantity=initis+supplierin+stocktaking+in-salesOut-out;
 
         StockTakingEnty stockTakingEnty=new StockTakingEnty();
         stockTakingEnty.setName(name);

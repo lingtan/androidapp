@@ -21,6 +21,7 @@ import android.widget.ListAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.androiderp.CustomDataClass.AppropriationEnty;
 import com.example.androiderp.CustomDataClass.Consignment;
 import com.example.androiderp.CustomDataClass.Employee;
 import com.example.androiderp.CustomDataClass.Product;
@@ -30,6 +31,8 @@ import com.example.androiderp.CustomDataClass.SalesOut;
 import com.example.androiderp.CustomDataClass.SalesOutEnty;
 import com.example.androiderp.CustomDataClass.ShoppingData;
 import com.example.androiderp.CustomDataClass.Stock;
+import com.example.androiderp.CustomDataClass.StockIniti;
+import com.example.androiderp.CustomDataClass.StockTakingEnty;
 import com.example.androiderp.CustomDataClass.Supplier;
 import com.example.androiderp.R;
 import com.example.androiderp.adaper.CommonDataStructure;
@@ -93,6 +96,9 @@ public class ReturnPurchaseProductForm extends CustomSearchBase implements View.
     private int countall;
     private double amountCount;
     private Intent intent;
+    private double quantity;
+    private int  stockCheck=1;
+    private List<Integer> stockCheckList=new ArrayList<Integer>();
     public void iniView() {
         setContentView(R.layout.returnpurchaseproductform);
         initMenu();
@@ -304,13 +310,22 @@ public class ReturnPurchaseProductForm extends CustomSearchBase implements View.
                 }else
 
                 {
-                    SimpleDateFormat format=new SimpleDateFormat("yyyyMMddHHmmss");
-                    Date curData=new Date(System.currentTimeMillis());
-                    String fdate=format.format(curData);
+                    stockCheckList.clear();
+
                     for(int i = 0; i < listdatas.size(); i++)
                     {
+                        stockCheck(number.getText().toString(),listdatas.get(i).getNumber(),listdatas.get(i).getFqty());
 
-                        SalesOutEnty salesOutEnty=new SalesOutEnty();
+                    }if(stockCheckList.size()>0)
+                {
+                    Toast.makeText(ReturnPurchaseProductForm.this,"有产品库存不足,不能保存",Toast.LENGTH_LONG).show();
+                }else {
+                    SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
+                    Date curData = new Date(System.currentTimeMillis());
+                    String fdate = format.format(curData);
+                    for (int i = 0; i < listdatas.size(); i++) {
+
+                        SalesOutEnty salesOutEnty = new SalesOutEnty();
                         salesOutEnty.setName(listdatas.get(i).getName());
                         salesOutEnty.setNumber(listdatas.get(i).getNumber());
                         salesOutEnty.setPrice(listdatas.get(i).getSalesprice());
@@ -321,10 +336,10 @@ public class ReturnPurchaseProductForm extends CustomSearchBase implements View.
                         salesOutEntyList.add(salesOutEnty);
                     }
                     DataSupport.saveAll(salesOutEntyList);
-                    SalesOut salesOut =new SalesOut();
+                    SalesOut salesOut = new SalesOut();
                     salesOut.setSalesOutEntyList(salesOutEntyList);
                     salesOut.setCustomer(name.getText().toString());
-                    salesOut.setNuber("CGTH"+ fdate);
+                    salesOut.setNuber("CGTH" + fdate);
                     salesOut.setDate(data.getText().toString());
                     salesOut.setStock(number.getText().toString());
                     salesOut.setAmount(-amountCount);
@@ -334,11 +349,11 @@ public class ReturnPurchaseProductForm extends CustomSearchBase implements View.
                     salesOut.setNote(note.getText().toString().trim());
                     salesOut.setBilltype("1");
                     salesOut.save();
-                    Toast.makeText(ReturnPurchaseProductForm.this,"新增成功",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ReturnPurchaseProductForm.this, "新增成功", Toast.LENGTH_SHORT).show();
                     toobarSave.setVisibility(View.GONE);
                     toobarAdd.setVisibility(View.VISIBLE);
 
-
+                }
                 }
 
             break;
@@ -530,7 +545,10 @@ public class ReturnPurchaseProductForm extends CustomSearchBase implements View.
 
                        for(int i = 0; i < listdatas.size(); i++)
                        {
-
+                           if(stockCheck(number.getText().toString(),listdatas.get(i).getNumber(),listdatas.get(i).getFqty())==0)
+                           {
+                               Toast.makeText(ReturnPurchaseProductForm.this,"仓库数量不足，实际库存为："+df.format(quantity),Toast.LENGTH_SHORT).show();
+                           }
                            countall+= listdatas.get(i).getFqty();
                            amountCount +=listdatas.get(i).getSaleamount();
                        }
@@ -620,7 +638,10 @@ public class ReturnPurchaseProductForm extends CustomSearchBase implements View.
 
                     for(int i = 0; i < listdatas.size(); i++)
                     {
-
+                        if(stockCheck(number.getText().toString(),listdatas.get(i).getNumber(),listdatas.get(i).getFqty())==0)
+                        {
+                            Toast.makeText(ReturnPurchaseProductForm.this,"仓库数量不足，实际库存为："+df.format(quantity),Toast.LENGTH_SHORT).show();
+                        }
                         countall+= listdatas.get(i).getFqty();
                         amountCount +=listdatas.get(i).getSaleamount();
                     }
@@ -721,6 +742,27 @@ public class ReturnPurchaseProductForm extends CustomSearchBase implements View.
         ViewGroup.LayoutParams params = listView.getLayoutParams();
         params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
         listView.setLayoutParams(params);
+    }
+    private int stockCheck(String stockname,String number,double sfqty)
+    {
+
+        double  in=DataSupport.where("stockIn=? and number=?",stockname,number).sum(AppropriationEnty.class,"quantity",double.class);
+        double  out=DataSupport.where("stockOut=? and number=?",stockname,number).sum(AppropriationEnty.class,"quantity",double.class);
+        double  initis=DataSupport.where("stock=? and number=?",stockname,number).sum(StockIniti.class,"quantity",double.class);
+        double  stocktaking=DataSupport.where("stock=? and number=?",stockname,number).sum(StockTakingEnty.class,"quantity",double.class);
+        double   salesOut=DataSupport.where("billtype =? and stock=? and number=?","2",stockname,number).sum(SalesOutEnty.class,"quantity",double.class);
+        double  supplierin=DataSupport.where("billtype =? and stock=? and number=?","1",stockname,number).sum(SalesOutEnty.class,"quantity",double.class);
+        quantity=0.00;
+        quantity=initis+supplierin+in+stocktaking-salesOut-out;
+
+        if(sfqty>quantity)
+        {
+            stockCheck=0;
+            stockCheckList.add(stockCheck);
+        }else {
+            stockCheck=1;
+        }
+        return  stockCheck;
     }
 
 }

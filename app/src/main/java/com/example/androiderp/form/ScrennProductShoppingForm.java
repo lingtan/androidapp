@@ -130,7 +130,7 @@ public class ScrennProductShoppingForm extends AppCompatActivity implements View
                 }else {
 
                     DecimalFormat df = new DecimalFormat("#####0.00");
-                    amountString=df.format(Double.valueOf(price.getText().toString().trim()) * Integer.parseInt(quantity.getText().toString().trim()));
+                    amountString=df.format(Double.valueOf(price.getText().toString().trim()) * Double.valueOf(quantity.getText().toString().trim()));
 
                     toobarTile.setText("金额：¥"+amountString);
                 }

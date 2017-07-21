@@ -16,7 +16,7 @@
     <color name="orange">#F57C00</color>
     <color name="griditems_bg">#ffffff</color>
     <color name="commo_text_color">#ff333333</color>
-    <color name="line">#ffffff</color>
+    <color name="line">#F8F8F8</color>
     <color name="itemcolor">#f5f6eb</color>
     <color name="holo_green_light">#ff99cc00</color>
     <color name="holo_red_light">#ffff4444</color>

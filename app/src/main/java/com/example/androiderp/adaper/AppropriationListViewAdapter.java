@@ -85,7 +85,7 @@ public class AppropriationListViewAdapter extends ArrayAdapter<CommonDataStructu
             itemLayout.setBackgroundColor(Color.parseColor("#ffffff"));
         }
         // 重新获取ViewHolder
-        DecimalFormat df = new DecimalFormat("#####0.00");
+        DecimalFormat df = new DecimalFormat("#####0.##");
         viewHolder.name.setText(data.get(position).getName());
         viewHolder.quantity.setText(df.format(data.get(position).getFqty()));
         viewHolder.image.setImageResource(data.get(position).getImage());

@@ -8,34 +8,36 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.androiderp.CustomDataClass.GridView;
 import com.example.androiderp.R;
+
+import java.util.List;
 
 /**
  * Created by lingtan on 2017/5/10.
  */
 public class CusteomGridAdapter extends BaseAdapter {
     private Context mContext;
-    private String[] itemTitles;
-    private int[] itemImages;
+    private List<GridView> data;
 
 
-    public CusteomGridAdapter(Context mContext, String[] itemTitles, int[] itemImages) {
+    public CusteomGridAdapter(Context mContext, List<GridView> data) {
         super();
         this.mContext = mContext;
-        this.itemTitles=itemTitles;
-        this.itemImages=itemImages;
+        this.data=data;
+
     }
 
     @Override
     public int getCount() {
         // TODO Auto-generated method stub
-        return itemTitles.length;
+        return data.size();
     }
 
     @Override
     public Object getItem(int position) {
         // TODO Auto-generated method stub
-        return itemTitles[position];
+        return data.get(position);
     }
 
     @Override
@@ -56,8 +58,8 @@ public class CusteomGridAdapter extends BaseAdapter {
         {
             viewTag = (ItemViewTag) convertView.getTag();
         }
-        viewTag.mName.setText(itemTitles[position]);;
-        viewTag.mIcon.setBackgroundResource(itemImages[position]);
+        viewTag.mName.setText(data.get(position).getName());;
+        viewTag.mIcon.setBackgroundResource(data.get(position).getImage());
 
         return convertView;
     }
