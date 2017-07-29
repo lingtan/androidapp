@@ -89,8 +89,7 @@ public class HomeMoreListView extends CustomSearchBase implements View.OnClickLi
                  gridViewList.get(position).setChoiceImage(R.drawable.yeschoice);
                  gridViewList.get(position).setChoice(true);
              }
-                adapter = new HomeMoreAdapter(HomeMoreListView.this, R.layout.home_moreitem, gridViewList);
-                listView.setAdapter(adapter);
+               adapter.notifyDataSetChanged();
             }
         });
 

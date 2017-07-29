@@ -83,6 +83,7 @@
         <View style="@style/bg_line"  android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"/>
         <!-- 下圆角-->
+
         <LinearLayout android:layout_height="wrap_content"
             android:layout_width="match_parent">
             <com.example.androiderp.listview.SlideAndDragListView

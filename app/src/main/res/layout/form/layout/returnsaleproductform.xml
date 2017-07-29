@@ -105,6 +105,21 @@
         <View style="@style/bg_line"  android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"/>
         <!-- 下圆角-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_marginLeft="10dp"
+                android:id="@+id/item_tile"
+                android:gravity="center_vertical"
+                android:hint="产品左滑动可删除，点击产品可修改"
+                android:textSize="12dip" />
+        </LinearLayout>
+        <View style="@style/bg_line" />
         <LinearLayout android:layout_height="wrap_content"
             android:layout_width="match_parent">
             <com.example.androiderp.listview.SlideAndDragListView

@@ -152,6 +152,12 @@ public class SaleProductForm extends CustomSearchBase implements View.OnClickLis
                 errorIcon.getIntrinsicHeight()));
         toobarSave.setText("保存");
         formInit();
+        popuMenuDatas = new ArrayList<PopuMenuDataStructure>();
+        PopuMenuDataStructure popuMenua = new PopuMenuDataStructure(android.R.drawable.ic_menu_edit, "美的");
+        popuMenuDatas.add(popuMenua);
+        PopuMenuDataStructure popuMenub = new PopuMenuDataStructure(android.R.drawable.ic_menu_edit, "松下");
+        popuMenuDatas.add(popuMenub);
+        showPopupWindow(popuMenuDatas);
         getDate();
 
         screenLayout.setOnClickListener(new View.OnClickListener() {
@@ -502,6 +508,7 @@ public class SaleProductForm extends CustomSearchBase implements View.OnClickLis
                 {
                     intent = new Intent(SaleProductForm.this, SaleProductForm.class);
                     startActivity(intent);
+                    SaleProductForm.this.finish();
                 }
                 else
 

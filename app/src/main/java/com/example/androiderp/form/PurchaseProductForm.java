@@ -142,7 +142,12 @@ public class PurchaseProductForm extends CustomSearchBase implements View.OnClic
         toobarSave.setText("保存");
         formInit();
         getDate();
-
+        popuMenuDatas = new ArrayList<PopuMenuDataStructure>();
+        PopuMenuDataStructure popuMenua = new PopuMenuDataStructure(android.R.drawable.ic_menu_edit, "美的");
+        popuMenuDatas.add(popuMenua);
+        PopuMenuDataStructure popuMenub = new PopuMenuDataStructure(android.R.drawable.ic_menu_edit, "松下");
+        popuMenuDatas.add(popuMenub);
+        showPopupWindow(popuMenuDatas);
         screenLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -470,8 +475,9 @@ public class PurchaseProductForm extends CustomSearchBase implements View.OnClic
 
                 if(popuMenuDatas.get(position).getName().equals("采购单新增"))
                 {
-                    intent = new Intent(PurchaseProductForm.this, SupplierForm.class);
+                    intent = new Intent(PurchaseProductForm.this, PurchaseProductForm.class);
                     startActivity(intent);
+                    PurchaseProductForm.this.finish();
                 }
                 else
 

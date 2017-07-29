@@ -63,8 +63,6 @@ public class HomeMoreAdapter extends ArrayAdapter<GridView>   {
 
             view = convertView;
             viewHolder = (ViewHolder) view.getTag();
-            //这句非常重要，不然出现重复
-            viewHolder.image.setVisibility(View.INVISIBLE);
 
             // 重新获取ViewHolder
 

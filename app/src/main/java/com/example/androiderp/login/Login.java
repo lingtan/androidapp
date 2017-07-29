@@ -33,9 +33,9 @@ import com.example.androiderp.home.ErpHome;
 
 public class Login extends AppCompatActivity implements View.OnClickListener {
 
-    private EditText name, password, email;
+    private EditText name, password;
     private CheckBox checked;
-    private TextInputLayout layoutName, layoutPassword, layoutEmail;
+    private TextInputLayout layoutName, layoutPassword;
     private Button loginButton;
     private InputMethodManager manager;
     private SharedPreferences preferences;
@@ -64,15 +64,13 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         if (isTrue) {
             String nane = preferences.getString("name", "");
             String password = preferences.getString("password", "");
-            String email = preferences.getString("email", "");
             name.setText(nane);
             this.password.setText(password);
-            this.email.setText(email);
             checked.setChecked(true);
         }
     }
 
-    private void  refWrite(boolean ischechde,String name,String password,String email)
+    private void  refWrite(boolean ischechde,String name,String password)
     {
         editor=preferences.edit();
         if(ischechde)
@@ -80,7 +78,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
             editor.putBoolean("remenber_passwored",true);
             editor.putString("name",name);
             editor.putString("password",password);
-            editor.putString("email",email);
 
 
         }else {
@@ -91,20 +88,16 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     private void initWidget() {
         name = (EditText) findViewById(R.id.login_layout_one_one_name);
         password = (EditText) findViewById(R.id.login_layout_one_tow_password);
-        email = (EditText) findViewById(R.id.login_layout_one_three_email);
         checked =(CheckBox)findViewById(R.id.login_layout_one_four_remenberpaw);
         password.setTransformationMethod(PasswordTransformationMethod.getInstance());
         layoutName = (TextInputLayout) findViewById(R.id.login_layout_one_one);
         layoutPassword = (TextInputLayout) findViewById(R.id.login_layout_one_tow);
-        layoutEmail = (TextInputLayout) findViewById(R.id.login_layout_one_three);
-
         loginButton = (Button) findViewById(R.id.login_layout_one_login);
         loginButton.setOnClickListener(this);
 
         //添加监听
         name.addTextChangedListener(new MyTextWatcher(name));
         password.addTextChangedListener(new MyTextWatcher(password));
-        email.addTextChangedListener(new MyTextWatcher(email));
     }
 
     @Override
@@ -131,12 +124,9 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
             Toast.makeText(this, getString(R.string.check), Toast.LENGTH_SHORT).show();
             return;
         }
-        if (!isEmailValid()) {
-            Toast.makeText(this, getString(R.string.check), Toast.LENGTH_SHORT).show();
-            return;
-        }
 
-       goIntent(name.getText().toString(), password.getText().toString(), email.getText().toString());
+
+       goIntent(name.getText().toString(), password.getText().toString());
 
     }
     /**
@@ -158,10 +148,10 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
             dialog.dismiss();
         }
     }
-    private void goIntent(String name,String password,String email)
+    private void goIntent(String name,String password)
     {
         Intent intent=new Intent(Login.this,ErpHome.class);
-        refWrite(checked.isChecked(),name,password,email);
+        refWrite(checked.isChecked(),name,password);
         User user=new User();
         user.setName(name);
         user.setPassword(password);
@@ -193,17 +183,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         return true;
     }
 
-    public boolean isEmailValid() {
-        String email = this.email.getText().toString().trim();
-        if (TextUtils.isEmpty(email) || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            layoutEmail.setErrorEnabled(true);
-            layoutEmail.setError(getString(R.string.error_email));
-            layoutEmail.requestFocus();
-            return false;
-        }
-        layoutEmail.setErrorEnabled(false);
-        return true;
-    }
 
     //动态监听输入过程
     private class MyTextWatcher implements TextWatcher {
@@ -233,9 +212,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                 case R.id.login_layout_one_tow_password:
                     isPasswordValid();
                     break;
-                case R.id.login_layout_one_three_email:
-                    isEmailValid();
-                    break;
+
 
             }
 
