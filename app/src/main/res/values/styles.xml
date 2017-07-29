@@ -125,7 +125,7 @@
 
     <style name="editTextStyle">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">35sp</item>
+        <item name="android:layout_height">28sp</item>
         <item name="android:background">@drawable/custom_search_shape</item>
         <item name="android:drawableLeft">@drawable/customlist_search</item>
         <item name="android:gravity">center_vertical</item>

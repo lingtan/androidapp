@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
@@ -22,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.androiderp.CustomDataClass.AppropriationEnty;
+import com.example.androiderp.CustomDataClass.Brand;
 import com.example.androiderp.CustomDataClass.Consignment;
 import com.example.androiderp.CustomDataClass.Custom;
 import com.example.androiderp.CustomDataClass.Employee;
@@ -39,6 +41,7 @@ import com.example.androiderp.adaper.CommonDataStructure;
 import com.example.androiderp.adaper.DataStructure;
 import com.example.androiderp.adaper.PopuMenuDataStructure;
 import com.example.androiderp.adaper.SaleProductListViewAdapter;
+import com.example.androiderp.basicdata.BrandListView;
 import com.example.androiderp.basicdata.ConsignmentListview;
 import com.example.androiderp.basicdata.EmployeeIntentListview;
 import com.example.androiderp.basicdata.EmployeeListview;
@@ -395,8 +398,31 @@ public class SaleProductForm extends CustomSearchBase implements View.OnClickLis
 
                 break;
             case R.id.customtoobar_left:
+             if(listdatas.size()>0)
+             {
+                 AlertDialog.Builder dialog=new AlertDialog.Builder(SaleProductForm.this);
+                 dialog.setTitle("提示");
+                 dialog.setMessage("单据还没保存，确认要退出？");
+                 dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                     @Override
+                     public void onClick(DialogInterface dialog, int which) {
 
-                    SaleProductForm.this.finish();
+
+                         SaleProductForm.this.finish();
+
+                     }
+                 });
+                 dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                     @Override
+                     public void onClick(DialogInterface dialog, int which) {
+
+                     }
+                 });
+                 dialog.show();
+             }else {
+                 SaleProductForm.this.finish();
+             }
+
 
              break;
             case R.id.documentmaker_layout:

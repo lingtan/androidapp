@@ -338,6 +338,8 @@ public class ErpHome extends CustomSearchBase implements  BottomNavigationBar.On
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //必须要这一句，否则fistfragment的onActivityResult不执行。
+        super.onActivityResult(requestCode,resultCode,data);
         switch (requestCode) {
             case 1:
                 if (resultCode == RESULT_OK) {

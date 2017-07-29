@@ -1,6 +1,7 @@
 package com.example.androiderp.basicdata;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.AdapterView;
@@ -25,27 +26,39 @@ public class HomeMoreListView extends CustomSearchBase implements View.OnClickLi
     private List<GridView> gridViewList=new ArrayList<GridView>();
     private List<GridView> gridViewaddList=new ArrayList<GridView>();
     private TextView toobarBack, toobarAdd, toobarTile;
+    private String[] home_name = {
+            "供应商管理","客户管理","仓库管理",
+            "库存调拨","调拨流水", "盘点作业","盘点流水","仓库预警",
+            "职员管理","账户管理","经营分析",};
+    private int[] imgs = {
+            R.drawable.home_fisrtfragment_gy, R.drawable.home_firstfragment_kh,R.drawable.home_fisrtfragment_kc,
+            R.drawable.home_fistfragment_db, R.drawable.home_dbls,R.drawable.home_fisrfragment_pd,R.drawable.fourthfragmnet_pdls,R.drawable.fourthfragment_kcyj,
+            R.drawable.home_firstfragment_zy,R.drawable.home_fisrtfragment_zh,R.drawable.hoem_fisrtfragment_jy,
+           };
     @Override
     public void iniView(){
         setContentView(R.layout.home_morelayout);
         toobarBack =(TextView)findViewById(R.id.custom_toobar_left) ;
         toobarTile =(TextView)findViewById(R.id.custom_toobar_midd);
         toobarAdd =(TextView)findViewById(R.id.custom_toobar_right);
+        Drawable more= getResources().getDrawable(R.drawable.toobar_more);
+        more.setBounds(0, 0, more.getMinimumWidth(), more.getMinimumHeight());
+        toobarAdd.setCompoundDrawables(more,null,null,null);
         toobarBack.setOnClickListener(this);
         toobarAdd.setOnClickListener(this);
+
         toobarTile.setText("快捷菜单");
-        GridView gridView1=new GridView();
-        gridView1.setName("盘点流水");
-        gridView1.setChoiceImage(R.drawable.nochoice);
-        gridView1.setImage(R.drawable.fourthfragmnet_pdls);
-        gridView1.setChoice(false);
-        gridViewList.add(gridView1);
-        GridView gridView2=new GridView();
-        gridView2.setName("仓库预警");
-        gridView2.setChoiceImage(R.drawable.nochoice);
-        gridView2.setImage(R.drawable.fourthfragment_kcyj);
-        gridView2.setChoice(false);
-        gridViewList.add(gridView2);
+
+        for(int i=0;i<11;i++)
+        {
+            GridView gridView=new GridView();
+            gridView.setName(home_name[i]);
+            gridView.setChoiceImage(R.drawable.nochoice);
+            gridView.setImage(imgs[i]);
+            gridView.setChoice(false);
+            gridViewList.add(gridView);
+        }
+
         gridViewaddList=DataSupport.findAll(GridView.class);
         for(GridView gridView:gridViewList)
         {
@@ -106,9 +119,6 @@ public class HomeMoreListView extends CustomSearchBase implements View.OnClickLi
                         gridView.save();
                     }
                 }
-                Intent intent =new Intent(HomeMoreListView.this, ErpHome.class);
-                intent.putExtra("fragment","fisrt");
-                startActivity(intent);
                 HomeMoreListView.this.finish();
                 break;
 

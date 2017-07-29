@@ -22,6 +22,7 @@ import com.example.androiderp.basicdata.ProductTowListView;
 import com.example.androiderp.basicdata.SaleOutListView;
 import com.example.androiderp.basicdata.StockListView;
 import com.example.androiderp.basicdata.PurchaseOutListView;
+import com.example.androiderp.basicdata.StockTakingListView;
 import com.example.androiderp.basicdata.SupplierTowListView;
 import com.example.androiderp.custom.CustomGridView;
 import com.example.androiderp.form.AppropriationForm;
@@ -45,37 +46,35 @@ public class FirstFragment extends Fragment {
     private String[] img_text = {
             "商品管理", "采购新增","销售新增",
             "库存查询","采购流水", "销售流水",
-            "供应商管理","客户管理","仓库管理",
-            "库存调拨","调拨流水", "盘点作业",
-             "职员管理","账户管理","经营分析",
             ""};
 
     private int[] imgs = {
             R.drawable.home_firstfragment_sp, R.drawable.hoem_firstfragmnet_cg,R.drawable.firstfragment_xs,
             R.drawable.hoem_fistfragment_search,R.drawable.home_fisrtfragment_cgcx, R.drawable.home_fisrtfragment_xscx,
-            R.drawable.home_fisrtfragment_gy, R.drawable.home_firstfragment_kh,R.drawable.home_fisrtfragment_kc,
-            R.drawable.home_fistfragment_db, R.drawable.home_dbls,R.drawable.home_fisrfragment_pd,
-            R.drawable.home_firstfragment_zy,R.drawable.home_fisrtfragment_zh,R.drawable.hoem_fisrtfragment_jy,
             R.drawable.home_firstfragmnet_more};
     private   Intent intent;
     CustomGridView gridView;
     @Override
     public View onCreateView(LayoutInflater inflater,  ViewGroup container,  Bundle savedInstanceState) {
-        for(int i=0;i<15;i++)
+        gridViewAddList = DataSupport.findAll(GridView.class);
+
+        for(int i=0;i<6;i++)
         {
             GridView gridView=new GridView();
             gridView.setName(img_text[i]);
             gridView.setImage(imgs[i]);
             gridViewList.add(gridView);
         }
-        gridViewAddList = DataSupport.findAll(GridView.class);
-        for (GridView gridView : gridViewAddList) {
 
-            gridViewList.add(gridView);
-        }
+            gridViewAddList = DataSupport.findAll(GridView.class);
+            for (GridView gridView : gridViewAddList) {
+
+                gridViewList.add(gridView);
+            }
+
         GridView gridView2=new GridView();
-        gridView2.setName(img_text[15]);
-        gridView2.setImage(imgs[15]);
+        gridView2.setName(img_text[6]);
+        gridView2.setImage(imgs[6]);
         gridViewList.add(gridView2);
      View view=inflater.inflate(R.layout.customgridview_layout,container,false);
         gridView=(CustomGridView)view.findViewById(R.id.customgridview_gridview);
@@ -141,11 +140,13 @@ public class FirstFragment extends Fragment {
                         intent = new Intent(context, EmployeeListview.class);
                         startActivity(intent);
                         break;
+                    case "盘点流水":
+                        intent = new Intent(context, StockTakingListView.class);
+                        startActivity(intent);
+                        break;
                     case "":
                         intent = new Intent(context, HomeMoreListView.class);
                         startActivityForResult(intent,1);
-                        ErpHome erpHome =(ErpHome)getActivity();
-                        erpHome.finish();
                         break;
 
 
@@ -158,5 +159,31 @@ public class FirstFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
 
+            case 1:
+                gridViewList.clear();
+                for(int i=0;i<6;i++)
+                {
+                    GridView gridView=new GridView();
+                    gridView.setName(img_text[i]);
+                    gridView.setImage(imgs[i]);
+                    gridViewList.add(gridView);
+                }
+                gridViewAddList = DataSupport.findAll(GridView.class);
+                for (GridView gridView : gridViewAddList) {
+
+                    gridViewList.add(gridView);
+                }
+
+                GridView gridView2=new GridView();
+                gridView2.setName(img_text[6]);
+                gridView2.setImage(imgs[6]);
+                gridViewList.add(gridView2);
+                gridView.setAdapter(new CusteomGridAdapter(getActivity(),gridViewList));
+
+        }
+    }
 }

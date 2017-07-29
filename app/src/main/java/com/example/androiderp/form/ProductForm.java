@@ -298,7 +298,7 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                 dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if(isCustom(name.getText().toString()))
+                        if(isCustom(number.getText().toString()))
                         {
                             Toast.makeText(ProductForm.this,"已经有业务发生，不能删除",Toast.LENGTH_SHORT).show();
 
@@ -473,10 +473,10 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
         }
         return super.onTouchEvent(event);
     }
-    public boolean isCustom(String name)
+    public boolean isCustom(String number)
     {
 
-        salesOutEntyList =DataSupport.where("itemname =?",name).find(SalesOutEnty.class);
+        salesOutEntyList =DataSupport.where("number =?",number).find(SalesOutEnty.class);
 
         if (salesOutEntyList.size()>0)
         {

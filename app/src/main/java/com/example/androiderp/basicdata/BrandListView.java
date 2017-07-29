@@ -1,5 +1,6 @@
 package com.example.androiderp.basicdata;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -7,6 +8,7 @@ import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -52,6 +54,7 @@ public class BrandListView extends CustomSearchBase implements View.OnClickListe
         setContentView(R.layout.customlistview_category_layout);
         initMenu();
         initUiAndListener();
+
         toobarBack=(TextView)findViewById(R.id.custom_toobar_left) ;
         toobarTile=(TextView)findViewById(R.id.custom_toobar_midd);
         toobarTile.setText("新增品牌");

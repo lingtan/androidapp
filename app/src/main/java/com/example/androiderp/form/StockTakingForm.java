@@ -1,10 +1,12 @@
 package com.example.androiderp.form;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
@@ -295,8 +297,32 @@ public class StockTakingForm extends CustomSearchBase implements View.OnClickLis
 
 
             case R.id.customtoobar_left:
+                if(commonDataStructureList.size()>0)
+                {
+                    AlertDialog.Builder dialog=new AlertDialog.Builder(StockTakingForm.this);
+                    dialog.setTitle("提示");
+                    dialog.setMessage("单据还没保存，确认要退出？");
+                    dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
 
+
+                            StockTakingForm.this.finish();
+
+                        }
+                    });
+                    dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    });
+                    dialog.show();
+                }else {
                     StockTakingForm.this.finish();
+                }
+
+
 
              break;
 

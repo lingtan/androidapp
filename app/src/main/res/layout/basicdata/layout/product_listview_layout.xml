@@ -13,7 +13,7 @@
     <include layout="@layout/custom_badge_toobar" android:id="@+id/id_toobar"/>
 <LinearLayout
     android:layout_width="match_parent"
-    android:layout_height="47dp"
+    android:layout_height="37dp"
     android:background="#E0E0E0"
     android:layout_marginTop="50dp"
     android:padding="5dp">
@@ -24,7 +24,6 @@
         style="@style/editTextStyle"
        />
 </LinearLayout>
-    <View style="@style/bg_line" android:layout_marginTop="97dp"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -36,7 +35,7 @@
         android:layout_weight="0.75"
         android:layout_marginBottom="30dp">
     <ListView
-        android:layout_marginTop="97dp"
+        android:layout_marginTop="87dp"
         android:id="@+id/left_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

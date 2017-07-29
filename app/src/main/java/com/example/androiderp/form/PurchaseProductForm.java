@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
@@ -367,8 +368,31 @@ public class PurchaseProductForm extends CustomSearchBase implements View.OnClic
 
                 break;
             case R.id.customtoobar_left:
+                if(listdatas.size()>0)
+                {
+                    AlertDialog.Builder dialog=new AlertDialog.Builder(PurchaseProductForm.this);
+                    dialog.setTitle("提示");
+                    dialog.setMessage("单据还没保存，确认要退出？");
+                    dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
 
+
+                            PurchaseProductForm.this.finish();
+                        }
+                    });
+                    dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    });
+                    dialog.show();
+                }else {
                     PurchaseProductForm.this.finish();
+                }
+
+
 
              break;
             case R.id.documentmaker_layout:
@@ -475,6 +499,10 @@ public class PurchaseProductForm extends CustomSearchBase implements View.OnClic
             case 11:
                 if(resultCode==RESULT_OK){
                     number.setText(data.getStringExtra("data_return"));
+                }
+            case 8:
+                if(resultCode==RESULT_OK){
+                    name.setText(data.getStringExtra("data_return"));
                 }
                 break;
             case 12:
