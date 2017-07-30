@@ -26,6 +26,7 @@ public class ProductCategoryForm extends AppCompatActivity implements View.OnCli
     private TextView toobarSave, toobarTile, toobarBack;
     private ProductCategory productCategory;
     private String customid,edit;
+    private boolean isSave=false;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.customcategory);
@@ -71,7 +72,9 @@ private  void formInit()
                         productCategory.setName(userName.getText().toString());
                         productCategory.update(Long.parseLong(customid));
                         Intent intent = new Intent();
+                        intent.putExtra("returnName",userName.getText().toString());
                         setResult(RESULT_OK,intent);
+                        isSave=true;
                         ProductCategoryForm.this.finish();
                     } else {
                  ProductCategory       productCategory = new ProductCategory();
@@ -87,6 +90,11 @@ private  void formInit()
                 if(edit.equals("edit"))
                 {
                     Intent intent = new Intent();
+                    if(isSave) {
+                        intent.putExtra("returnName", userName.getText().toString());
+                    }else {
+                        intent.putExtra("returnName",productCategory.getName());
+                    }
                     setResult(RESULT_OK,intent);
                     finish();
                 }else {

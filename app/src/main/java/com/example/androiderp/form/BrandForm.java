@@ -10,11 +10,16 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.androiderp.CustomDataClass.Brand;
+import com.example.androiderp.CustomDataClass.Product;
 import com.example.androiderp.R;
+import com.example.androiderp.adaper.DataStructure;
 
 import org.litepal.crud.DataSupport;
+
+import java.util.List;
 
 /**
  * Created by lingtan on 2017/5/15.
@@ -26,6 +31,8 @@ public class BrandForm extends AppCompatActivity implements View.OnClickListener
     private TextView toobarSave, toobarTile, toobarBack;
     private Brand brand;
     private String customid,edit;
+    private List<Brand> brandList;
+    private boolean isSave=false;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.customcategory);
@@ -63,6 +70,8 @@ private  void formInit()
         switch (v.getId())
         {
             case R.id.custom_toobar_right:
+
+                brandList = DataStructure.where("name = ?",userName.getText().toString()).find(Brand.class);
                 if (TextUtils.isEmpty(userName.getText().toString())) {
                     userName.setError("需要输入品牌");
                 } else {
@@ -71,12 +80,16 @@ private  void formInit()
                         brand.setName(userName.getText().toString());
                         brand.update(Long.parseLong(customid));
                         Intent intent = new Intent();
+                        intent.putExtra("returnName",userName.getText().toString());
                         setResult(RESULT_OK,intent);
+                        isSave=true;
                         BrandForm.this.finish();
-                    } else {
+                    } else if (brandList.size()>0)
+                    {
+                        Toast.makeText(BrandForm.this,"品牌已经存在",Toast.LENGTH_SHORT).show();}
+                else {
                       Brand  brand = new Brand();
                         brand.setName(userName.getText().toString());
-
                         brand.save();
                         Intent intent = new Intent();
                         setResult(RESULT_OK,intent);
@@ -88,6 +101,11 @@ private  void formInit()
                 if(edit.equals("edit"))
                 {
                     Intent intent = new Intent();
+                    if(isSave) {
+                        intent.putExtra("returnName", userName.getText().toString());
+                    }else {
+                        intent.putExtra("returnName",brand.getName());
+                    }
                     setResult(RESULT_OK,intent);
                     finish();
                 }else {

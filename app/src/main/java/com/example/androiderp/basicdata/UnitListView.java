@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.androiderp.CustomDataClass.ProductCategory;
 import com.example.androiderp.CustomDataClass.Unit;
 import com.example.androiderp.R;
 import com.example.androiderp.adaper.CommonDataStructure;
@@ -33,7 +34,7 @@ import java.util.List;
 public class UnitListView extends CustomSearchBase implements View.OnClickListener,
         AdapterView.OnItemClickListener,
         SlideAndDragListView.OnMenuItemClickListener, SlideAndDragListView.OnItemDeleteListener {
-    private List<CommonDataStructure> commonDataStructureList = new ArrayList<CommonDataStructure>();
+    private List<CommonDataStructure> listdatas = new ArrayList<CommonDataStructure>();
     private CommonListViewAdapter adapter;
     private SlideAndDragListView<CommonDataStructure> listView;
     private DisplayMetrics dm;
@@ -41,10 +42,8 @@ public class UnitListView extends CustomSearchBase implements View.OnClickListen
     private List<Unit> unitList;
     private TextView toobarBack, toobarAdd, toobarTile;
     private CustomSearch customSearch;
-    private String categoryid;
     private ImageView lastCheckedOption;
-    private int positionTemp;
-    private int indexPositon;
+    private int indexPositon=-1;
     private String indexName;
     private Menu menu;
     @Override
@@ -54,14 +53,13 @@ public class UnitListView extends CustomSearchBase implements View.OnClickListen
         initUiAndListener();
         toobarBack =(TextView)findViewById(R.id.custom_toobar_left) ;
         toobarTile =(TextView)findViewById(R.id.custom_toobar_midd);
-        toobarTile.setText("新增品牌");
+        toobarTile.setText("选择品牌");
         toobarAdd =(TextView)findViewById(R.id.custom_toobar_right);
         toobarBack.setOnClickListener(this);
         toobarAdd.setOnClickListener(this);
         toobarTile.setOnClickListener(this);
         customSearch = (CustomSearch) findViewById(R.id.search);
         Intent intent=getIntent();
-        categoryid=intent.getStringExtra("category");
         indexName =intent.getStringExtra("index");
         unitList = DataSupport.findAll(Unit.class);
         toobarTile.setCompoundDrawables(null,null,null,null);
@@ -75,33 +73,24 @@ public class UnitListView extends CustomSearchBase implements View.OnClickListen
             commonData.setName(unit.getName());
             commonData.setId(unit.getId());
             commonData.setImage(R.drawable.seclec_arrow);
-            commonDataStructureList.add(commonData);
+            listdatas.add(commonData);
 
 
 
         }
-        if(indexName.isEmpty())
-        {
-            indexPositon =-1;
-        }else {
-            positionTemp = indexPositon;
-        }
+
 
         //构造函数第一参数是类的对象，第二个是布局文件，第三个是数据源
         dm=new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
 
 
-        if(commonDataStructureList.size()!=0) {
-             if(categoryid!=null) {
-                 Object[] obj = searchCategory(categoryid);
-                 updateLayout("10");
-                 toobarTile.setText(categoryid);
-             }else {
-                 adapter = new CommonListViewAdapter(UnitListView.this, R.layout.custom_item, commonDataStructureList);
+        if(listdatas.size()!=0) {
+
+                 adapter = new CommonListViewAdapter(UnitListView.this, R.layout.custom_item, listdatas);
                  adapter.setSeclection(indexPositon);
                  listView.setAdapter(adapter);
-             }
+
 
         }
 
@@ -142,18 +131,12 @@ public class UnitListView extends CustomSearchBase implements View.OnClickListen
                 switch (buttonPosition) {
                     case 0:
                         Intent intent=new Intent(UnitListView.this,UnitForm.class);
-                        if(commonDataStructureSearch.size()!=0) {
+
 
                             intent.putExtra("action", "edit");
-                            intent.putExtra("customid", String.valueOf(commonDataStructureSearch.get(itemPosition).getId()));
-                            indexName = commonDataStructureSearch.get(itemPosition).getName();
+                            intent.putExtra("customid", String.valueOf(listdatas.get(itemPosition).getId()));
+                            indexName = listdatas.get(itemPosition).getName();
 
-                        }else {
-
-                            intent.putExtra("action", "edit");
-                            intent.putExtra("customid", String.valueOf(commonDataStructureList.get(itemPosition).getId()));
-                            indexName = commonDataStructureList.get(itemPosition).getName();
-                        }
                         startActivityForResult(intent,1);
 
                         return Menu.ITEM_NOTHING;
@@ -164,20 +147,24 @@ public class UnitListView extends CustomSearchBase implements View.OnClickListen
                         dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                DataStructure.deleteAll(Unit.class,"name = ?", commonDataStructureList.get(itemPosition - listView.getHeaderViewsCount()).getName().toString());
+                                DataStructure.deleteAll(Unit.class,"name = ?", listdatas.get(itemPosition - listView.getHeaderViewsCount()).getName().toString());
 
                                 AlertDialog.Builder dialogOK=new AlertDialog.Builder(UnitListView.this);
                                 dialogOK.setMessage("该单位已经删除");
                                 dialogOK.setNegativeButton("确认", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        if(indexPositon ==itemPosition)
-                                        {
-                                            indexPositon =-1;
+                                        listdatas.remove(itemPosition - listView.getHeaderViewsCount());
+                                        if(customSearch.getText().toString().isEmpty()) {
+                                            if (indexPositon == itemPosition) {
+                                                indexPositon = -1;
+                                            }
+
+                                            adapter.setSeclection(indexPositon);
+                                            adapter.notifyDataSetChanged();
+                                        }else {
+                                            customSearch.setText("");
                                         }
-                                        commonDataStructureList.remove(itemPosition - listView.getHeaderViewsCount());
-                                        adapter.setSeclection(indexPositon);
-                                        adapter.notifyDataSetChanged();
                                     }
                                 });
                                 dialogOK.show();
@@ -210,18 +197,12 @@ public class UnitListView extends CustomSearchBase implements View.OnClickListen
 
 
         Intent intent=new Intent(UnitListView.this,UnitForm.class);
-        if(commonDataStructureSearch.size()!=0) {
+
 
             intent.putExtra("action", "edit");
-            intent.putExtra("data_return", String.valueOf(commonDataStructureSearch.get(position).getName()));
-            indexName = commonDataStructureSearch.get(position).getName();
+            intent.putExtra("data_return", String.valueOf(listdatas.get(position).getName()));
+            indexName = listdatas.get(position).getName();
 
-        }else {
-
-            intent.putExtra("action", "edit");
-            intent.putExtra("data_return", String.valueOf(commonDataStructureList.get(position).getName()));
-            indexName = commonDataStructureList.get(position).getName();
-        }
         setResult(RESULT_OK,intent);
 
         if(lastCheckedOption != null){
@@ -229,64 +210,46 @@ public class UnitListView extends CustomSearchBase implements View.OnClickListen
         }
         lastCheckedOption = (ImageView)view.findViewById(R.id.custom_item_layout_one_image);
         lastCheckedOption.setVisibility(View.VISIBLE);
-        positionTemp =position;
+        indexPositon =position;
         this.finish();
     }
-    //筛选条件
-    public Object[] searchItem(String name) {
-        if(commonDataStructureSearch !=null) {
-            commonDataStructureSearch.clear();
+    public void  searchItem(String name) {
+        if(listdatas.size()>0) {
+            listdatas.clear();
         }
-        for (int i = 0; i < commonDataStructureList.size(); i++) {
-            int index = commonDataStructureList.get(i).getName().indexOf(name);
-            // 存在匹配的数据
-            if (index != -1) {
-                commonDataStructureSearch.add(commonDataStructureList.get(i));
-            }
-        }
-        return commonDataStructureSearch.toArray();
-    }
+       unitList=DataStructure.where("name like ?","%" + name + "%").find(Unit.class);
+        for(Unit unit:unitList)
 
-    public Object[] searchCategory(String name) {
+        {
+            CommonDataStructure commonData=new CommonDataStructure();
+            commonData.setName(unit.getName());
+            commonData.setId(unit.getId());
+            commonData.setImage(R.drawable.seclec_arrow);
+            listdatas.add(commonData);
 
-        if(commonDataStructureSearch !=null) {
-            commonDataStructureSearch.clear();
         }
-        for (int i = 0; i < commonDataStructureList.size(); i++) {
-            if(commonDataStructureList.get(i).getCategory()!=null) {
-                int index = commonDataStructureList.get(i).getCategory().indexOf(name);
-                // 存在匹配的数据
-                if (index != -1) {
-                    commonDataStructureSearch.add(commonDataStructureList.get(i));
-                }
-            }
-        }
-        return commonDataStructureSearch.toArray();
-    }
-//adapter刷新,重写Filter方式会出现BUG.
-    public void updateLayout(String name) {
-        if(commonDataStructureSearch !=null) {
+
+        if(listdatas!=null) {
             int index=-1;
             if(!name.isEmpty())
             {
-               for(int i = 0; i< commonDataStructureSearch.size(); i++)
-               {
-                   if(commonDataStructureSearch.get(i).getName().equals(indexName))
-                   {
-                       index=i;
-                   }
-               }
+                for(int i=0;i<listdatas.size();i++)
+                {
+                    if(listdatas.get(i).getName().equals(indexName))
+                    {
+                        index=i;
+                    }
+                }
             }else
             {
-                index= positionTemp;
+                index= indexPositon;
             }
-            adapter = new CommonListViewAdapter(UnitListView.this, R.layout.custom_item, commonDataStructureSearch);
+
             adapter.setSeclection(index);
+            adapter.notifyDataSetChanged();
             listView.setAdapter(adapter);
         }
     }
-
-
     @Override
     public void onClick(View v) {
         switch(v.getId())
@@ -316,8 +279,8 @@ public class UnitListView extends CustomSearchBase implements View.OnClickListen
             case 1:
                 if(resultCode==RESULT_OK)
                 {
-                    if(commonDataStructureList.size()!=0) {
-                        commonDataStructureList.clear();
+                    if(listdatas.size()!=0) {
+                        listdatas.clear();
                     }
                     unitList = DataSupport.findAll(Unit.class);
                     for(Unit unit: unitList)
@@ -327,13 +290,13 @@ public class UnitListView extends CustomSearchBase implements View.OnClickListen
                         commonData.setName(unit.getName());
                         commonData.setId(unit.getId());
                         commonData.setImage(R.drawable.seclec_arrow);
-                        commonDataStructureList.add(commonData);
+                        listdatas.add(commonData);
 
 
 
                     }
-                    adapter = new CommonListViewAdapter(UnitListView.this, R.layout.custom_item, commonDataStructureList);
-                    adapter.setSeclection(positionTemp);
+                    adapter = new CommonListViewAdapter(UnitListView.this, R.layout.custom_item, listdatas);
+                    adapter.setSeclection(indexPositon);
                     listView.setAdapter(adapter);
 
 
@@ -361,8 +324,8 @@ public class UnitListView extends CustomSearchBase implements View.OnClickListen
         @Override
         public void afterTextChanged(Editable s) {
 
-            Object[] obj = searchItem(customSearch.getText().toString());
-            updateLayout(customSearch.getText().toString());
+            searchItem(customSearch.getText().toString());
+
 
         }
     };
