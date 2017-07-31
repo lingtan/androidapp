@@ -11,14 +11,10 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.example.androiderp.CustomDataClass.Brand;
-import com.example.androiderp.CustomDataClass.Product;
 import com.example.androiderp.R;
 import com.example.androiderp.adaper.DataStructure;
-
 import org.litepal.crud.DataSupport;
-
 import java.util.List;
 
 /**
@@ -74,6 +70,9 @@ private  void formInit()
                 brandList = DataStructure.where("name = ?",userName.getText().toString()).find(Brand.class);
                 if (TextUtils.isEmpty(userName.getText().toString())) {
                     userName.setError("需要输入品牌");
+                }else if (brandList.size()>0)
+                {
+                    Toast.makeText(BrandForm.this,"品牌已经存在",Toast.LENGTH_SHORT).show();
                 } else {
                     if (edit.equals("edit")) {
                       Brand  brand = new Brand();
@@ -84,10 +83,7 @@ private  void formInit()
                         setResult(RESULT_OK,intent);
                         isSave=true;
                         BrandForm.this.finish();
-                    } else if (brandList.size()>0)
-                    {
-                        Toast.makeText(BrandForm.this,"品牌已经存在",Toast.LENGTH_SHORT).show();}
-                else {
+                    } else {
                       Brand  brand = new Brand();
                         brand.setName(userName.getText().toString());
                         brand.save();

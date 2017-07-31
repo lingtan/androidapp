@@ -71,6 +71,7 @@
                 android:id="@+id/product_purchaseprice"
                 android:textSize="14dp"
                 android:hint="¥0.00"
+                android:textColorHint="#E56907"
                 android:maxLines="1"
                 android:inputType="phone"/>
         </LinearLayout>
@@ -88,6 +89,7 @@
                 android:id="@+id/product_salesprice"
                 android:textSize="14dp"
                 android:hint="¥0.00"
+                android:textColorHint="#E56907"
                 android:maxLines="1"
                 android:inputType="phone"/>
         </LinearLayout>

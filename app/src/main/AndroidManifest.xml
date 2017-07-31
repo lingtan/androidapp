@@ -47,12 +47,6 @@
         <activity android:name="com.example.androiderp.basicdata.CustomListView">
 
         </activity>
-        <activity android:name="com.example.androiderp.basicdata.CustomCategoryListview">
-
-        </activity>
-        <activity android:name="com.example.androiderp.basicdata.SupplierCategoryListView">
-
-        </activity>
         <activity android:name="com.example.androiderp.basicdata.SupplierListView">
         </activity>
         <activity android:name="com.example.androiderp.basicdata.CustomTowListView">
@@ -105,19 +99,27 @@
         </activity>
         <activity android:name="com.example.androiderp.basicdata.InventorySearchListView">
 
-        </activity>
+    </activity>
+
         <activity android:name="com.example.androiderp.basicdata.ProductStockTakingListView">
 
         </activity>
         <activity android:name="com.example.androiderp.basicdata.CustomSearchListView">
 
         </activity>
-        <activity android:name="com.example.androiderp.form.CustomCategoryForm">
+        <activity android:name="com.example.androiderp.basicdata.SupplierCategoryListView">
+
+        </activity>
+        <activity android:name="com.example.androiderp.basicdata.CustomCategoryListView">
 
         </activity>
         <activity android:name="com.example.androiderp.form.SupplierCategoryForm">
 
         </activity>
+        <activity android:name="com.example.androiderp.form.CustomCategoryForm">
+
+        </activity>
+
         <activity android:name="com.example.androiderp.form.AppropriationShoppingForm">
 
         </activity>

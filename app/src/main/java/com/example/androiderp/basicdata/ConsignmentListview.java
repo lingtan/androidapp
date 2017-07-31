@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.androiderp.CustomDataClass.Brand;
 import com.example.androiderp.CustomDataClass.Consignment;
 import com.example.androiderp.CustomDataClass.ProductCategory;
 import com.example.androiderp.CustomDataClass.SalesOut;
@@ -47,11 +48,12 @@ public class ConsignmentListview extends CustomSearchBase implements View.OnClic
     private CustomSearch customSearch;
     private String categoryid;
     private ImageView lastCheckedOption;
-    private int positionTemp;
-    private int indexPositon;
+    private int indexPositon=-1;
     private String indexName;
     private Menu menu;
     private List<SalesOut> salesOutList =new ArrayList<SalesOut>();
+    private String returnName;
+    private String searchVale;
     @Override
     public void iniView(){
         setContentView(R.layout.customlistview_category_layout);
@@ -59,7 +61,7 @@ public class ConsignmentListview extends CustomSearchBase implements View.OnClic
         initUiAndListener();
         toobarBack =(TextView)findViewById(R.id.custom_toobar_left) ;
         toobarTile =(TextView)findViewById(R.id.custom_toobar_midd);
-        toobarTile.setText("发货方式");
+        toobarTile.setText("选择发货方式");
         toobarAdd =(TextView)findViewById(R.id.custom_toobar_right);
         toobarBack.setOnClickListener(this);
         toobarAdd.setOnClickListener(this);
@@ -86,26 +88,15 @@ public class ConsignmentListview extends CustomSearchBase implements View.OnClic
 
 
         }
-        if(indexName.isEmpty())
-        {
-            indexPositon =-1;
-        }else {
-            positionTemp = indexPositon;
-        }
 
         //构造函数第一参数是类的对象，第二个是布局文件，第三个是数据源
         dm=new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         if(listdatas.size()!=0) {
-             if(categoryid!=null) {
-                 Object[] obj = searchCategory(categoryid);
-                 updateLayout("10");
-                 toobarTile.setText(categoryid);
-             }else {
+
                  adapter = new CommonListViewAdapter(ConsignmentListview.this, R.layout.custom_item, listdatas);
                  adapter.setSeclection(indexPositon);
                  listView.setAdapter(adapter);
-             }
 
         }
 
@@ -145,19 +136,10 @@ public class ConsignmentListview extends CustomSearchBase implements View.OnClic
             case MenuItem.DIRECTION_RIGHT:
                 switch (buttonPosition) {
                     case 0:
-                        Intent intent=new Intent(ConsignmentListview.this,ProductCategoryForm.class);
-                        if(commonDataStructureSearch.size()!=0) {
-
-                            intent.putExtra("action", "edit");
-                            intent.putExtra("customid", String.valueOf(commonDataStructureSearch.get(itemPosition).getId()));
-                            indexName = commonDataStructureSearch.get(itemPosition).getName();
-
-                        }else {
+                        Intent intent=new Intent(ConsignmentListview.this,ConsignmentForm.class);
 
                             intent.putExtra("action", "edit");
                             intent.putExtra("customid", String.valueOf(listdatas.get(itemPosition).getId()));
-                            indexName =listdatas.get(itemPosition).getName();
-                        }
                         startActivityForResult(intent,1);
 
                         return Menu.ITEM_NOTHING;
@@ -175,20 +157,17 @@ public class ConsignmentListview extends CustomSearchBase implements View.OnClic
                                 }else {
                                     DataStructure.deleteAll(ProductCategory.class, "name = ?", listdatas.get(itemPosition - listView.getHeaderViewsCount()).getName().toString());
 
-                                    AlertDialog.Builder dialogOK = new AlertDialog.Builder(ConsignmentListview.this);
-                                    dialogOK.setMessage("该发货方式已经删除");
-                                    dialogOK.setNegativeButton("确认", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
+                                    listdatas.remove(itemPosition - listView.getHeaderViewsCount());
+                                    if(customSearch.getText().toString().isEmpty()) {
                                             if (indexPositon == itemPosition) {
                                                 indexPositon = -1;
                                             }
-                                            listdatas.remove(itemPosition - listView.getHeaderViewsCount());
+
                                             adapter.setSeclection(indexPositon);
                                             adapter.notifyDataSetChanged();
-                                        }
-                                    });
-                                    dialogOK.show();
+                                        }else {
+                                        customSearch.setText("");
+                                    }
 
                                 }
 
@@ -218,18 +197,11 @@ public class ConsignmentListview extends CustomSearchBase implements View.OnClic
 
 
         Intent intent=new Intent(ConsignmentListview.this,ProductCategoryForm.class);
-        if(commonDataStructureSearch.size()!=0) {
-
-            intent.putExtra("action", "edit");
-            intent.putExtra("data_return", String.valueOf(commonDataStructureSearch.get(position).getName()));
-            indexName = commonDataStructureSearch.get(position).getName();
-
-        }else {
 
             intent.putExtra("action", "edit");
             intent.putExtra("data_return", String.valueOf(listdatas.get(position).getName()));
             indexName =listdatas.get(position).getName();
-        }
+
         setResult(RESULT_OK,intent);
 
         if(lastCheckedOption != null){
@@ -237,59 +209,44 @@ public class ConsignmentListview extends CustomSearchBase implements View.OnClic
         }
         lastCheckedOption = (ImageView)view.findViewById(R.id.custom_item_layout_one_image);
         lastCheckedOption.setVisibility(View.VISIBLE);
-        positionTemp =position;
+        indexPositon =position;
         this.finish();
     }
     //筛选条件
-    public Object[] searchItem(String name) {
-        if(commonDataStructureSearch !=null) {
-            commonDataStructureSearch.clear();
+    public void  searchItem(String name) {
+        if(listdatas.size()>0) {
+            listdatas.clear();
         }
-        for (int i = 0; i < listdatas.size(); i++) {
-            int index = listdatas.get(i).getName().indexOf(name);
-            // 存在匹配的数据
-            if (index != -1) {
-                commonDataStructureSearch.add(listdatas.get(i));
-            }
-        }
-        return commonDataStructureSearch.toArray();
-    }
+        consignmentList=DataStructure.where("name like ?","%" + name + "%").find(Consignment.class);
+        for(Consignment consignment:consignmentList)
 
-    public Object[] searchCategory(String name) {
+        {
+            CommonDataStructure commonData=new CommonDataStructure();
+            commonData.setName(consignment.getName());
+            commonData.setId(consignment.getId());
+            commonData.setImage(R.drawable.seclec_arrow);
+            listdatas.add(commonData);
 
-        if(commonDataStructureSearch !=null) {
-            commonDataStructureSearch.clear();
         }
-        for (int i = 0; i < listdatas.size(); i++) {
-            if(listdatas.get(i).getCategory()!=null) {
-                int index = listdatas.get(i).getCategory().indexOf(name);
-                // 存在匹配的数据
-                if (index != -1) {
-                    commonDataStructureSearch.add(listdatas.get(i));
-                }
-            }
-        }
-        return commonDataStructureSearch.toArray();
-    }
-//adapter刷新,重写Filter方式会出现BUG.
-    public void updateLayout(String name) {
-        if(commonDataStructureSearch !=null) {
+
+        if(listdatas!=null) {
             int index=-1;
             if(!name.isEmpty())
             {
-               for(int i = 0; i< commonDataStructureSearch.size(); i++)
-               {
-                   if(commonDataStructureSearch.get(i).getName().equals(indexName))
-                   {
-                       index=i;
-                   }
-               }
+                for(int i=0;i<listdatas.size();i++)
+                {
+                    if(listdatas.get(i).getName().equals(indexName))
+                    {
+                        index=i;
+                    }
+                }
             }else
             {
-                index= positionTemp;
+                index= indexPositon;
             }
-            adapter = new CommonListViewAdapter(ConsignmentListview.this, R.layout.custom_item, commonDataStructureSearch);
+
             adapter.setSeclection(index);
+            adapter.notifyDataSetChanged();
             listView.setAdapter(adapter);
         }
     }
@@ -300,6 +257,11 @@ public class ConsignmentListview extends CustomSearchBase implements View.OnClic
         switch(v.getId())
         {
             case R.id.custom_toobar_left:
+                Intent intent=getIntent();
+                if(indexPositon!=-1) {
+                    intent.putExtra("data_return", listdatas.get(indexPositon).getName());
+                }
+                setResult(RESULT_OK,intent);
                 ConsignmentListview.this.finish();
                 break;
 
@@ -311,7 +273,7 @@ public class ConsignmentListview extends CustomSearchBase implements View.OnClic
             case R.id.custom_toobar_right:
                 Intent cate = new Intent(ConsignmentListview.this, ConsignmentForm.class);
                 cate.putExtra("action","add");
-                startActivityForResult(cate,1);
+                startActivityForResult(cate,2);
                 break;
 
 
@@ -322,6 +284,30 @@ public class ConsignmentListview extends CustomSearchBase implements View.OnClic
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode){
             case 1:
+                if(resultCode==RESULT_OK)
+                {   returnName=data.getStringExtra("returnName");
+                    indexName=returnName;
+                    if(listdatas.size()>0) {
+                        listdatas.clear();
+                    }
+                    if(customSearch.getText().toString().isEmpty()) {
+
+                        customSearch.requestFocusFromTouch();
+                        customSearch.setText("");
+                    }else {
+                        int i = returnName.indexOf(searchVale);
+                        if(i!=-1) {
+                            customSearch.requestFocusFromTouch();
+                            customSearch.setText(searchVale);
+                        }else {
+                            customSearch.requestFocusFromTouch();
+                            customSearch.setText(returnName);
+                        }
+                    }
+
+                }
+                break;
+            case 2:
                 if(resultCode==RESULT_OK)
                 {
                     if(listdatas.size()!=0) {
@@ -341,7 +327,7 @@ public class ConsignmentListview extends CustomSearchBase implements View.OnClic
 
                     }
                     adapter = new CommonListViewAdapter(ConsignmentListview.this, R.layout.custom_item, listdatas);
-                    adapter.setSeclection(positionTemp);
+                    adapter.setSeclection(indexPositon);
                     listView.setAdapter(adapter);
 
 
@@ -369,8 +355,9 @@ public class ConsignmentListview extends CustomSearchBase implements View.OnClic
         @Override
         public void afterTextChanged(Editable s) {
 
-            Object[] obj = searchItem(customSearch.getText().toString());
-            updateLayout(customSearch.getText().toString());
+            searchItem(customSearch.getText().toString());
+            searchVale=customSearch.getText().toString();
+
 
         }
     };

@@ -136,7 +136,6 @@ public class BrandListView extends CustomSearchBase implements View.OnClickListe
 
                             intent.putExtra("action", "edit");
                             intent.putExtra("customid", String.valueOf(listdatas.get(itemPosition).getId()));
-
                         startActivityForResult(intent,1);
 
                         return Menu.ITEM_NOTHING;
@@ -234,8 +233,9 @@ public class BrandListView extends CustomSearchBase implements View.OnClickListe
             {
                 index= indexPositon;
             }
-            adapter.notifyDataSetChanged();
+
             adapter.setSeclection(index);
+            adapter.notifyDataSetChanged();
             listView.setAdapter(adapter);
         }
     }
@@ -248,7 +248,9 @@ public class BrandListView extends CustomSearchBase implements View.OnClickListe
         {
             case R.id.custom_toobar_left:
                 Intent intent=getIntent();
-                intent.putExtra("data_return",indexName);
+                if(indexPositon!=-1) {
+                    intent.putExtra("data_return", listdatas.get(indexPositon).getName());
+                }
                 setResult(RESULT_OK,intent);
                 BrandListView.this.finish();
                 break;

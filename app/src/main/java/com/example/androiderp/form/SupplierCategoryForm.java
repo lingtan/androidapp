@@ -2,7 +2,6 @@ package com.example.androiderp.form;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -11,11 +10,16 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.androiderp.CustomDataClass.ProductCategory;
 import com.example.androiderp.CustomDataClass.SupplierCategory;
 import com.example.androiderp.R;
+import com.example.androiderp.adaper.DataStructure;
 
 import org.litepal.crud.DataSupport;
+
+import java.util.List;
 
 /**
  * Created by lingtan on 2017/5/15.
@@ -27,14 +31,14 @@ public class SupplierCategoryForm extends AppCompatActivity implements View.OnCl
     private TextView toobarSave, toobarTile, toobarBack;
     private SupplierCategory supplierCategory;
     private String customid,edit;
-    private Intent intent;
+    private boolean isSave=false;
+    private List<SupplierCategory> supplierCategoryList;
     protected void onCreate(Bundle savedInstanceState) {
-        final Typeface textFont = Typeface.createFromAsset(getAssets(), "fonts/Montserrat-Regular.ttf");
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.suppliercategory);
+        setContentView(R.layout.customcategory);
         manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        userName =(EditText)findViewById(R.id.suppliercategory_name);
-        intent=getIntent();
+        userName =(EditText)findViewById(R.id.customcategory_name);
+        final Intent intent=getIntent();
         customid=intent.getStringExtra("customid");
         edit=intent.getStringExtra("action");
         toobarSave =(TextView)findViewById(R.id.custom_toobar_right);
@@ -45,53 +49,69 @@ public class SupplierCategoryForm extends AppCompatActivity implements View.OnCl
         toobarSave.setText("保存");
         toobarSave.setOnClickListener(this);
         toobarBack.setOnClickListener(this);
-        formInit();
-
-
+       formInit();
 
     }
-    private  void  formInit()
-    {if(customid!=null) {
-        supplierCategory = DataSupport.find(SupplierCategory.class, Long.parseLong(customid));
-        userName.setText(supplierCategory.getName());
+private  void formInit()
+{if(customid!=null) {
+    supplierCategory = DataSupport.find(SupplierCategory.class, Long.parseLong(customid));
+    userName.setText(supplierCategory.getName());
+}
+    if(edit.equals("edit"))
+    {
+        toobarTile.setText("供应商分类修改");
+    }else {
+        toobarTile.setText("供应商分类新增");
     }
-        if(edit.equals("edit"))
-        {
-            toobarTile.setText("供应商分类修改");
-        }else {
-            toobarTile.setText("供应商分类新增");
-        }
-    }
+
+}
     @Override
     public void onClick(View v) {
         switch (v.getId())
         {
             case R.id.custom_toobar_right:
-
+                supplierCategoryList = DataStructure.where("name = ?",userName.getText().toString()).find(SupplierCategory.class);
                 if (TextUtils.isEmpty(userName.getText().toString())) {
-                    userName.setError("需要输入供应商分类名称");
-                } else {
+                    userName.setError("需要输入供应商分类");
+                } else if (supplierCategoryList.size()>0)
+                {
+                    Toast.makeText(SupplierCategoryForm.this,"分类已经存在",Toast.LENGTH_SHORT).show();
+                }else {
                     if (edit.equals("edit")) {
-               SupplierCategory         supplierCategory = new SupplierCategory();
-                        supplierCategory.setName(userName.getText().toString());
-                        supplierCategory.update(Long.parseLong(customid));
-
+                 SupplierCategory      supplierCategory = new SupplierCategory();
+                       supplierCategory.setName(userName.getText().toString());
+                       supplierCategory.update(Long.parseLong(customid));
+                        Intent intent = new Intent();
+                        intent.putExtra("returnName",userName.getText().toString());
                         setResult(RESULT_OK,intent);
+                        isSave=true;
                         SupplierCategoryForm.this.finish();
                     } else {
-              SupplierCategory          supplierCategory = new SupplierCategory();
+                SupplierCategory       supplierCategory = new SupplierCategory();
                         supplierCategory.setName(userName.getText().toString());
-                        supplierCategory.save();
+                       supplierCategory.save();
+                        Intent intent = new Intent();
                         setResult(RESULT_OK,intent);
                         SupplierCategoryForm.this.finish();
                     }
                 }
-
                 break;
             case R.id.custom_toobar_left:
+                if(edit.equals("edit"))
+                {
+                    Intent intent = new Intent();
+                    if(isSave) {
+                        intent.putExtra("returnName", userName.getText().toString());
+                    }else {
+                        intent.putExtra("returnName", supplierCategory.getName());
+                    }
+                    setResult(RESULT_OK,intent);
+                    finish();
+                }else {
+                    finish();
+                }
 
-                setResult(RESULT_OK,intent);
-                SupplierCategoryForm.this.finish();
+
 
         }
     }

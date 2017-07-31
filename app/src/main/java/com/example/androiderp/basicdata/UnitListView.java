@@ -46,6 +46,8 @@ public class UnitListView extends CustomSearchBase implements View.OnClickListen
     private int indexPositon=-1;
     private String indexName;
     private Menu menu;
+    private String returnName;
+    private String searchVale;
     @Override
     public void iniView(){
         setContentView(R.layout.customlistview_category_layout);
@@ -149,11 +151,7 @@ public class UnitListView extends CustomSearchBase implements View.OnClickListen
                             public void onClick(DialogInterface dialog, int which) {
                                 DataStructure.deleteAll(Unit.class,"name = ?", listdatas.get(itemPosition - listView.getHeaderViewsCount()).getName().toString());
 
-                                AlertDialog.Builder dialogOK=new AlertDialog.Builder(UnitListView.this);
-                                dialogOK.setMessage("该单位已经删除");
-                                dialogOK.setNegativeButton("确认", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
+
                                         listdatas.remove(itemPosition - listView.getHeaderViewsCount());
                                         if(customSearch.getText().toString().isEmpty()) {
                                             if (indexPositon == itemPosition) {
@@ -165,11 +163,6 @@ public class UnitListView extends CustomSearchBase implements View.OnClickListen
                                         }else {
                                             customSearch.setText("");
                                         }
-                                    }
-                                });
-                                dialogOK.show();
-
-
 
 
                             }
@@ -255,6 +248,11 @@ public class UnitListView extends CustomSearchBase implements View.OnClickListen
         switch(v.getId())
         {
             case R.id.custom_toobar_left:
+                Intent intent=getIntent();
+                if(indexPositon!=-1) {
+                    intent.putExtra("data_return", listdatas.get(indexPositon).getName());
+                }
+                setResult(RESULT_OK,intent);
                 UnitListView.this.finish();
                 break;
 
@@ -266,7 +264,7 @@ public class UnitListView extends CustomSearchBase implements View.OnClickListen
             case R.id.custom_toobar_right:
                 Intent cate = new Intent(UnitListView.this, UnitForm.class);
                 cate.putExtra("action","add");
-                startActivityForResult(cate,1);
+                startActivityForResult(cate,2);
                 break;
 
 
@@ -276,7 +274,33 @@ public class UnitListView extends CustomSearchBase implements View.OnClickListen
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode){
+
             case 1:
+                if(resultCode==RESULT_OK)
+                {   returnName=data.getStringExtra("returnName");
+                    indexName=returnName;
+                    if(listdatas.size()>0) {
+                        listdatas.clear();
+                    }
+                    if(customSearch.getText().toString().isEmpty()) {
+
+                        customSearch.requestFocusFromTouch();
+                        customSearch.setText("");
+                    }else {
+                        int i = returnName.indexOf(searchVale);
+                        if(i!=-1) {
+                            customSearch.requestFocusFromTouch();
+                            customSearch.setText(searchVale);
+                        }else {
+                            customSearch.requestFocusFromTouch();
+                            customSearch.setText(returnName);
+                        }
+                    }
+
+                }
+                break;
+
+            case 2:
                 if(resultCode==RESULT_OK)
                 {
                     if(listdatas.size()!=0) {
@@ -325,6 +349,8 @@ public class UnitListView extends CustomSearchBase implements View.OnClickListen
         public void afterTextChanged(Editable s) {
 
             searchItem(customSearch.getText().toString());
+            searchVale=customSearch.getText().toString();
+
 
 
         }

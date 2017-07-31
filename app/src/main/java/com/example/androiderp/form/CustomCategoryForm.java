@@ -10,11 +10,15 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.androiderp.CustomDataClass.CustomCategory;
 import com.example.androiderp.R;
+import com.example.androiderp.adaper.DataStructure;
 
 import org.litepal.crud.DataSupport;
+
+import java.util.List;
 
 /**
  * Created by lingtan on 2017/5/15.
@@ -26,6 +30,8 @@ public class CustomCategoryForm extends AppCompatActivity implements View.OnClic
     private TextView toobarSave, toobarTile, toobarBack;
     private CustomCategory customCategory;
     private String customid,edit;
+    private boolean isSave=false;
+    private List<CustomCategory> customCategoryList;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.customcategory);
@@ -63,21 +69,26 @@ private  void formInit()
         switch (v.getId())
         {
             case R.id.custom_toobar_right:
+                customCategoryList = DataStructure.where("name = ?",userName.getText().toString()).find(CustomCategory.class);
                 if (TextUtils.isEmpty(userName.getText().toString())) {
-                    userName.setError("需要输入客户分类名称");
-                } else {
+                    userName.setError("需要输入客户分类");
+                } else if (customCategoryList.size()>0)
+                {
+                    Toast.makeText(CustomCategoryForm.this,"分类已经存在",Toast.LENGTH_SHORT).show();
+                }else {
                     if (edit.equals("edit")) {
-               CustomCategory     customCategory = new CustomCategory();
-                        customCategory.setName(userName.getText().toString());
-                        customCategory.update(Long.parseLong(customid));
+                 CustomCategory      supplierCategory = new CustomCategory();
+                       supplierCategory.setName(userName.getText().toString());
+                       supplierCategory.update(Long.parseLong(customid));
                         Intent intent = new Intent();
+                        intent.putExtra("returnName",userName.getText().toString());
                         setResult(RESULT_OK,intent);
+                        isSave=true;
                         CustomCategoryForm.this.finish();
                     } else {
-               CustomCategory     customCategory = new CustomCategory();
-                        customCategory.setName(userName.getText().toString());
-
-                        customCategory.save();
+                CustomCategory       supplierCategory = new CustomCategory();
+                        supplierCategory.setName(userName.getText().toString());
+                       supplierCategory.save();
                         Intent intent = new Intent();
                         setResult(RESULT_OK,intent);
                         CustomCategoryForm.this.finish();
@@ -88,6 +99,11 @@ private  void formInit()
                 if(edit.equals("edit"))
                 {
                     Intent intent = new Intent();
+                    if(isSave) {
+                        intent.putExtra("returnName", userName.getText().toString());
+                    }else {
+                        intent.putExtra("returnName", customCategory.getName());
+                    }
                     setResult(RESULT_OK,intent);
                     finish();
                 }else {

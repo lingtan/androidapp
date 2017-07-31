@@ -41,6 +41,7 @@ public class ProductCategoryListview extends CustomSearchBase implements View.On
     private int indexPositon=-1;
     private String indexName;
     private String returnName;
+    private String searchVale;
     private Menu menu;
     @Override
     public void iniView(){
@@ -130,8 +131,6 @@ public class ProductCategoryListview extends CustomSearchBase implements View.On
 
                             intent.putExtra("action", "edit");
                             intent.putExtra("customid", String.valueOf(listdatas.get(itemPosition).getId()));
-
-
                         startActivityForResult(intent,1);
 
                         return Menu.ITEM_NOTHING;
@@ -243,6 +242,11 @@ public class ProductCategoryListview extends CustomSearchBase implements View.On
         switch(v.getId())
         {
             case R.id.custom_toobar_left:
+                Intent intent=getIntent();
+                if(indexPositon!=-1) {
+                    intent.putExtra("data_return", listdatas.get(indexPositon).getName());
+                }
+                setResult(RESULT_OK,intent);
                 ProductCategoryListview.this.finish();
                 break;
 
@@ -275,9 +279,14 @@ public class ProductCategoryListview extends CustomSearchBase implements View.On
                         customSearch.requestFocusFromTouch();
                         customSearch.setText("");
                     }else {
-
-                        customSearch.requestFocusFromTouch();
-                        customSearch.setText(returnName);
+                        int i = returnName.indexOf(searchVale);
+                        if(i!=-1) {
+                            customSearch.requestFocusFromTouch();
+                            customSearch.setText(searchVale);
+                        }else {
+                            customSearch.requestFocusFromTouch();
+                            customSearch.setText(returnName);
+                        }
                     }
 
                 }
@@ -333,6 +342,7 @@ public class ProductCategoryListview extends CustomSearchBase implements View.On
         public void afterTextChanged(Editable s) {
 
             searchItem(customSearch.getText().toString());
+            searchVale=customSearch.getText().toString();
 
 
         }

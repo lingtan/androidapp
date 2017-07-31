@@ -10,11 +10,16 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.androiderp.CustomDataClass.ProductCategory;
+import com.example.androiderp.CustomDataClass.Unit;
 import com.example.androiderp.R;
+import com.example.androiderp.adaper.DataStructure;
 
 import org.litepal.crud.DataSupport;
+
+import java.util.List;
 
 /**
  * Created by lingtan on 2017/5/15.
@@ -27,6 +32,7 @@ public class ProductCategoryForm extends AppCompatActivity implements View.OnCli
     private ProductCategory productCategory;
     private String customid,edit;
     private boolean isSave=false;
+    private List<ProductCategory> productCategoryList;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.customcategory);
@@ -64,9 +70,13 @@ private  void formInit()
         switch (v.getId())
         {
             case R.id.custom_toobar_right:
+                productCategoryList= DataStructure.where("name = ?",userName.getText().toString()).find(ProductCategory.class);
                 if (TextUtils.isEmpty(userName.getText().toString())) {
                     userName.setError("需要输入商品分类");
-                } else {
+                } else if (productCategoryList.size()>0)
+                {
+                    Toast.makeText(ProductCategoryForm.this,"分类已经存在",Toast.LENGTH_SHORT).show();
+                }else {
                     if (edit.equals("edit")) {
                  ProductCategory       productCategory = new ProductCategory();
                         productCategory.setName(userName.getText().toString());

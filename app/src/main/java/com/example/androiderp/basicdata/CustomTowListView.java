@@ -9,9 +9,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 import com.example.androiderp.CustomDataClass.Custom;
 import com.example.androiderp.CustomDataClass.CustomCategory;
+import com.example.androiderp.CustomDataClass.Supplier;
 import com.example.androiderp.R;
 import com.example.androiderp.adaper.CommonAdapter;
 import com.example.androiderp.adaper.CommonDataStructure;
+import com.example.androiderp.adaper.DataStructure;
 import com.example.androiderp.custom.CustomSearch;
 import com.example.androiderp.custom.CustomSearchBase;
 import com.example.androiderp.form.CustomForm;
@@ -34,6 +36,7 @@ public class CustomTowListView extends CustomSearchBase implements View.OnClickL
     private List<CustomCategory> customCategoryList;
     private List<CommonDataStructure> categorylist = new ArrayList<CommonDataStructure>();
     private String selectCategory;
+    private String leftItemName="全部";
 
     @Override
     public void iniView(){
@@ -88,6 +91,7 @@ public class CustomTowListView extends CustomSearchBase implements View.OnClickL
                 selectCategory= categorylist.get(position).getName().toString();
                 leftAdapter.setSeclection(position);
                 leftAdapter.notifyDataSetInvalidated();
+                leftItemName=categorylist.get(position).getName().toString();
                 Object[] obj = categorySearch(categorylist.get(position).getName().toString());
                 updateLayout(obj);
             }
@@ -133,8 +137,21 @@ public class CustomTowListView extends CustomSearchBase implements View.OnClickL
 
     //筛选条件
     public Object[] search(String name) {
-        if(commonDataStructureSearch !=null) {
-            commonDataStructureSearch.clear();
+        commonDataStructureSearch.clear();
+        commonDataStructureList.clear();
+
+        customList = DataStructure.where("name like ?","%" + name + "%").find(Custom.class);
+        for(Custom custom: customList)
+
+        {
+            CommonDataStructure commonData=new CommonDataStructure();
+            commonData.setName(custom.getName());
+            commonData.setCategory(custom.getCategory());
+            commonData.setId(custom.getId());
+            commonDataStructureList.add(commonData);
+
+
+
         }
         for (int i = 0; i < commonDataStructureList.size(); i++) {
             int index = commonDataStructureList.get(i).getName().indexOf(name);
@@ -156,13 +173,32 @@ public class CustomTowListView extends CustomSearchBase implements View.OnClickL
 
     public Object[] categorySearch(String name) {
 
-        if(commonDataStructureSearch !=null) {
-            commonDataStructureSearch.clear();
+        commonDataStructureSearch.clear();
+        commonDataStructureList.clear();
+        if(name.equals("全部")||name.equals("未分类"))
+        {
+            customList = DataStructure.findAll(Custom.class);
+        }else {
+            customList = DataStructure.where("category like ?","%" + name + "%").find(Custom.class);
         }
+
+        for(Custom custom: customList)
+
+        {
+            CommonDataStructure commonData=new CommonDataStructure();
+            commonData.setName(custom.getName());
+            commonData.setCategory(custom.getCategory());
+            commonData.setId(custom.getId());
+            commonDataStructureList.add(commonData);
+
+
+
+        }
+
         if(name.equals("未分类"))
         {
             for (int i = 0; i < commonDataStructureList.size(); i++) {
-               if(commonDataStructureList.get(i).getCategory()==null)
+               if(commonDataStructureList.get(i).getCategory().isEmpty())
                {
                     commonDataStructureSearch.add(commonDataStructureList.get(i));
                }
@@ -180,13 +216,13 @@ public class CustomTowListView extends CustomSearchBase implements View.OnClickL
 
         else {
         for (int i = 0; i < commonDataStructureList.size(); i++) {
-              if(commonDataStructureList.get(i).getCategory()!=null){
+
                 int index = commonDataStructureList.get(i).getCategory().indexOf(name);
                 // 存在匹配的数据
                 if (index != -1) {
                     commonDataStructureSearch.add(commonDataStructureList.get(i));
                 }
-            }
+
         }}
         return commonDataStructureSearch.toArray();
     }
@@ -204,25 +240,9 @@ public class CustomTowListView extends CustomSearchBase implements View.OnClickL
         switch (requestCode){
             case 1:
                 if(resultCode==RESULT_OK)
-                {
-                    if(commonDataStructureList.size()!=0) {
-                        commonDataStructureList.clear();
-                    }
-                    customList = DataSupport.findAll(Custom.class);
-                    for(Custom category: customList)
-
-                    {
-                        CommonDataStructure commonData=new CommonDataStructure();
-                        commonData.setName(category.getName());
-                        commonData.setCategory(category.getCategory());
-                        commonData.setId(category.getId());
-                        commonDataStructureList.add(commonData);
-
-
-
-                    }
-                    rightAdapter = new CommonAdapter(CustomTowListView.this, R.layout.custom_item, commonDataStructureList);
-                    rightListView.setAdapter(rightAdapter);
+                { Object[] obj = categorySearch(leftItemName);
+                    updateLayout(obj);
+                    leftAdapter.notifyDataSetChanged();
                 }
                 break;
 

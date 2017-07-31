@@ -10,11 +10,12 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
-
+import android.widget.Toast;
 import com.example.androiderp.CustomDataClass.Consignment;
 import com.example.androiderp.R;
-
+import com.example.androiderp.adaper.DataStructure;
 import org.litepal.crud.DataSupport;
+import java.util.List;
 
 /**
  * Created by lingtan on 2017/5/15.
@@ -26,6 +27,8 @@ public class ConsignmentForm extends AppCompatActivity implements View.OnClickLi
     private TextView toobarSave, toobarTile, toobarBack;
     private Consignment consignment;
     private String customid,edit;
+    private boolean isSave=false;
+    private List<Consignment> consignmentList;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.customcategory);
@@ -63,15 +66,21 @@ private  void formInit()
         switch (v.getId())
         {
             case R.id.custom_toobar_right:
+                consignmentList= DataStructure.where("name = ?",userName.getText().toString()).find(Consignment.class);
                 if (TextUtils.isEmpty(userName.getText().toString())) {
                     userName.setError("需要发货方式");
+                }else if (consignmentList.size()>0)
+                {
+                    Toast.makeText(ConsignmentForm.this,"发货方式已经存在",Toast.LENGTH_SHORT).show();
                 } else {
                     if (edit.equals("edit")) {
                    Consignment     consignment = new Consignment();
                         consignment.setName(userName.getText().toString());
                         consignment.update(Long.parseLong(customid));
                         Intent intent = new Intent();
+                        intent.putExtra("returnName",userName.getText().toString());
                         setResult(RESULT_OK,intent);
+                        isSave=true;
                         ConsignmentForm.this.finish();
                     } else {
                     Consignment    consignment = new Consignment();
@@ -87,6 +96,11 @@ private  void formInit()
                 if(edit.equals("edit"))
                 {
                     Intent intent = new Intent();
+                    if(isSave) {
+                        intent.putExtra("returnName", userName.getText().toString());
+                    }else {
+                        intent.putExtra("returnName",consignment.getName());
+                    }
                     setResult(RESULT_OK,intent);
                     finish();
                 }else {

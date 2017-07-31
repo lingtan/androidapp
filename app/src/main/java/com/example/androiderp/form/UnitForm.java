@@ -10,11 +10,16 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.androiderp.CustomDataClass.Brand;
 import com.example.androiderp.CustomDataClass.Unit;
 import com.example.androiderp.R;
+import com.example.androiderp.adaper.DataStructure;
 
 import org.litepal.crud.DataSupport;
+
+import java.util.List;
 
 /**
  * Created by lingtan on 2017/5/15.
@@ -26,6 +31,8 @@ public class UnitForm extends AppCompatActivity implements View.OnClickListener 
     private TextView toobarSave, toobarTile, toobarBack;
     private Unit unit;
     private String customid,edit;
+    private boolean isSave=false;
+    private List<Unit> unitList;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.customcategory);
@@ -63,31 +70,41 @@ private  void formInit()
         switch (v.getId())
         {
             case R.id.custom_toobar_right:
+                 unitList= DataStructure.where("name = ?",userName.getText().toString()).find(Unit.class);
                 if (TextUtils.isEmpty(userName.getText().toString())) {
                     userName.setError("需要输入单位");
-                } else {
-                    if (edit.equals("edit")) {
-                 Unit       custom = new Unit();
-                        custom.setName(userName.getText().toString());
-                        custom.update(Long.parseLong(customid));
+                }else if (unitList.size()>0)
+                {
+                    Toast.makeText(UnitForm.this,"单位已经存在",Toast.LENGTH_SHORT).show();
+                } else if  (edit.equals("edit"))
+                {
+                        Unit  unitL = new Unit();
+                        unitL.setName(userName.getText().toString());
+                        unitL.update(Long.parseLong(customid));
                         Intent intent = new Intent();
                         setResult(RESULT_OK,intent);
+                        isSave=true;
                         UnitForm.this.finish();
-                    } else {
-                 Unit       custom = new Unit();
-                        custom.setName(userName.getText().toString());
-
-                        custom.save();
+                    }
+                    else {
+                        Unit unitL = new Unit();
+                        unitL .setName(userName.getText().toString());
+                        unitL .save();
                         Intent intent = new Intent();
                         setResult(RESULT_OK,intent);
                         UnitForm.this.finish();
                     }
-                }
+
                 break;
             case R.id.custom_toobar_left:
                 if(edit.equals("edit"))
                 {
                     Intent intent = new Intent();
+                    if(isSave) {
+                        intent.putExtra("returnName", userName.getText().toString());
+                    }else {
+                        intent.putExtra("returnName",unit.getName());
+                    }
                     setResult(RESULT_OK,intent);
                     finish();
                 }else {

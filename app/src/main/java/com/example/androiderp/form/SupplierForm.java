@@ -129,9 +129,6 @@ public class SupplierForm extends AppCompatActivity implements View.OnClickListe
             case R.id.customtoobar_right:
                 if (TextUtils.isEmpty(name.getText().toString())) {
                     name.setError("需要输入供应商",errorIcon);
-                }else if (TextUtils.isEmpty(category.getText().toString()))
-                {
-                    category.setError("请选择供应商分类",errorIcon);
                 }
                 else if (edit.equals("edit")) {
              Supplier       supplier = new Supplier();
@@ -172,6 +169,8 @@ public class SupplierForm extends AppCompatActivity implements View.OnClickListe
                     setResult(RESULT_OK,intent);
                     finish();
                 }else {
+                    Intent intent = new Intent();
+                    setResult(RESULT_OK,intent);
                     finish();
                 }
              break;

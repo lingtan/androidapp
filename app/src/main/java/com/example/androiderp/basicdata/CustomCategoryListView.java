@@ -12,41 +12,40 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.androiderp.adaper.CommonListViewAdapter;
-import com.example.androiderp.listview.Utils;
 import com.example.androiderp.CustomDataClass.CustomCategory;
 import com.example.androiderp.R;
 import com.example.androiderp.adaper.CommonDataStructure;
+import com.example.androiderp.adaper.CommonListViewAdapter;
 import com.example.androiderp.adaper.DataStructure;
 import com.example.androiderp.custom.CustomSearch;
 import com.example.androiderp.custom.CustomSearchBase;
 import com.example.androiderp.form.CustomCategoryForm;
+import com.example.androiderp.form.ProductCategoryForm;
 import com.example.androiderp.listview.Menu;
 import com.example.androiderp.listview.MenuItem;
 import com.example.androiderp.listview.SlideAndDragListView;
+import com.example.androiderp.listview.Utils;
 
 import org.litepal.crud.DataSupport;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class CustomCategoryListview extends CustomSearchBase implements View.OnClickListener,
+public class CustomCategoryListView extends CustomSearchBase implements View.OnClickListener,
         AdapterView.OnItemClickListener,
         SlideAndDragListView.OnMenuItemClickListener, SlideAndDragListView.OnItemDeleteListener {
     private List<CommonDataStructure> listdatas = new ArrayList<CommonDataStructure>();
-    private List<DataStructure> fruit = new ArrayList<DataStructure>();
     private CommonListViewAdapter adapter;
     private SlideAndDragListView<CommonDataStructure> listView;
     private DisplayMetrics dm;
-    private List<CommonDataStructure> commonDataStructureSearch = new ArrayList<CommonDataStructure>();
     private List<CustomCategory> customCategoryList;
     private TextView toobarBack, toobarAdd, toobarTile;
     private CustomSearch customSearch;
-    private String categoryid;
     private ImageView lastCheckedOption;
-    private int positionTemp;
-    private int indexPositon;
+    private int indexPositon=-1;
     private String indexName;
+    private String returnName;
+    private String searchVale;
     private Menu menu;
     @Override
     public void iniView(){
@@ -55,47 +54,43 @@ public class CustomCategoryListview extends CustomSearchBase implements View.OnC
         initUiAndListener();
         toobarBack =(TextView)findViewById(R.id.custom_toobar_left) ;
         toobarTile =(TextView)findViewById(R.id.custom_toobar_midd);
-        toobarTile.setText("客户分类");
+        toobarTile.setText("选择客户分类");
         toobarAdd =(TextView)findViewById(R.id.custom_toobar_right);
         toobarBack.setOnClickListener(this);
         toobarAdd.setOnClickListener(this);
         toobarTile.setOnClickListener(this);
         customSearch = (CustomSearch) findViewById(R.id.search);
+        Intent intent=getIntent();
+        indexName =intent.getStringExtra("index");
         customCategoryList = DataSupport.findAll(CustomCategory.class);
         toobarTile.setCompoundDrawables(null,null,null,null);
-        for(CustomCategory custom: customCategoryList)
 
-        {   if(custom.getName().equals("mei"))
+        for(CustomCategory customCategory: customCategoryList)
+
+        {   if(customCategory.getName().equals(indexName))
         {
-            indexPositon = customCategoryList.indexOf(custom);
+            indexPositon = customCategoryList.indexOf(customCategory);
         }
+
             CommonDataStructure commonData=new CommonDataStructure();
-            commonData.setName(custom.getName());
-            commonData.setId(custom.getId());
+            commonData.setName(customCategory.getName());
+            commonData.setId(customCategory.getId());
             commonData.setImage(R.drawable.seclec_arrow);
             listdatas.add(commonData);
 
 
 
         }
-        positionTemp = indexPositon;
 
         //构造函数第一参数是类的对象，第二个是布局文件，第三个是数据源
         dm=new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
-
-        Intent intent=getIntent();
-        categoryid=intent.getStringExtra("category");
         if(listdatas.size()!=0) {
-             if(categoryid!=null) {
-                 Object[] obj = searchCategory(categoryid);
-                 updateLayout("10");
-                 toobarTile.setText(categoryid);
-             }else {
-                 adapter = new CommonListViewAdapter(CustomCategoryListview.this, R.layout.custom_item, listdatas);
+
+                 adapter = new CommonListViewAdapter(CustomCategoryListView.this, R.layout.custom_item, listdatas);
                  adapter.setSeclection(indexPositon);
                  listView.setAdapter(adapter);
-             }
+
 
         }
 
@@ -109,7 +104,7 @@ public class CustomCategoryListview extends CustomSearchBase implements View.OnC
         menu = new Menu(true);
         menu.addItem(new MenuItem.Builder().setWidth((int) getResources().getDimension(R.dimen.slv_item_bg_btn_width))
                 .setBackground(Utils.getDrawable(this, R.drawable.btn_right0))
-                .setText("取消")
+                .setText("编辑")
                 .setDirection(MenuItem.DIRECTION_RIGHT)
                 .setTextColor(Color.BLACK)
                 .setTextSize(14)
@@ -135,26 +130,34 @@ public class CustomCategoryListview extends CustomSearchBase implements View.OnC
             case MenuItem.DIRECTION_RIGHT:
                 switch (buttonPosition) {
                     case 0:
-                        return Menu.ITEM_SCROLL_BACK;
+                        Intent intent=new Intent(CustomCategoryListView.this,CustomCategoryForm.class);
+
+
+                            intent.putExtra("action", "edit");
+                            intent.putExtra("customid", String.valueOf(listdatas.get(itemPosition).getId()));
+                        startActivityForResult(intent,1);
+
+                        return Menu.ITEM_NOTHING;
                     case 1:
-                        AlertDialog.Builder dialog=new AlertDialog.Builder(CustomCategoryListview.this);
+                        AlertDialog.Builder dialog=new AlertDialog.Builder(CustomCategoryListView.this);
                         dialog.setTitle("提示");
-                        dialog.setMessage("您确认要删除该客户？");
+                        dialog.setMessage("您确认要删除该分类？");
                         dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 DataStructure.deleteAll(CustomCategory.class,"name = ?",listdatas.get(itemPosition - listView.getHeaderViewsCount()).getName().toString());
 
-                                AlertDialog.Builder dialogOK=new AlertDialog.Builder(CustomCategoryListview.this);
-                                dialogOK.setMessage("该客户已经删除");
-                                dialogOK.setNegativeButton("确认", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        listdatas.remove(itemPosition - listView.getHeaderViewsCount());
-                                        adapter.notifyDataSetChanged();
+                                listdatas.remove(itemPosition - listView.getHeaderViewsCount());
+                                if(customSearch.getText().toString().isEmpty()) {
+                                    if (indexPositon == itemPosition) {
+                                        indexPositon = -1;
                                     }
-                                });
-                                dialogOK.show();
+
+                                    adapter.setSeclection(indexPositon);
+                                    adapter.notifyDataSetChanged();
+                                }else {
+                                    customSearch.setText("");
+                                }
 
 
 
@@ -183,77 +186,55 @@ public class CustomCategoryListview extends CustomSearchBase implements View.OnC
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
 
-        Intent intent=new Intent(CustomCategoryListview.this,CustomCategoryForm.class);
-        if(commonDataStructureSearch.size()!=0) {
+        Intent intent=new Intent(CustomCategoryListView.this,ProductCategoryForm.class);
+
 
             intent.putExtra("action", "edit");
-            intent.putExtra("customid", String.valueOf(commonDataStructureSearch.get(position).getId()));
-            indexName = commonDataStructureSearch.get(position).getName();
-
-        }else {
-
-            intent.putExtra("action", "edit");
-            intent.putExtra("customid", String.valueOf(listdatas.get(position).getId()));
+            intent.putExtra("data_return", String.valueOf(listdatas.get(position).getName()));
             indexName =listdatas.get(position).getName();
-        }
-        startActivityForResult(intent,1);
+
+        setResult(RESULT_OK,intent);
 
         if(lastCheckedOption != null){
             lastCheckedOption.setVisibility(View.INVISIBLE);
         }
         lastCheckedOption = (ImageView)view.findViewById(R.id.custom_item_layout_one_image);
         lastCheckedOption.setVisibility(View.VISIBLE);
-        positionTemp =position;
+        indexPositon =position;
+        this.finish();
     }
-    //筛选条件
-    public Object[] searchItem(String name) {
-        if(commonDataStructureSearch !=null) {
-            commonDataStructureSearch.clear();
+    public void  searchItem(String name) {
+        if(listdatas.size()>0) {
+            listdatas.clear();
         }
-        for (int i = 0; i < listdatas.size(); i++) {
-            int index = listdatas.get(i).getName().indexOf(name);
-            // 存在匹配的数据
-            if (index != -1) {
-                commonDataStructureSearch.add(listdatas.get(i));
-            }
-        }
-        return commonDataStructureSearch.toArray();
-    }
+        customCategoryList =DataStructure.where("name like ?","%" + name + "%").find(CustomCategory.class);
+        for(CustomCategory customCategory: customCategoryList)
 
-    public Object[] searchCategory(String name) {
+        {
+            CommonDataStructure commonData=new CommonDataStructure();
+            commonData.setName(customCategory.getName());
+            commonData.setId(customCategory.getId());
+            commonData.setImage(R.drawable.seclec_arrow);
+            listdatas.add(commonData);
 
-        if(commonDataStructureSearch !=null) {
-            commonDataStructureSearch.clear();
         }
-        for (int i = 0; i < listdatas.size(); i++) {
-            if(listdatas.get(i).getCategory()!=null) {
-                int index = listdatas.get(i).getCategory().indexOf(name);
-                // 存在匹配的数据
-                if (index != -1) {
-                    commonDataStructureSearch.add(listdatas.get(i));
-                }
-            }
-        }
-        return commonDataStructureSearch.toArray();
-    }
-//adapter刷新,重写Filter方式会出现BUG.
-    public void updateLayout(String name) {
-        if(commonDataStructureSearch !=null) {
+
+        if(listdatas!=null) {
             int index=-1;
             if(!name.isEmpty())
             {
-               for(int i = 0; i< commonDataStructureSearch.size(); i++)
-               {
-                   if(commonDataStructureSearch.get(i).getName().equals(indexName))
-                   {
-                       index=i;
-                   }
-               }
+                for(int i=0;i<listdatas.size();i++)
+                {
+                    if(listdatas.get(i).getName().equals(indexName))
+                    {
+                        index=i;
+                    }
+                }
             }else
             {
-                index= positionTemp;
+                index= indexPositon;
             }
-            adapter = new CommonListViewAdapter(CustomCategoryListview.this, R.layout.custom_item, commonDataStructureSearch);
+            adapter.notifyDataSetChanged();
             adapter.setSeclection(index);
             listView.setAdapter(adapter);
         }
@@ -265,7 +246,12 @@ public class CustomCategoryListview extends CustomSearchBase implements View.OnC
         switch(v.getId())
         {
             case R.id.custom_toobar_left:
-                CustomCategoryListview.this.finish();
+                Intent intent=getIntent();
+                if(indexPositon!=-1) {
+                    intent.putExtra("data_return", listdatas.get(indexPositon).getName());
+                }
+                setResult(RESULT_OK,intent);
+                CustomCategoryListView.this.finish();
                 break;
 
             case R.id.custom_toobar_midd:
@@ -274,9 +260,9 @@ public class CustomCategoryListview extends CustomSearchBase implements View.OnC
                 break;
 
             case R.id.custom_toobar_right:
-                Intent cate = new Intent(CustomCategoryListview.this, CustomCategoryForm.class);
+                Intent cate = new Intent(CustomCategoryListView.this, CustomCategoryForm.class);
                 cate.putExtra("action","add");
-                startActivity(cate);
+                startActivityForResult(cate,2);
                 break;
 
 
@@ -288,25 +274,50 @@ public class CustomCategoryListview extends CustomSearchBase implements View.OnC
         switch (requestCode){
             case 1:
                 if(resultCode==RESULT_OK)
-                {
-                    if(listdatas.size()!=0) {
+                {   returnName=data.getStringExtra("returnName");
+                    if(listdatas.size()>0) {
                         listdatas.clear();
                     }
+                    if(customSearch.getText().toString().isEmpty()) {
+
+                        customSearch.requestFocusFromTouch();
+                        customSearch.setText("");
+                    }else {
+                        int i = returnName.indexOf(searchVale);
+                        if(i!=-1) {
+                            customSearch.requestFocusFromTouch();
+                            customSearch.setText(searchVale);
+                        }else {
+                            customSearch.requestFocusFromTouch();
+                            customSearch.setText(returnName);
+                        }
+                    }
+
+                }
+                break;
+            case 2:
+                if(resultCode==RESULT_OK)
+                {
+                    if(listdatas.size()>0) {
+                        customSearch.setText("");
+                        listdatas.clear();
+                    }
+
                     customCategoryList = DataSupport.findAll(CustomCategory.class);
-                    for(CustomCategory custom: customCategoryList)
+                    for(CustomCategory customCategory: customCategoryList)
 
                     {
                         CommonDataStructure commonData=new CommonDataStructure();
-                        commonData.setName(custom.getName());
-                        commonData.setId(custom.getId());
+                        commonData.setName(customCategory.getName());
+                        commonData.setId(customCategory.getId());
                         commonData.setImage(R.drawable.seclec_arrow);
                         listdatas.add(commonData);
 
 
 
                     }
-                    adapter = new CommonListViewAdapter(CustomCategoryListview.this, R.layout.custom_item, listdatas);
-                    adapter.setSeclection(positionTemp);
+                    adapter = new CommonListViewAdapter(CustomCategoryListView.this, R.layout.custom_item, listdatas);
+                    adapter.setSeclection(indexPositon);
                     listView.setAdapter(adapter);
 
 
@@ -334,8 +345,9 @@ public class CustomCategoryListview extends CustomSearchBase implements View.OnC
         @Override
         public void afterTextChanged(Editable s) {
 
-            Object[] obj = searchItem(customSearch.getText().toString());
-            updateLayout(customSearch.getText().toString());
+            searchItem(customSearch.getText().toString());
+            searchVale=customSearch.getText().toString();
+
 
         }
     };

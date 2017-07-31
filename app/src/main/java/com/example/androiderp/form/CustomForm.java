@@ -18,12 +18,15 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.androiderp.CustomDataClass.Consignment;
 import com.example.androiderp.CustomDataClass.Custom;
 import com.example.androiderp.CustomDataClass.CustomCategory;
 import com.example.androiderp.CustomDataClass.SalesOut;
 import com.example.androiderp.R;
 import com.example.androiderp.adaper.DataStructure;
 import com.example.androiderp.adaper.PopuMenuDataStructure;
+import com.example.androiderp.basicdata.CustomCategoryListView;
+import com.example.androiderp.basicdata.SupplierCategoryListView;
 import com.example.androiderp.common.Common;
 
 import org.litepal.crud.DataSupport;
@@ -39,12 +42,10 @@ public class CustomForm extends AppCompatActivity implements View.OnClickListene
     private InputMethodManager manager;
     private EditText name,address,phone,fax;
     private TextView toobarSave, toobarTile, toobarBack, toobarAdd,category;
-    private Common common;
     private DisplayMetrics dm;
-    private List<PopuMenuDataStructure> popuMenuDatas;
     private LinearLayout linearLayout;
     private Custom custom;
-    private List<CustomCategory> customCategoryList;
+    private List<Custom> customList;
     private String edit,customid;
     private Button deleteButton;
     private List<SalesOut> salesOutList =new ArrayList<SalesOut>();
@@ -56,7 +57,6 @@ public class CustomForm extends AppCompatActivity implements View.OnClickListene
         final Intent intent=getIntent();
         edit=intent.getStringExtra("action");
         customid=intent.getStringExtra("custom_item");
-        showPopupWindow();
         manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         name=(EditText)findViewById(R.id.username);
         address=(EditText)findViewById(R.id.useraddress);
@@ -114,9 +114,13 @@ public class CustomForm extends AppCompatActivity implements View.OnClickListene
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.customtoobar_right:
+                customList= DataStructure.where("name = ?",name.getText().toString()).find(Custom.class);
                 if (TextUtils.isEmpty(name.getText().toString())) {
                     name.setError("需要输入客户名称");
-                } else {
+                } else if (customList.size()>0)
+                {
+                    Toast.makeText(CustomForm.this,"客户方式已经存在",Toast.LENGTH_SHORT).show();
+                }else {
                     if (edit.equals("edit")) {
                   Custom      custom = new Custom();
                         custom.setName(name.getText().toString());
@@ -204,16 +208,10 @@ public class CustomForm extends AppCompatActivity implements View.OnClickListene
                 break;
 
             case R.id.usercategory_layout:
-                if( common.mPopWindow==null ||!common.mPopWindow.isShowing())
-                {
-                    int xPos = dm.widthPixels / 3;
-                    common.mPopWindow.showAsDropDown(v,xPos,5);
-                    //mPopWindow.showAtLocation(findViewById(R.id.main), Gravity.BOTTOM, 0, 0);//从底部弹出
-                }
-                else {
-                    common.mPopWindow.dismiss();
-                }
 
+                Intent intent=new Intent(CustomForm.this, CustomCategoryListView.class);
+                intent.putExtra("index",category.getText().toString());
+                startActivityForResult(intent,1);
                 break;
             case R.id.customtoobar_r:
                 name.setText("");
@@ -230,6 +228,18 @@ public class CustomForm extends AppCompatActivity implements View.OnClickListene
 
         }
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode){
+            case 1:
+                if(resultCode==RESULT_OK){
+                    category.setText(data.getStringExtra("data_return"));
+                }
+                break;
+            default:
+        }
+    }
     private void hintKbTwo() {
         InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
         if(imm.isActive()&&getCurrentFocus()!=null){
@@ -238,39 +248,7 @@ public class CustomForm extends AppCompatActivity implements View.OnClickListene
             }
         }
     }
-    private void showPopupWindow() {
-        common = new Common();
-        popuMenuDatas = new ArrayList<PopuMenuDataStructure>();
-        customCategoryList = DataSupport.findAll(CustomCategory.class);
-        for(CustomCategory category: customCategoryList)
 
-        {
-            PopuMenuDataStructure popuMenua = new PopuMenuDataStructure(R.drawable.poppu_wrie, category.getName());
-            popuMenuDatas.add(popuMenua);
-
-        }
-        common.PopupWindow(CustomForm.this, dm, popuMenuDatas);
-        common.listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view,
-                                    int position, long id) {
-
-               category.setText(popuMenuDatas.get(position).getName());
-                common.mPopWindow.dismiss();
-            }
-        });
-    }
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        // TODO Auto-generated method stub
-        if(event.getAction() == MotionEvent.ACTION_DOWN){
-            if(getCurrentFocus()!=null && getCurrentFocus().getWindowToken()!=null){
-                manager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-            }
-        }
-        return super.onTouchEvent(event);
-    }
     public boolean isCustom(String name)
     {
 
