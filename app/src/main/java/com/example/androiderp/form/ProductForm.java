@@ -1,28 +1,43 @@
 package com.example.androiderp.form;
 
+import android.Manifest;
+import android.annotation.TargetApi;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.DocumentsContract;
+import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.androiderp.CustomDataClass.Product;
 import com.example.androiderp.CustomDataClass.SalesOutEnty;
 import com.example.androiderp.CustomDataClass.StockIniti;
@@ -36,13 +51,17 @@ import com.example.androiderp.basicdata.ProductCategoryListview;
 import com.example.androiderp.basicdata.StockInitiListView;
 import com.example.androiderp.basicdata.UnitListView;
 import com.example.androiderp.common.Common;
+import com.example.androiderp.custom.CustomPopupWindow;
+import com.example.androiderp.custom.PictureFullPopupWindow;
 import com.example.androiderp.scanning.CommonScanActivity;
 import com.example.androiderp.scanning.utils.Constant;
-
 import org.litepal.crud.DataSupport;
-
+import java.io.File;
+import java.io.IOException;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -53,6 +72,7 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
     private InputMethodManager manager;
     private EditText name,number, purchasePrice, salesPrice,barcode,model,note;
     private ImageView numberScreen;
+    private ImageButton camera;
     private TextView toobarSave, toobarTile, toobarBack, toobarAdd,category,brand,unit, stockIniti;
     private DisplayMetrics dm;
     private LinearLayout categoryLayout,brandLayout,unitLayout,hideLayoutOne,hideLayoutTow,hideLayoutthree;
@@ -67,6 +87,17 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
     private List<Product> productList;
     private List<SalesOutEnty> salesOutEntyList =new ArrayList<SalesOutEnty>();
     List<StockInitiTem> stockInitiTemList = new ArrayList<StockInitiTem>();
+    private CustomPopupWindow customPopupWindow;
+    private PictureFullPopupWindow pictureFullPopupWindow;
+    public static final int TAKE_PHOTO = 11;
+    public static final int CHOOSE_PHOTO = 12;
+    private ImageView pictureFisrt,pictureSecond,pictureThress;
+    private Uri imageUri;
+    private String photoUri,photoPath;
+    private List<String> imageUirData=new ArrayList<String>();
+    private List<String> imagePathData=new ArrayList<String>();
+    private List<ImageView> imageViewData=new ArrayList<ImageView>();
+    private int i=0;
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
@@ -102,6 +133,13 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
         hideLayoutOne=(LinearLayout)findViewById(R.id.productform_layout_hide_one);
         hideLayoutTow=(LinearLayout)findViewById(R.id.productform_layout_hide_tow);
         hideLayoutthree=(LinearLayout)findViewById(R.id.productform_layout_hide_three);
+        camera=(ImageButton)findViewById(R.id.camera);
+        pictureFisrt = (ImageView) findViewById(R.id.picture_fisrt);
+        pictureSecond = (ImageView) findViewById(R.id.picture_second);
+        pictureThress = (ImageView) findViewById(R.id.picture_thress);
+        imageViewData.add(pictureFisrt);
+        imageViewData.add(pictureSecond);
+        imageViewData.add(pictureThress);
         toobarSave.setOnClickListener(this);
         toobarBack.setOnClickListener(this);
         categoryLayout.setOnClickListener(this);
@@ -111,6 +149,7 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
         deleteButton.setOnClickListener(this);
         moreLayout.setOnClickListener(this);
         stockIniti.setOnClickListener(this);
+        camera.setOnClickListener(this);
         toobarSave.setCompoundDrawables(null,null,null,null);
         toobarTile.setCompoundDrawables(null,null,null,null);
         errorIcon = getResources().getDrawable(R.drawable.icon_error);
@@ -141,7 +180,6 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
     {
 
         if(customid!=null) {
-            
             customlist = DataSupport.find(Product.class, Long.parseLong(customid));
             name.setText(customlist.getName());
             number.setText(customlist.getNumber());
@@ -161,6 +199,106 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                 toobarAdd.setVisibility(View.GONE);
                 deleteButton.setVisibility(View.GONE);
             }
+            if(!customlist.getPhotoFirstPath().isEmpty())
+            {   pictureFisrt.setVisibility(View.VISIBLE);
+                Glide.with(this).load(customlist.getPhotoFirstPath()).override(100,100).into(pictureFisrt);
+                pictureFisrt.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        pictureFullPopupWindow = new PictureFullPopupWindow(ProductForm.this,customlist.getPhotoFirstPath());
+
+                        pictureFullPopupWindow.showAtLocation(ProductForm.this.findViewById(R.id.main), Gravity.CENTER|Gravity.CENTER_HORIZONTAL, 0, 0);
+
+                    }
+                });
+
+            }
+
+            if(!customlist.getPhotoFirstUri().isEmpty())
+            {
+
+                    // 将拍摄的照片显示出来
+                    pictureFisrt.setVisibility(View.VISIBLE);
+                    Glide.with(this).load(customlist.getPhotoFirstUri().toString()).override(100,100).into(pictureFisrt);
+                pictureFisrt.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        pictureFullPopupWindow = new PictureFullPopupWindow(ProductForm.this,customlist.getPhotoFirstUri().toString());
+
+                        pictureFullPopupWindow.showAtLocation(ProductForm.this.findViewById(R.id.main), Gravity.CENTER|Gravity.CENTER_HORIZONTAL, 0, 0);
+
+                    }
+                });
+
+            }
+
+            if(customlist.getPhotoSecondPath()!=null)
+            {   pictureSecond.setVisibility(View.VISIBLE);
+                Glide.with(this).load(customlist.getPhotoSecondPath()).override(100,100).into(pictureSecond);
+                pictureSecond.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        pictureFullPopupWindow = new PictureFullPopupWindow(ProductForm.this,customlist.getPhotoSecondPath());
+
+                        pictureFullPopupWindow.showAtLocation(ProductForm.this.findViewById(R.id.main), Gravity.CENTER|Gravity.CENTER_HORIZONTAL, 0, 0);
+
+                    }
+                });
+            }
+
+            if(customlist.getPhotoSecondUri()!=null)
+            {
+                    // 将拍摄的照片显示出来
+                    pictureSecond.setVisibility(View.VISIBLE);
+                    Glide.with(this).load(customlist.getPhotoSecondUri()).override(100,100).into(pictureSecond);
+                pictureSecond.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        pictureFullPopupWindow = new PictureFullPopupWindow(ProductForm.this,customlist.getPhotoSecondUri());
+
+                        pictureFullPopupWindow.showAtLocation(ProductForm.this.findViewById(R.id.main), Gravity.CENTER|Gravity.CENTER_HORIZONTAL, 0, 0);
+
+                    }
+                });
+
+            }
+            if(customlist.getPhotoThressPath()!=null)
+            {   pictureThress.setVisibility(View.VISIBLE);
+                Glide.with(this).load(customlist.getPhotoThressPath()).override(100,100).into(pictureThress);
+                pictureThress.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        pictureFullPopupWindow = new PictureFullPopupWindow(ProductForm.this,customlist.getPhotoThressPath());
+
+                        pictureFullPopupWindow.showAtLocation(ProductForm.this.findViewById(R.id.main), Gravity.CENTER|Gravity.CENTER_HORIZONTAL, 0, 0);
+
+                    }
+                });
+
+            }
+
+            if(customlist.getPhotoThressUri()!=null)
+            {
+                    // 将拍摄的照片显示出来
+                    pictureThress.setVisibility(View.VISIBLE);
+                    Glide.with(this).load(customlist.getPhotoThressUri().toString()).override(100,100).into(pictureThress);
+                pictureThress.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        pictureFullPopupWindow = new PictureFullPopupWindow(ProductForm.this,customlist.getPhotoThressUri().toString());
+
+                        pictureFullPopupWindow.showAtLocation(ProductForm.this.findViewById(R.id.main), Gravity.CENTER|Gravity.CENTER_HORIZONTAL, 0, 0);
+
+                    }
+                });
+            }
+
         }
         if(edit!=null) {
             if (edit.equals("edit")) {
@@ -178,6 +316,8 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
             }
         }
     }
+
+
     @Override
     public void onClick(View v) {
         switch (v.getId())
@@ -228,6 +368,26 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                     product.setUnit(unit.getText().toString());
                     product.setImage(R.drawable.listvist_item_delete);
                     product.setBadgeShow("");
+                    if((i-1)==0)
+                    {
+                        product.setPhotoFirstUri(imageUirData.get(0));
+                        product.setPhotoFirstPath(imagePathData.get(0));
+                    }
+                    if((i-1)==1)
+                    {
+                        product.setPhotoFirstUri(imageUirData.get(0));
+                        product.setPhotoFirstPath(imagePathData.get(0));
+                        product.setPhotoSecondUri(imageUirData.get(1));
+                        product.setPhotoSecondPath(imagePathData.get(1));
+                    }
+                    if((i-1)==2) {
+                        product.setPhotoFirstUri(imageUirData.get(0));
+                        product.setPhotoFirstPath(imagePathData.get(0));
+                        product.setPhotoSecondUri(imageUirData.get(1));
+                        product.setPhotoSecondPath(imagePathData.get(1));
+                        product.setPhotoThressUri(imageUirData.get(2));
+                        product.setPhotoThressPath(imagePathData.get(2));
+                    }
                     product.save();
 
                     for(int i = 0; i < stockInitiTemList.size(); i++) {
@@ -264,11 +424,13 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                     intent.putExtra("category",categoryid);
                     setResult(RESULT_OK,intent);
                     ProductForm.this.finish();
+                    Glide.get(this).clearMemory();
                 }else {
                     //不需要直接返回第一页
                    // Intent intent = new Intent();
                    // setResult(RESULT_OK,intent);
                     ProductForm.this.finish();
+                    Glide.get(this).clearMemory();
                 }
              break;
             case R.id.documentmaker_layout:
@@ -348,6 +510,14 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                     common.mPopWindow.dismiss();
                 }
                 break;
+            case  R.id.camera:
+
+
+                customPopupWindow = new CustomPopupWindow(ProductForm.this, itemsOnClick);
+
+                customPopupWindow.showAtLocation(ProductForm.this.findViewById(R.id.main), Gravity.CENTER|Gravity.CENTER_HORIZONTAL, 0, 0); //����layout��PopupWindow����ʾ��λ��
+
+                break;
 
             case R.id.productform_layout_more:
                 moreLayout.setVisibility(View.GONE);
@@ -401,6 +571,24 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                 common.mPopWindow.dismiss();
             }
         });
+    }
+    private void openAlbum() {
+        Intent intent = new Intent("android.intent.action.GET_CONTENT");
+        intent.setType("image/*");
+        startActivityForResult(intent, CHOOSE_PHOTO); // 打开相册
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case 1:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    openAlbum();
+                } else {
+                    Toast.makeText(this, "You denied the permission", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            default:
+        }
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -459,7 +647,33 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                 }
 
                 break;
+
+            case TAKE_PHOTO:
+                if (resultCode == RESULT_OK) {
+                    try {
+                        // 将拍摄的照片显示出来
+                        imageViewData.get(i).setVisibility(View.VISIBLE);
+                        Glide.with(this).load(imageUri).override(100,100).into(imageViewData.get(i));
+                        i++;
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                break;
+            case CHOOSE_PHOTO:
+                if (resultCode == RESULT_OK) {
+                    // 判断手机系统版本号
+                    if (Build.VERSION.SDK_INT >= 19) {
+                        // 4.4及以上系统使用这个方法处理图片
+                        handleImageOnKitKat(data);
+                    } else {
+                        // 4.4以下系统使用这个方法处理图片
+                        handleImageBeforeKitKat(data);
+                    }
+                }
+                break;
             default:
+                break;
         }
     }
 
@@ -486,5 +700,121 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
         }
 
     }
+    private View.OnClickListener itemsOnClick = new View.OnClickListener(){
+
+        public void onClick(View v) {
+            customPopupWindow.dismiss();
+            switch (v.getId()) {
+                case R.id.takephoto_layout:
+                    // 创建File对象，用于存储拍照后的图片
+                    if(i<3) {
+                        SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
+                        Date date = new Date(System.currentTimeMillis());
+                        String filename = format.format(date);
+                        File outputImage = new File(getExternalCacheDir(), filename + ".jpg");
+                        try {
+                            if (outputImage.exists()) {
+                                outputImage.delete();
+                            }
+                            outputImage.createNewFile();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        if (Build.VERSION.SDK_INT < 24) {
+                            imageUri = Uri.fromFile(outputImage);
+                            photoUri = imageUri.toString();
+                            imageUirData.add(photoUri);
+                            imagePathData.add("");
+                        } else {
+                            imageUri = FileProvider.getUriForFile(ProductForm.this, "com.example.cameraalbumtest.fileprovider", outputImage);
+                            photoUri = imageUri.toString();
+                            imageUirData.add(photoUri);
+                            imagePathData.add("");
+                        }
+                        // 启动相机程序
+                        Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
+                        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+                        startActivityForResult(intent, TAKE_PHOTO);
+                    }else {
+                        Toast.makeText(ProductForm.this, "只能上传三张", Toast.LENGTH_SHORT).show();
+                    }
+                case R.id.pickphoto_layout:
+                    if(i<3)
+                    {
+                    if (ContextCompat.checkSelfPermission(ProductForm.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(ProductForm.this, new String[]{ Manifest.permission. WRITE_EXTERNAL_STORAGE }, 1);
+                    } else {
+                        openAlbum();
+                    }}else {
+                        Toast.makeText(ProductForm.this, "只能上传三张", Toast.LENGTH_SHORT).show();
+                    }
+                default:
+                    break;
+            }
+
+
+        }
+
+    };
+
+
+    @TargetApi(19)
+    private void handleImageOnKitKat(Intent data) {
+        String imagePath = null;
+        Uri uri = data.getData();
+        Log.d("TAG", "handleImageOnKitKat: uri is " + uri);
+        if (DocumentsContract.isDocumentUri(this, uri)) {
+            // 如果是document类型的Uri，则通过document id处理
+            String docId = DocumentsContract.getDocumentId(uri);
+            if("com.android.providers.media.documents".equals(uri.getAuthority())) {
+                String id = docId.split(":")[1]; // 解析出数字格式的id
+                String selection = MediaStore.Images.Media._ID + "=" + id;
+                imagePath = getImagePath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, selection);
+            } else if ("com.android.providers.downloads.documents".equals(uri.getAuthority())) {
+                Uri contentUri = ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"), Long.valueOf(docId));
+                imagePath = getImagePath(contentUri, null);
+            }
+        } else if ("content".equalsIgnoreCase(uri.getScheme())) {
+            // 如果是content类型的Uri，则使用普通方式处理
+            imagePath = getImagePath(uri, null);
+        } else if ("file".equalsIgnoreCase(uri.getScheme())) {
+            // 如果是file类型的Uri，直接获取图片路径即可
+            imagePath = uri.getPath();
+        }
+        displayImage(imagePath); // 根据图片路径显示图片
+    }
+
+    private void handleImageBeforeKitKat(Intent data) {
+        Uri uri = data.getData();
+        String imagePath = getImagePath(uri, null);
+        displayImage(imagePath);
+    }
+
+    private String getImagePath(Uri uri, String selection) {
+        String path = null;
+        // 通过Uri和selection来获取真实的图片路径
+        Cursor cursor = getContentResolver().query(uri, null, selection, null, null);
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
+            }
+            cursor.close();
+        }
+        return path;
+    }
+
+    private void displayImage(String imagePath) {
+        if (imagePath != null) {
+            imageViewData.get(i).setVisibility(View.VISIBLE);
+            photoPath=imagePath;
+            imagePathData.add(photoPath);
+            imageUirData.add("");
+            Glide.with(this).load(imagePath).override(100,100).into(imageViewData.get(i));
+            i++;
+        } else {
+            Toast.makeText(this, "failed to get image", Toast.LENGTH_SHORT).show();
+        }
+    }
+
 
 }

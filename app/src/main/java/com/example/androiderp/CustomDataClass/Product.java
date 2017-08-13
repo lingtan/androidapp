@@ -21,6 +21,12 @@ public class Product extends DataSupport {
     private int    image;
     private double quantity;
     private String badgeShow;
+    private String photoFirstUri;
+    private String photoFirstPath;
+    private String photoSecondUri;
+    private String photoSecondPath;
+    private String photoThressUri;
+    private String photoThressPath;
 
     public int getId() {
         return id;
@@ -132,5 +138,53 @@ public class Product extends DataSupport {
 
     public void setBadgeShow(String badgeShow) {
         this.badgeShow = badgeShow;
+    }
+
+    public String getPhotoFirstUri() {
+        return photoFirstUri;
+    }
+
+    public void setPhotoFirstUri(String photoFirstUri) {
+        this.photoFirstUri = photoFirstUri;
+    }
+
+    public String getPhotoFirstPath() {
+        return photoFirstPath;
+    }
+
+    public void setPhotoFirstPath(String photoFirstPath) {
+        this.photoFirstPath = photoFirstPath;
+    }
+
+    public String getPhotoSecondUri() {
+        return photoSecondUri;
+    }
+
+    public void setPhotoSecondUri(String photoSecondUri) {
+        this.photoSecondUri = photoSecondUri;
+    }
+
+    public String getPhotoSecondPath() {
+        return photoSecondPath;
+    }
+
+    public void setPhotoSecondPath(String photoSecondPath) {
+        this.photoSecondPath = photoSecondPath;
+    }
+
+    public String getPhotoThressUri() {
+        return photoThressUri;
+    }
+
+    public void setPhotoThressUri(String photoThressUri) {
+        this.photoThressUri = photoThressUri;
+    }
+
+    public String getPhotoThressPath() {
+        return photoThressPath;
+    }
+
+    public void setPhotoThressPath(String photoThressPath) {
+        this.photoThressPath = photoThressPath;
     }
 }

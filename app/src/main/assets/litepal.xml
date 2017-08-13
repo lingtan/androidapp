@@ -2,7 +2,7 @@
 <litepal>
     <dbname value="BookStore" ></dbname>
 
-    <version value="35" ></version>
+    <version value="37" ></version>
 
     <list>
         <mapping class="com.example.androiderp.adaper.DataStructure"></mapping>

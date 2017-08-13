@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -24,7 +25,9 @@
             <TextView style="@style/usertext"
                 android:text="采购：" />
 
-            <TextView style="@style/usertext"
+            <TextView android:layout_width="170dp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_clo"
                 android:id="@+id/stockout"
                 android:hint="请选择供应商"
                 android:layout_gravity="center_vertical"
@@ -46,7 +49,9 @@
                 />
 
 
-            <TextView style="@style/usertext"
+            <TextView android:layout_width="170dp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_clo"
                 android:id="@+id/stockin"
                 android:hint="请选择仓库"
                 android:layout_gravity="center_vertical"/>
@@ -68,15 +73,15 @@
             android:weightSum="1">
             <LinearLayout style="@style/top_layout"
 
-                android:layout_weight="0.36">
+                android:layout_weight="0.38">
                 <TextView style="@style/usertext"
-                    android:text="选择商品"
+                    android:text="选择商品："
                     android:layout_gravity="center_vertical"/>
             </LinearLayout>
         <LinearLayout style="@style/top_layout"
             android:gravity="center_horizontal"
             android:id="@+id/number_screen"
-            android:layout_weight="0.32">
+            android:layout_weight="0.31">
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -93,7 +98,7 @@
             <LinearLayout style="@style/top_layout"
                 android:gravity="center_horizontal"
                 android:id="@+id/saleproduct_add"
-                android:layout_weight="0.32">
+                android:layout_weight="0.31">
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -162,11 +167,13 @@
         <LinearLayout style="@style/top_layout"
             android:id="@+id/documentmaker_layout">
             <TextView style="@style/usertext"
-                android:text="采购员"
+                android:text="采购员："
                 android:layout_gravity="center_vertical"
                 />
 
-            <TextView style="@style/usertext"
+            <TextView android:layout_width="170dp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_clo"
                 android:id="@+id/documentmaker"
                 android:hint="请选择采购员"
                 android:layout_gravity="center_vertical"
@@ -183,9 +190,11 @@
         <LinearLayout style="@style/top_layout"
             android:id="@+id/businessdata_layout">
             <TextView style="@style/usertext"
-                android:text="采购日期"
+                android:text="采购日期："
                 android:layout_gravity="center_vertical"/>
-            <TextView style="@style/usertext"
+            <TextView android:layout_width="170dp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_clo"
                 android:id="@+id/businessdata"
                 android:layout_gravity="center_vertical" />
             <ImageView
@@ -202,11 +211,13 @@
         <LinearLayout style="@style/bottom_layout"
             android:id="@+id/billnumber_layout">
             <TextView style="@style/usertext"
-                android:text="发货方式"
+                android:text="发货方式："
                 android:layout_gravity="center_vertical"
                 />
 
-            <TextView style="@style/usertext"
+            <TextView android:layout_width="170dp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_clo"
                 android:id="@+id/billnumber"
                 android:hint="请选择发货方式"
                 android:layout_gravity="center_vertical"
@@ -224,9 +235,9 @@
             android:layout_marginTop="10dp"
             android:gravity="top">
             <TextView style="@style/usertext"
-                android:text="备注" />
+                android:text="备注：" />
             <EditText
-                android:layout_width="300dp"
+                android:layout_width="200dp"
                 android:layout_height="match_parent"
                 android:id="@+id/note"
                 android:textSize="14dp"

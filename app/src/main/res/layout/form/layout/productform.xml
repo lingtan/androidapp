@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -95,27 +96,11 @@
         </LinearLayout>
 
     </LinearLayout>
-<RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="20dp"
-    android:layout_marginTop="10dp"
-    android:gravity="center"
-    android:id="@+id/productform_layout_more">
-    <TextView
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:id="@+id/product_more"
-        android:text="更多信息"
-        android:textSize="14dp"
-        android:textColor="#33B5E5"
-        android:drawableRight="@drawable/form_more"
-        android:gravity="center"
-        />
-</RelativeLayout>
+
     <LinearLayout style="@style/hide_layout_to"
         android:layout_marginTop="10dp"
         android:id="@+id/productform_layout_hide_one"
-        android:visibility="gone">
+       >
         <!-- 上圆角-->
         <LinearLayout style="@style/top_layout">
             <TextView style="@style/usertext"
@@ -166,13 +151,14 @@
     </LinearLayout>
             <LinearLayout style="@style/wrap_layout_to"
             android:id="@+id/productform_layout_hide_three"
-            android:visibility="gone">
+               >
 
             <View style="@style/bg_line"  android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"/>
             <!-- 下圆角-->
             <LinearLayout style="@style/top_layout"
-                android:id="@+id/stockin_layout">
+                android:id="@+id/stockin_layout"
+               >
                 <TextView style="@style/usertext"
                     android:text="库存初始化："
                     android:layout_gravity="center_vertical"
@@ -188,6 +174,23 @@
             </LinearLayout>
 
         </LinearLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:id="@+id/productform_layout_more">
+                <TextView
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:id="@+id/product_more"
+                    android:text="更多信息"
+                    android:textSize="14dp"
+                    android:textColor="#33B5E5"
+                    android:drawableRight="@drawable/form_more"
+                    android:gravity="center"
+                    />
+            </RelativeLayout>
     <LinearLayout style="@style/wrap_layout_to"
         android:id="@+id/productform_layout_hide_tow"
         android:visibility="gone">
@@ -199,7 +202,8 @@
                 android:layout_gravity="center_vertical"
                 />
 
-            <TextView style="@style/usertext"
+            <TextView android:layout_width="200dp"
+                android:layout_height="wrap_content"
                 android:id="@+id/documentmaker"
                 android:hint="请选择分类"
                 android:layout_gravity="center_vertical"
@@ -222,7 +226,8 @@
                 android:layout_gravity="center_vertical"
                 />
 
-            <TextView style="@style/usertext"
+            <TextView  android:layout_width="200dp"
+                android:layout_height="wrap_content"
                 android:id="@+id/product_brand"
                 android:hint="请选择品牌"
                 android:layout_gravity="center_vertical"
@@ -244,7 +249,8 @@
                 android:layout_gravity="center_vertical"
                 />
 
-            <TextView style="@style/usertext"
+            <TextView   android:layout_width="200dp"
+                android:layout_height="wrap_content"
                 android:id="@+id/product_unit"
                 android:hint="请选择单位"
                 android:layout_gravity="center_vertical"
@@ -255,7 +261,72 @@
                 android:src="@drawable/from_arrow"
                 android:gravity="right"/>
         </LinearLayout>
+        <LinearLayout android:layout_height="150dp"
+        android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:background="#F0F3F6">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/picture_thress"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_width="68dp"
+                    android:layout_height="68dp"
+                    android:scaleType="centerCrop"
+                    android:visibility="gone"
+                    />
+                <ImageView
+                    android:id="@+id/picture_second"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_width="68dp"
+                    android:layout_height="68dp"
+                    android:scaleType="centerCrop"
+                    android:visibility="gone"
+                    />
+                <ImageView
+                    android:id="@+id/picture_fisrt"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_width="68dp"
+                    android:layout_height="68dp"
+                    android:scaleType="centerCrop"
+                    android:visibility="gone"
+                    />
+            <ImageButton
+                android:layout_marginTop="10dp"
+                android:id="@+id/camera"
+                android:layout_marginLeft="10dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:src="@drawable/camera"
+                />
+            </LinearLayout>
+            <TextView   android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="40dp"
+                android:hint="上传照片大小不能超过2M，只能上传一个照片！"
+                android:layout_gravity="center_vertical"
+                android:textSize="12dp"/>
 
+        </LinearLayout>
+        <LinearLayout style="@style/top_layout"
+
+            >
+            <TextView style="@style/usertext"
+                android:text="库存预警："
+                android:layout_gravity="center_vertical"
+                />
+
+            <Switch
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="right"/>
+
+        </LinearLayout>
     </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"

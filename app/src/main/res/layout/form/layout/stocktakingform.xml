@@ -24,7 +24,9 @@
             <TextView style="@style/usertext"
                 android:text="仓库：" />
 
-            <TextView style="@style/usertext"
+            <TextView android:layout_width="170dp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_clo"
                 android:id="@+id/stockout"
                 android:hint="请选择仓库"
                 android:layout_gravity="center_vertical"
@@ -46,7 +48,9 @@
                 android:hint="全部盘点："
                 android:layout_gravity="center_vertical"/>
 
-            <TextView style="@style/usertext"
+            <TextView android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_clo"
                 android:id="@+id/stockin"
                 android:text="未盘点产品"
                 android:layout_gravity="center_vertical"/>
@@ -63,15 +67,15 @@
             android:weightSum="1">
             <LinearLayout style="@style/top_layout"
 
-                android:layout_weight="0.36">
+                android:layout_weight="0.38">
                 <TextView style="@style/usertext"
-                    android:text="选择商品"
+                    android:text="选择商品："
                     android:layout_gravity="center_vertical"/>
             </LinearLayout>
         <LinearLayout style="@style/top_layout"
             android:gravity="center_horizontal"
             android:id="@+id/screen_layout"
-            android:layout_weight="0.32">
+            android:layout_weight="0.31">
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -88,7 +92,7 @@
             <LinearLayout style="@style/top_layout"
                 android:gravity="center_horizontal"
                 android:id="@+id/add_layout"
-                android:layout_weight="0.32">
+                android:layout_weight="0.31">
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -134,9 +138,9 @@
             android:layout_marginTop="10dp"
             android:gravity="top">
             <TextView style="@style/usertext"
-                android:text="备注" />
+                android:text="备注：" />
             <EditText
-                android:layout_width="300dp"
+                android:layout_width="200dp"
                 android:layout_height="match_parent"
                 android:id="@+id/note"
                 android:textSize="14dp"
