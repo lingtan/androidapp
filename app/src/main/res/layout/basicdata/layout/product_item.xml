@@ -7,11 +7,25 @@ android:orientation="vertical"
 android:padding="5dip">
 
     <LinearLayout
+        android:layout_marginTop="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true">
+
+        <ImageView
+            android:id="@+id/picture_mail_path"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:scaleType="centerCrop"
+            />
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/custom_item_layout_one"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_marginRight="5dip"
+        android:layout_marginLeft="80dp"
         android:orientation="vertical">
         <LinearLayout
             android:layout_width="wrap_content"

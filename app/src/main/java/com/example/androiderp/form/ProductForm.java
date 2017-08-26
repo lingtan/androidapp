@@ -76,6 +76,7 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
     private TextView toobarSave, toobarTile, toobarBack, toobarAdd,category,brand,unit, stockIniti;
     private DisplayMetrics dm;
     private LinearLayout categoryLayout,brandLayout,unitLayout,hideLayoutOne,hideLayoutTow,hideLayoutthree;
+    private RelativeLayout pictureThressLayout,pictureSecondLayout,pictureFisrtLayout;
     private RelativeLayout moreLayout;
     private Product customlist;
     private String categoryid,customid,edit;
@@ -91,13 +92,12 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
     private PictureFullPopupWindow pictureFullPopupWindow;
     public static final int TAKE_PHOTO = 11;
     public static final int CHOOSE_PHOTO = 12;
-    private ImageView pictureFisrt,pictureSecond,pictureThress;
+    private ImageView pictureFisrt,pictureSecond,pictureThress,pictureFisrtDelete,pictureSecondDelete,pictureThressDelete;
     private Uri imageUri;
-    private String photoUri,photoPath;
+    private String photoUri,pictureFisrtSrc,pictureSecondSrc,pictureThressSrc;
     private List<String> imageUirData=new ArrayList<String>();
     private List<String> imagePathData=new ArrayList<String>();
     private List<ImageView> imageViewData=new ArrayList<ImageView>();
-    private int i=0;
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
@@ -137,6 +137,12 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
         pictureFisrt = (ImageView) findViewById(R.id.picture_fisrt);
         pictureSecond = (ImageView) findViewById(R.id.picture_second);
         pictureThress = (ImageView) findViewById(R.id.picture_thress);
+        pictureFisrtDelete = (ImageView) findViewById(R.id.picture_fisrt_delete);
+        pictureSecondDelete = (ImageView) findViewById(R.id.picture_second_delete);
+        pictureThressDelete = (ImageView) findViewById(R.id.picture_thress_delete);
+        pictureFisrtLayout=(RelativeLayout)findViewById(R.id.picture_fisrt_layout);
+        pictureSecondLayout=(RelativeLayout)findViewById(R.id.picture_second_layout);
+        pictureThressLayout=(RelativeLayout)findViewById(R.id.picture_thress_layout);
         imageViewData.add(pictureFisrt);
         imageViewData.add(pictureSecond);
         imageViewData.add(pictureThress);
@@ -175,6 +181,7 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
             }
         });
 
+
     }
     private void  formInit()
     {
@@ -199,9 +206,10 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                 toobarAdd.setVisibility(View.GONE);
                 deleteButton.setVisibility(View.GONE);
             }
-            if(!customlist.getPhotoFirstPath().isEmpty())
-            {   pictureFisrt.setVisibility(View.VISIBLE);
+            if(customlist.getPhotoFirstPath()!=null&&!customlist.getPhotoFirstPath().isEmpty())
+            {   pictureFisrtLayout.setVisibility(View.VISIBLE);
                 Glide.with(this).load(customlist.getPhotoFirstPath()).override(100,100).into(pictureFisrt);
+                imagePathData.add(customlist.getPhotoFirstPath());
                 pictureFisrt.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -211,32 +219,39 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                         pictureFullPopupWindow.showAtLocation(ProductForm.this.findViewById(R.id.main), Gravity.CENTER|Gravity.CENTER_HORIZONTAL, 0, 0);
 
                     }
+
+
                 });
-
-            }
-
-            if(!customlist.getPhotoFirstUri().isEmpty())
-            {
-
-                    // 将拍摄的照片显示出来
-                    pictureFisrt.setVisibility(View.VISIBLE);
-                    Glide.with(this).load(customlist.getPhotoFirstUri().toString()).override(100,100).into(pictureFisrt);
-                pictureFisrt.setOnClickListener(new View.OnClickListener() {
+                Log.d("lingtana",customlist.getPhotoFirstPath());
+                pictureFisrtDelete.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        pictureFisrt.setImageDrawable(null);
+                        Product      product = new Product();
+                        product.setPhotoFirstPath("");
+                        product.update(Long.parseLong(customid));
+                        pictureFisrtLayout.setVisibility(View.GONE);
 
-                        pictureFullPopupWindow = new PictureFullPopupWindow(ProductForm.this,customlist.getPhotoFirstUri().toString());
-
-                        pictureFullPopupWindow.showAtLocation(ProductForm.this.findViewById(R.id.main), Gravity.CENTER|Gravity.CENTER_HORIZONTAL, 0, 0);
 
                     }
                 });
 
+               pictureFisrt.setOnLongClickListener(new View.OnLongClickListener() {
+                   @Override
+                   public boolean onLongClick(View v) {
+                       Product      product = new Product();
+                       product.setPhotoMainPath(customlist.getPhotoFirstPath());
+                       product.update(Long.parseLong(customid));
+                       Toast.makeText(ProductForm.this,"次图片已经设置为封面",Toast.LENGTH_SHORT).show();
+                       return true;
+                   }
+               });
             }
 
             if(customlist.getPhotoSecondPath()!=null)
-            {   pictureSecond.setVisibility(View.VISIBLE);
+            {   pictureSecondLayout.setVisibility(View.VISIBLE);
                 Glide.with(this).load(customlist.getPhotoSecondPath()).override(100,100).into(pictureSecond);
+                imagePathData.add(customlist.getPhotoSecondPath());
                 pictureSecond.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -247,28 +262,24 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
 
                     }
                 });
-            }
 
-            if(customlist.getPhotoSecondUri()!=null)
-            {
-                    // 将拍摄的照片显示出来
-                    pictureSecond.setVisibility(View.VISIBLE);
-                    Glide.with(this).load(customlist.getPhotoSecondUri()).override(100,100).into(pictureSecond);
-                pictureSecond.setOnClickListener(new View.OnClickListener() {
+                pictureSecond.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
-                    public void onClick(View v) {
+                    public boolean onLongClick(View v) {
+                        Product      product = new Product();
+                        product.setPhotoMainPath(customlist.getPhotoSecondPath());
+                        product.update(Long.parseLong(customid));
 
-                        pictureFullPopupWindow = new PictureFullPopupWindow(ProductForm.this,customlist.getPhotoSecondUri());
-
-                        pictureFullPopupWindow.showAtLocation(ProductForm.this.findViewById(R.id.main), Gravity.CENTER|Gravity.CENTER_HORIZONTAL, 0, 0);
-
+                        Toast.makeText(ProductForm.this,"次图片已经设置为封面",Toast.LENGTH_SHORT).show();
+                        return true;
                     }
                 });
-
             }
+
             if(customlist.getPhotoThressPath()!=null)
-            {   pictureThress.setVisibility(View.VISIBLE);
+            {   pictureThressLayout.setVisibility(View.VISIBLE);
                 Glide.with(this).load(customlist.getPhotoThressPath()).override(100,100).into(pictureThress);
+                imagePathData.add(customlist.getPhotoThressPath());
                 pictureThress.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -280,24 +291,19 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                     }
                 });
 
-            }
-
-            if(customlist.getPhotoThressUri()!=null)
-            {
-                    // 将拍摄的照片显示出来
-                    pictureThress.setVisibility(View.VISIBLE);
-                    Glide.with(this).load(customlist.getPhotoThressUri().toString()).override(100,100).into(pictureThress);
-                pictureThress.setOnClickListener(new View.OnClickListener() {
+                pictureThress.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
-                    public void onClick(View v) {
-
-                        pictureFullPopupWindow = new PictureFullPopupWindow(ProductForm.this,customlist.getPhotoThressUri().toString());
-
-                        pictureFullPopupWindow.showAtLocation(ProductForm.this.findViewById(R.id.main), Gravity.CENTER|Gravity.CENTER_HORIZONTAL, 0, 0);
-
+                    public boolean onLongClick(View v) {
+                        Product      product = new Product();
+                        product.setPhotoMainPath(customlist.getPhotoThressPath());
+                        product.update(Long.parseLong(customid));
+                        Toast.makeText(ProductForm.this,"次图片已经设置为封面",Toast.LENGTH_SHORT).show();
+                        return true;
                     }
                 });
+
             }
+
 
         }
         if(edit!=null) {
@@ -343,6 +349,24 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                     product.setCategory(category.getText().toString());
                     product.setBrand(brand.getText().toString());
                     product.setUnit(unit.getText().toString());
+
+
+                        if(product.getPhotoFirstPath()==null) {
+                            product.setPhotoFirstPath(pictureFisrtSrc);
+                        }
+
+
+
+                        if(product.getPhotoSecondPath()==null) {
+                            product.setPhotoSecondPath(pictureSecondSrc);
+                        }
+
+
+
+                        if(product.getPhotoThressPath()==null) {
+                            product.setPhotoThressPath(pictureThressSrc);
+                        }
+
                     product.update(Long.parseLong(customid));
                     Toast.makeText(ProductForm.this,"修改成功",Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent();
@@ -368,25 +392,16 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                     product.setUnit(unit.getText().toString());
                     product.setImage(R.drawable.listvist_item_delete);
                     product.setBadgeShow("");
-                    if((i-1)==0)
+                    if(pictureFisrt.getDrawable()!=null)
                     {
-                        product.setPhotoFirstUri(imageUirData.get(0));
-                        product.setPhotoFirstPath(imagePathData.get(0));
+                        product.setPhotoFirstPath(pictureFisrtSrc);
                     }
-                    if((i-1)==1)
+                    if(pictureSecond.getDrawable()!=null)
                     {
-                        product.setPhotoFirstUri(imageUirData.get(0));
-                        product.setPhotoFirstPath(imagePathData.get(0));
-                        product.setPhotoSecondUri(imageUirData.get(1));
-                        product.setPhotoSecondPath(imagePathData.get(1));
+                        product.setPhotoSecondPath(pictureSecondSrc);
                     }
-                    if((i-1)==2) {
-                        product.setPhotoFirstUri(imageUirData.get(0));
-                        product.setPhotoFirstPath(imagePathData.get(0));
-                        product.setPhotoSecondUri(imageUirData.get(1));
-                        product.setPhotoSecondPath(imagePathData.get(1));
-                        product.setPhotoThressUri(imageUirData.get(2));
-                        product.setPhotoThressPath(imagePathData.get(2));
+                    if(pictureThress.getDrawable()!=null) {
+                        product.setPhotoThressPath(pictureThressSrc);
                     }
                     product.save();
 
@@ -651,10 +666,56 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
             case TAKE_PHOTO:
                 if (resultCode == RESULT_OK) {
                     try {
+
+                        if(pictureFisrt.getDrawable()==null)
+                        {
+                            pictureFisrtLayout.setVisibility(View.VISIBLE);
+                            Glide.with(this).load(imageUri).override(100,100).into(pictureFisrt);
+                            pictureFisrtSrc=imageUri.toString();
+
+                            pictureFisrt.setOnLongClickListener(new View.OnLongClickListener() {
+                                @Override
+                                public boolean onLongClick(View v) {
+                                    Product      product = new Product();
+                                    product.setPhotoMainPath(imageUri.toString());
+                                    product.update(Long.parseLong(customid));
+                                    Toast.makeText(ProductForm.this,"次图片已经设置为封面",Toast.LENGTH_SHORT).show();
+                                    return true;
+                                }
+                            });
+                        }else if(pictureSecond.getDrawable()==null)
+                        {
+                            pictureSecondLayout.setVisibility(View.VISIBLE);
+                            Glide.with(this).load(imageUri).override(100,100).into(pictureSecond);
+                            pictureSecondSrc=imageUri.toString();
+                            pictureSecond.setOnLongClickListener(new View.OnLongClickListener() {
+                                @Override
+                                public boolean onLongClick(View v) {
+                                    Product      product = new Product();
+                                    product.setPhotoMainPath(imageUri.toString());
+                                    product.update(Long.parseLong(customid));
+                                    Toast.makeText(ProductForm.this,"次图片已经设置为封面",Toast.LENGTH_SHORT).show();
+                                    return true;
+                                }
+                            });
+                        }else if(pictureThress.getDrawable()==null)
+                        {
+                            pictureThressLayout.setVisibility(View.VISIBLE);
+                            Glide.with(this).load(imageUri).override(100,100).into(pictureThress);
+                            pictureThressSrc=imageUri.toString();
+                            pictureThress.setOnLongClickListener(new View.OnLongClickListener() {
+                                @Override
+                                public boolean onLongClick(View v) {
+                                    Product      product = new Product();
+                                    product.setPhotoMainPath(imageUri.toString());
+                                    product.update(Long.parseLong(customid));
+                                    Toast.makeText(ProductForm.this,"次图片已经设置为封面",Toast.LENGTH_SHORT).show();
+                                    return true;
+                                }
+                            });
+                        }
                         // 将拍摄的照片显示出来
-                        imageViewData.get(i).setVisibility(View.VISIBLE);
-                        Glide.with(this).load(imageUri).override(100,100).into(imageViewData.get(i));
-                        i++;
+
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -707,7 +768,7 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
             switch (v.getId()) {
                 case R.id.takephoto_layout:
                     // 创建File对象，用于存储拍照后的图片
-                    if(i<3) {
+                    if(pictureThress.getDrawable()==null||pictureSecond.getDrawable()==null||pictureFisrt.getDrawable()==null) {
                         SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
                         Date date = new Date(System.currentTimeMillis());
                         String filename = format.format(date);
@@ -739,7 +800,7 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                         Toast.makeText(ProductForm.this, "只能上传三张", Toast.LENGTH_SHORT).show();
                     }
                 case R.id.pickphoto_layout:
-                    if(i<3)
+                    if(pictureThress.getDrawable()==null||pictureSecond.getDrawable()==null||pictureFisrt.getDrawable()==null)
                     {
                     if (ContextCompat.checkSelfPermission(ProductForm.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                         ActivityCompat.requestPermissions(ProductForm.this, new String[]{ Manifest.permission. WRITE_EXTERNAL_STORAGE }, 1);
@@ -803,14 +864,54 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
         return path;
     }
 
-    private void displayImage(String imagePath) {
+    private void displayImage(final String imagePath) {
         if (imagePath != null) {
-            imageViewData.get(i).setVisibility(View.VISIBLE);
-            photoPath=imagePath;
-            imagePathData.add(photoPath);
-            imageUirData.add("");
-            Glide.with(this).load(imagePath).override(100,100).into(imageViewData.get(i));
-            i++;
+            if(pictureFisrt.getDrawable()==null)
+            {
+                pictureFisrtLayout.setVisibility(View.VISIBLE);
+                Glide.with(this).load(imagePath).override(100,100).into(pictureFisrt);
+                pictureFisrtSrc=imagePath;
+                pictureFisrt.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        Product      product = new Product();
+                        product.setPhotoMainPath(imagePath);
+                        product.update(Long.parseLong(customid));
+                        Toast.makeText(ProductForm.this,"次图片已经设置为封面",Toast.LENGTH_SHORT).show();
+                        return true;
+                    }
+                });
+            }else if(pictureSecond.getDrawable()==null)
+            {
+                pictureSecondLayout.setVisibility(View.VISIBLE);
+                Glide.with(this).load(imagePath).override(100,100).into(pictureSecond);
+                pictureSecondSrc=imagePath;
+                pictureSecond.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        Product      product = new Product();
+                        product.setPhotoMainPath(imagePath);
+                        product.update(Long.parseLong(customid));
+                        Toast.makeText(ProductForm.this,"次图片已经设置为封面",Toast.LENGTH_SHORT).show();
+                        return true;
+                    }
+                });
+            }else if(pictureThress.getDrawable()==null)
+            {
+                pictureThressLayout.setVisibility(View.VISIBLE);
+                Glide.with(this).load(imagePath).override(100,100).into(pictureThress);
+                pictureThressSrc=imagePath;
+                pictureThress.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        Product      product = new Product();
+                        product.setPhotoMainPath(imagePath);
+                        product.update(Long.parseLong(customid));
+                        Toast.makeText(ProductForm.this,"次图片已经设置为封面",Toast.LENGTH_SHORT).show();
+                        return true;
+                    }
+                });
+            }
         } else {
             Toast.makeText(this, "failed to get image", Toast.LENGTH_SHORT).show();
         }

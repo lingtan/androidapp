@@ -2,6 +2,7 @@ package com.example.androiderp.adaper;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.androiderp.CustomDataClass.Product;
 import com.example.androiderp.R;
 
@@ -60,6 +62,7 @@ public class ProductAdapter extends ArrayAdapter<Product>   {
             viewHolder = new ViewHolder();
             viewHolder.name = (TextView) view.findViewById (R.id.custom_item_layout_one_name);
             viewHolder.image=(ImageView) view.findViewById(R.id.custom_item_layout_one_image);
+            viewHolder.imageMain=(ImageView) view.findViewById(R.id.picture_mail_path);
             viewHolder.number = (TextView) view.findViewById (R.id.custom_item_layout_number);
             viewHolder.model = (TextView) view.findViewById (R.id.custom_item_layout_model);
             viewHolder.salesPrice = (TextView) view.findViewById (R.id.custom_item_layout_salesprice);
@@ -92,6 +95,8 @@ public class ProductAdapter extends ArrayAdapter<Product>   {
         viewHolder.model.setText(data.get(position).getModel());
         viewHolder.salesPrice.setText("¥"+data.get(position).getSalesPrice().toString());
         viewHolder.image.setImageResource(data.get(position).getImage());
+        Glide.with(context).load(data.get(position).getPhotoMainPath()).override(100,100).into(viewHolder.imageMain);
+
 
 
 
@@ -114,6 +119,7 @@ public void setSeclection(int position)
     class ViewHolder {
 
         ImageView image;
+        ImageView imageMain;
         TextView  name;
         TextView  number;
         TextView  model;
