@@ -95,7 +95,12 @@ public class ProductAdapter extends ArrayAdapter<Product>   {
         viewHolder.model.setText(data.get(position).getModel());
         viewHolder.salesPrice.setText("¥"+data.get(position).getSalesPrice().toString());
         viewHolder.image.setImageResource(data.get(position).getImage());
-        Glide.with(context).load(data.get(position).getPhotoMainPath()).override(100,100).into(viewHolder.imageMain);
+        if(data.get(position).getPhotoMainPath()!=null&&!data.get(position).getPhotoMainPath().isEmpty()) {
+            Glide.with(context).load(data.get(position).getPhotoMainPath()).override(100, 100).into(viewHolder.imageMain);
+        }else {
+            viewHolder.imageMain.setImageResource(R.drawable.picture_default);
+            viewHolder.imageMain.setBackgroundColor(android.graphics.Color.parseColor("#F6F6F6"));
+        }
 
 
 

@@ -94,7 +94,7 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
     public static final int CHOOSE_PHOTO = 12;
     private ImageView pictureFisrt,pictureSecond,pictureThress,pictureFisrtDelete,pictureSecondDelete,pictureThressDelete;
     private Uri imageUri;
-    private String photoUri,pictureFisrtSrc,pictureSecondSrc,pictureThressSrc;
+    private String photoUri,pictureFisrtSrc,pictureSecondSrc,pictureThressSrc,pictureMainSrc;
     private List<String> imageUirData=new ArrayList<String>();
     private List<String> imagePathData=new ArrayList<String>();
     private List<ImageView> imageViewData=new ArrayList<ImageView>();
@@ -222,15 +222,22 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
 
 
                 });
-                Log.d("lingtana",customlist.getPhotoFirstPath());
                 pictureFisrtDelete.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         pictureFisrt.setImageDrawable(null);
                         Product      product = new Product();
                         product.setPhotoFirstPath("");
+                        if(customlist.getPhotoMainPath().equals(customlist.getPhotoFirstPath())) {
+                            product.setPhotoMainPath("");
+                        }
                         product.update(Long.parseLong(customid));
+                        File file=new File(customlist.getPhotoFirstPath());
+                        file.delete();
                         pictureFisrtLayout.setVisibility(View.GONE);
+
+
+
 
 
                     }
@@ -248,7 +255,7 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                });
             }
 
-            if(customlist.getPhotoSecondPath()!=null)
+            if(customlist.getPhotoSecondPath()!=null&&!customlist.getPhotoSecondPath().isEmpty())
             {   pictureSecondLayout.setVisibility(View.VISIBLE);
                 Glide.with(this).load(customlist.getPhotoSecondPath()).override(100,100).into(pictureSecond);
                 imagePathData.add(customlist.getPhotoSecondPath());
@@ -259,6 +266,23 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                         pictureFullPopupWindow = new PictureFullPopupWindow(ProductForm.this,customlist.getPhotoSecondPath());
 
                         pictureFullPopupWindow.showAtLocation(ProductForm.this.findViewById(R.id.main), Gravity.CENTER|Gravity.CENTER_HORIZONTAL, 0, 0);
+
+                    }
+                });
+                pictureSecondDelete.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        pictureSecond.setImageDrawable(null);
+                        Product      product = new Product();
+                        product.setPhotoSecondPath("");
+                        if(customlist.getPhotoMainPath().equals(customlist.getPhotoSecondPath())) {
+                            product.setPhotoMainPath("");
+                        }
+                        product.update(Long.parseLong(customid));
+                        File file=new File(customlist.getPhotoSecondPath());
+                        file.delete();
+                        pictureSecondLayout.setVisibility(View.GONE);
+
 
                     }
                 });
@@ -276,7 +300,7 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                 });
             }
 
-            if(customlist.getPhotoThressPath()!=null)
+            if(customlist.getPhotoThressPath()!=null&&!customlist.getPhotoThressPath().isEmpty())
             {   pictureThressLayout.setVisibility(View.VISIBLE);
                 Glide.with(this).load(customlist.getPhotoThressPath()).override(100,100).into(pictureThress);
                 imagePathData.add(customlist.getPhotoThressPath());
@@ -287,6 +311,24 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                         pictureFullPopupWindow = new PictureFullPopupWindow(ProductForm.this,customlist.getPhotoThressPath());
 
                         pictureFullPopupWindow.showAtLocation(ProductForm.this.findViewById(R.id.main), Gravity.CENTER|Gravity.CENTER_HORIZONTAL, 0, 0);
+
+                    }
+                });
+
+                pictureThressDelete.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        pictureThress.setImageDrawable(null);
+                        Product      product = new Product();
+                        product.setPhotoThressPath("");
+                        if(customlist.getPhotoMainPath().equals(customlist.getPhotoThressPath())) {
+                            product.setPhotoMainPath("");
+                        }
+                        product.update(Long.parseLong(customid));
+                        File file=new File(customlist.getPhotoThressPath());
+                        file.delete();
+                        pictureThressLayout.setVisibility(View.GONE);
+
 
                     }
                 });
@@ -349,24 +391,6 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                     product.setCategory(category.getText().toString());
                     product.setBrand(brand.getText().toString());
                     product.setUnit(unit.getText().toString());
-
-
-                        if(product.getPhotoFirstPath()==null) {
-                            product.setPhotoFirstPath(pictureFisrtSrc);
-                        }
-
-
-
-                        if(product.getPhotoSecondPath()==null) {
-                            product.setPhotoSecondPath(pictureSecondSrc);
-                        }
-
-
-
-                        if(product.getPhotoThressPath()==null) {
-                            product.setPhotoThressPath(pictureThressSrc);
-                        }
-
                     product.update(Long.parseLong(customid));
                     Toast.makeText(ProductForm.this,"修改成功",Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent();
@@ -403,6 +427,13 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                     if(pictureThress.getDrawable()!=null) {
                         product.setPhotoThressPath(pictureThressSrc);
                     }
+                    if(pictureMainSrc==null)
+                    {
+                        product.setPhotoMainPath(pictureFisrtSrc);
+                    }else {
+                        product.setPhotoMainPath(pictureMainSrc);
+                    }
+
                     product.save();
 
                     for(int i = 0; i < stockInitiTemList.size(); i++) {
@@ -671,16 +702,43 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                         {
                             pictureFisrtLayout.setVisibility(View.VISIBLE);
                             Glide.with(this).load(imageUri).override(100,100).into(pictureFisrt);
+                            if(customid!=null) {
+                                Product product = new Product();
+                                product.setPhotoFirstPath(imageUri.toString());
+                                if(pictureMainSrc==null&&customlist.getPhotoMainPath().isEmpty())
+                                {
+                                    product.setPhotoMainPath(pictureFisrtSrc);
+                                }
+                                product.update(Long.parseLong(customid));
+                            }
                             pictureFisrtSrc=imageUri.toString();
+
 
                             pictureFisrt.setOnLongClickListener(new View.OnLongClickListener() {
                                 @Override
                                 public boolean onLongClick(View v) {
-                                    Product      product = new Product();
-                                    product.setPhotoMainPath(imageUri.toString());
-                                    product.update(Long.parseLong(customid));
+                                    if(customid!=null) {
+                                        Product product = new Product();
+                                        product.setPhotoMainPath(imageUri.toString());
+                                        product.update(Long.parseLong(customid));
+                                    }else {
+                                        pictureMainSrc=imageUri.toString();
+                                    }
                                     Toast.makeText(ProductForm.this,"次图片已经设置为封面",Toast.LENGTH_SHORT).show();
                                     return true;
+                                }
+                            });
+
+                            pictureFisrtDelete.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    pictureFisrt.setImageDrawable(null);
+                                    pictureMainSrc="";
+                                    File file=new File(imageUri.toString());
+                                    file.delete();
+                                    pictureFisrtLayout.setVisibility(View.GONE);
+
+
                                 }
                             });
                         }else if(pictureSecond.getDrawable()==null)
@@ -688,14 +746,35 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                             pictureSecondLayout.setVisibility(View.VISIBLE);
                             Glide.with(this).load(imageUri).override(100,100).into(pictureSecond);
                             pictureSecondSrc=imageUri.toString();
+                            if(customid!=null) {
+                                Product product = new Product();
+                                product.setPhotoSecondPath(imageUri.toString());
+                                product.update(Long.parseLong(customid));
+                            }
                             pictureSecond.setOnLongClickListener(new View.OnLongClickListener() {
                                 @Override
                                 public boolean onLongClick(View v) {
-                                    Product      product = new Product();
-                                    product.setPhotoMainPath(imageUri.toString());
-                                    product.update(Long.parseLong(customid));
+                                    if(customid!=null) {
+                                        Product product = new Product();
+                                        product.setPhotoMainPath(imageUri.toString());
+                                        product.update(Long.parseLong(customid));
+                                    }else  {
+                                        pictureMainSrc=imageUri.toString();
+                                    }
                                     Toast.makeText(ProductForm.this,"次图片已经设置为封面",Toast.LENGTH_SHORT).show();
                                     return true;
+                                }
+                            });
+                            pictureSecondDelete.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    pictureSecond.setImageDrawable(null);
+                                    pictureMainSrc="";
+                                    File file=new File(imageUri.toString());
+                                    file.delete();
+                                    pictureSecondLayout.setVisibility(View.GONE);
+
+
                                 }
                             });
                         }else if(pictureThress.getDrawable()==null)
@@ -703,14 +782,36 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                             pictureThressLayout.setVisibility(View.VISIBLE);
                             Glide.with(this).load(imageUri).override(100,100).into(pictureThress);
                             pictureThressSrc=imageUri.toString();
+                            if(customid!=null) {
+                                Product product = new Product();
+                                product.setPhotoThressPath(imageUri.toString());
+                                product.update(Long.parseLong(customid));
+                            }
                             pictureThress.setOnLongClickListener(new View.OnLongClickListener() {
                                 @Override
                                 public boolean onLongClick(View v) {
-                                    Product      product = new Product();
-                                    product.setPhotoMainPath(imageUri.toString());
-                                    product.update(Long.parseLong(customid));
+                                    if(customid!=null) {
+                                        Product product = new Product();
+                                        product.setPhotoMainPath(imageUri.toString());
+                                        product.update(Long.parseLong(customid));
+                                    }else  {
+                                        pictureMainSrc=imageUri.toString();
+                                    }
                                     Toast.makeText(ProductForm.this,"次图片已经设置为封面",Toast.LENGTH_SHORT).show();
                                     return true;
+                                }
+                            });
+
+                            pictureThressDelete.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    pictureThress.setImageDrawable(null);
+                                    pictureMainSrc="";
+                                    File file=new File(imageUri.toString());
+                                    file.delete();
+                                    pictureThressLayout.setVisibility(View.GONE);
+
+
                                 }
                             });
                         }
@@ -871,29 +972,79 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                 pictureFisrtLayout.setVisibility(View.VISIBLE);
                 Glide.with(this).load(imagePath).override(100,100).into(pictureFisrt);
                 pictureFisrtSrc=imagePath;
+                if(customid!=null) {
+                    Product product = new Product();
+                    product.setPhotoFirstPath(imagePath);
+                    if(pictureMainSrc==null&&customlist.getPhotoMainPath().isEmpty())
+                    {
+                        product.setPhotoMainPath(pictureFisrtSrc);
+                    }
+                    product.update(Long.parseLong(customid));
+                }
+
                 pictureFisrt.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View v) {
-                        Product      product = new Product();
-                        product.setPhotoMainPath(imagePath);
-                        product.update(Long.parseLong(customid));
+                        if(customid!=null) {
+                            Product product = new Product();
+                            product.setPhotoMainPath(imagePath);
+                            product.update(Long.parseLong(customid));
+                        }else {
+
+                            pictureMainSrc=imagePath;
+                        }
                         Toast.makeText(ProductForm.this,"次图片已经设置为封面",Toast.LENGTH_SHORT).show();
                         return true;
                     }
                 });
+                pictureFisrtDelete.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        pictureFisrt.setImageDrawable(null);
+                        pictureMainSrc="";
+                        File file=new File(imagePath);
+                        file.delete();
+                        pictureFisrtLayout.setVisibility(View.GONE);
+
+
+                    }
+                });
+
             }else if(pictureSecond.getDrawable()==null)
             {
                 pictureSecondLayout.setVisibility(View.VISIBLE);
                 Glide.with(this).load(imagePath).override(100,100).into(pictureSecond);
                 pictureSecondSrc=imagePath;
+                if(customid!=null) {
+                    Product product = new Product();
+                    product.setPhotoSecondPath(imagePath);
+                    product.update(Long.parseLong(customid));
+                }
                 pictureSecond.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View v) {
-                        Product      product = new Product();
-                        product.setPhotoMainPath(imagePath);
-                        product.update(Long.parseLong(customid));
+                        if(customid!=null) {
+                            Product product = new Product();
+                            product.setPhotoMainPath(imagePath);
+                            product.update(Long.parseLong(customid));
+                        }else {
+
+                            pictureMainSrc=imagePath;
+                        }
                         Toast.makeText(ProductForm.this,"次图片已经设置为封面",Toast.LENGTH_SHORT).show();
                         return true;
+                    }
+                });
+                pictureSecondDelete.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        pictureSecond.setImageDrawable(null);
+                        pictureMainSrc="";
+                        File file=new File(imagePath);
+                        file.delete();
+                        pictureSecondLayout.setVisibility(View.GONE);
+
+
                     }
                 });
             }else if(pictureThress.getDrawable()==null)
@@ -901,14 +1052,36 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                 pictureThressLayout.setVisibility(View.VISIBLE);
                 Glide.with(this).load(imagePath).override(100,100).into(pictureThress);
                 pictureThressSrc=imagePath;
+                if(customid!=null) {
+                    Product product = new Product();
+                    product.setPhotoThressPath(imagePath);
+                    product.update(Long.parseLong(customid));
+                }
                 pictureThress.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View v) {
-                        Product      product = new Product();
-                        product.setPhotoMainPath(imagePath);
-                        product.update(Long.parseLong(customid));
+                        if(customid!=null) {
+                            Product product = new Product();
+                            product.setPhotoMainPath(imagePath);
+                            product.update(Long.parseLong(customid));
+                        }else {
+
+                            pictureMainSrc=imagePath;
+                        }
                         Toast.makeText(ProductForm.this,"次图片已经设置为封面",Toast.LENGTH_SHORT).show();
                         return true;
+                    }
+                });
+                pictureThressDelete.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        pictureThress.setImageDrawable(null);
+                        pictureMainSrc="";
+                        File file=new File(imagePath);
+                        file.delete();
+                        pictureThressLayout.setVisibility(View.GONE);
+
+
                     }
                 });
             }

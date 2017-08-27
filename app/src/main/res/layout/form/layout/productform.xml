@@ -284,8 +284,8 @@
                     />
                  <ImageView
                      android:id="@+id/picture_thress_delete"
-                     android:layout_width="wrap_content"
-                     android:layout_height="wrap_content"
+                     android:layout_width="25dp"
+                     android:layout_height="25dp"
                      android:src="@drawable/picture_delete"
                      android:layout_alignParentRight="true" />
                 </RelativeLayout>
@@ -304,8 +304,8 @@
                     />
                     <ImageView
                         android:id="@+id/picture_second_delete"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
                         android:src="@drawable/picture_delete"
                         android:layout_alignParentRight="true"
                         />
@@ -325,8 +325,8 @@
                     />
                     <ImageView
                         android:id="@+id/picture_fisrt_delete"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
                         android:src="@drawable/picture_delete"
                         android:layout_alignParentRight="true"
                         />
