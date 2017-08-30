@@ -522,6 +522,7 @@ public class SaleProductForm extends CustomSearchBase implements View.OnClickLis
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         DecimalFormat df = new DecimalFormat("#####0.00");
+        DecimalFormat quantityDf = new DecimalFormat("#####0.##");
         switch (requestCode){
             case 1:
                 if(resultCode==RESULT_OK){
@@ -616,7 +617,7 @@ public class SaleProductForm extends CustomSearchBase implements View.OnClickLis
                        if(amountCount!=0) {
                            totalLayout.setVisibility(View.VISIBLE);
                            totalAmout.setText("¥"+df.format(amountCount));
-                           totalQuantity.setText(df.format(quantityCount));
+                           totalQuantity.setText(quantityDf.format(quantityCount));
                        }else {
                            totalLayout.setVisibility(View.GONE);
                        }
@@ -668,7 +669,7 @@ public class SaleProductForm extends CustomSearchBase implements View.OnClickLis
                     if(amountCount!=0) {
                         totalLayout.setVisibility(View.VISIBLE);
                         totalAmout.setText("¥"+df.format(amountCount));
-                        totalQuantity.setText(df.format(quantityCount));
+                        totalQuantity.setText(quantityDf.format(quantityCount));
                     }else {
                         totalLayout.setVisibility(View.GONE);
                     }
@@ -684,6 +685,7 @@ public class SaleProductForm extends CustomSearchBase implements View.OnClickLis
                     for ( CommonDataStructure commonData : listdatas)
 
                     {
+
                         if (commonData.getNumber().toString().equals(shopping.getNumber().toString())) {
                             commonData.setFqty(shopping.getQuantity());
                             commonData.setSalesprice(shopping.getPrice());
@@ -708,7 +710,7 @@ public class SaleProductForm extends CustomSearchBase implements View.OnClickLis
                     if(amountCount!=0) {
                         totalLayout.setVisibility(View.VISIBLE);
                         totalAmout.setText("¥"+df.format(amountCount));
-                        totalQuantity.setText(df.format(quantityCount));
+                        totalQuantity.setText(quantityDf.format(quantityCount));
                     }else {
                         totalLayout.setVisibility(View.GONE);
                     }

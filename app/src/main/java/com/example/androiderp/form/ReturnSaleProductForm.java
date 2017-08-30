@@ -504,6 +504,7 @@ public class ReturnSaleProductForm extends CustomSearchBase implements View.OnCl
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         DecimalFormat df = new DecimalFormat("#####0.00");
+        DecimalFormat quantityDf = new DecimalFormat("#####0.##");
         switch (requestCode){
             case 1:
                 if(resultCode==RESULT_OK){
@@ -631,7 +632,7 @@ public class ReturnSaleProductForm extends CustomSearchBase implements View.OnCl
                        if(amountCount!=0) {
                            totalLayout.setVisibility(View.VISIBLE);
                            totalAmout.setText("¥"+df.format(amountCount));
-                           totalQuantity.setText(df.format(quantityCount));
+                           totalQuantity.setText(quantityDf.format(quantityCount));
                        }else {
                            totalLayout.setVisibility(View.GONE);
                        }
@@ -683,7 +684,7 @@ public class ReturnSaleProductForm extends CustomSearchBase implements View.OnCl
                     if(amountCount!=0) {
                         totalLayout.setVisibility(View.VISIBLE);
                         totalAmout.setText("¥"+df.format(amountCount));
-                        totalQuantity.setText(df.format(quantityCount));
+                        totalQuantity.setText(quantityDf.format(quantityCount));
                     }else {
                         totalLayout.setVisibility(View.GONE);
                     }
@@ -756,7 +757,7 @@ public class ReturnSaleProductForm extends CustomSearchBase implements View.OnCl
                     if(amountCount!=0) {
                         totalLayout.setVisibility(View.VISIBLE);
                         totalAmout.setText("¥"+df.format(amountCount));
-                        totalQuantity.setText(df.format(quantityCount));
+                        totalQuantity.setText(quantityDf.format(quantityCount));
                     }else {
                         totalLayout.setVisibility(View.GONE);
                     }

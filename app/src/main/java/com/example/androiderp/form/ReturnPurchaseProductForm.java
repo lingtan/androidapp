@@ -502,6 +502,7 @@ public class ReturnPurchaseProductForm extends CustomSearchBase implements View.
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         DecimalFormat df = new DecimalFormat("#####0.00");
+        DecimalFormat quantityDf = new DecimalFormat("#####0.##");
         switch (requestCode){
             case 1:
                 if(resultCode==RESULT_OK){
@@ -583,7 +584,7 @@ public class ReturnPurchaseProductForm extends CustomSearchBase implements View.
                        if(amountCount !=0) {
                            totalLayout.setVisibility(View.VISIBLE);
                            totalAmout.setText("¥"+df.format(amountCount));
-                           totalQuantity.setText(String.valueOf(countall));
+                           totalQuantity.setText(quantityDf.format(countall));
                        }else {
                            totalLayout.setVisibility(View.GONE);
                        }
@@ -635,7 +636,7 @@ public class ReturnPurchaseProductForm extends CustomSearchBase implements View.
                     if(amountCount !=0) {
                         totalLayout.setVisibility(View.VISIBLE);
                         totalAmout.setText("¥"+df.format(amountCount));
-                        totalQuantity.setText(String.valueOf(countall));
+                        totalQuantity.setText(quantityDf.format(countall));
                     }else {
                         totalLayout.setVisibility(View.GONE);
                     }
@@ -674,7 +675,7 @@ public class ReturnPurchaseProductForm extends CustomSearchBase implements View.
                     if(amountCount !=0) {
                         totalLayout.setVisibility(View.VISIBLE);
                         totalAmout.setText("¥"+df.format(amountCount));
-                        totalQuantity.setText(String.valueOf(countall));
+                        totalQuantity.setText(quantityDf.format(countall));
                     }else {
                         totalLayout.setVisibility(View.GONE);
                     }

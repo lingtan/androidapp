@@ -88,8 +88,9 @@ public class SaleProductListViewAdapter extends ArrayAdapter<CommonDataStructure
         }
         // 重新获取ViewHolder
         DecimalFormat df = new DecimalFormat("#####0.00");
+        DecimalFormat quantityDf = new DecimalFormat("#####0.##");
         viewHolder.name.setText(data.get(position).getName());
-        viewHolder.quantity.setText(String.valueOf(data.get(position).getFqty()));
+        viewHolder.quantity.setText(String.valueOf(quantityDf.format(data.get(position).getFqty())));
         viewHolder.saleAmount.setText("¥"+df.format(data.get(position).getSaleamount()));
         viewHolder.salesPrice.setText("¥"+df.format(data.get(position).getSalesprice()));
         viewHolder.image.setImageResource(data.get(position).getImage());

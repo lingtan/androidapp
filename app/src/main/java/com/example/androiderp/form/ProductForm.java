@@ -705,9 +705,9 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                             if(customid!=null) {
                                 Product product = new Product();
                                 product.setPhotoFirstPath(imageUri.toString());
-                                if(pictureMainSrc==null&&customlist.getPhotoMainPath().isEmpty())
+                                if(pictureMainSrc==null&&(customlist.getPhotoMainPath()==null||customlist.getPhotoMainPath().isEmpty()))
                                 {
-                                    product.setPhotoMainPath(pictureFisrtSrc);
+                                    product.setPhotoMainPath(imageUri.toString());
                                 }
                                 product.update(Long.parseLong(customid));
                             }
@@ -975,9 +975,9 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                 if(customid!=null) {
                     Product product = new Product();
                     product.setPhotoFirstPath(imagePath);
-                    if(pictureMainSrc==null&&customlist.getPhotoMainPath().isEmpty())
+                    if(pictureMainSrc==null&&(customlist.getPhotoMainPath()==null||customlist.getPhotoMainPath().isEmpty()))
                     {
-                        product.setPhotoMainPath(pictureFisrtSrc);
+                        product.setPhotoMainPath(imagePath);
                     }
                     product.update(Long.parseLong(customid));
                 }

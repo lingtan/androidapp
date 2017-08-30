@@ -337,10 +337,8 @@ public class ProductAppropriationListView extends CustomSearchBase implements Vi
             case 1:
                 if(resultCode==RESULT_OK)
                 {
-
+                    DecimalFormat df = new DecimalFormat("#####0.##");
                     ProductShopping shopping=(ProductShopping) data.getParcelableExtra("shop_data");
-                    Log.d("tongtan",String.valueOf(shopping.getId()));
-                    Log.d("tongtan",shopping.getName());
                     for(ProductShopping shop: productShoppingList)
                     {
 
@@ -369,7 +367,7 @@ public class ProductAppropriationListView extends CustomSearchBase implements Vi
                     {
                         if(product.getNumber().equals(shopping.getNumber()))
                         {
-                            product.setBadgeShow(String.valueOf(shopping.getQuantity()));
+                            product.setBadgeShow(String.valueOf(df.format(shopping.getQuantity())));
                         }
 
                         product.setImage(R.drawable.listvist_item_delete);
@@ -386,7 +384,7 @@ public class ProductAppropriationListView extends CustomSearchBase implements Vi
                     productCategoryList = DataSupport.findAll(ProductCategory.class);
                     CommonDataStructure commonDataAll=new CommonDataStructure();
                     commonDataAll.setName("全部产品");
-                    commonDataAll.setBadge(String.valueOf(quantityCount));
+                    commonDataAll.setBadge(String.valueOf(df.format(quantityCount)));
                     categorylist.add(commonDataAll);
                     CommonDataStructure commonDataN=new CommonDataStructure();
                     commonDataN.setName("未分类");
@@ -408,7 +406,7 @@ public class ProductAppropriationListView extends CustomSearchBase implements Vi
                         commonData.setName(productCategory.getName());
                         commonData.setId(productCategory.getId());
                         if(categorycount>0) {
-                            commonData.setBadge(String.valueOf(categorycount));
+                            commonData.setBadge(String.valueOf(df.format(categorycount)));
                         }
                         categorylist.add(commonData);
 
@@ -417,7 +415,6 @@ public class ProductAppropriationListView extends CustomSearchBase implements Vi
                     leftAdapter = new CommonAdapter(ProductAppropriationListView.this, R.layout.custom_item, categorylist);
                     leftAdapter.setSeclection(leftListSelecte);
                     leftListView.setAdapter(leftAdapter);
-                    DecimalFormat df = new DecimalFormat("#####0.00");
                 }
 
                 if(resultCode==RESULT_FIRST_USER){
