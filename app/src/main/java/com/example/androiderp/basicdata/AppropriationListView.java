@@ -1,5 +1,12 @@
-package com.example.androiderp.basicdata;
+/*
+实现功能：记录调拨流情况
+使用控件：ListView、CustomSearch、TextView
+使用类型：Adapter、Appropriation
 
+ */
+
+
+package com.example.androiderp.basicdata;
 import android.content.Intent;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -8,19 +15,13 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
-
 import com.example.androiderp.CustomDataClass.Appropriation;
-import com.example.androiderp.CustomDataClass.SalesOut;
 import com.example.androiderp.R;
 import com.example.androiderp.adaper.AppropriationAdapter;
-import com.example.androiderp.adaper.SaleOutAdapter;
 import com.example.androiderp.custom.CustomSearch;
 import com.example.androiderp.custom.CustomSearchBase;
 import com.example.androiderp.form.AppropriationForm;
-import com.example.androiderp.form.SaleProductForm;
-
 import org.litepal.crud.DataSupport;
-
 import java.util.ArrayList;
 import java.util.List;
 

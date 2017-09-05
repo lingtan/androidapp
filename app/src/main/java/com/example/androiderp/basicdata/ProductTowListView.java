@@ -18,7 +18,6 @@ import com.example.androiderp.custom.CustomSearchBase;
 import com.example.androiderp.form.ProductForm;
 import com.example.androiderp.scanning.CommonScanActivity;
 import com.example.androiderp.scanning.utils.Constant;
-
 import org.litepal.crud.DataSupport;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,27 +35,31 @@ public class ProductTowListView extends CustomSearchBase implements View.OnClick
     private Intent intent, intentScreen;
     private List<ProductCategory> productCategoryList;
     private List<CommonDataStructure> categorylist = new ArrayList<CommonDataStructure>();
+    private  String leftListSelecteText;
+    private  int leftListSelecte;
     private String scanResult;
 
     @Override
     public void iniView(){
         setContentView(R.layout.product_listview_layout);
-        toobarBack =(TextView)findViewById(R.id.custom_toobar_left) ;
-        toobarTile =(TextView)findViewById(R.id.custom_toobar_midd);
-        toobarAdd =(TextView)findViewById(R.id.custom_toobar_right);
-        toobarScreen =(TextView)findViewById(R.id.customtoobar_screen);
-        toobarScreen.setOnClickListener(this);
-        toobarTile.setText("商品信息");
-        toobarTile.setCompoundDrawables(null,null,null,null);
-        toobarBack.setOnClickListener(this);
-        toobarAdd.setOnClickListener(this);
-        toobarTile.setOnClickListener(this);
-        customSearch = (CustomSearch) findViewById(R.id.search);
-        countShow =(TextView)findViewById(R.id.product_item_layout_count) ;
-        intentScreen =getIntent();
-        scanResult= intentScreen.getStringExtra("scanResult");
+        DataInit();
+        widgetInit();
+        widgetSet();
+        widgetListenerSet();
+        if(scanResult!=null)
+        {
+            search(scanResult,leftListSelecteText);
+            listViewUpdate(productSearch,rightAdapter,rightListView);
+            
+
+        }
+
+
+    }
+    //读取数据库
+    private void DataInit()
+    {
         productList = DataSupport.findAll(Product.class);
-        intent= new Intent(ProductTowListView.this, ProductForm.class);
         productCategoryList = DataSupport.findAll(ProductCategory.class);
         CommonDataStructure commonDataAll=new CommonDataStructure();
         commonDataAll.setName("全部产品");
@@ -64,7 +67,6 @@ public class ProductTowListView extends CustomSearchBase implements View.OnClick
         CommonDataStructure commonDataN=new CommonDataStructure();
         commonDataN.setName("未分类");
         categorylist.add(commonDataN);
-
         for(ProductCategory productCategory: productCategoryList)
 
         {
@@ -74,124 +76,142 @@ public class ProductTowListView extends CustomSearchBase implements View.OnClick
             categorylist.add(commonData);
 
         }
-        countShow.setText(String.valueOf(productList.size()));
-        //构造函数第一参数是类的对象，第二个是布局文件，第三个是数据源
+    }
+//控件初始化
+    private void widgetInit()
+    {
+        toobarBack =(TextView)findViewById(R.id.custom_toobar_left) ;
+        toobarTile =(TextView)findViewById(R.id.custom_toobar_midd);
+        toobarAdd =(TextView)findViewById(R.id.custom_toobar_right);
+        toobarScreen =(TextView)findViewById(R.id.customtoobar_screen);
+        customSearch = (CustomSearch) findViewById(R.id.search);
+        countShow =(TextView)findViewById(R.id.product_item_layout_count) ;
         leftListView=(ListView) findViewById(R.id.left_list);
-        leftListView.setTextFilterEnabled(true);
         rightListView = (ListView) findViewById(R.id.right_list);
+    }
+//控件设置
+    private void widgetSet()
+    {
+
+        toobarTile.setText("商品信息");
+        countShow.setText(String.valueOf(productList.size()));
+        dm=new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(dm);
+        intent= new Intent(ProductTowListView.this, ProductForm.class);
+        intentScreen =getIntent();
+        scanResult= intentScreen.getStringExtra("scanResult");
+        toobarTile.setCompoundDrawables(null,null,null,null);
+        toobarScreen.setOnClickListener(this);
+        toobarBack.setOnClickListener(this);
+        toobarAdd.setOnClickListener(this);
+        toobarTile.setOnClickListener(this);
+        leftListView.setTextFilterEnabled(true);
         rightListView.setTextFilterEnabled(true);
+        customSearch.addTextChangedListener(textWatcher);
+        leftAdapter = new CommonAdapter(ProductTowListView.this, R.layout.custom_item, categorylist);
+        leftAdapter.setSeclection(leftListSelecte);
+        leftListView.setAdapter(leftAdapter);
+        rightAdapter = new ProductAdapter(ProductTowListView.this, R.layout.product_item, productList);
+        rightListView.setAdapter(rightAdapter);
+
+    }
+
+//控件设置事件
+    private void widgetListenerSet()
+    {
         leftListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                leftListSelecte=position;
                 leftAdapter.setSeclection(position);
                 leftAdapter.notifyDataSetInvalidated();
-                Object[] obj = categorySearch(categorylist.get(position).getName().toString());
-                updateLayout(obj);
+                listViewUpdate(categorySearch(categorylist.get(position).getName().toString()),rightAdapter,rightListView);
+                leftListSelecteText = categorylist.get(position).getName().toString();
             }
         });
-        dm=new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(dm);
         rightListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view,
                                     int position, long id) {
                 intent.removeExtra("action");
-                        if(productSearch.size()!=0) {
+                if(productSearch.size()!=0) {
 
-                            intent.putExtra("action", "edit");
-                            intent.putExtra("product_item", String.valueOf(productSearch.get(position).getId()));
+                    intent.putExtra("action", "edit");
+                    intent.putExtra("product_item", String.valueOf(productSearch.get(position).getId()));
 
 
-                        }else {
+                }else {
 
-                            intent.putExtra("action", "edit");
-                            intent.putExtra("product_item", String.valueOf(productList.get(position).getId()));
+                    intent.putExtra("action", "edit");
+                    intent.putExtra("product_item", String.valueOf(productList.get(position).getId()));
 
-                        }
+                }
                 startActivityForResult(intent,1);
 
 
             }
         });
 
-            leftAdapter = new CommonAdapter(ProductTowListView.this, R.layout.custom_item, categorylist);
-            leftAdapter.setSeclection(0);
-            leftListView.setAdapter(leftAdapter);
-            rightAdapter = new ProductAdapter(ProductTowListView.this, R.layout.product_item, productList);
-            rightListView.setAdapter(rightAdapter);
-            
-
-
-        customSearch.addTextChangedListener(textWatcher);
-
-        if(scanResult!=null)
-        {
-            Object[] obj = search(scanResult);
-            updateLayout(obj);
-            
-
-        }
-
-
     }
 
-    //筛选条件
-    public Object[] search(String name) {
-        if(productSearch !=null) {
-            productSearch.clear();
+    //内容查找
+    public List<Product> search(String searchKey,String selecteCategory) {
+         List<Product> searchData = new ArrayList<Product>();
+        if(selecteCategory ==null){
+            selecteCategory ="全部产品";
         }
-        for (int i = 0; i < productList.size(); i++) {
-            int index = productList.get(i).getNumber().indexOf(name);
+        if(selecteCategory.equals("未分类"))
 
-            // 存在匹配的数据
-            if (index != -1) {
-                productSearch.add(productList.get(i));
-            }
-        }
-        return productSearch.toArray();
-    }
-
-    public Object[] categorySearch(String name) {
-
-        if(productSearch !=null) {
-            productSearch.clear();
-        }
-        if(name.equals("未分类"))
         {
-            for (int i = 0; i < productList.size(); i++) {
-               if(productList.get(i).getCategory()==null)
-               {
-                    productSearch.add(productList.get(i));
-               }
-            }
+            searchData=DataSupport.where("category=? and name like ?","", "%" + searchKey + "%").find(Product.class);
 
-        }else if (name.equals("全部产品"))
+
+
+        }else if (selecteCategory.equals("全部产品"))
         {
-            for (int i = 0; i < productList.size(); i++) {
-
-                    productSearch.add(productList.get(i));
-
-            }
+            searchData=DataSupport.where("name like ?","%" + searchKey + "%").find(Product.class);
 
         }
 
         else {
-        for (int i = 0; i < productList.size(); i++) {
-              if(productList.get(i).getCategory()!=null){
-                int index = productList.get(i).getCategory().indexOf(name);
-                // 存在匹配的数据
-                if (index != -1) {
-                    productSearch.add(productList.get(i));
-                }
+
+
+
+                searchData=DataSupport.where("category=? and name like ?",selecteCategory,"%" + searchKey + "%").find(Product.class);
+
+        }
+        productSearch=searchData;
+        return  searchData;
+    }
+//类别
+    public List<Product> categorySearch(String searchKey) {
+
+         List<Product> searchData = new ArrayList<Product>();
+
+        if(searchKey.equals("未分类"))
+        {
+               searchData=DataSupport.where("category=?","").find(Product.class);
+
+        }else if (searchKey.equals("全部产品"))
+        {
+
+           searchData=DataSupport.findAll(Product.class);
+
+        }
+
+        else {
+
+                searchData= DataSupport.where("category=?", searchKey).find(Product.class);
+
             }
-        }}
-        return productSearch.toArray();
+            productSearch=searchData;
+        return searchData;
     }
 //adapter刷新,重写Filter方式会出现BUG.
-    public void updateLayout(Object[] obj) {
-        if(productSearch !=null) {
-            rightAdapter = new ProductAdapter(ProductTowListView.this, R.layout.product_item, productSearch);
+    public void listViewUpdate(List<Product> searchData,ProductAdapter rightAdapter,ListView rightListView) {
+        if(searchData !=null) {
+            rightAdapter = new ProductAdapter(ProductTowListView.this, R.layout.product_item, searchData);
             rightListView.setAdapter(rightAdapter);
         }
     }
@@ -236,7 +256,7 @@ public class ProductTowListView extends CustomSearchBase implements View.OnClick
                     }
 
                     leftAdapter = new CommonAdapter(ProductTowListView.this, R.layout.custom_item, categorylist);
-                    leftAdapter.setSeclection(0);
+                    leftAdapter.setSeclection(leftListSelecte);
                     leftListView.setAdapter(leftAdapter);
                     countShow.setText(String.valueOf(productList.size()));
                 }
@@ -303,8 +323,8 @@ public class ProductTowListView extends CustomSearchBase implements View.OnClick
         @Override
         public void afterTextChanged(Editable s) {
 
-            Object[] obj = search(customSearch.getText().toString());
-            updateLayout(obj);
+
+            listViewUpdate(search(customSearch.getText().toString(),leftListSelecteText),rightAdapter,rightListView);
 
         }
     };

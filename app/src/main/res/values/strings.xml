@@ -1,15 +1,12 @@
 <resources>
     <string name="app_name">快记</string>
-    <string name="EnterName">请输入姓名</string>
-    <string name="EnterPassWord">请输入密码</string>
-    <string name="EnterEmail">请输入邮箱地址</string>
-    <string name="login">登录</string>
+    <string name="login_user_name">请输入用户名</string>
+    <string name="login_user_password">请输入密码</string>
+    <string name="login_button">登录</string>
+    <string name="login_remenber_password">是否记住密码</string>
     <string name="error_name">请检查姓名是否有误</string>
     <string name="error_password">请检查密码是否有误</string>
-    <string name="error_email">请检查邮箱是否有误</string>
-    <string name="login_success">登陆成功</string>
     <string name="check">请仔细检查未完成项</string>
-    <string name="hello_world">Hello world!</string>
     <string name="scan_barcode_title">条形码扫描</string>
     <string name="scan_qrcode_title">二维码扫描</string>
     <string name="scan_allcode_title">二维码或条形码扫描</string>

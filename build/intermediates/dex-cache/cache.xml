@@ -10,32 +10,5 @@
         sha1="d5d13ea991eab0252e3710e5df3d6a9d4b21d461">
         <dex dex="/Users/lingtan/Desktop/androiderp/app/build/intermediates/pre-dexed/debug/butterknife-7.0.1_78f5b0706e31b1230c7386f65e4b0d8be420ddc4.jar" />
     </item>
-    <item
-        is-multidex="true"
-        jar="/Users/lingtan/Desktop/androiderp/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.0"
-        sha1="3be78ebc2706b2e1fe2f12d5726887a92d6c183b">
-        <dex dex="/Users/lingtan/Desktop/androiderp/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run_621939404227343c51dc2dfb1dbabde261b054f0/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/Users/lingtan/Desktop/androiderp/app/src/libs/butterknife-7.0.1.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.0"
-        sha1="d5d13ea991eab0252e3710e5df3d6a9d4b21d461">
-        <dex dex="/Users/lingtan/Desktop/androiderp/app/build/intermediates/transforms/dex/debug/folders/1000/2/butterknife-7.0.1_78f5b0706e31b1230c7386f65e4b0d8be420ddc4/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/Users/lingtan/Desktop/androiderp/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.0"
-        sha1="2691297200aa79f54a12a343079b28df08ea808e">
-        <dex dex="/Users/lingtan/Desktop/androiderp/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_7d7037ee2d1931479f87d5778f2045fd02af78c6/classes.dex" />
-    </item>
 
 </items>

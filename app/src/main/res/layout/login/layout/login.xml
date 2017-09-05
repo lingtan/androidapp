@@ -22,7 +22,7 @@
             android:id="@+id/login_layout_one_one_name"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
-            android:hint="用户"
+            android:hint="@string/login_user_name"
             android:drawableLeft="@drawable/login_user"
             style="@style/customeditTextStyle"
             />
@@ -44,7 +44,7 @@
             android:drawableLeft="@drawable/login_password"
             android:inputType="textPassword"
             android:layout_marginTop="10dp"
-            android:hint="密码"
+            android:hint="@string/login_user_password"
             style="@style/customeditTextStyle"
             />
         <android.support.design.widget.TextInputLayout
@@ -73,7 +73,7 @@
             android:id="@+id/login_layout_one_four_remenbertext"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="记住密码"
+            android:text="@string/login_remenber_password"
             android:textSize="16sp"/>
         <CheckBox
             android:id="@+id/login_layout_one_four_remenberpaw"
@@ -87,7 +87,7 @@
             android:layout_height="45dp"
             android:layout_marginTop="20dp"
             android:background="@drawable/login_button_shape"
-            android:text="@string/login"
+            android:text="@string/login_button"
             android:textColor="#ffffff"
             android:textSize="16dp" />
     </LinearLayout>
