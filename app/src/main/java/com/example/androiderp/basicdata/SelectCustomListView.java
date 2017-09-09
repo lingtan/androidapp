@@ -15,7 +15,7 @@ import com.example.androiderp.CustomDataClass.CustomCategory;
 import com.example.androiderp.CustomDataClass.User;
 import com.example.androiderp.R;
 import com.example.androiderp.adaper.CommonAdapter;
-import com.example.androiderp.adaper.CommonDataStructure;
+import com.example.androiderp.adaper.CommonAdapterData;
 import com.example.androiderp.custom.CustomSearch;
 import com.example.androiderp.custom.CustomSearchBase;
 import com.example.androiderp.form.CustomForm;
@@ -26,19 +26,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SelectCustomListView extends CustomSearchBase implements View.OnClickListener {
-    private List<CommonDataStructure> commonDataStructureList = new ArrayList<CommonDataStructure>();
+    private List<CommonAdapterData> commonAdapterDataList = new ArrayList<CommonAdapterData>();
     private CommonAdapter rightAdapter;
     private CommonAdapter leftAdapter;
     private ListView rightListView;
     private ListView leftListView;
     private DisplayMetrics dm;
     private User user;
-    private List<CommonDataStructure> commonDataStructureSearch = new ArrayList<CommonDataStructure>();
+    private List<CommonAdapterData> commonAdapterDataSearch = new ArrayList<CommonAdapterData>();
     private List<Custom> customList;
     private TextView toobarBack, toobarAdd, toobarTile;
     private CustomSearch customSearch;
     private List<CustomCategory> customCategoryList;
-    private List<CommonDataStructure> categorylist = new ArrayList<CommonDataStructure>();
+    private List<CommonAdapterData> categorylist = new ArrayList<CommonAdapterData>();
     private String selectCategory;
     private ImageView lastCheckedOption;
     private int positionTemp;
@@ -67,27 +67,27 @@ public class SelectCustomListView extends CustomSearchBase implements View.OnCli
             {
                 indexPositon = customList.indexOf(custom);
             }
-            CommonDataStructure commonData=new CommonDataStructure();
+            CommonAdapterData commonData=new CommonAdapterData();
             commonData.setName(custom.getName());
             commonData.setCategory(custom.getCategory());
             commonData.setId(custom.getId());
             commonData.setImage(R.drawable.seclec_arrow);
-            commonDataStructureList.add(commonData);
+            commonAdapterDataList.add(commonData);
 
 
 
         }
         customCategoryList = DataSupport.findAll(CustomCategory.class);
-        CommonDataStructure commonDataAll=new CommonDataStructure();
+        CommonAdapterData commonDataAll=new CommonAdapterData();
         commonDataAll.setName("全部");
         categorylist.add(commonDataAll);
-        CommonDataStructure commonDataN=new CommonDataStructure();
+        CommonAdapterData commonDataN=new CommonAdapterData();
         commonDataN.setName("未分类");
         categorylist.add(commonDataN);
         for(CustomCategory custom: customCategoryList)
 
         {
-            CommonDataStructure commonData=new CommonDataStructure();
+            CommonAdapterData commonData=new CommonAdapterData();
             commonData.setName(custom.getName());
             commonData.setId(custom.getId());
             categorylist.add(commonData);
@@ -124,15 +124,15 @@ public class SelectCustomListView extends CustomSearchBase implements View.OnCli
             public void onItemClick(AdapterView<?> adapterView, View view,
                                     int position, long id) {
                 Intent intent=getIntent();
-                        if(commonDataStructureSearch.size()!=0) {
+                        if(commonAdapterDataSearch.size()!=0) {
 
-                            intent.putExtra("data_return", String.valueOf(commonDataStructureSearch.get(position).getName()));
-                            indexName = commonDataStructureSearch.get(position).getName();
+                            intent.putExtra("data_return", String.valueOf(commonAdapterDataSearch.get(position).getName()));
+                            indexName = commonAdapterDataSearch.get(position).getName();
 
                         }else {
 
-                            intent.putExtra("data_return", String.valueOf(commonDataStructureList.get(position).getName()));
-                            indexName = commonDataStructureList.get(position).getName();
+                            intent.putExtra("data_return", String.valueOf(commonAdapterDataList.get(position).getName()));
+                            indexName = commonAdapterDataList.get(position).getName();
                         }
                 if(lastCheckedOption != null){
                     lastCheckedOption.setVisibility(View.INVISIBLE);
@@ -150,7 +150,7 @@ public class SelectCustomListView extends CustomSearchBase implements View.OnCli
             leftAdapter = new CommonAdapter(SelectCustomListView.this, R.layout.custom_item, categorylist);
             leftAdapter.setSeclection(0);
             leftListView.setAdapter(leftAdapter);
-            rightAdapter = new CommonAdapter(SelectCustomListView.this, R.layout.custom_item, commonDataStructureList);
+            rightAdapter = new CommonAdapter(SelectCustomListView.this, R.layout.custom_item, commonAdapterDataList);
              rightAdapter.setSeclection(indexPositon);
             rightListView.setAdapter(rightAdapter);
             
@@ -162,72 +162,72 @@ public class SelectCustomListView extends CustomSearchBase implements View.OnCli
 
     //筛选条件
     public Object[] search(String name) {
-        if(commonDataStructureSearch !=null) {
-            commonDataStructureSearch.clear();
+        if(commonAdapterDataSearch !=null) {
+            commonAdapterDataSearch.clear();
         }
-        for (int i = 0; i < commonDataStructureList.size(); i++) {
-            int index = commonDataStructureList.get(i).getName().indexOf(name);
+        for (int i = 0; i < commonAdapterDataList.size(); i++) {
+            int index = commonAdapterDataList.get(i).getName().indexOf(name);
             int indey;
             if(selectCategory.equals("全部"))
             {
                 indey=0;
             }else {
-                indey = commonDataStructureList.get(i).getCategory().indexOf(selectCategory);
+                indey = commonAdapterDataList.get(i).getCategory().indexOf(selectCategory);
 
             }
             // 存在匹配的数据
             if (index != -1&&indey!=-1) {
-                commonDataStructureSearch.add(commonDataStructureList.get(i));
+                commonAdapterDataSearch.add(commonAdapterDataList.get(i));
             }
         }
-        return commonDataStructureSearch.toArray();
+        return commonAdapterDataSearch.toArray();
     }
 
     public Object[] categorySearch(String name) {
 
-        if(commonDataStructureSearch !=null) {
-            commonDataStructureSearch.clear();
+        if(commonAdapterDataSearch !=null) {
+            commonAdapterDataSearch.clear();
         }
         if(name.equals("未分类"))
         {
-            for (int i = 0; i < commonDataStructureList.size(); i++) {
-               if(commonDataStructureList.get(i).getCategory()==null)
+            for (int i = 0; i < commonAdapterDataList.size(); i++) {
+               if(commonAdapterDataList.get(i).getCategory()==null)
                {
-                    commonDataStructureSearch.add(commonDataStructureList.get(i));
+                    commonAdapterDataSearch.add(commonAdapterDataList.get(i));
                }
             }
 
         }else if (name.equals("全部"))
         {
-            for (int i = 0; i < commonDataStructureList.size(); i++) {
+            for (int i = 0; i < commonAdapterDataList.size(); i++) {
 
-                    commonDataStructureSearch.add(commonDataStructureList.get(i));
+                    commonAdapterDataSearch.add(commonAdapterDataList.get(i));
 
             }
 
         }
 
         else {
-        for (int i = 0; i < commonDataStructureList.size(); i++) {
-              if(commonDataStructureList.get(i).getCategory()!=null){
-                int index = commonDataStructureList.get(i).getCategory().indexOf(name);
+        for (int i = 0; i < commonAdapterDataList.size(); i++) {
+              if(commonAdapterDataList.get(i).getCategory()!=null){
+                int index = commonAdapterDataList.get(i).getCategory().indexOf(name);
                 // 存在匹配的数据
                 if (index != -1) {
-                    commonDataStructureSearch.add(commonDataStructureList.get(i));
+                    commonAdapterDataSearch.add(commonAdapterDataList.get(i));
                 }
             }
         }}
-        return commonDataStructureSearch.toArray();
+        return commonAdapterDataSearch.toArray();
     }
 //adapter刷新,重写Filter方式会出现BUG.
     public void updateLayout(String name) {
-        if(commonDataStructureSearch !=null) {
+        if(commonAdapterDataSearch !=null) {
             int index=-1;
             if(!name.isEmpty())
             {
-                for(int i = 0; i< commonDataStructureSearch.size(); i++)
+                for(int i = 0; i< commonAdapterDataSearch.size(); i++)
                 {
-                    if(commonDataStructureSearch.get(i).getName().equals(indexName))
+                    if(commonAdapterDataSearch.get(i).getName().equals(indexName))
                     {
                         index=i;
                     }
@@ -236,7 +236,7 @@ public class SelectCustomListView extends CustomSearchBase implements View.OnCli
             {
                 index= positionTemp;
             }
-            rightAdapter = new CommonAdapter(SelectCustomListView.this, R.layout.custom_item, commonDataStructureSearch);
+            rightAdapter = new CommonAdapter(SelectCustomListView.this, R.layout.custom_item, commonAdapterDataSearch);
             rightAdapter.setSeclection(index);
             rightListView.setAdapter(rightAdapter);
         }
@@ -249,24 +249,24 @@ public class SelectCustomListView extends CustomSearchBase implements View.OnCli
             case 1:
                 if(resultCode==RESULT_OK)
                 {
-                    if(commonDataStructureList.size()!=0) {
-                        commonDataStructureList.clear();
+                    if(commonAdapterDataList.size()!=0) {
+                        commonAdapterDataList.clear();
                     }
                     customList = DataSupport.findAll(Custom.class);
                     for(Custom category: customList)
 
                     {
-                        CommonDataStructure commonData=new CommonDataStructure();
+                        CommonAdapterData commonData=new CommonAdapterData();
                         commonData.setName(category.getName());
                         commonData.setCategory(category.getCategory());
                         commonData.setId(category.getId());
                         commonData.setImage(R.drawable.seclec_arrow);
-                        commonDataStructureList.add(commonData);
+                        commonAdapterDataList.add(commonData);
 
 
 
                     }
-                    rightAdapter = new CommonAdapter(SelectCustomListView.this, R.layout.custom_item, commonDataStructureList);
+                    rightAdapter = new CommonAdapter(SelectCustomListView.this, R.layout.custom_item, commonAdapterDataList);
                     rightAdapter.setSeclection(positionTemp);
                     rightListView.setAdapter(rightAdapter);
                 }

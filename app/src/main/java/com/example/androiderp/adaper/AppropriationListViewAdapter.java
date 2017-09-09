@@ -16,17 +16,17 @@ import java.text.DecimalFormat;
 import java.util.List;
 
 //继承ArrayAdapter<DataStructure>
-public class AppropriationListViewAdapter extends ArrayAdapter<CommonDataStructure>   {
+public class AppropriationListViewAdapter extends ArrayAdapter<CommonAdapterData>   {
 //类成员变量
     private int resourceId;
     Context context;
     private int clickTemp=-1;
-    List<CommonDataStructure> data; //这个数据是会改变的，所以要有个变量来备份一下原始数据
+    List<CommonAdapterData> data; //这个数据是会改变的，所以要有个变量来备份一下原始数据
 
 
     //构造函数，context是一个抽象类，可以理解为类的类型！
     public AppropriationListViewAdapter(Context context, int textViewResourceId,
-                                        List<CommonDataStructure> data) {
+                                        List<CommonAdapterData> data) {
         
         super(context, textViewResourceId, data);
         this.context=context;
@@ -41,7 +41,7 @@ public class AppropriationListViewAdapter extends ArrayAdapter<CommonDataStructu
     }
 
     @Override
-    public CommonDataStructure getItem(int position) {
+    public CommonAdapterData getItem(int position) {
         return data.get(position);
     }
 

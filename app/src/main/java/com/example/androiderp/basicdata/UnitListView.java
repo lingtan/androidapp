@@ -11,11 +11,12 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.example.androiderp.CustomDataClass.ProductCategory;
+import com.example.androiderp.CustomDataClass.Product;
 import com.example.androiderp.CustomDataClass.Unit;
 import com.example.androiderp.R;
-import com.example.androiderp.adaper.CommonDataStructure;
+import com.example.androiderp.adaper.CommonAdapterData;
 import com.example.androiderp.adaper.CommonListViewAdapter;
 import com.example.androiderp.adaper.DataStructure;
 import com.example.androiderp.custom.CustomSearch;
@@ -34,11 +35,11 @@ import java.util.List;
 public class UnitListView extends CustomSearchBase implements View.OnClickListener,
         AdapterView.OnItemClickListener,
         SlideAndDragListView.OnMenuItemClickListener, SlideAndDragListView.OnItemDeleteListener {
-    private List<CommonDataStructure> listdatas = new ArrayList<CommonDataStructure>();
+    private List<CommonAdapterData> listdatas = new ArrayList<CommonAdapterData>();
     private CommonListViewAdapter adapter;
-    private SlideAndDragListView<CommonDataStructure> listView;
+    private SlideAndDragListView<CommonAdapterData> listView;
     private DisplayMetrics dm;
-    private List<CommonDataStructure> commonDataStructureSearch = new ArrayList<CommonDataStructure>();
+    private List<CommonAdapterData> commonAdapterDataSearch = new ArrayList<CommonAdapterData>();
     private List<Unit> unitList;
     private TextView toobarBack, toobarAdd, toobarTile;
     private CustomSearch customSearch;
@@ -71,7 +72,7 @@ public class UnitListView extends CustomSearchBase implements View.OnClickListen
         {
             indexPositon = unitList.indexOf(unit);
         }
-            CommonDataStructure commonData=new CommonDataStructure();
+            CommonAdapterData commonData=new CommonAdapterData();
             commonData.setName(unit.getName());
             commonData.setId(unit.getId());
             commonData.setImage(R.drawable.seclec_arrow);
@@ -149,22 +150,28 @@ public class UnitListView extends CustomSearchBase implements View.OnClickListen
                         dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                DataStructure.deleteAll(Unit.class,"name = ?", listdatas.get(itemPosition - listView.getHeaderViewsCount()).getName().toString());
+                                List<Product> productList=DataSupport.where("unit =?",listdatas.get(itemPosition - listView.getHeaderViewsCount()).getName().toString()).find(Product.class);
+                                if(productList.size()>0)
+                                {
+                                    adapter.notifyDataSetChanged();
+                                    Toast.makeText(UnitListView.this,"业务已经发生不能删除",Toast.LENGTH_SHORT).show();
+                                }else {
+                                    DataStructure.deleteAll(Unit.class, "name = ?", listdatas.get(itemPosition - listView.getHeaderViewsCount()).getName().toString());
 
 
-                                        listdatas.remove(itemPosition - listView.getHeaderViewsCount());
-                                        if(customSearch.getText().toString().isEmpty()) {
-                                            if (indexPositon == itemPosition) {
-                                                indexPositon = -1;
-                                            }
-
-                                            adapter.setSeclection(indexPositon);
-                                            adapter.notifyDataSetChanged();
-                                        }else {
-                                            customSearch.setText("");
+                                    listdatas.remove(itemPosition - listView.getHeaderViewsCount());
+                                    if (customSearch.getText().toString().isEmpty()) {
+                                        if (indexPositon == itemPosition) {
+                                            indexPositon = -1;
                                         }
 
+                                        adapter.setSeclection(indexPositon);
+                                        adapter.notifyDataSetChanged();
+                                    } else {
+                                        customSearch.setText("");
+                                    }
 
+                                }
                             }
                         });
                         dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -214,7 +221,7 @@ public class UnitListView extends CustomSearchBase implements View.OnClickListen
         for(Unit unit:unitList)
 
         {
-            CommonDataStructure commonData=new CommonDataStructure();
+            CommonAdapterData commonData=new CommonAdapterData();
             commonData.setName(unit.getName());
             commonData.setId(unit.getId());
             commonData.setImage(R.drawable.seclec_arrow);
@@ -310,7 +317,7 @@ public class UnitListView extends CustomSearchBase implements View.OnClickListen
                     for(Unit unit: unitList)
 
                     {
-                        CommonDataStructure commonData=new CommonDataStructure();
+                        CommonAdapterData commonData=new CommonAdapterData();
                         commonData.setName(unit.getName());
                         commonData.setId(unit.getId());
                         commonData.setImage(R.drawable.seclec_arrow);

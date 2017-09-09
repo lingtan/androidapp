@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.example.androiderp.CustomDataClass.Brand;
+import com.example.androiderp.CustomDataClass.Product;
 import com.example.androiderp.R;
 import com.example.androiderp.adaper.DataStructure;
 import org.litepal.crud.DataSupport;
@@ -25,7 +26,7 @@ public class BrandForm extends AppCompatActivity implements View.OnClickListener
     private InputMethodManager manager;
     private EditText userName;
     private TextView toobarSave, toobarTile, toobarBack;
-    private Brand brand;
+    private Brand brandName;
     private String customid,edit;
     private List<Brand> brandList;
     private boolean isSave=false;
@@ -50,8 +51,8 @@ public class BrandForm extends AppCompatActivity implements View.OnClickListener
     }
 private  void formInit()
 {if(customid!=null) {
-    brand = DataSupport.find(Brand.class, Long.parseLong(customid));
-    userName.setText(brand.getName());
+    brandName = DataSupport.find(Brand.class, Long.parseLong(customid));
+    userName.setText(brandName.getName());
 }
     if(edit.equals("edit"))
     {
@@ -81,6 +82,9 @@ private  void formInit()
                         Intent intent = new Intent();
                         intent.putExtra("returnName",userName.getText().toString());
                         setResult(RESULT_OK,intent);
+                        Product product=new Product();
+                        product.setBrand(userName.getText().toString());
+                        product.updateAll("brand = ?",brandName.getName());
                         isSave=true;
                         BrandForm.this.finish();
                     } else {
@@ -100,7 +104,7 @@ private  void formInit()
                     if(isSave) {
                         intent.putExtra("returnName", userName.getText().toString());
                     }else {
-                        intent.putExtra("returnName",brand.getName());
+                        intent.putExtra("returnName",brandName.getName());
                     }
                     setResult(RESULT_OK,intent);
                     finish();

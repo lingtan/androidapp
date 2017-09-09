@@ -98,6 +98,7 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
     private List<String> imageUirData=new ArrayList<String>();
     private List<String> imagePathData=new ArrayList<String>();
     private List<ImageView> imageViewData=new ArrayList<ImageView>();
+    private String categoryReturnVale;
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
@@ -196,6 +197,7 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
             model.setText(customlist.getModel());
             note.setText(customlist.getNote());
             category.setText(customlist.getCategory());
+            categoryReturnVale=customlist.getCategory();
             brand.setText(customlist.getBrand());
             unit.setText(customlist.getUnit());
             if(edit.equals("edit")) {
@@ -392,6 +394,7 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                     product.setBrand(brand.getText().toString());
                     product.setUnit(unit.getText().toString());
                     product.update(Long.parseLong(customid));
+                    categoryReturnVale=category.getText().toString();
                     Toast.makeText(ProductForm.this,"修改成功",Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent();
                     setResult(RESULT_OK,intent);
@@ -457,6 +460,7 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                     hideLayoutthree.setVisibility(View.GONE);
                     toobarAdd.setVisibility(View.VISIBLE);
                     deleteButton.setVisibility(View.VISIBLE);
+                    categoryReturnVale=category.getText().toString();
                     Intent intent = new Intent();
                     setResult(RESULT_OK,intent);
                     hintKbTwo();
@@ -468,13 +472,15 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                 if(edit.equals("edit"))
                 {Intent intent = new Intent();
                     intent.putExtra("category",categoryid);
+                    intent.putExtra("returncategory",categoryReturnVale);
                     setResult(RESULT_OK,intent);
                     ProductForm.this.finish();
                     Glide.get(this).clearMemory();
                 }else {
                     //不需要直接返回第一页
-                   // Intent intent = new Intent();
-                   // setResult(RESULT_OK,intent);
+                    Intent intent = new Intent();
+                    intent.putExtra("returncategory",categoryReturnVale);
+                    setResult(RESULT_OK,intent);
                     ProductForm.this.finish();
                     Glide.get(this).clearMemory();
                 }
@@ -519,6 +525,7 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     Intent intent = new Intent();
+                                    intent.putExtra("returncategory",categoryReturnVale);
                                     setResult(RESULT_OK, intent);
                                     finish();
                                 }
@@ -601,6 +608,7 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                     intentBack.removeExtra("product_item");
                     intentBack.putExtra("action","add");
                     startActivityForResult(intentBack,4);
+                    finish();
                 }
                 else if(popuMenuDatas.get(position).getName().equals("商品复制"))
 
@@ -609,6 +617,7 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                     intentBack.putExtra("action","add");
                     intentBack.putExtra("product_item", customid);
                     startActivityForResult(intentBack,4);
+                    finish();
 
                 }else
                 {

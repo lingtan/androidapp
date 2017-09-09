@@ -29,11 +29,10 @@ import com.example.androiderp.CustomDataClass.SalesOutEnty;
 import com.example.androiderp.CustomDataClass.ShoppingData;
 import com.example.androiderp.CustomDataClass.Stock;
 import com.example.androiderp.CustomDataClass.StockIniti;
-import com.example.androiderp.CustomDataClass.StockTaking;
 import com.example.androiderp.CustomDataClass.StockTakingEnty;
 import com.example.androiderp.R;
 import com.example.androiderp.adaper.AppropriationListViewAdapter;
-import com.example.androiderp.adaper.CommonDataStructure;
+import com.example.androiderp.adaper.CommonAdapterData;
 import com.example.androiderp.adaper.DataStructure;
 import com.example.androiderp.adaper.PopuMenuDataStructure;
 import com.example.androiderp.basicdata.ProductAppropriationListView;
@@ -74,8 +73,8 @@ public class AppropriationForm extends CustomSearchBase implements View.OnClickL
     private List<Product> productList;
     private List<AppropriationEnty> appropriationEntyList=new ArrayList<AppropriationEnty>();
     private List<ProductShopping> productShoppinglist = new ArrayList<ProductShopping>();
-    private List<CommonDataStructure> commonDataStructureList = new ArrayList<CommonDataStructure>();
-    private SlideAndDragListView<CommonDataStructure> listView;
+    private List<CommonAdapterData> commonAdapterDataList = new ArrayList<CommonAdapterData>();
+    private SlideAndDragListView<CommonAdapterData> listView;
     private AppropriationListViewAdapter adapter;
     private Menu menu;
     private List<Stock> stockList;
@@ -201,10 +200,10 @@ public class AppropriationForm extends CustomSearchBase implements View.OnClickL
                         return Menu.ITEM_SCROLL_BACK;
                     case 1:
 
-                                DataStructure.deleteAll(ProductCategory.class,"name = ?",commonDataStructureList.get(itemPosition - listView.getHeaderViewsCount()).getName().toString());
+                                DataStructure.deleteAll(ProductCategory.class,"name = ?", commonAdapterDataList.get(itemPosition - listView.getHeaderViewsCount()).getName().toString());
 
 
-                        commonDataStructureList.remove(itemPosition - listView.getHeaderViewsCount());
+                        commonAdapterDataList.remove(itemPosition - listView.getHeaderViewsCount());
                                    adapter.notifyDataSetChanged();
                                   setListViewHeightBasedOnChildren(listView);
 
@@ -227,7 +226,7 @@ public class AppropriationForm extends CustomSearchBase implements View.OnClickL
 
         Intent intent=new Intent(AppropriationForm.this,ScrennProductShoppingForm.class);
         intent.putExtra("action", "edit");
-        intent.putExtra("product_item", String.valueOf(commonDataStructureList.get(position).getId()));
+        intent.putExtra("product_item", String.valueOf(commonAdapterDataList.get(position).getId()));
         startActivityForResult(intent,7);
     }
 
@@ -252,7 +251,7 @@ public class AppropriationForm extends CustomSearchBase implements View.OnClickL
                 {
                     Toast.makeText(AppropriationForm.this,"请选择调入仓库",Toast.LENGTH_SHORT).show();
                 }
-                else if (commonDataStructureList.size()==0) {
+                else if (commonAdapterDataList.size()==0) {
                     Toast.makeText(AppropriationForm.this, "请选择产品", Toast.LENGTH_SHORT).show();
                 }else if (appropriIn.getText().equals(appropriOut.getText())) {
                     Toast.makeText(AppropriationForm.this,"调出仓库与调入仓库，不能相同", Toast.LENGTH_SHORT).show();
@@ -261,9 +260,9 @@ public class AppropriationForm extends CustomSearchBase implements View.OnClickL
                 {
                     stockCheckList.clear();
 
-                    for(int i = 0; i < commonDataStructureList.size(); i++)
+                    for(int i = 0; i < commonAdapterDataList.size(); i++)
                     {
-                        stockCheck(appropriOut.getText().toString(),commonDataStructureList.get(i).getNumber(),commonDataStructureList.get(i).getFqty());
+                        stockCheck(appropriOut.getText().toString(), commonAdapterDataList.get(i).getNumber(), commonAdapterDataList.get(i).getFqty());
 
                     }
                     if(stockCheckList.size()>0)
@@ -275,12 +274,12 @@ public class AppropriationForm extends CustomSearchBase implements View.OnClickL
                         SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
                         Date curData = new Date(System.currentTimeMillis());
                         String fdate = format.format(curData);
-                        for (int i = 0; i < commonDataStructureList.size(); i++) {
+                        for (int i = 0; i < commonAdapterDataList.size(); i++) {
 
                             AppropriationEnty appropriationEnty = new AppropriationEnty();
-                            appropriationEnty.setName(commonDataStructureList.get(i).getName());
-                            appropriationEnty.setNumber(commonDataStructureList.get(i).getNumber());
-                            appropriationEnty.setQuantity(commonDataStructureList.get(i).getFqty());
+                            appropriationEnty.setName(commonAdapterDataList.get(i).getName());
+                            appropriationEnty.setNumber(commonAdapterDataList.get(i).getNumber());
+                            appropriationEnty.setQuantity(commonAdapterDataList.get(i).getFqty());
                             appropriationEnty.setStockIn(appropriIn.getText().toString());
                             appropriationEnty.setStockOut(appropriOut.getText().toString());
                             appropriationEntyList.add(appropriationEnty);
@@ -340,7 +339,7 @@ public class AppropriationForm extends CustomSearchBase implements View.OnClickL
 
 
             case R.id.customtoobar_left:
-                if(commonDataStructureList.size()>0)
+                if(commonAdapterDataList.size()>0)
                 {
                     AlertDialog.Builder dialog=new AlertDialog.Builder(AppropriationForm.this);
                     dialog.setTitle("提示");
@@ -442,7 +441,7 @@ public class AppropriationForm extends CustomSearchBase implements View.OnClickL
                        for (Product product : productList) {
                            boolean flag=true;
                            double  temQty=0.0;
-                           for (CommonDataStructure structure : commonDataStructureList) {
+                           for (CommonAdapterData structure : commonAdapterDataList) {
 
                                if(structure.getNumber().equals(product.getNumber()))
                                {
@@ -454,7 +453,7 @@ public class AppropriationForm extends CustomSearchBase implements View.OnClickL
                            }
                            if(flag==true)
                            {
-                               CommonDataStructure commonData = new CommonDataStructure();
+                               CommonAdapterData commonData = new CommonAdapterData();
                                commonData.setId(product.getId());
                                commonData.setNumber(product.getNumber());
                                commonData.setName(product.getName());
@@ -462,7 +461,7 @@ public class AppropriationForm extends CustomSearchBase implements View.OnClickL
                                commonData.setSaleamount(Double.valueOf(product.getSalesPrice()));
                                commonData.setSalesprice(Double.valueOf(product.getSalesPrice()));
                               temQty=commonData.getFqty();
-                               commonDataStructureList.add(commonData);
+                               commonAdapterDataList.add(commonData);
                            }
 
 
@@ -472,7 +471,7 @@ public class AppropriationForm extends CustomSearchBase implements View.OnClickL
                            }
                        }
 
-                       adapter = new AppropriationListViewAdapter(AppropriationForm.this, R.layout.saleproduct_item, commonDataStructureList);
+                       adapter = new AppropriationListViewAdapter(AppropriationForm.this, R.layout.saleproduct_item, commonAdapterDataList);
                        listView.setAdapter(adapter);
                        setListViewHeightBasedOnChildren(listView);
 
@@ -488,25 +487,25 @@ public class AppropriationForm extends CustomSearchBase implements View.OnClickL
                     productShoppinglist=shoppingData.getProductShoppingList();
                     for(ProductShopping shopping:productShoppinglist)
                     {
-                        for(int i = 0; i < commonDataStructureList.size(); i++)
+                        for(int i = 0; i < commonAdapterDataList.size(); i++)
                         {
-                            if(commonDataStructureList.get(i).getNumber().equals(shopping.getNumber()))
+                            if(commonAdapterDataList.get(i).getNumber().equals(shopping.getNumber()))
                             {
 
-                                shopping.setQuantity(shopping.getQuantity()+commonDataStructureList.get(i).getFqty());
-                                commonDataStructureList.remove(i);
+                                shopping.setQuantity(shopping.getQuantity()+ commonAdapterDataList.get(i).getFqty());
+                                commonAdapterDataList.remove(i);
                                 i--;
                             }
                         }
-                        CommonDataStructure commonData=new CommonDataStructure();
+                        CommonAdapterData commonData=new CommonAdapterData();
                         commonData.setId(shopping.getId());
                         commonData.setName(shopping.getName());
                         commonData.setNumber(shopping.getNumber());
                         commonData.setFqty(shopping.getQuantity());
-                        commonDataStructureList.add(commonData);
+                        commonAdapterDataList.add(commonData);
                     }
 
-                    adapter = new AppropriationListViewAdapter(AppropriationForm.this, R.layout.saleproduct_item, commonDataStructureList);
+                    adapter = new AppropriationListViewAdapter(AppropriationForm.this, R.layout.saleproduct_item, commonAdapterDataList);
                     listView.setAdapter(adapter);
                     setListViewHeightBasedOnChildren(listView);
 
@@ -517,7 +516,7 @@ public class AppropriationForm extends CustomSearchBase implements View.OnClickL
             case 7:
                 if(resultCode==RESULT_OK) {
                     ProductShopping shopping = (ProductShopping) data.getParcelableExtra("shop_data");
-                    for ( CommonDataStructure commonData : commonDataStructureList)
+                    for ( CommonAdapterData commonData : commonAdapterDataList)
 
                     {
                         if (commonData.getNumber().toString().equals(shopping.getNumber().toString())) {
@@ -533,7 +532,7 @@ public class AppropriationForm extends CustomSearchBase implements View.OnClickL
                         }
                     }
 
-                    adapter = new AppropriationListViewAdapter(AppropriationForm.this, R.layout.saleproduct_item, commonDataStructureList);
+                    adapter = new AppropriationListViewAdapter(AppropriationForm.this, R.layout.saleproduct_item, commonAdapterDataList);
                     listView.setAdapter(adapter);
 
                 }
@@ -612,7 +611,7 @@ public class AppropriationForm extends CustomSearchBase implements View.OnClickL
         return super.onTouchEvent(event);
     }
 //根据内容动态测量listview实际高度,动态显示listview内容，此方法，适配器中 getView 方法如果是 RelativeLayout 则显示不正常
-    private void setListViewHeightBasedOnChildren(SlideAndDragListView<CommonDataStructure> listView) {
+    private void setListViewHeightBasedOnChildren(SlideAndDragListView<CommonAdapterData> listView) {
         if (listView == null) {
             return;
         }

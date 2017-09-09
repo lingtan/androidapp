@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
@@ -12,9 +11,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.androiderp.CustomDataClass.AppropriationEnty;
 import com.example.androiderp.CustomDataClass.Product;
 import com.example.androiderp.CustomDataClass.ProductCategory;
 import com.example.androiderp.CustomDataClass.ProductShopping;
@@ -25,7 +22,7 @@ import com.example.androiderp.CustomDataClass.StockTakingEnty;
 import com.example.androiderp.R;
 import com.example.androiderp.adaper.AppropriationBadgeAdapter;
 import com.example.androiderp.adaper.CommonAdapter;
-import com.example.androiderp.adaper.CommonDataStructure;
+import com.example.androiderp.adaper.CommonAdapterData;
 import com.example.androiderp.custom.CustomBadgeView;
 import com.example.androiderp.custom.CustomSearch;
 import com.example.androiderp.custom.CustomSearchBase;
@@ -54,7 +51,7 @@ public class ProductStockTakingListView extends CustomSearchBase implements View
     private CustomSearch customSearch;
     private Intent intent;
     private List<ProductCategory> productCategoryList;
-    private List<CommonDataStructure> categorylist = new ArrayList<CommonDataStructure>();
+    private List<CommonAdapterData> categorylist = new ArrayList<CommonAdapterData>();
     private double quantityCount;
     private double categorycount;
     private double amountCount;
@@ -138,10 +135,10 @@ public class ProductStockTakingListView extends CustomSearchBase implements View
         }
         intent= new Intent(ProductStockTakingListView.this, AppropriationShoppingForm.class);
         productCategoryList = DataSupport.findAll(ProductCategory.class);
-        CommonDataStructure commonDataAll=new CommonDataStructure();
+        CommonAdapterData commonDataAll=new CommonAdapterData();
         commonDataAll.setName("全部产品");
         categorylist.add(commonDataAll);
-        CommonDataStructure commonDataN=new CommonDataStructure();
+        CommonAdapterData commonDataN=new CommonAdapterData();
         commonDataN.setName("未分类");
         categorylist.add(commonDataN);
         badgeView = new CustomBadgeView(this);
@@ -152,7 +149,7 @@ public class ProductStockTakingListView extends CustomSearchBase implements View
         for(ProductCategory productCategory: productCategoryList)
 
         {
-            CommonDataStructure commonData=new CommonDataStructure();
+            CommonAdapterData commonData=new CommonAdapterData();
             commonData.setName(productCategory.getName());
             commonData.setId(productCategory.getId());
             categorylist.add(commonData);
@@ -375,11 +372,11 @@ public class ProductStockTakingListView extends CustomSearchBase implements View
                         categorylist.clear();
                     }
                     productCategoryList = DataSupport.findAll(ProductCategory.class);
-                    CommonDataStructure commonDataAll=new CommonDataStructure();
+                    CommonAdapterData commonDataAll=new CommonAdapterData();
                     commonDataAll.setName("全部产品");
                     commonDataAll.setBadge(String.valueOf(df.format(quantityCount)));
                     categorylist.add(commonDataAll);
-                    CommonDataStructure commonDataN=new CommonDataStructure();
+                    CommonAdapterData commonDataN=new CommonAdapterData();
                     commonDataN.setName("未分类");
                     categorylist.add(commonDataN);
                     for(ProductCategory productCategory: productCategoryList)
@@ -395,7 +392,7 @@ public class ProductStockTakingListView extends CustomSearchBase implements View
 
 
                     }
-                        CommonDataStructure commonData=new CommonDataStructure();
+                        CommonAdapterData commonData=new CommonAdapterData();
                         commonData.setName(productCategory.getName());
                         commonData.setId(productCategory.getId());
                         if(categorycount>0) {
@@ -530,10 +527,10 @@ public class ProductStockTakingListView extends CustomSearchBase implements View
             categorylist.clear();
         }
         productCategoryList = DataSupport.findAll(ProductCategory.class);
-        CommonDataStructure commonDataAll=new CommonDataStructure();
+        CommonAdapterData commonDataAll=new CommonAdapterData();
         commonDataAll.setName("全部产品");
         categorylist.add(commonDataAll);
-        CommonDataStructure commonDataN=new CommonDataStructure();
+        CommonAdapterData commonDataN=new CommonAdapterData();
         commonDataN.setName("未分类");
         categorylist.add(commonDataN);
         for(ProductCategory productCategory: productCategoryList)
@@ -549,7 +546,7 @@ public class ProductStockTakingListView extends CustomSearchBase implements View
 
 
             }
-            CommonDataStructure commonData=new CommonDataStructure();
+            CommonAdapterData commonData=new CommonAdapterData();
             commonData.setName(productCategory.getName());
             commonData.setId(productCategory.getId());
             if(categorycount>0) {

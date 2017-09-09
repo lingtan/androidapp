@@ -1,6 +1,6 @@
 package com.example.androiderp.adaper;
 
-public class CommonDataStructure {
+public class CommonAdapterData {
 
 
 

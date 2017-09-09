@@ -15,7 +15,7 @@ import com.example.androiderp.CustomDataClass.SalesOut;
 import com.example.androiderp.CustomDataClass.SalesOutEnty;
 import com.example.androiderp.CustomDataClass.Stock;
 import com.example.androiderp.R;
-import com.example.androiderp.adaper.CommonDataStructure;
+import com.example.androiderp.adaper.CommonAdapterData;
 import com.example.androiderp.adaper.PopuMenuDataStructure;
 import com.example.androiderp.adaper.SaleProductListViewAdapter;
 import com.example.androiderp.common.Common;
@@ -44,8 +44,8 @@ public class SaleOutEntyList extends CustomSearchBase implements View.OnClickLis
     private Intent  intentback;
     private List<PopuMenuDataStructure> popuMenuDatas;
     private List<SalesOutEnty> salesOutEntyList=new ArrayList<SalesOutEnty>();
-    private List<CommonDataStructure> commonDataStructureList = new ArrayList<CommonDataStructure>();
-    private SlideAndDragListView<CommonDataStructure> listView;
+    private List<CommonAdapterData> commonAdapterDataList = new ArrayList<CommonAdapterData>();
+    private SlideAndDragListView<CommonAdapterData> listView;
     private SaleProductListViewAdapter adapter;
     private Menu menu;
     private List<Stock> stockList;
@@ -106,7 +106,7 @@ public class SaleOutEntyList extends CustomSearchBase implements View.OnClickLis
             totalQuantity.setText(df.format(salesOutlist.getQuantity()));
             note.setText(salesOutlist.getNote());
           for(SalesOutEnty salesOutEnty:salesOutEntyList) {
-              CommonDataStructure commonData = new CommonDataStructure();
+              CommonAdapterData commonData = new CommonAdapterData();
               commonData.setId(salesOutEnty.getId());
               commonData.setNumber(salesOutEnty.getNumber());
               commonData.setName(salesOutEnty.getName());
@@ -114,9 +114,9 @@ public class SaleOutEntyList extends CustomSearchBase implements View.OnClickLis
               commonData.setSaleamount(salesOutEnty.getAmount());
               commonData.setSalesprice(salesOutEnty.getPrice());
 
-              commonDataStructureList.add(commonData);
+              commonAdapterDataList.add(commonData);
           }
-            adapter = new SaleProductListViewAdapter(SaleOutEntyList.this, R.layout.saleproduct_item, commonDataStructureList);
+            adapter = new SaleProductListViewAdapter(SaleOutEntyList.this, R.layout.saleproduct_item, commonAdapterDataList);
             listView.setAdapter(adapter);
             setListViewHeightBasedOnChildren(listView);
 
@@ -286,7 +286,7 @@ public class SaleOutEntyList extends CustomSearchBase implements View.OnClickLis
         return super.onTouchEvent(event);
     }
 //根据内容动态测量listview实际高度,动态显示listview内容，此方法，适配器中 getView 方法如果是 RelativeLayout 则显示不正常
-    private void setListViewHeightBasedOnChildren(SlideAndDragListView<CommonDataStructure> listView) {
+    private void setListViewHeightBasedOnChildren(SlideAndDragListView<CommonAdapterData> listView) {
         if (listView == null) {
             return;
         }

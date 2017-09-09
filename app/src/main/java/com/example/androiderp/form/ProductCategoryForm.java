@@ -12,8 +12,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.androiderp.CustomDataClass.Product;
 import com.example.androiderp.CustomDataClass.ProductCategory;
-import com.example.androiderp.CustomDataClass.Unit;
 import com.example.androiderp.R;
 import com.example.androiderp.adaper.DataStructure;
 
@@ -29,7 +29,7 @@ public class ProductCategoryForm extends AppCompatActivity implements View.OnCli
     private InputMethodManager manager;
     private EditText userName;
     private TextView toobarSave, toobarTile, toobarBack;
-    private ProductCategory productCategory;
+    private ProductCategory productCategoryName;
     private String customid,edit;
     private boolean isSave=false;
     private List<ProductCategory> productCategoryList;
@@ -54,8 +54,8 @@ public class ProductCategoryForm extends AppCompatActivity implements View.OnCli
     }
 private  void formInit()
 {if(customid!=null) {
-    productCategory = DataSupport.find(ProductCategory.class, Long.parseLong(customid));
-    userName.setText(productCategory.getName());
+    productCategoryName = DataSupport.find(ProductCategory.class, Long.parseLong(customid));
+    userName.setText(productCategoryName.getName());
 }
     if(edit.equals("edit"))
     {
@@ -71,6 +71,7 @@ private  void formInit()
         {
             case R.id.custom_toobar_right:
                 productCategoryList= DataStructure.where("name = ?",userName.getText().toString()).find(ProductCategory.class);
+
                 if (TextUtils.isEmpty(userName.getText().toString())) {
                     userName.setError("需要输入商品分类");
                 } else if (productCategoryList.size()>0)
@@ -84,7 +85,12 @@ private  void formInit()
                         Intent intent = new Intent();
                         intent.putExtra("returnName",userName.getText().toString());
                         setResult(RESULT_OK,intent);
+                        Product product=new Product();
+                        product.setCategory(userName.getText().toString());
+                        product.updateAll("category = ?",productCategoryName.getName());
                         isSave=true;
+
+
                         ProductCategoryForm.this.finish();
                     } else {
                  ProductCategory       productCategory = new ProductCategory();
@@ -97,13 +103,16 @@ private  void formInit()
                 }
                 break;
             case R.id.custom_toobar_left:
+
+
                 if(edit.equals("edit"))
                 {
                     Intent intent = new Intent();
                     if(isSave) {
                         intent.putExtra("returnName", userName.getText().toString());
+
                     }else {
-                        intent.putExtra("returnName",productCategory.getName());
+                        intent.putExtra("returnName", productCategoryName.getName());
                     }
                     setResult(RESULT_OK,intent);
                     finish();

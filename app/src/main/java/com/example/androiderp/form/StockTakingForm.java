@@ -32,10 +32,9 @@ import com.example.androiderp.CustomDataClass.StockTaking;
 import com.example.androiderp.CustomDataClass.StockTakingEnty;
 import com.example.androiderp.R;
 import com.example.androiderp.adaper.AppropriationListViewAdapter;
-import com.example.androiderp.adaper.CommonDataStructure;
+import com.example.androiderp.adaper.CommonAdapterData;
 import com.example.androiderp.adaper.DataStructure;
 import com.example.androiderp.adaper.PopuMenuDataStructure;
-import com.example.androiderp.basicdata.ProductAppropriationListView;
 import com.example.androiderp.basicdata.ProductStockTakingListView;
 import com.example.androiderp.basicdata.StockIntentListview;
 import com.example.androiderp.common.Common;
@@ -74,8 +73,8 @@ public class StockTakingForm extends CustomSearchBase implements View.OnClickLis
     private List<StockTakingEnty> stockTakingEntyList=new ArrayList<StockTakingEnty>();
     private List<Product> productList;
     private List<ProductShopping> productShoppinglist = new ArrayList<ProductShopping>();
-    private List<CommonDataStructure> commonDataStructureList = new ArrayList<CommonDataStructure>();
-    private SlideAndDragListView<CommonDataStructure> listView;
+    private List<CommonAdapterData> commonAdapterDataList = new ArrayList<CommonAdapterData>();
+    private SlideAndDragListView<CommonAdapterData> listView;
     private AppropriationListViewAdapter adapter;
     private Menu menu;
     private List<Stock> stockList;
@@ -199,10 +198,10 @@ public class StockTakingForm extends CustomSearchBase implements View.OnClickLis
                         return Menu.ITEM_SCROLL_BACK;
                     case 1:
 
-                                DataStructure.deleteAll(ProductCategory.class,"name = ?",commonDataStructureList.get(itemPosition - listView.getHeaderViewsCount()).getName().toString());
+                                DataStructure.deleteAll(ProductCategory.class,"name = ?", commonAdapterDataList.get(itemPosition - listView.getHeaderViewsCount()).getName().toString());
 
 
-                        commonDataStructureList.remove(itemPosition - listView.getHeaderViewsCount());
+                        commonAdapterDataList.remove(itemPosition - listView.getHeaderViewsCount());
                                    adapter.notifyDataSetChanged();
                                   setListViewHeightBasedOnChildren(listView);
 
@@ -225,7 +224,7 @@ public class StockTakingForm extends CustomSearchBase implements View.OnClickLis
 
         Intent intent=new Intent(StockTakingForm.this,ScrennProductShoppingForm.class);
         intent.putExtra("action", "edit");
-        intent.putExtra("product_item", String.valueOf(commonDataStructureList.get(position).getId()));
+        intent.putExtra("product_item", String.valueOf(commonAdapterDataList.get(position).getId()));
         startActivityForResult(intent,7);
     }
 
@@ -247,16 +246,16 @@ public class StockTakingForm extends CustomSearchBase implements View.OnClickLis
                     Toast.makeText(StockTakingForm.this,"请选择仓库",Toast.LENGTH_SHORT).show();
 
                 }
-                else if (commonDataStructureList.size()==0) {
+                else if (commonAdapterDataList.size()==0) {
                     Toast.makeText(StockTakingForm.this, "请选择产品", Toast.LENGTH_SHORT).show();
                 }else
 
                 { SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
                     Date curData = new Date(System.currentTimeMillis());
                     String fdate = format.format(curData);
-                    for(int i = 0; i < commonDataStructureList.size(); i++)
+                    for(int i = 0; i < commonAdapterDataList.size(); i++)
                     {
-                        stockCheck(stockname.getText().toString(),commonDataStructureList.get(i).getName(),commonDataStructureList.get(i).getNumber(),commonDataStructureList.get(i).getFqty());
+                        stockCheck(stockname.getText().toString(), commonAdapterDataList.get(i).getName(), commonAdapterDataList.get(i).getNumber(), commonAdapterDataList.get(i).getFqty());
 
                     }
                     DataSupport.saveAll(stockTakingEntyList);
@@ -297,7 +296,7 @@ public class StockTakingForm extends CustomSearchBase implements View.OnClickLis
 
 
             case R.id.customtoobar_left:
-                if(commonDataStructureList.size()>0)
+                if(commonAdapterDataList.size()>0)
                 {
                     AlertDialog.Builder dialog=new AlertDialog.Builder(StockTakingForm.this);
                     dialog.setTitle("提示");
@@ -399,7 +398,7 @@ public class StockTakingForm extends CustomSearchBase implements View.OnClickLis
                        for (Product product : productList) {
                            boolean flag=true;
                            double  temQty=0.0;
-                           for (CommonDataStructure structure : commonDataStructureList) {
+                           for (CommonAdapterData structure : commonAdapterDataList) {
 
                                if(structure.getNumber().equals(product.getNumber()))
                                {
@@ -411,7 +410,7 @@ public class StockTakingForm extends CustomSearchBase implements View.OnClickLis
                            }
                            if(flag==true)
                            {
-                               CommonDataStructure commonData = new CommonDataStructure();
+                               CommonAdapterData commonData = new CommonAdapterData();
                                commonData.setId(product.getId());
                                commonData.setNumber(product.getNumber());
                                commonData.setName(product.getName());
@@ -419,13 +418,13 @@ public class StockTakingForm extends CustomSearchBase implements View.OnClickLis
                                commonData.setSaleamount(Double.valueOf(product.getSalesPrice()));
                                commonData.setSalesprice(Double.valueOf(product.getSalesPrice()));
                               temQty=commonData.getFqty();
-                               commonDataStructureList.add(commonData);
+                               commonAdapterDataList.add(commonData);
                            }
 
 
                        }
 
-                       adapter = new AppropriationListViewAdapter(StockTakingForm.this, R.layout.saleproduct_item, commonDataStructureList);
+                       adapter = new AppropriationListViewAdapter(StockTakingForm.this, R.layout.saleproduct_item, commonAdapterDataList);
                        listView.setAdapter(adapter);
                        setListViewHeightBasedOnChildren(listView);
 
@@ -441,25 +440,25 @@ public class StockTakingForm extends CustomSearchBase implements View.OnClickLis
                     productShoppinglist=shoppingData.getProductShoppingList();
                     for(ProductShopping shopping:productShoppinglist)
                     {
-                        for(int i = 0; i < commonDataStructureList.size(); i++)
+                        for(int i = 0; i < commonAdapterDataList.size(); i++)
                         {
-                            if(commonDataStructureList.get(i).getNumber().equals(shopping.getNumber()))
+                            if(commonAdapterDataList.get(i).getNumber().equals(shopping.getNumber()))
                             {
 
-                                shopping.setQuantity(shopping.getQuantity()+commonDataStructureList.get(i).getFqty());
-                                commonDataStructureList.remove(i);
+                                shopping.setQuantity(shopping.getQuantity()+ commonAdapterDataList.get(i).getFqty());
+                                commonAdapterDataList.remove(i);
                                 i--;
                             }
                         }
-                        CommonDataStructure commonData=new CommonDataStructure();
+                        CommonAdapterData commonData=new CommonAdapterData();
                         commonData.setId(shopping.getId());
                         commonData.setName(shopping.getName());
                         commonData.setNumber(shopping.getNumber());
                         commonData.setFqty(shopping.getQuantity());
-                        commonDataStructureList.add(commonData);
+                        commonAdapterDataList.add(commonData);
                     }
 
-                    adapter = new AppropriationListViewAdapter(StockTakingForm.this, R.layout.saleproduct_item, commonDataStructureList);
+                    adapter = new AppropriationListViewAdapter(StockTakingForm.this, R.layout.saleproduct_item, commonAdapterDataList);
                     listView.setAdapter(adapter);
                     setListViewHeightBasedOnChildren(listView);
 
@@ -470,7 +469,7 @@ public class StockTakingForm extends CustomSearchBase implements View.OnClickLis
             case 7:
                 if(resultCode==RESULT_OK) {
                     ProductShopping shopping = (ProductShopping) data.getParcelableExtra("shop_data");
-                    for ( CommonDataStructure commonData : commonDataStructureList)
+                    for ( CommonAdapterData commonData : commonAdapterDataList)
 
                     {
                         if (commonData.getNumber().toString().equals(shopping.getNumber().toString())) {
@@ -482,7 +481,7 @@ public class StockTakingForm extends CustomSearchBase implements View.OnClickLis
 
                     }
 
-                    adapter = new AppropriationListViewAdapter(StockTakingForm.this, R.layout.saleproduct_item, commonDataStructureList);
+                    adapter = new AppropriationListViewAdapter(StockTakingForm.this, R.layout.saleproduct_item, commonAdapterDataList);
                     listView.setAdapter(adapter);
 
                 }
@@ -535,7 +534,7 @@ public class StockTakingForm extends CustomSearchBase implements View.OnClickLis
         return super.onTouchEvent(event);
     }
 //根据内容动态测量listview实际高度,动态显示listview内容，此方法，适配器中 getView 方法如果是 RelativeLayout 则显示不正常
-    private void setListViewHeightBasedOnChildren(SlideAndDragListView<CommonDataStructure> listView) {
+    private void setListViewHeightBasedOnChildren(SlideAndDragListView<CommonAdapterData> listView) {
         if (listView == null) {
             return;
         }

@@ -19,7 +19,7 @@ import com.example.androiderp.CustomDataClass.Employee;
 import com.example.androiderp.CustomDataClass.Stock;
 import com.example.androiderp.R;
 import com.example.androiderp.adaper.AppropriationListViewAdapter;
-import com.example.androiderp.adaper.CommonDataStructure;
+import com.example.androiderp.adaper.CommonAdapterData;
 import com.example.androiderp.adaper.PopuMenuDataStructure;
 import com.example.androiderp.common.Common;
 import com.example.androiderp.custom.CustomSearchBase;
@@ -50,8 +50,8 @@ public class AppropriationEntyList extends CustomSearchBase implements View.OnCl
     private Intent  intentBack;
     private List<PopuMenuDataStructure> popuMenuDatas;
     private List<AppropriationEnty> appropriationEntyList=new ArrayList<AppropriationEnty>();
-    private List<CommonDataStructure> listdatas = new ArrayList<CommonDataStructure>();
-    private SlideAndDragListView<CommonDataStructure> listView;
+    private List<CommonAdapterData> listdatas = new ArrayList<CommonAdapterData>();
+    private SlideAndDragListView<CommonAdapterData> listView;
     private AppropriationListViewAdapter adapter;
     private Menu menu;
     private List<Stock> stockList;
@@ -116,7 +116,7 @@ public class AppropriationEntyList extends CustomSearchBase implements View.OnCl
             billnumber.setText(appropriation.getNuber());
             note.setText(appropriation.getNote());
           for(AppropriationEnty appropriationEnty:appropriationEntyList) {
-              CommonDataStructure commonData = new CommonDataStructure();
+              CommonAdapterData commonData = new CommonAdapterData();
               commonData.setId(appropriationEnty.getId());
               commonData.setNumber(appropriationEnty.getNumber());
               commonData.setName(appropriationEnty.getName());
@@ -296,7 +296,7 @@ public class AppropriationEntyList extends CustomSearchBase implements View.OnCl
         return super.onTouchEvent(event);
     }
 //根据内容动态测量listview实际高度,动态显示listview内容，此方法，适配器中 getView 方法如果是 RelativeLayout 则显示不正常
-    private void setListViewHeightBasedOnChildren(SlideAndDragListView<CommonDataStructure> listView) {
+    private void setListViewHeightBasedOnChildren(SlideAndDragListView<CommonAdapterData> listView) {
         if (listView == null) {
             return;
         }

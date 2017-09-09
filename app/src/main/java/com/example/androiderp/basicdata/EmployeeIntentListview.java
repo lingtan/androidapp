@@ -16,16 +16,14 @@ import android.widget.Toast;
 import com.example.androiderp.CustomDataClass.Employee;
 import com.example.androiderp.CustomDataClass.ProductCategory;
 import com.example.androiderp.CustomDataClass.SalesOut;
-import com.example.androiderp.CustomDataClass.Stock;
 import com.example.androiderp.R;
-import com.example.androiderp.adaper.CommonDataStructure;
+import com.example.androiderp.adaper.CommonAdapterData;
 import com.example.androiderp.adaper.CommonListViewAdapter;
 import com.example.androiderp.adaper.DataStructure;
 import com.example.androiderp.custom.CustomSearch;
 import com.example.androiderp.custom.CustomSearchBase;
 import com.example.androiderp.form.EmployeeForm;
 import com.example.androiderp.form.ProductCategoryForm;
-import com.example.androiderp.form.StockForm;
 import com.example.androiderp.listview.Menu;
 import com.example.androiderp.listview.MenuItem;
 import com.example.androiderp.listview.SlideAndDragListView;
@@ -39,11 +37,11 @@ import java.util.List;
 public class EmployeeIntentListview extends CustomSearchBase implements View.OnClickListener,
         AdapterView.OnItemClickListener,
         SlideAndDragListView.OnMenuItemClickListener, SlideAndDragListView.OnItemDeleteListener {
-    private List<CommonDataStructure> listdatas = new ArrayList<CommonDataStructure>();
+    private List<CommonAdapterData> listdatas = new ArrayList<CommonAdapterData>();
     private CommonListViewAdapter adapter;
-    private SlideAndDragListView<CommonDataStructure> listView;
+    private SlideAndDragListView<CommonAdapterData> listView;
     private DisplayMetrics dm;
-    private List<CommonDataStructure> commonDataStructureSearch= new ArrayList<CommonDataStructure>();
+    private List<CommonAdapterData> commonAdapterDataSearch = new ArrayList<CommonAdapterData>();
     private List<Employee> employeeList;
     private TextView toobarBack, toobarAdd, toobarTile;
     private CustomSearch customSearch;
@@ -79,7 +77,7 @@ public class EmployeeIntentListview extends CustomSearchBase implements View.OnC
             indexPositon = employeeList.indexOf(employee);
         }
 
-            CommonDataStructure commonData=new CommonDataStructure();
+            CommonAdapterData commonData=new CommonAdapterData();
             commonData.setName(employee.getName());
             commonData.setId(employee.getId());
             commonData.setImage(R.drawable.seclec_arrow);
@@ -148,11 +146,11 @@ public class EmployeeIntentListview extends CustomSearchBase implements View.OnC
                 switch (buttonPosition) {
                     case 0:
                         Intent intent=new Intent(EmployeeIntentListview.this,ProductCategoryForm.class);
-                        if(commonDataStructureSearch.size()!=0) {
+                        if(commonAdapterDataSearch.size()!=0) {
 
                             intent.putExtra("action", "edit");
-                            intent.putExtra("customid", String.valueOf(commonDataStructureSearch.get(itemPosition).getId()));
-                            indexName = commonDataStructureSearch.get(itemPosition).getName();
+                            intent.putExtra("customid", String.valueOf(commonAdapterDataSearch.get(itemPosition).getId()));
+                            indexName = commonAdapterDataSearch.get(itemPosition).getName();
 
                         }else {
 
@@ -220,11 +218,11 @@ public class EmployeeIntentListview extends CustomSearchBase implements View.OnC
 
 
         Intent intent=new Intent(EmployeeIntentListview.this,ProductCategoryForm.class);
-        if(commonDataStructureSearch.size()!=0) {
+        if(commonAdapterDataSearch.size()!=0) {
 
             intent.putExtra("action", "edit");
-            intent.putExtra("data_return", String.valueOf(commonDataStructureSearch.get(position).getName()));
-            indexName = commonDataStructureSearch.get(position).getName();
+            intent.putExtra("data_return", String.valueOf(commonAdapterDataSearch.get(position).getName()));
+            indexName = commonAdapterDataSearch.get(position).getName();
 
         }else {
 
@@ -244,44 +242,44 @@ public class EmployeeIntentListview extends CustomSearchBase implements View.OnC
     }
     //筛选条件
     public Object[] searchItem(String name) {
-        if(commonDataStructureSearch !=null) {
-            commonDataStructureSearch.clear();
+        if(commonAdapterDataSearch !=null) {
+            commonAdapterDataSearch.clear();
         }
         for (int i = 0; i < listdatas.size(); i++) {
             int index = listdatas.get(i).getName().indexOf(name);
             // 存在匹配的数据
             if (index != -1) {
-                commonDataStructureSearch.add(listdatas.get(i));
+                commonAdapterDataSearch.add(listdatas.get(i));
             }
         }
-        return commonDataStructureSearch.toArray();
+        return commonAdapterDataSearch.toArray();
     }
 
     public Object[] searchCategory(String name) {
 
-        if(commonDataStructureSearch !=null) {
-            commonDataStructureSearch.clear();
+        if(commonAdapterDataSearch !=null) {
+            commonAdapterDataSearch.clear();
         }
         for (int i = 0; i < listdatas.size(); i++) {
             if(listdatas.get(i).getCategory()!=null) {
                 int index = listdatas.get(i).getCategory().indexOf(name);
                 // 存在匹配的数据
                 if (index != -1) {
-                    commonDataStructureSearch.add(listdatas.get(i));
+                    commonAdapterDataSearch.add(listdatas.get(i));
                 }
             }
         }
-        return commonDataStructureSearch.toArray();
+        return commonAdapterDataSearch.toArray();
     }
 //adapter刷新,重写Filter方式会出现BUG.
     public void updateLayout(String name) {
-        if(commonDataStructureSearch !=null) {
+        if(commonAdapterDataSearch !=null) {
             int index=-1;
             if(!name.isEmpty())
             {
-               for(int i = 0; i< commonDataStructureSearch.size(); i++)
+               for(int i = 0; i< commonAdapterDataSearch.size(); i++)
                {
-                   if(commonDataStructureSearch.get(i).getName().equals(indexName))
+                   if(commonAdapterDataSearch.get(i).getName().equals(indexName))
                    {
                        index=i;
                    }
@@ -290,7 +288,7 @@ public class EmployeeIntentListview extends CustomSearchBase implements View.OnC
             {
                 index= positionTemp;
             }
-            adapter = new CommonListViewAdapter(EmployeeIntentListview.this, R.layout.custom_item, commonDataStructureSearch);
+            adapter = new CommonListViewAdapter(EmployeeIntentListview.this, R.layout.custom_item, commonAdapterDataSearch);
             adapter.setSeclection(index);
             listView.setAdapter(adapter);
         }
@@ -333,7 +331,7 @@ public class EmployeeIntentListview extends CustomSearchBase implements View.OnC
                     for(Employee employee: employeeList)
 
                     {
-                        CommonDataStructure commonData=new CommonDataStructure();
+                        CommonAdapterData commonData=new CommonAdapterData();
                         commonData.setName(employee.getName());
                         commonData.setId(employee.getId());
                         commonData.setImage(R.drawable.seclec_arrow);

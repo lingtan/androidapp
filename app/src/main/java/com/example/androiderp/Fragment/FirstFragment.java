@@ -13,6 +13,7 @@ import android.widget.AdapterView;
 import com.example.androiderp.CustomDataClass.GridView;
 import com.example.androiderp.R;
 import com.example.androiderp.adaper.CusteomGridAdapter;
+import com.example.androiderp.basicdata.AccountListview;
 import com.example.androiderp.basicdata.AppropriationListView;
 import com.example.androiderp.basicdata.CustomTowListView;
 import com.example.androiderp.basicdata.EmployeeListview;
@@ -142,6 +143,10 @@ public class FirstFragment extends Fragment {
                         break;
                     case "盘点流水":
                         intent = new Intent(context, StockTakingListView.class);
+                        startActivity(intent);
+                        break;
+                    case "账户管理":
+                        intent = new Intent(context, AccountListview.class);
                         startActivity(intent);
                         break;
                     case "":

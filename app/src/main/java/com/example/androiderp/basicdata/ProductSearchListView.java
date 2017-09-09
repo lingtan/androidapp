@@ -1,7 +1,6 @@
 package com.example.androiderp.basicdata;
 
 import android.content.Intent;
-import android.support.v4.view.GravityCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -14,20 +13,14 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.example.androiderp.CustomDataClass.Custom;
 import com.example.androiderp.CustomDataClass.Product;
 import com.example.androiderp.R;
-import com.example.androiderp.adaper.AppropriationBadgeAdapter;
-import com.example.androiderp.adaper.CommonAdapter;
-import com.example.androiderp.adaper.CommonDataStructure;
 import com.example.androiderp.adaper.PopuMenuDataStructure;
 import com.example.androiderp.adaper.ProductAdapter;
 import com.example.androiderp.common.Common;
 import com.example.androiderp.custom.CustomHomeSearch;
 import com.example.androiderp.custom.CustomSearchBase;
-import com.example.androiderp.form.CustomForm;
 import com.example.androiderp.form.ProductForm;
-import com.example.androiderp.home.ErpHome;
 import com.example.androiderp.scanning.CommonScanActivity;
 import com.example.androiderp.scanning.utils.Constant;
 

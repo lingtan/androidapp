@@ -33,7 +33,7 @@ import com.example.androiderp.CustomDataClass.ShoppingData;
 import com.example.androiderp.CustomDataClass.Stock;
 import com.example.androiderp.CustomDataClass.Supplier;
 import com.example.androiderp.R;
-import com.example.androiderp.adaper.CommonDataStructure;
+import com.example.androiderp.adaper.CommonAdapterData;
 import com.example.androiderp.adaper.DataStructure;
 import com.example.androiderp.adaper.PopuMenuDataStructure;
 import com.example.androiderp.adaper.SaleProductListViewAdapter;
@@ -83,8 +83,8 @@ public class PurchaseProductForm extends CustomSearchBase implements View.OnClic
     private List<Product> productList;
     private List<SalesOutEnty> salesOutEntyList=new ArrayList<SalesOutEnty>();
     private List<ProductShopping> productShoppingList = new ArrayList<ProductShopping>();
-    private List<CommonDataStructure> listdatas = new ArrayList<CommonDataStructure>();
-    private SlideAndDragListView<CommonDataStructure> listView;
+    private List<CommonAdapterData> listdatas = new ArrayList<CommonAdapterData>();
+    private SlideAndDragListView<CommonAdapterData> listView;
     private SaleProductListViewAdapter adapter;
     private Menu menu;
     private List<Stock> stockList;
@@ -538,7 +538,7 @@ public class PurchaseProductForm extends CustomSearchBase implements View.OnClic
 
                        for (Product product : productList) {
                            boolean flag=true;
-                           for (CommonDataStructure structure : listdatas) {
+                           for (CommonAdapterData structure : listdatas) {
 
                                if(structure.getNumber().equals(product.getNumber()))
                                {
@@ -549,7 +549,7 @@ public class PurchaseProductForm extends CustomSearchBase implements View.OnClic
                            }
                            if(flag==true)
                            {
-                               CommonDataStructure commonData = new CommonDataStructure();
+                               CommonAdapterData commonData = new CommonAdapterData();
                                commonData.setId(product.getId());
                                commonData.setNumber(product.getNumber());
                                commonData.setName(product.getName());
@@ -604,7 +604,7 @@ public class PurchaseProductForm extends CustomSearchBase implements View.OnClic
                                 i--;
                             }
                         }
-                        CommonDataStructure commonData=new CommonDataStructure();
+                        CommonAdapterData commonData=new CommonAdapterData();
                         commonData.setId(shopping.getId());
                         commonData.setName(shopping.getName());
                         commonData.setNumber(shopping.getNumber());
@@ -639,7 +639,7 @@ public class PurchaseProductForm extends CustomSearchBase implements View.OnClic
                     countall=0;
                     amountCount =0.00;
                     ProductShopping shopping = (ProductShopping) data.getParcelableExtra("shop_data");
-                    for ( CommonDataStructure commonData : listdatas)
+                    for ( CommonAdapterData commonData : listdatas)
 
                     {
                         if (commonData.getNumber().toString().equals(shopping.getNumber().toString())) {
@@ -732,7 +732,7 @@ public class PurchaseProductForm extends CustomSearchBase implements View.OnClic
         return super.onTouchEvent(event);
     }
 //根据内容动态测量listview实际高度,动态显示listview内容，此方法，适配器中 getView 方法如果是 RelativeLayout 则显示不正常
-    private void setListViewHeightBasedOnChildren(SlideAndDragListView<CommonDataStructure> listView) {
+    private void setListViewHeightBasedOnChildren(SlideAndDragListView<CommonAdapterData> listView) {
         if (listView == null) {
             return;
         }

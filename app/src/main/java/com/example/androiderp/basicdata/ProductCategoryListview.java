@@ -11,14 +11,18 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.example.androiderp.CustomDataClass.Product;
 import com.example.androiderp.CustomDataClass.ProductCategory;
 import com.example.androiderp.R;
-import com.example.androiderp.adaper.CommonDataStructure;
+import com.example.androiderp.adaper.CommonAdapterData;
 import com.example.androiderp.adaper.CommonListViewAdapter;
 import com.example.androiderp.adaper.DataStructure;
 import com.example.androiderp.custom.CustomSearch;
 import com.example.androiderp.custom.CustomSearchBase;
 import com.example.androiderp.form.ProductCategoryForm;
+import com.example.androiderp.form.ProductForm;
 import com.example.androiderp.listview.Menu;
 import com.example.androiderp.listview.MenuItem;
 import com.example.androiderp.listview.SlideAndDragListView;
@@ -30,9 +34,9 @@ import java.util.List;
 public class ProductCategoryListview extends CustomSearchBase implements View.OnClickListener,
         AdapterView.OnItemClickListener,
         SlideAndDragListView.OnMenuItemClickListener, SlideAndDragListView.OnItemDeleteListener {
-    private List<CommonDataStructure> listdatas = new ArrayList<CommonDataStructure>();
+    private List<CommonAdapterData> listdatas = new ArrayList<CommonAdapterData>();
     private CommonListViewAdapter adapter;
-    private SlideAndDragListView<CommonDataStructure> listView;
+    private SlideAndDragListView<CommonAdapterData> listView;
     private DisplayMetrics dm;
     private List<ProductCategory> productCategoryList;
     private TextView toobarBack, toobarAdd, toobarTile;
@@ -68,7 +72,7 @@ public class ProductCategoryListview extends CustomSearchBase implements View.On
             indexPositon = productCategoryList.indexOf(productCategory);
         }
 
-            CommonDataStructure commonData=new CommonDataStructure();
+            CommonAdapterData commonData=new CommonAdapterData();
             commonData.setName(productCategory.getName());
             commonData.setId(productCategory.getId());
             commonData.setImage(R.drawable.seclec_arrow);
@@ -141,6 +145,12 @@ public class ProductCategoryListview extends CustomSearchBase implements View.On
                         dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
+                                List<Product> productList=DataSupport.where("category =?",listdatas.get(itemPosition - listView.getHeaderViewsCount()).getName().toString()).find(Product.class);
+                                if(productList.size()>0)
+                                {
+                                    adapter.notifyDataSetChanged();
+                                    Toast.makeText(ProductCategoryListview.this,"业务已经发生不能删除",Toast.LENGTH_SHORT).show();
+                                }else {
                                 DataStructure.deleteAll(ProductCategory.class,"name = ?",listdatas.get(itemPosition - listView.getHeaderViewsCount()).getName().toString());
 
                                 listdatas.remove(itemPosition - listView.getHeaderViewsCount());
@@ -153,7 +163,7 @@ public class ProductCategoryListview extends CustomSearchBase implements View.On
                                     adapter.notifyDataSetChanged();
                                 }else {
                                     customSearch.setText("");
-                                }
+                                }}
 
 
 
@@ -207,7 +217,7 @@ public class ProductCategoryListview extends CustomSearchBase implements View.On
         for(ProductCategory brand:productCategoryList)
 
         {
-            CommonDataStructure commonData=new CommonDataStructure();
+            CommonAdapterData commonData=new CommonAdapterData();
             commonData.setName(brand.getName());
             commonData.setId(brand.getId());
             commonData.setImage(R.drawable.seclec_arrow);
@@ -303,7 +313,7 @@ public class ProductCategoryListview extends CustomSearchBase implements View.On
                     for(ProductCategory category: productCategoryList)
 
                     {
-                        CommonDataStructure commonData=new CommonDataStructure();
+                        CommonAdapterData commonData=new CommonAdapterData();
                         commonData.setName(category.getName());
                         commonData.setId(category.getId());
                         commonData.setImage(R.drawable.seclec_arrow);

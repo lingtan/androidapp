@@ -16,8 +16,12 @@
 
 package com.example.androiderp.home;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
@@ -30,6 +34,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Toast;
 
 import com.ashokvarma.bottomnavigation.BadgeItem;
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
@@ -67,6 +72,8 @@ public class ErpHome extends CustomSearchBase implements  BottomNavigationBar.On
     private InputMethodManager manager;
     private int searchPosition=0;
 
+
+
     @Override
     public void iniView(){
         setContentView(R.layout.home_layout);//加载主界面
@@ -88,6 +95,9 @@ public class ErpHome extends CustomSearchBase implements  BottomNavigationBar.On
         if (navigationView != null) {
             setupDrawerContent(navigationView);
         }
+
+
+
         switch (edit) {
             case "send":
                 fragmentManager=getSupportFragmentManager();
@@ -172,6 +182,8 @@ public class ErpHome extends CustomSearchBase implements  BottomNavigationBar.On
         }
     });
     }
+
+
 
     private void refresh() {
 
@@ -353,4 +365,6 @@ public class ErpHome extends CustomSearchBase implements  BottomNavigationBar.On
             default:
         }
     }
+
+
 }

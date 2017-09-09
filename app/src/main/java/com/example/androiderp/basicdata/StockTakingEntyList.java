@@ -19,7 +19,7 @@ import com.example.androiderp.CustomDataClass.StockTaking;
 import com.example.androiderp.CustomDataClass.StockTakingEnty;
 import com.example.androiderp.R;
 import com.example.androiderp.adaper.AppropriationListViewAdapter;
-import com.example.androiderp.adaper.CommonDataStructure;
+import com.example.androiderp.adaper.CommonAdapterData;
 import com.example.androiderp.adaper.PopuMenuDataStructure;
 import com.example.androiderp.common.Common;
 import com.example.androiderp.custom.CustomSearchBase;
@@ -50,8 +50,8 @@ public class StockTakingEntyList extends CustomSearchBase implements View.OnClic
     private Intent  intentBack;
     private List<PopuMenuDataStructure> popuMenuDatas;
     private List<StockTakingEnty> stockTakingEntyList =new ArrayList<StockTakingEnty>();
-    private List<CommonDataStructure> listdatas = new ArrayList<CommonDataStructure>();
-    private SlideAndDragListView<CommonDataStructure> listView;
+    private List<CommonAdapterData> listdatas = new ArrayList<CommonAdapterData>();
+    private SlideAndDragListView<CommonAdapterData> listView;
     private AppropriationListViewAdapter adapter;
     private Menu menu;
     private List<Stock> stockList;
@@ -113,7 +113,7 @@ public class StockTakingEntyList extends CustomSearchBase implements View.OnClic
             consignment.setText(stockTaking.getNuber());
             note.setText(stockTaking.getNote());
           for(StockTakingEnty stockTakingEntyy: stockTakingEntyList) {
-              CommonDataStructure commonData = new CommonDataStructure();
+              CommonAdapterData commonData = new CommonAdapterData();
               commonData.setId(stockTakingEntyy.getId());
               commonData.setNumber(stockTakingEntyy.getNumber());
               commonData.setName(stockTakingEntyy.getName());
@@ -293,7 +293,7 @@ public class StockTakingEntyList extends CustomSearchBase implements View.OnClic
         return super.onTouchEvent(event);
     }
 //根据内容动态测量listview实际高度,动态显示listview内容，此方法，适配器中 getView 方法如果是 RelativeLayout 则显示不正常
-    private void setListViewHeightBasedOnChildren(SlideAndDragListView<CommonDataStructure> listView) {
+    private void setListViewHeightBasedOnChildren(SlideAndDragListView<CommonAdapterData> listView) {
         if (listView == null) {
             return;
         }

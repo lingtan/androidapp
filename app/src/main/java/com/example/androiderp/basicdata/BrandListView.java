@@ -1,6 +1,5 @@
 package com.example.androiderp.basicdata;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -8,15 +7,16 @@ import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.androiderp.CustomDataClass.Brand;
+import com.example.androiderp.CustomDataClass.Product;
 import com.example.androiderp.R;
-import com.example.androiderp.adaper.CommonDataStructure;
+import com.example.androiderp.adaper.CommonAdapterData;
 import com.example.androiderp.adaper.CommonListViewAdapter;
 import com.example.androiderp.adaper.DataStructure;
 import com.example.androiderp.custom.CustomSearch;
@@ -35,11 +35,11 @@ import java.util.List;
 public class BrandListView extends CustomSearchBase implements View.OnClickListener,
         AdapterView.OnItemClickListener,
         SlideAndDragListView.OnMenuItemClickListener, SlideAndDragListView.OnItemDeleteListener {
-    private List<CommonDataStructure> listdatas = new ArrayList<CommonDataStructure>();
+    private List<CommonAdapterData> listdatas = new ArrayList<CommonAdapterData>();
     private CommonListViewAdapter adapter;
-    private SlideAndDragListView<CommonDataStructure>  listView;
+    private SlideAndDragListView<CommonAdapterData>  listView;
     private DisplayMetrics dm;
-    private List<CommonDataStructure> commonDataStructureSearch= new ArrayList<CommonDataStructure>();
+    private List<CommonAdapterData> commonAdapterDataSearch = new ArrayList<CommonAdapterData>();
     private List<Brand> brandList;
     private TextView toobarBack, toobarAdd,toobarTile;
     private CustomSearch customSearch;
@@ -73,7 +73,7 @@ public class BrandListView extends CustomSearchBase implements View.OnClickListe
         {
             indexPositon =brandList.indexOf(brand);
         }
-            CommonDataStructure commonData=new CommonDataStructure();
+            CommonAdapterData commonData=new CommonAdapterData();
             commonData.setName(brand.getName());
             commonData.setId(brand.getId());
             commonData.setImage(R.drawable.seclec_arrow);
@@ -146,20 +146,26 @@ public class BrandListView extends CustomSearchBase implements View.OnClickListe
                         dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                DataStructure.deleteAll(Brand.class,"name = ?",listdatas.get(itemPosition - listView.getHeaderViewsCount()).getName().toString());
-                                listdatas.remove(itemPosition - listView.getHeaderViewsCount());
-                                if(customSearch.getText().toString().isEmpty()) {
-                                    if (indexPositon == itemPosition) {
-                                        indexPositon = -1;
+                                List<Product> productList=DataSupport.where("brand =?",listdatas.get(itemPosition - listView.getHeaderViewsCount()).getName().toString()).find(Product.class);
+                                if(productList.size()>0)
+                                {
+                                    adapter.notifyDataSetChanged();
+                                    Toast.makeText(BrandListView.this,"业务已经发生不能删除",Toast.LENGTH_SHORT).show();
+                                }else {
+                                    DataStructure.deleteAll(Brand.class, "name = ?", listdatas.get(itemPosition - listView.getHeaderViewsCount()).getName().toString());
+                                    listdatas.remove(itemPosition - listView.getHeaderViewsCount());
+                                    if (customSearch.getText().toString().isEmpty()) {
+                                        if (indexPositon == itemPosition) {
+                                            indexPositon = -1;
+                                        }
+
+                                        adapter.setSeclection(indexPositon);
+                                        adapter.notifyDataSetChanged();
+                                    } else {
+                                        customSearch.setText("");
                                     }
 
-                                    adapter.setSeclection(indexPositon);
-                                    adapter.notifyDataSetChanged();
-                                }else {
-                                    customSearch.setText("");
                                 }
-
-
 
 
 
@@ -210,7 +216,7 @@ public class BrandListView extends CustomSearchBase implements View.OnClickListe
         for(Brand brand:brandList)
 
         {
-            CommonDataStructure commonData=new CommonDataStructure();
+            CommonAdapterData commonData=new CommonAdapterData();
             commonData.setName(brand.getName());
             commonData.setId(brand.getId());
             commonData.setImage(R.drawable.seclec_arrow);
@@ -307,7 +313,7 @@ public class BrandListView extends CustomSearchBase implements View.OnClickListe
                     for(Brand brand:brandList)
 
                     {
-                        CommonDataStructure commonData=new CommonDataStructure();
+                        CommonAdapterData commonData=new CommonAdapterData();
                         commonData.setName(brand.getName());
                         commonData.setId(brand.getId());
                         commonData.setImage(R.drawable.seclec_arrow);

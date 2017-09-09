@@ -9,10 +9,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import com.example.androiderp.CustomDataClass.Custom;
 import com.example.androiderp.CustomDataClass.CustomCategory;
-import com.example.androiderp.CustomDataClass.Supplier;
 import com.example.androiderp.R;
 import com.example.androiderp.adaper.CommonAdapter;
-import com.example.androiderp.adaper.CommonDataStructure;
+import com.example.androiderp.adaper.CommonAdapterData;
 import com.example.androiderp.adaper.DataStructure;
 import com.example.androiderp.custom.CustomSearch;
 import com.example.androiderp.custom.CustomSearchBase;
@@ -22,19 +21,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CustomTowListView extends CustomSearchBase implements View.OnClickListener {
-    private List<CommonDataStructure> commonDataStructureList = new ArrayList<CommonDataStructure>();
+    private List<CommonAdapterData> commonAdapterDataList = new ArrayList<CommonAdapterData>();
     private CommonAdapter rightAdapter;
     private CommonAdapter leftAdapter;
     private ListView rightListView;
     private ListView leftListView;
     private DisplayMetrics dm;
-    private List<CommonDataStructure> commonDataStructureSearch = new ArrayList<CommonDataStructure>();
+    private List<CommonAdapterData> commonAdapterDataSearch = new ArrayList<CommonAdapterData>();
     private List<Custom> customList;
     private TextView toobarBack, toobarAdd, toobarTile;
     private CustomSearch customSearch;
     private Intent intent;
     private List<CustomCategory> customCategoryList;
-    private List<CommonDataStructure> categorylist = new ArrayList<CommonDataStructure>();
+    private List<CommonAdapterData> categorylist = new ArrayList<CommonAdapterData>();
     private String selectCategory;
     private String leftItemName="全部";
 
@@ -55,26 +54,26 @@ public class CustomTowListView extends CustomSearchBase implements View.OnClickL
         for(Custom custom: customList)
 
         {
-            CommonDataStructure commonData=new CommonDataStructure();
+            CommonAdapterData commonData=new CommonAdapterData();
             commonData.setName(custom.getName());
             commonData.setCategory(custom.getCategory());
             commonData.setId(custom.getId());
-            commonDataStructureList.add(commonData);
+            commonAdapterDataList.add(commonData);
 
 
 
         }
         customCategoryList = DataSupport.findAll(CustomCategory.class);
-        CommonDataStructure commonDataAll=new CommonDataStructure();
+        CommonAdapterData commonDataAll=new CommonAdapterData();
         commonDataAll.setName("全部");
         categorylist.add(commonDataAll);
-        CommonDataStructure commonDataN=new CommonDataStructure();
+        CommonAdapterData commonDataN=new CommonAdapterData();
         commonDataN.setName("未分类");
         categorylist.add(commonDataN);
         for(CustomCategory custom: customCategoryList)
 
         {
-            CommonDataStructure commonData=new CommonDataStructure();
+            CommonAdapterData commonData=new CommonAdapterData();
             commonData.setName(custom.getName());
             commonData.setId(custom.getId());
             categorylist.add(commonData);
@@ -104,16 +103,16 @@ public class CustomTowListView extends CustomSearchBase implements View.OnClickL
             public void onItemClick(AdapterView<?> adapterView, View view,
                                     int position, long id) {
                 intent.removeExtra("action");
-                        if(commonDataStructureSearch.size()!=0) {
+                        if(commonAdapterDataSearch.size()!=0) {
 
                             intent.putExtra("action", "edit");
-                            intent.putExtra("custom_item", String.valueOf(commonDataStructureSearch.get(position).getId()));
+                            intent.putExtra("custom_item", String.valueOf(commonAdapterDataSearch.get(position).getId()));
 
 
                         }else {
 
                             intent.putExtra("action", "edit");
-                            intent.putExtra("custom_item", String.valueOf(commonDataStructureList.get(position).getId()));
+                            intent.putExtra("custom_item", String.valueOf(commonAdapterDataList.get(position).getId()));
 
                         }
                 startActivityForResult(intent,1);
@@ -125,7 +124,7 @@ public class CustomTowListView extends CustomSearchBase implements View.OnClickL
             leftAdapter = new CommonAdapter(CustomTowListView.this, R.layout.custom_item, categorylist);
             leftAdapter.setSeclection(0);
             leftListView.setAdapter(leftAdapter);
-            rightAdapter = new CommonAdapter(CustomTowListView.this, R.layout.custom_item, commonDataStructureList);
+            rightAdapter = new CommonAdapter(CustomTowListView.this, R.layout.custom_item, commonAdapterDataList);
             rightListView.setAdapter(rightAdapter);
             
 
@@ -137,44 +136,44 @@ public class CustomTowListView extends CustomSearchBase implements View.OnClickL
 
     //筛选条件
     public Object[] search(String name) {
-        commonDataStructureSearch.clear();
-        commonDataStructureList.clear();
+        commonAdapterDataSearch.clear();
+        commonAdapterDataList.clear();
 
         customList = DataStructure.where("name like ?","%" + name + "%").find(Custom.class);
         for(Custom custom: customList)
 
         {
-            CommonDataStructure commonData=new CommonDataStructure();
+            CommonAdapterData commonData=new CommonAdapterData();
             commonData.setName(custom.getName());
             commonData.setCategory(custom.getCategory());
             commonData.setId(custom.getId());
-            commonDataStructureList.add(commonData);
+            commonAdapterDataList.add(commonData);
 
 
 
         }
-        for (int i = 0; i < commonDataStructureList.size(); i++) {
-            int index = commonDataStructureList.get(i).getName().indexOf(name);
+        for (int i = 0; i < commonAdapterDataList.size(); i++) {
+            int index = commonAdapterDataList.get(i).getName().indexOf(name);
             int indey;
             if(selectCategory.equals("全部"))
             {
                 indey=0;
             }else {
-                indey = commonDataStructureList.get(i).getCategory().indexOf(selectCategory);
+                indey = commonAdapterDataList.get(i).getCategory().indexOf(selectCategory);
 
             }
             // 存在匹配的数据
             if (index != -1&&indey!=-1) {
-                commonDataStructureSearch.add(commonDataStructureList.get(i));
+                commonAdapterDataSearch.add(commonAdapterDataList.get(i));
             }
         }
-        return commonDataStructureSearch.toArray();
+        return commonAdapterDataSearch.toArray();
     }
 
     public Object[] categorySearch(String name) {
 
-        commonDataStructureSearch.clear();
-        commonDataStructureList.clear();
+        commonAdapterDataSearch.clear();
+        commonAdapterDataList.clear();
         if(name.equals("全部")||name.equals("未分类"))
         {
             customList = DataStructure.findAll(Custom.class);
@@ -185,11 +184,11 @@ public class CustomTowListView extends CustomSearchBase implements View.OnClickL
         for(Custom custom: customList)
 
         {
-            CommonDataStructure commonData=new CommonDataStructure();
+            CommonAdapterData commonData=new CommonAdapterData();
             commonData.setName(custom.getName());
             commonData.setCategory(custom.getCategory());
             commonData.setId(custom.getId());
-            commonDataStructureList.add(commonData);
+            commonAdapterDataList.add(commonData);
 
 
 
@@ -197,39 +196,39 @@ public class CustomTowListView extends CustomSearchBase implements View.OnClickL
 
         if(name.equals("未分类"))
         {
-            for (int i = 0; i < commonDataStructureList.size(); i++) {
-               if(commonDataStructureList.get(i).getCategory().isEmpty())
+            for (int i = 0; i < commonAdapterDataList.size(); i++) {
+               if(commonAdapterDataList.get(i).getCategory().isEmpty())
                {
-                    commonDataStructureSearch.add(commonDataStructureList.get(i));
+                    commonAdapterDataSearch.add(commonAdapterDataList.get(i));
                }
             }
 
         }else if (name.equals("全部"))
         {
-            for (int i = 0; i < commonDataStructureList.size(); i++) {
+            for (int i = 0; i < commonAdapterDataList.size(); i++) {
 
-                    commonDataStructureSearch.add(commonDataStructureList.get(i));
+                    commonAdapterDataSearch.add(commonAdapterDataList.get(i));
 
             }
 
         }
 
         else {
-        for (int i = 0; i < commonDataStructureList.size(); i++) {
+        for (int i = 0; i < commonAdapterDataList.size(); i++) {
 
-                int index = commonDataStructureList.get(i).getCategory().indexOf(name);
+                int index = commonAdapterDataList.get(i).getCategory().indexOf(name);
                 // 存在匹配的数据
                 if (index != -1) {
-                    commonDataStructureSearch.add(commonDataStructureList.get(i));
+                    commonAdapterDataSearch.add(commonAdapterDataList.get(i));
                 }
 
         }}
-        return commonDataStructureSearch.toArray();
+        return commonAdapterDataSearch.toArray();
     }
 //adapter刷新,重写Filter方式会出现BUG.
     public void updateLayout(Object[] obj) {
-        if(commonDataStructureSearch !=null) {
-            rightAdapter = new CommonAdapter(CustomTowListView.this, R.layout.custom_item, commonDataStructureSearch);
+        if(commonAdapterDataSearch !=null) {
+            rightAdapter = new CommonAdapter(CustomTowListView.this, R.layout.custom_item, commonAdapterDataSearch);
             rightListView.setAdapter(rightAdapter);
         }
     }

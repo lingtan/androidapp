@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.example.androiderp.CustomDataClass.Supplier;
 import com.example.androiderp.R;
 import com.example.androiderp.adaper.CommonAdapter;
-import com.example.androiderp.adaper.CommonDataStructure;
+import com.example.androiderp.adaper.CommonAdapterData;
 import com.example.androiderp.adaper.DataStructure;
 import com.example.androiderp.custom.CustomSearch;
 import com.example.androiderp.custom.CustomSearchBase;
@@ -24,12 +24,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SupplierListView extends CustomSearchBase implements View.OnClickListener {
-    private List<CommonDataStructure> commonDataStructureList = new ArrayList<CommonDataStructure>();
+    private List<CommonAdapterData> commonAdapterDataList = new ArrayList<CommonAdapterData>();
     private List<DataStructure> fruit = new ArrayList<DataStructure>();
     private CommonAdapter adapter;
     private ListView listView;
     private DisplayMetrics dm;
-    private List<CommonDataStructure> commonDataStructureSearch = new ArrayList<CommonDataStructure>();
+    private List<CommonAdapterData> commonAdapterDataSearch = new ArrayList<CommonAdapterData>();
     private List<Supplier> supplierList;
     private TextView toobarBack, toobarAdd, toobarTile;
     private CustomSearch customSearch;
@@ -52,10 +52,10 @@ public class SupplierListView extends CustomSearchBase implements View.OnClickLi
         for(Supplier supplier: supplierList)
 
         {
-            CommonDataStructure commonData=new CommonDataStructure();
+            CommonAdapterData commonData=new CommonAdapterData();
             commonData.setName(supplier.getName());
             commonData.setId(supplier.getId());
-            commonDataStructureList.add(commonData);
+            commonAdapterDataList.add(commonData);
 
 
 
@@ -72,25 +72,25 @@ public class SupplierListView extends CustomSearchBase implements View.OnClickLi
             public void onItemClick(AdapterView<?> adapterView, View view,
                                     int position, long id) {
 
-                        if(commonDataStructureSearch.size()!=0) {
+                        if(commonAdapterDataSearch.size()!=0) {
 
                             intent.putExtra("action", "edit");
-                            intent.putExtra("supller_item", String.valueOf(commonDataStructureSearch.get(position).getId()));
+                            intent.putExtra("supller_item", String.valueOf(commonAdapterDataSearch.get(position).getId()));
 
 
                         }else {
 
                             intent.putExtra("action", "edit");
-                            intent.putExtra("supller_item", String.valueOf(commonDataStructureList.get(position).getId()));
+                            intent.putExtra("supller_item", String.valueOf(commonAdapterDataList.get(position).getId()));
 
                         }
                 startActivityForResult(intent,1);
 
             }
         });
-        if(commonDataStructureList.size()!=0) {
+        if(commonAdapterDataList.size()!=0) {
 
-                 adapter = new CommonAdapter(SupplierListView.this, R.layout.custom_item, commonDataStructureList);
+                 adapter = new CommonAdapter(SupplierListView.this, R.layout.custom_item, commonAdapterDataList);
                  listView.setAdapter(adapter);
 
         }
@@ -102,23 +102,23 @@ public class SupplierListView extends CustomSearchBase implements View.OnClickLi
 
     //筛选条件
     public Object[] search(String name) {
-        if(commonDataStructureSearch !=null) {
-            commonDataStructureSearch.clear();
+        if(commonAdapterDataSearch !=null) {
+            commonAdapterDataSearch.clear();
         }
-        for (int i = 0; i < commonDataStructureList.size(); i++) {
-            int index = commonDataStructureList.get(i).getName().indexOf(name);
+        for (int i = 0; i < commonAdapterDataList.size(); i++) {
+            int index = commonAdapterDataList.get(i).getName().indexOf(name);
             // 存在匹配的数据
             if (index != -1) {
-                commonDataStructureSearch.add(commonDataStructureList.get(i));
+                commonAdapterDataSearch.add(commonAdapterDataList.get(i));
             }
         }
-        return commonDataStructureSearch.toArray();
+        return commonAdapterDataSearch.toArray();
     }
 
 //adapter刷新,重写Filter方式会出现BUG.
     public void updateLayout(Object[] obj) {
-        if(commonDataStructureSearch !=null) {
-            adapter = new CommonAdapter(SupplierListView.this, R.layout.custom_item, commonDataStructureSearch);
+        if(commonAdapterDataSearch !=null) {
+            adapter = new CommonAdapter(SupplierListView.this, R.layout.custom_item, commonAdapterDataSearch);
             listView.setAdapter(adapter);
         }
     }
@@ -153,22 +153,22 @@ public class SupplierListView extends CustomSearchBase implements View.OnClickLi
             case 1:
                 if(resultCode==RESULT_OK)
                 {
-                    if(commonDataStructureList.size()!=0) {
-                        commonDataStructureList.clear();
+                    if(commonAdapterDataList.size()!=0) {
+                        commonAdapterDataList.clear();
                     }
                     supplierList = DataSupport.findAll(Supplier.class);
                     for(Supplier category: supplierList)
 
                     {
-                        CommonDataStructure commonData=new CommonDataStructure();
+                        CommonAdapterData commonData=new CommonAdapterData();
                         commonData.setName(category.getName());
                         commonData.setId(category.getId());
-                        commonDataStructureList.add(commonData);
+                        commonAdapterDataList.add(commonData);
 
 
 
                     }
-                    adapter = new CommonAdapter(SupplierListView.this, R.layout.custom_item, commonDataStructureList);
+                    adapter = new CommonAdapter(SupplierListView.this, R.layout.custom_item, commonAdapterDataList);
                     listView.setAdapter(adapter);
                 }
                 break;

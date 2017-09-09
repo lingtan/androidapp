@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.androiderp">
+
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.CAMERA" />
+
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
     <uses-feature android:name="android.hardware.camera.flash" />
+
     <uses-permission android:name="android.permission.FLASHLIGHT" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="com.android.browser.permission.READ_HISTORY_BOOKMARKS" />
@@ -23,202 +26,86 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.example.androiderp.login.Login">
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
-    </activity>
-        <activity android:name="com.example.androiderp.home.ErpHome">
+        <activity android:name=".login.Login">
             <intent-filter>
-            <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.example.androiderp.utili.SenHome">
-
+        <activity android:name=".home.ErpHome">
+            <intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
-        <activity android:name="com.example.androiderp.form.CustomForm"
-            android:launchMode="singleTop">
-
-        </activity>
-        <activity android:name="com.example.androiderp.basicdata.CustomListView">
-
-        </activity>
-        <activity android:name="com.example.androiderp.basicdata.SupplierListView">
-        </activity>
-        <activity android:name="com.example.androiderp.basicdata.CustomTowListView">
-
-        </activity>
-        <activity android:name="com.example.androiderp.basicdata.SaleOutListView">
-
-        </activity>
-        <activity android:name="com.example.androiderp.basicdata.SaleOutEntyList">
-
-        </activity>
-        <activity android:name="com.example.androiderp.basicdata.ProductAppropriationListView">
-
-        </activity>
-        <activity android:name="com.example.androiderp.basicdata.AppropriationListView">
-
-        </activity>
-        <activity android:name="com.example.androiderp.basicdata.AppropriationEntyList">
-
-        </activity>
-        <activity android:name="com.example.androiderp.basicdata.StockTakingListView">
-
-        </activity>
-        <activity android:name="com.example.androiderp.basicdata.StockTakingEntyList">
-
-        </activity>
-        <activity android:name="com.example.androiderp.basicdata.InventoryListView">
-
-        </activity>
-        <activity android:name="com.example.androiderp.basicdata.InventoryEntyList">
-
-        </activity>
-        <activity android:name="com.example.androiderp.basicdata.StockIntentListview">
-
-        </activity>
-        <activity android:name="com.example.androiderp.basicdata.EmployeeIntentListview">
-
-        </activity>
-        <activity android:name="com.example.androiderp.basicdata.ProductSearchListView">
-
-        </activity>
-        <activity android:name="com.example.androiderp.basicdata.SaleOutSearchListView">
-
-        </activity>
-        <activity android:name="com.example.androiderp.basicdata.HomeMoreListView">
-
-        </activity>
-        <activity android:name="com.example.androiderp.basicdata.SupplierOutSearchListView">
-
-        </activity>
-        <activity android:name="com.example.androiderp.basicdata.InventorySearchListView">
-
-    </activity>
-
-        <activity android:name="com.example.androiderp.basicdata.ProductStockTakingListView">
-
-        </activity>
-        <activity android:name="com.example.androiderp.basicdata.CustomSearchListView">
-
-        </activity>
-        <activity android:name="com.example.androiderp.basicdata.SupplierCategoryListView">
-
-        </activity>
-        <activity android:name="com.example.androiderp.basicdata.CustomCategoryListView">
-
-        </activity>
-        <activity android:name="com.example.androiderp.form.SupplierCategoryForm">
-
-        </activity>
-        <activity android:name="com.example.androiderp.form.CustomCategoryForm">
-
-        </activity>
-
-        <activity android:name="com.example.androiderp.form.AppropriationShoppingForm">
-
-        </activity>
-        <activity android:name="com.example.androiderp.form.ProductCategoryForm">
-
-        </activity>
-        <activity android:name="com.example.androiderp.form.ReturnPurchaseProductForm">
-
-        </activity>
-        <activity android:name="com.example.androiderp.form.ReturnSaleProductForm">
-
-        </activity>
-        <activity android:name="com.example.androiderp.form.BrandForm">
-
-        </activity>
-        <activity android:name="com.example.androiderp.form.StockTakingForm">
-
-        </activity>
-        <activity android:name="com.example.androiderp.form.UnitForm">
-
-        </activity>
-        <activity android:name="com.example.androiderp.form.StockForm">
-
-        </activity>
-        <activity android:name="com.example.androiderp.form.SupplierForm">
-
-        </activity>
-
-        <activity android:name="com.example.androiderp.form.PurchaseProductForm">
-
-        </activity>
-        <activity android:name="com.example.androiderp.form.ProductForm">
-
-        </activity>
-        <activity android:name="com.example.androiderp.form.ProductShoppingForm">
-
-        </activity>
-        <activity android:name="com.example.androiderp.form.AppropriationForm">
-
-        </activity>
-        <activity android:name="com.example.androiderp.form.EmployeeForm">
-
-        </activity>
-        <activity android:name="com.example.androiderp.form.ConsignmentForm">
-
-        </activity>
-        <activity android:name="com.example.androiderp.form.ScrennProductShoppingForm">
-
-        </activity>
-        <activity android:name="com.example.androiderp.basicdata.ProductTowListView">
-
-    </activity>
-        <activity android:name="com.example.androiderp.basicdata.ProductBadgeListView">
-
-        </activity>
-        <activity android:name="com.example.androiderp.basicdata.StockInitiListView">
-
-        </activity>
-        <activity android:name="com.example.androiderp.basicdata.ConsignmentListview">
-
-        </activity>
-        <activity android:name="com.example.androiderp.basicdata.BrandListView">
-
-        </activity>
-        <activity android:name="com.example.androiderp.basicdata.SupplierTowListView">
-
-        </activity>
-        <activity android:name="com.example.androiderp.basicdata.EmployeeListview">
-
-        </activity>
-        <activity android:name="com.example.androiderp.basicdata.SelectSupplierListView">
-
-        </activity>
-        <activity android:name="com.example.androiderp.basicdata.StockListView">
-
-        </activity>
-        <activity android:name="com.example.androiderp.basicdata.PurchaseOutListView">
-
-        </activity>
-        <activity android:name="com.example.androiderp.basicdata.PurchaseOutEntyList">
-
-        </activity>
-        <activity android:name="com.example.androiderp.basicdata.BrandBadgeListView">
-
-        </activity>
-        <activity android:name="com.example.androiderp.basicdata.ProductCategoryListview">
-
-        </activity>
-        <activity android:name="com.example.androiderp.basicdata.SelectCustomListView">
-
-        </activity>
-        <activity android:name="com.example.androiderp.basicdata.UnitListView">
-
-        </activity>
+        <activity android:name=".utili.SenHome"></activity>
+        <activity
+            android:name=".form.CustomForm"
+            android:launchMode="singleTop"></activity>
+        <activity android:name=".basicdata.CustomListView"></activity>
+        <activity android:name=".basicdata.SupplierListView"></activity>
+        <activity android:name=".basicdata.CustomTowListView"></activity>
+        <activity android:name=".basicdata.SaleOutListView"></activity>
+        <activity android:name=".basicdata.SaleOutEntyList"></activity>
+        <activity android:name=".basicdata.ProductAppropriationListView"></activity>
+        <activity android:name=".basicdata.AppropriationListView"></activity>
+        <activity android:name=".basicdata.AppropriationEntyList"></activity>
+        <activity android:name=".basicdata.StockTakingListView"></activity>
+        <activity android:name=".basicdata.StockTakingEntyList"></activity>
+        <activity android:name=".basicdata.InventoryListView"></activity>
+        <activity android:name=".basicdata.InventoryEntyList"></activity>
+        <activity android:name=".basicdata.StockIntentListview"></activity>
+        <activity android:name=".basicdata.EmployeeIntentListview"></activity>
+        <activity android:name=".basicdata.ProductSearchListView"></activity>
+        <activity android:name=".basicdata.SaleOutSearchListView"></activity>
+        <activity android:name=".basicdata.HomeMoreListView"></activity>
+        <activity android:name=".basicdata.SupplierOutSearchListView"></activity>
+        <activity android:name=".basicdata.InventorySearchListView"></activity>
+        <activity android:name=".basicdata.ProductStockTakingListView"></activity>
+        <activity android:name=".basicdata.CustomSearchListView"></activity>
+        <activity android:name=".basicdata.SupplierCategoryListView"></activity>
+        <activity android:name=".basicdata.CustomCategoryListView"></activity>
+        <activity android:name=".form.SupplierCategoryForm"></activity>
+        <activity android:name=".form.CustomCategoryForm"></activity>
+        <activity android:name=".form.AppropriationShoppingForm"></activity>
+        <activity android:name=".form.ProductCategoryForm"></activity>
+        <activity android:name=".form.ReturnPurchaseProductForm"></activity>
+        <activity android:name=".form.ReturnSaleProductForm"></activity>
+        <activity android:name=".form.BrandForm"></activity>
+        <activity android:name=".form.StockTakingForm"></activity>
+        <activity android:name=".form.UnitForm"></activity>
+        <activity android:name=".form.StockForm"></activity>
+        <activity android:name=".form.SupplierForm"></activity>
+        <activity android:name=".form.PurchaseProductForm"></activity>
+        <activity android:name=".form.ProductForm"></activity>
+        <activity android:name=".form.ProductShoppingForm"></activity>
+        <activity android:name=".form.AppropriationForm"></activity>
+        <activity android:name=".form.EmployeeForm"></activity>
+        <activity android:name=".form.ConsignmentForm"></activity>
+        <activity android:name=".form.ScrennProductShoppingForm"></activity>
+        <activity android:name=".form.AccountForm"></activity>
+        <activity android:name=".basicdata.ProductTowListView"></activity>
+        <activity android:name=".basicdata.ProductBadgeListView"></activity>
+        <activity android:name=".basicdata.StockInitiListView"></activity>
+        <activity android:name=".basicdata.ConsignmentListview"></activity>
+        <activity android:name=".basicdata.BrandListView"></activity>
+        <activity android:name=".basicdata.AccountListview"></activity>
+        <activity android:name=".basicdata.SupplierTowListView"></activity>
+        <activity android:name=".basicdata.EmployeeListview"></activity>
+        <activity android:name=".basicdata.SelectSupplierListView"></activity>
+        <activity android:name=".basicdata.StockListView"></activity>
+        <activity android:name=".basicdata.PurchaseOutListView"></activity>
+        <activity android:name=".basicdata.PurchaseOutEntyList"></activity>
+        <activity android:name=".basicdata.BrandBadgeListView"></activity>
+        <activity android:name=".basicdata.ProductCategoryListview"></activity>
+        <activity android:name=".basicdata.SelectCustomListView"></activity>
+        <activity android:name=".basicdata.UnitListView"></activity>
         <activity
             android:name=".scanning.CommonScanActivity"
             android:label="@string/app_name"
             android:theme="@android:style/Theme.Light.NoTitleBar" />
-        <activity android:name="com.example.androiderp.form.SaleProductForm">
+        <activity android:name=".form.SaleProductForm"></activity>
 
-        </activity>
     </application>
 
 </manifest>

@@ -9,12 +9,11 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.example.androiderp.CustomDataClass.CustomCategory;
 import com.example.androiderp.CustomDataClass.Supplier;
 import com.example.androiderp.CustomDataClass.SupplierCategory;
 import com.example.androiderp.R;
 import com.example.androiderp.adaper.CommonAdapter;
-import com.example.androiderp.adaper.CommonDataStructure;
+import com.example.androiderp.adaper.CommonAdapterData;
 import com.example.androiderp.adaper.DataStructure;
 import com.example.androiderp.custom.CustomSearch;
 import com.example.androiderp.custom.CustomSearchBase;
@@ -24,19 +23,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SupplierTowListView extends CustomSearchBase implements View.OnClickListener {
-    private List<CommonDataStructure> commonDataStructureList = new ArrayList<CommonDataStructure>();
+    private List<CommonAdapterData> commonAdapterDataList = new ArrayList<CommonAdapterData>();
     private CommonAdapter rightAdapter;
     private CommonAdapter leftAdapter;
     private ListView rightListView;
     private ListView leftListView;
     private DisplayMetrics dm;
-    private List<CommonDataStructure> commonDataStructureSearch = new ArrayList<CommonDataStructure>();
+    private List<CommonAdapterData> commonAdapterDataSearch = new ArrayList<CommonAdapterData>();
     private List<Supplier> supplierList;
     private TextView toobarBack, toobarAdd, toobarTile;
     private CustomSearch customSearch;
     private String selectCategory;
     private List<SupplierCategory> supplierCategoryList;
-    private List<CommonDataStructure> categorylist = new ArrayList<CommonDataStructure>();
+    private List<CommonAdapterData> categorylist = new ArrayList<CommonAdapterData>();
     private String leftItemName="全部";
 
     @Override
@@ -56,26 +55,26 @@ public class SupplierTowListView extends CustomSearchBase implements View.OnClic
         for(Supplier supplier: supplierList)
 
         {
-            CommonDataStructure commonData=new CommonDataStructure();
+            CommonAdapterData commonData=new CommonAdapterData();
             commonData.setName(supplier.getName());
             commonData.setCategory(supplier.getCategory());
             commonData.setId(supplier.getId());
-            commonDataStructureList.add(commonData);
+            commonAdapterDataList.add(commonData);
 
 
 
         }
         supplierCategoryList = DataSupport.findAll(SupplierCategory.class);
-        CommonDataStructure commonDataAll=new CommonDataStructure();
+        CommonAdapterData commonDataAll=new CommonAdapterData();
         commonDataAll.setName("全部");
         categorylist.add(commonDataAll);
-        CommonDataStructure commonDataN=new CommonDataStructure();
+        CommonAdapterData commonDataN=new CommonAdapterData();
         commonDataN.setName("未分类");
         categorylist.add(commonDataN);
         for(SupplierCategory sCategory: supplierCategoryList)
 
         {
-            CommonDataStructure commonData=new CommonDataStructure();
+            CommonAdapterData commonData=new CommonAdapterData();
             commonData.setName(sCategory.getName());
             commonData.setId(sCategory.getId());
             categorylist.add(commonData);
@@ -105,16 +104,16 @@ public class SupplierTowListView extends CustomSearchBase implements View.OnClic
             public void onItemClick(AdapterView<?> adapterView, View view,
                                     int position, long id) {
              Intent   intent= new Intent(SupplierTowListView.this, SupplierForm.class);
-                        if(commonDataStructureSearch.size()!=0) {
+                        if(commonAdapterDataSearch.size()!=0) {
 
                             intent.putExtra("action", "edit");
-                            intent.putExtra("supller_item", String.valueOf(commonDataStructureSearch.get(position).getId()));
+                            intent.putExtra("supller_item", String.valueOf(commonAdapterDataSearch.get(position).getId()));
 
 
                         }else {
 
                             intent.putExtra("action", "edit");
-                            intent.putExtra("supller_item", String.valueOf(commonDataStructureList.get(position).getId()));
+                            intent.putExtra("supller_item", String.valueOf(commonAdapterDataList.get(position).getId()));
 
                         }
                 startActivityForResult(intent,1);
@@ -126,7 +125,7 @@ public class SupplierTowListView extends CustomSearchBase implements View.OnClic
             leftAdapter = new CommonAdapter(SupplierTowListView.this, R.layout.custom_item, categorylist);
             leftAdapter.setSeclection(0);
             leftListView.setAdapter(leftAdapter);
-            rightAdapter = new CommonAdapter(SupplierTowListView.this, R.layout.custom_item, commonDataStructureList);
+            rightAdapter = new CommonAdapter(SupplierTowListView.this, R.layout.custom_item, commonAdapterDataList);
             rightListView.setAdapter(rightAdapter);
             
 
@@ -138,44 +137,44 @@ public class SupplierTowListView extends CustomSearchBase implements View.OnClic
     //筛选条件
     public Object[] search(String name) {
 
-            commonDataStructureSearch.clear();
-            commonDataStructureList.clear();
+            commonAdapterDataSearch.clear();
+            commonAdapterDataList.clear();
 
         supplierList = DataStructure.where("name like ?","%" + name + "%").find(Supplier.class);
         for(Supplier supplier: supplierList)
 
         {
-            CommonDataStructure commonData=new CommonDataStructure();
+            CommonAdapterData commonData=new CommonAdapterData();
             commonData.setName(supplier.getName());
             commonData.setCategory(supplier.getCategory());
             commonData.setId(supplier.getId());
-            commonDataStructureList.add(commonData);
+            commonAdapterDataList.add(commonData);
 
 
 
         }
-        for (int i = 0; i < commonDataStructureList.size(); i++) {
-            int index = commonDataStructureList.get(i).getName().indexOf(name);
+        for (int i = 0; i < commonAdapterDataList.size(); i++) {
+            int index = commonAdapterDataList.get(i).getName().indexOf(name);
             int indey;
             if(selectCategory.equals("全部"))
             {
                 indey=0;
             }else {
-                indey = commonDataStructureList.get(i).getCategory().indexOf(selectCategory);
+                indey = commonAdapterDataList.get(i).getCategory().indexOf(selectCategory);
 
             }
             // 存在匹配的数据
             if (index != -1&&indey!=-1) {
-                commonDataStructureSearch.add(commonDataStructureList.get(i));
+                commonAdapterDataSearch.add(commonAdapterDataList.get(i));
             }
         }
-        return commonDataStructureSearch.toArray();
+        return commonAdapterDataSearch.toArray();
     }
 
     public Object[] categorySearch(String name) {
 
-        commonDataStructureSearch.clear();
-        commonDataStructureList.clear();
+        commonAdapterDataSearch.clear();
+        commonAdapterDataList.clear();
         if(name.equals("全部")||name.equals("未分类"))
         {
             supplierList = DataStructure.findAll(Supplier.class);
@@ -187,50 +186,50 @@ public class SupplierTowListView extends CustomSearchBase implements View.OnClic
         for(Supplier supplier: supplierList)
 
         {
-            CommonDataStructure commonData=new CommonDataStructure();
+            CommonAdapterData commonData=new CommonAdapterData();
             commonData.setName(supplier.getName());
             commonData.setCategory(supplier.getCategory());
             commonData.setId(supplier.getId());
-            commonDataStructureList.add(commonData);
+            commonAdapterDataList.add(commonData);
 
 
 
         }
         if(name.equals("未分类"))
         {
-            for (int i = 0; i < commonDataStructureList.size(); i++) {
-               if(commonDataStructureList.get(i).getCategory().isEmpty())
+            for (int i = 0; i < commonAdapterDataList.size(); i++) {
+               if(commonAdapterDataList.get(i).getCategory().isEmpty())
                {
-                    commonDataStructureSearch.add(commonDataStructureList.get(i));
+                    commonAdapterDataSearch.add(commonAdapterDataList.get(i));
                }
             }
 
         }else if (name.equals("全部"))
         {
-            for (int i = 0; i < commonDataStructureList.size(); i++) {
+            for (int i = 0; i < commonAdapterDataList.size(); i++) {
 
-                    commonDataStructureSearch.add(commonDataStructureList.get(i));
+                    commonAdapterDataSearch.add(commonAdapterDataList.get(i));
 
             }
 
         }
 
         else {
-        for (int i = 0; i < commonDataStructureList.size(); i++) {
+        for (int i = 0; i < commonAdapterDataList.size(); i++) {
 
-                int index = commonDataStructureList.get(i).getCategory().indexOf(name);
+                int index = commonAdapterDataList.get(i).getCategory().indexOf(name);
                 // 存在匹配的数据
                 if (index != -1) {
-                    commonDataStructureSearch.add(commonDataStructureList.get(i));
+                    commonAdapterDataSearch.add(commonAdapterDataList.get(i));
                 }
 
         }}
-        return commonDataStructureSearch.toArray();
+        return commonAdapterDataSearch.toArray();
     }
 //adapter刷新,重写Filter方式会出现BUG.
     public void updateLayout(Object[] obj) {
-        if(commonDataStructureSearch !=null) {
-            rightAdapter = new CommonAdapter(SupplierTowListView.this, R.layout.custom_item, commonDataStructureSearch);
+        if(commonAdapterDataSearch !=null) {
+            rightAdapter = new CommonAdapter(SupplierTowListView.this, R.layout.custom_item, commonAdapterDataSearch);
             rightListView.setAdapter(rightAdapter);
         }
     }
@@ -245,16 +244,16 @@ public class SupplierTowListView extends CustomSearchBase implements View.OnClic
                     updateLayout(obj);
                     categorylist.clear();
                     supplierCategoryList = DataSupport.findAll(SupplierCategory.class);
-                    CommonDataStructure commonDataAll=new CommonDataStructure();
+                    CommonAdapterData commonDataAll=new CommonAdapterData();
                     commonDataAll.setName("全部");
                     categorylist.add(commonDataAll);
-                    CommonDataStructure commonDataN=new CommonDataStructure();
+                    CommonAdapterData commonDataN=new CommonAdapterData();
                     commonDataN.setName("未分类");
                     categorylist.add(commonDataN);
                     for(SupplierCategory sCategory: supplierCategoryList)
 
                     {
-                        CommonDataStructure commonData=new CommonDataStructure();
+                        CommonAdapterData commonData=new CommonAdapterData();
                         commonData.setName(sCategory.getName());
                         commonData.setId(sCategory.getId());
                         categorylist.add(commonData);

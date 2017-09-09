@@ -12,10 +12,9 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.androiderp.CustomDataClass.ProductCategory;
 import com.example.androiderp.CustomDataClass.SupplierCategory;
 import com.example.androiderp.R;
-import com.example.androiderp.adaper.CommonDataStructure;
+import com.example.androiderp.adaper.CommonAdapterData;
 import com.example.androiderp.adaper.CommonListViewAdapter;
 import com.example.androiderp.adaper.DataStructure;
 import com.example.androiderp.custom.CustomSearch;
@@ -35,9 +34,9 @@ import java.util.List;
 public class SupplierCategoryListView extends CustomSearchBase implements View.OnClickListener,
         AdapterView.OnItemClickListener,
         SlideAndDragListView.OnMenuItemClickListener, SlideAndDragListView.OnItemDeleteListener {
-    private List<CommonDataStructure> listdatas = new ArrayList<CommonDataStructure>();
+    private List<CommonAdapterData> listdatas = new ArrayList<CommonAdapterData>();
     private CommonListViewAdapter adapter;
-    private SlideAndDragListView<CommonDataStructure> listView;
+    private SlideAndDragListView<CommonAdapterData> listView;
     private DisplayMetrics dm;
     private List<SupplierCategory> supplierCategoryList;
     private TextView toobarBack, toobarAdd, toobarTile;
@@ -73,7 +72,7 @@ public class SupplierCategoryListView extends CustomSearchBase implements View.O
             indexPositon = supplierCategoryList.indexOf(supplierCategory);
         }
 
-            CommonDataStructure commonData=new CommonDataStructure();
+            CommonAdapterData commonData=new CommonAdapterData();
             commonData.setName(supplierCategory.getName());
             commonData.setId(supplierCategory.getId());
             commonData.setImage(R.drawable.seclec_arrow);
@@ -212,7 +211,7 @@ public class SupplierCategoryListView extends CustomSearchBase implements View.O
         for(SupplierCategory supplierCategory: supplierCategoryList)
 
         {
-            CommonDataStructure commonData=new CommonDataStructure();
+            CommonAdapterData commonData=new CommonAdapterData();
             commonData.setName(supplierCategory.getName());
             commonData.setId(supplierCategory.getId());
             commonData.setImage(R.drawable.seclec_arrow);
@@ -308,7 +307,7 @@ public class SupplierCategoryListView extends CustomSearchBase implements View.O
                     for(SupplierCategory supplierCategory: supplierCategoryList)
 
                     {
-                        CommonDataStructure commonData=new CommonDataStructure();
+                        CommonAdapterData commonData=new CommonAdapterData();
                         commonData.setName(supplierCategory.getName());
                         commonData.setId(supplierCategory.getId());
                         commonData.setImage(R.drawable.seclec_arrow);

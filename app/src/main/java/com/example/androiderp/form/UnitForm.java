@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.androiderp.CustomDataClass.Brand;
+import com.example.androiderp.CustomDataClass.Product;
 import com.example.androiderp.CustomDataClass.Unit;
 import com.example.androiderp.R;
 import com.example.androiderp.adaper.DataStructure;
@@ -83,6 +84,9 @@ private  void formInit()
                         unitL.update(Long.parseLong(customid));
                         Intent intent = new Intent();
                         setResult(RESULT_OK,intent);
+                    Product product=new Product();
+                    product.setUnit(userName.getText().toString());
+                    product.updateAll("unit = ?",unit.getName());
                         isSave=true;
                         UnitForm.this.finish();
                     }

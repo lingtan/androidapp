@@ -17,7 +17,7 @@ import com.example.androiderp.CustomDataClass.SalesOut;
 import com.example.androiderp.CustomDataClass.SalesOutEnty;
 import com.example.androiderp.CustomDataClass.Stock;
 import com.example.androiderp.R;
-import com.example.androiderp.adaper.CommonDataStructure;
+import com.example.androiderp.adaper.CommonAdapterData;
 import com.example.androiderp.adaper.PopuMenuDataStructure;
 import com.example.androiderp.adaper.SaleProductListViewAdapter;
 import com.example.androiderp.common.Common;
@@ -48,8 +48,8 @@ public class PurchaseOutEntyList extends CustomSearchBase implements View.OnClic
     private Intent intentBack;
     private List<PopuMenuDataStructure> popuMenuDatas;
     private List<SalesOutEnty> salesOutEntyList=new ArrayList<SalesOutEnty>();
-    private List<CommonDataStructure> listdatas = new ArrayList<CommonDataStructure>();
-    private SlideAndDragListView<CommonDataStructure> listView;
+    private List<CommonAdapterData> listdatas = new ArrayList<CommonAdapterData>();
+    private SlideAndDragListView<CommonAdapterData> listView;
     private SaleProductListViewAdapter adapter;
     private Menu menu;
     private List<Stock> stockList;
@@ -110,7 +110,7 @@ public class PurchaseOutEntyList extends CustomSearchBase implements View.OnClic
             totalQuantity.setText(String.valueOf(salesOutlist.getQuantity()));
             note.setText(salesOutlist.getNote());
           for(SalesOutEnty salesOutEnty:salesOutEntyList) {
-              CommonDataStructure commonData = new CommonDataStructure();
+              CommonAdapterData commonData = new CommonAdapterData();
               commonData.setId(salesOutEnty.getId());
               commonData.setNumber(salesOutEnty.getNumber());
               commonData.setName(salesOutEnty.getName());
@@ -290,7 +290,7 @@ public class PurchaseOutEntyList extends CustomSearchBase implements View.OnClic
         return super.onTouchEvent(event);
     }
 //根据内容动态测量listview实际高度,动态显示listview内容，此方法，适配器中 getView 方法如果是 RelativeLayout 则显示不正常
-    private void setListViewHeightBasedOnChildren(SlideAndDragListView<CommonDataStructure> listView) {
+    private void setListViewHeightBasedOnChildren(SlideAndDragListView<CommonAdapterData> listView) {
         if (listView == null) {
             return;
         }

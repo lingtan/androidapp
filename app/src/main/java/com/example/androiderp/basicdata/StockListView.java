@@ -15,7 +15,7 @@ import android.widget.Toast;
 import com.example.androiderp.CustomDataClass.SalesOut;
 import com.example.androiderp.CustomDataClass.Stock;
 import com.example.androiderp.R;
-import com.example.androiderp.adaper.CommonDataStructure;
+import com.example.androiderp.adaper.CommonAdapterData;
 import com.example.androiderp.adaper.CommonListViewAdapter;
 import com.example.androiderp.adaper.DataStructure;
 import com.example.androiderp.custom.CustomSearch;
@@ -34,11 +34,11 @@ import java.util.List;
 public class StockListView extends CustomSearchBase implements View.OnClickListener,
         AdapterView.OnItemClickListener,
         SlideAndDragListView.OnMenuItemClickListener, SlideAndDragListView.OnItemDeleteListener {
-    private List<CommonDataStructure> commonDataStructureList = new ArrayList<CommonDataStructure>();
+    private List<CommonAdapterData> commonAdapterDataList = new ArrayList<CommonAdapterData>();
     private CommonListViewAdapter adapter;
-    private SlideAndDragListView<CommonDataStructure> listView;
+    private SlideAndDragListView<CommonAdapterData> listView;
     private DisplayMetrics dm;
-    private List<CommonDataStructure> commonDataStructureSearch = new ArrayList<CommonDataStructure>();
+    private List<CommonAdapterData> commonAdapterDataSearch = new ArrayList<CommonAdapterData>();
     private List<Stock> stockList;
     private TextView toobarBack, toobarAdd, toobarTile;
     private CustomSearch customSearch;
@@ -65,11 +65,11 @@ public class StockListView extends CustomSearchBase implements View.OnClickListe
         for(Stock stock: stockList)
 
         {
-            CommonDataStructure commonData=new CommonDataStructure();
+            CommonAdapterData commonData=new CommonAdapterData();
             commonData.setName(stock.getName());
             commonData.setId(stock.getId());
             commonData.setImage(R.drawable.seclec_arrow);
-            commonDataStructureList.add(commonData);
+            commonAdapterDataList.add(commonData);
 
 
 
@@ -79,13 +79,13 @@ public class StockListView extends CustomSearchBase implements View.OnClickListe
         getWindowManager().getDefaultDisplay().getMetrics(dm);
 
 
-        if(commonDataStructureList.size()!=0) {
+        if(commonAdapterDataList.size()!=0) {
              if(categoryid!=null) {
                  Object[] obj = searchCategory(categoryid);
                  updateLayout("10");
                  toobarTile.setText(categoryid);
              }else {
-                 adapter = new CommonListViewAdapter(StockListView.this, R.layout.custom_item, commonDataStructureList);
+                 adapter = new CommonListViewAdapter(StockListView.this, R.layout.custom_item, commonAdapterDataList);
                  listView.setAdapter(adapter);
              }
 
@@ -128,15 +128,15 @@ public class StockListView extends CustomSearchBase implements View.OnClickListe
                 switch (buttonPosition) {
                     case 0:
                         Intent intent=new Intent(StockListView.this,StockForm.class);
-                        if(commonDataStructureSearch.size()!=0) {
+                        if(commonAdapterDataSearch.size()!=0) {
 
                             intent.putExtra("action", "edit");
-                            intent.putExtra("customid", String.valueOf(commonDataStructureSearch.get(itemPosition).getId()));
+                            intent.putExtra("customid", String.valueOf(commonAdapterDataSearch.get(itemPosition).getId()));
 
                         }else {
 
                             intent.putExtra("action", "edit");
-                            intent.putExtra("customid", String.valueOf(commonDataStructureList.get(itemPosition).getId()));
+                            intent.putExtra("customid", String.valueOf(commonAdapterDataList.get(itemPosition).getId()));
                         }
                         startActivityForResult(intent,1);
 
@@ -149,19 +149,19 @@ public class StockListView extends CustomSearchBase implements View.OnClickListe
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
 
-                                if(isCustom(commonDataStructureList.get(itemPosition - listView.getHeaderViewsCount()).getName().toString()))
+                                if(isCustom(commonAdapterDataList.get(itemPosition - listView.getHeaderViewsCount()).getName().toString()))
                                 {
                                     Toast.makeText(StockListView.this,"已经有业务发生，不能删除",Toast.LENGTH_SHORT).show();
                                     adapter.notifyDataSetChanged();
                                 }else {
-                                    DataStructure.deleteAll(Stock.class, "name = ?", commonDataStructureList.get(itemPosition - listView.getHeaderViewsCount()).getName().toString());
+                                    DataStructure.deleteAll(Stock.class, "name = ?", commonAdapterDataList.get(itemPosition - listView.getHeaderViewsCount()).getName().toString());
 
                                     AlertDialog.Builder dialogOK = new AlertDialog.Builder(StockListView.this);
                                     dialogOK.setMessage("该仓库已经删除");
                                     dialogOK.setNegativeButton("确认", new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
-                                            commonDataStructureList.remove(itemPosition - listView.getHeaderViewsCount());
+                                            commonAdapterDataList.remove(itemPosition - listView.getHeaderViewsCount());
                                             adapter.notifyDataSetChanged();
                                         }
                                     });
@@ -197,40 +197,40 @@ public class StockListView extends CustomSearchBase implements View.OnClickListe
     }
     //筛选条件
     public Object[] searchItem(String name) {
-        if(commonDataStructureSearch !=null) {
-            commonDataStructureSearch.clear();
+        if(commonAdapterDataSearch !=null) {
+            commonAdapterDataSearch.clear();
         }
-        for (int i = 0; i < commonDataStructureList.size(); i++) {
-            int index = commonDataStructureList.get(i).getName().indexOf(name);
+        for (int i = 0; i < commonAdapterDataList.size(); i++) {
+            int index = commonAdapterDataList.get(i).getName().indexOf(name);
             // 存在匹配的数据
             if (index != -1) {
-                commonDataStructureSearch.add(commonDataStructureList.get(i));
+                commonAdapterDataSearch.add(commonAdapterDataList.get(i));
             }
         }
-        return commonDataStructureSearch.toArray();
+        return commonAdapterDataSearch.toArray();
     }
 
     public Object[] searchCategory(String name) {
 
-        if(commonDataStructureSearch !=null) {
-            commonDataStructureSearch.clear();
+        if(commonAdapterDataSearch !=null) {
+            commonAdapterDataSearch.clear();
         }
-        for (int i = 0; i < commonDataStructureList.size(); i++) {
-            if(commonDataStructureList.get(i).getCategory()!=null) {
-                int index = commonDataStructureList.get(i).getCategory().indexOf(name);
+        for (int i = 0; i < commonAdapterDataList.size(); i++) {
+            if(commonAdapterDataList.get(i).getCategory()!=null) {
+                int index = commonAdapterDataList.get(i).getCategory().indexOf(name);
                 // 存在匹配的数据
                 if (index != -1) {
-                    commonDataStructureSearch.add(commonDataStructureList.get(i));
+                    commonAdapterDataSearch.add(commonAdapterDataList.get(i));
                 }
             }
         }
-        return commonDataStructureSearch.toArray();
+        return commonAdapterDataSearch.toArray();
     }
 //adapter刷新,重写Filter方式会出现BUG.
     public void updateLayout(String name) {
-        if(commonDataStructureSearch !=null) {
+        if(commonAdapterDataSearch !=null) {
 
-            adapter = new CommonListViewAdapter(StockListView.this, R.layout.custom_item, commonDataStructureSearch);
+            adapter = new CommonListViewAdapter(StockListView.this, R.layout.custom_item, commonAdapterDataSearch);
             listView.setAdapter(adapter);
         }
     }
@@ -265,23 +265,23 @@ public class StockListView extends CustomSearchBase implements View.OnClickListe
             case 1:
                 if(resultCode==RESULT_OK)
                 {
-                    if(commonDataStructureList.size()!=0) {
-                        commonDataStructureList.clear();
+                    if(commonAdapterDataList.size()!=0) {
+                        commonAdapterDataList.clear();
                     }
                     stockList = DataSupport.findAll(Stock.class);
                     for(Stock stock: stockList)
 
                     {
-                        CommonDataStructure commonData=new CommonDataStructure();
+                        CommonAdapterData commonData=new CommonAdapterData();
                         commonData.setName(stock.getName());
                         commonData.setId(stock.getId());
                         commonData.setImage(R.drawable.seclec_arrow);
-                        commonDataStructureList.add(commonData);
+                        commonAdapterDataList.add(commonData);
 
 
 
                     }
-                    adapter = new CommonListViewAdapter(StockListView.this, R.layout.custom_item, commonDataStructureList);
+                    adapter = new CommonListViewAdapter(StockListView.this, R.layout.custom_item, commonAdapterDataList);
                     listView.setAdapter(adapter);
 
 

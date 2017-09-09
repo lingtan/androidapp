@@ -1,5 +1,17 @@
+/*
+功能：商品信息、商品扫描搜索、商品搜索、商品新增、商品修改、网络状态更变提醒
+主要控件：ListView、Adapter、ustomSearch、TextView
+数据模型：Product、ProductCategory、CommonAdapterData
+ */
+
 package com.example.androiderp.basicdata;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
@@ -7,11 +19,12 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 import com.example.androiderp.CustomDataClass.Product;
 import com.example.androiderp.CustomDataClass.ProductCategory;
 import com.example.androiderp.R;
 import com.example.androiderp.adaper.CommonAdapter;
-import com.example.androiderp.adaper.CommonDataStructure;
+import com.example.androiderp.adaper.CommonAdapterData;
 import com.example.androiderp.adaper.ProductAdapter;
 import com.example.androiderp.custom.CustomSearch;
 import com.example.androiderp.custom.CustomSearchBase;
@@ -28,16 +41,18 @@ public class ProductTowListView extends CustomSearchBase implements View.OnClick
     private ListView rightListView;
     private ListView leftListView;
     private DisplayMetrics dm;
-    private List<Product> productSearch = new ArrayList<Product>();
     private List<Product> productList;
     private TextView toobarBack, toobarAdd, toobarTile, countShow, toobarScreen;
     private CustomSearch customSearch;
     private Intent intent, intentScreen;
     private List<ProductCategory> productCategoryList;
-    private List<CommonDataStructure> categorylist = new ArrayList<CommonDataStructure>();
-    private  String leftListSelecteText;
-    private  int leftListSelecte;
+    private List<CommonAdapterData> categorylist = new ArrayList<CommonAdapterData>();
+    private  String leftListSelecteText="全部产品";
+    private  int leftListSelecte=0;
     private String scanResult;
+    private IntentFilter intentFilter;
+    private NetworkChangeReceiver networkChangeReceiver;
+    private CommonAdapterData proudctcategoryData=new CommonAdapterData();
 
     @Override
     public void iniView(){
@@ -48,12 +63,24 @@ public class ProductTowListView extends CustomSearchBase implements View.OnClick
         widgetListenerSet();
         if(scanResult!=null)
         {
-            search(scanResult,leftListSelecteText);
-            listViewUpdate(productSearch,rightAdapter,rightListView);
-            
+
+            listViewUpdate(search(scanResult,leftListSelecteText),rightAdapter,rightListView);
+
 
         }
 
+
+    }
+//注册广播类型
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        intentFilter=new IntentFilter();
+        intentFilter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
+        intentFilter.addAction("android.net.wifi.WIFI_STATE_CHANGED");
+        intentFilter.addAction("android.net.wifi.STATE_CHANGE");
+        networkChangeReceiver=new NetworkChangeReceiver();
+        registerReceiver(networkChangeReceiver,intentFilter);
 
     }
     //读取数据库
@@ -61,16 +88,16 @@ public class ProductTowListView extends CustomSearchBase implements View.OnClick
     {
         productList = DataSupport.findAll(Product.class);
         productCategoryList = DataSupport.findAll(ProductCategory.class);
-        CommonDataStructure commonDataAll=new CommonDataStructure();
+        CommonAdapterData commonDataAll=new CommonAdapterData();
         commonDataAll.setName("全部产品");
         categorylist.add(commonDataAll);
-        CommonDataStructure commonDataN=new CommonDataStructure();
+        CommonAdapterData commonDataN=new CommonAdapterData();
         commonDataN.setName("未分类");
         categorylist.add(commonDataN);
         for(ProductCategory productCategory: productCategoryList)
 
         {
-            CommonDataStructure commonData=new CommonDataStructure();
+            CommonAdapterData commonData=new CommonAdapterData();
             commonData.setName(productCategory.getName());
             commonData.setId(productCategory.getId());
             categorylist.add(commonData);
@@ -94,13 +121,13 @@ public class ProductTowListView extends CustomSearchBase implements View.OnClick
     {
 
         toobarTile.setText("商品信息");
-        countShow.setText(String.valueOf(productList.size()));
+        countShow.setText(String.valueOf(productList.size()));//统计商品数量并显示
         dm=new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         intent= new Intent(ProductTowListView.this, ProductForm.class);
         intentScreen =getIntent();
-        scanResult= intentScreen.getStringExtra("scanResult");
-        toobarTile.setCompoundDrawables(null,null,null,null);
+        scanResult= intentScreen.getStringExtra("scanResult");//获取扫描返回结果
+        toobarTile.setCompoundDrawables(null,null,null,null);//取消标题图片
         toobarScreen.setOnClickListener(this);
         toobarBack.setOnClickListener(this);
         toobarAdd.setOnClickListener(this);
@@ -109,14 +136,14 @@ public class ProductTowListView extends CustomSearchBase implements View.OnClick
         rightListView.setTextFilterEnabled(true);
         customSearch.addTextChangedListener(textWatcher);
         leftAdapter = new CommonAdapter(ProductTowListView.this, R.layout.custom_item, categorylist);
-        leftAdapter.setSeclection(leftListSelecte);
+        leftAdapter.setSeclection(leftListSelecte);//突出显示
         leftListView.setAdapter(leftAdapter);
         rightAdapter = new ProductAdapter(ProductTowListView.this, R.layout.product_item, productList);
         rightListView.setAdapter(rightAdapter);
 
     }
 
-//控件设置事件
+//控件设置事件，点击编辑、获取左类别的对应的位置及名称
     private void widgetListenerSet()
     {
         leftListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -127,6 +154,7 @@ public class ProductTowListView extends CustomSearchBase implements View.OnClick
                 leftAdapter.notifyDataSetInvalidated();
                 listViewUpdate(categorySearch(categorylist.get(position).getName().toString()),rightAdapter,rightListView);
                 leftListSelecteText = categorylist.get(position).getName().toString();
+                countShow.setText(String.valueOf(productList.size()));
             }
         });
         rightListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -134,19 +162,9 @@ public class ProductTowListView extends CustomSearchBase implements View.OnClick
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view,
                                     int position, long id) {
-                intent.removeExtra("action");
-                if(productSearch.size()!=0) {
-
-                    intent.putExtra("action", "edit");
-                    intent.putExtra("product_item", String.valueOf(productSearch.get(position).getId()));
-
-
-                }else {
-
+                intent.removeExtra("product_item");
                     intent.putExtra("action", "edit");
                     intent.putExtra("product_item", String.valueOf(productList.get(position).getId()));
-
-                }
                 startActivityForResult(intent,1);
 
 
@@ -156,21 +174,23 @@ public class ProductTowListView extends CustomSearchBase implements View.OnClick
     }
 
     //内容查找
-    public List<Product> search(String searchKey,String selecteCategory) {
-         List<Product> searchData = new ArrayList<Product>();
-        if(selecteCategory ==null){
-            selecteCategory ="全部产品";
+    public List<Product> search(String searchKey, String selecteCategory) {
+        List<Product> searchData = new ArrayList<Product>();
+        if(selecteCategory==null)
+        {
+            selecteCategory="全部产";
         }
+
         if(selecteCategory.equals("未分类"))
 
         {
-            searchData=DataSupport.where("category=? and name like ?","", "%" + searchKey + "%").find(Product.class);
+            searchData= DataSupport.where("category=? and (name like ? or number like ?)","", "%" + searchKey + "%","%" + searchKey + "%").find(Product.class);
 
 
 
         }else if (selecteCategory.equals("全部产品"))
         {
-            searchData=DataSupport.where("name like ?","%" + searchKey + "%").find(Product.class);
+            searchData=DataSupport.where("name like ? or number like ?","%" + searchKey + "%","%" + searchKey + "%").find(Product.class);
 
         }
 
@@ -178,13 +198,14 @@ public class ProductTowListView extends CustomSearchBase implements View.OnClick
 
 
 
-                searchData=DataSupport.where("category=? and name like ?",selecteCategory,"%" + searchKey + "%").find(Product.class);
+            searchData=DataSupport.where("category=? and (name like ? or number like ?)",selecteCategory,"%" + searchKey + "%","%" + searchKey + "%").find(Product.class);
 
         }
-        productSearch=searchData;
+        productList=searchData;
         return  searchData;
     }
-//类别
+
+    //类别
     public List<Product> categorySearch(String searchKey) {
 
          List<Product> searchData = new ArrayList<Product>();
@@ -205,67 +226,136 @@ public class ProductTowListView extends CustomSearchBase implements View.OnClick
                 searchData= DataSupport.where("category=?", searchKey).find(Product.class);
 
             }
-            productSearch=searchData;
+            productList=searchData;
         return searchData;
     }
-//adapter刷新,重写Filter方式会出现BUG.
+//adapter刷新
     public void listViewUpdate(List<Product> searchData,ProductAdapter rightAdapter,ListView rightListView) {
         if(searchData !=null) {
             rightAdapter = new ProductAdapter(ProductTowListView.this, R.layout.product_item, searchData);
             rightListView.setAdapter(rightAdapter);
         }
     }
-
+//处理返回结果
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode){
             case 1:
                 if(resultCode==RESULT_OK)
-                { if(productSearch.size()>0)
-                {
-                    rightAdapter = new ProductAdapter(ProductTowListView.this, R.layout.product_item, productSearch);
-                    rightListView.setAdapter(rightAdapter);
-                }else {
-                    if (productList.size() != 0) {
-                        productList.clear();
-                    }
-                    productList = DataSupport.findAll(Product.class);
+               //如果左菜单是"全部产品"，就不改变leftListSelecteText的值。
+                {    if(leftListSelecte!=0)
 
-                    rightAdapter = new ProductAdapter(ProductTowListView.this, R.layout.product_item, productList);
-                    rightListView.setAdapter(rightAdapter);
+                {
+                    leftListSelecteText=data.getStringExtra("returncategory");
+                    //重新统计商品数量并显示
+                    countShow.setText(String.valueOf(search(customSearch.getText().toString(),data.getStringExtra("returncategory")).size()));
+
+
                 }
+                //通过查找方式，刷新Adapter
+                    listViewUpdate(search(customSearch.getText().toString(),leftListSelecteText),rightAdapter,rightListView);
+
+
+                //清空左菜单数据集合
                     if(categorylist.size()!=0)
                     {
                         categorylist.clear();
                     }
+                 //获取商品类别
                     productCategoryList = DataSupport.findAll(ProductCategory.class);
-                    CommonDataStructure commonDataAll=new CommonDataStructure();
+                 // categorylist 增加元素。
+                    CommonAdapterData commonDataAll=new CommonAdapterData();
                     commonDataAll.setName("全部产品");
                     categorylist.add(commonDataAll);
-                    CommonDataStructure commonDataN=new CommonDataStructure();
+                    CommonAdapterData commonDataN=new CommonAdapterData();
                     commonDataN.setName("未分类");
                     categorylist.add(commonDataN);
                     for(ProductCategory productCategory: productCategoryList)
 
                     {
-                        CommonDataStructure commonData=new CommonDataStructure();
+
+                        CommonAdapterData commonData=new CommonAdapterData();
+                        if(productCategory.getName().equals(data.getStringExtra("returncategory")))
+                        {
+                            proudctcategoryData=commonData;
+                        }
                         commonData.setName(productCategory.getName());
                         commonData.setId(productCategory.getId());
                         categorylist.add(commonData);
 
                     }
+                    //如果左菜单是"商品全部"，不改变leftListSelecte的值。
+                    if(leftListSelecte!=0 &&data.getStringExtra("returncategory")!=null) {
+                        leftListSelecte = categorylist.indexOf(proudctcategoryData);
 
+                    }
                     leftAdapter = new CommonAdapter(ProductTowListView.this, R.layout.custom_item, categorylist);
                     leftAdapter.setSeclection(leftListSelecte);
                     leftListView.setAdapter(leftAdapter);
-                    countShow.setText(String.valueOf(productList.size()));
-                }
+
+                   }
                 break;
             case 2:
                 if(resultCode==RESULT_OK) {
-
-                    customSearch.requestFocusFromTouch();
+                    //通过扫描返回的结果改变customSearch的值
+                    customSearch.requestFocusFromTouch();//customSearch获得焦点
                     customSearch.setText(data.getStringExtra("scanResult"));
+
+                }
+                break;
+            case 3:
+                if(resultCode==RESULT_OK)
+                {
+                     if(leftListSelecte!=0 && data.getStringExtra("returncategory")!=null)
+
+                    {
+
+
+                        leftListSelecteText=data.getStringExtra("returncategory");
+                        //重新统计商品数量并显示
+                        countShow.setText(String.valueOf(search(customSearch.getText().toString(),data.getStringExtra("returncategory")).size()));
+
+
+                    }
+
+                    listViewUpdate(search(customSearch.getText().toString(),leftListSelecteText),rightAdapter,rightListView);
+                    //清空左菜单数据集合
+                    if(categorylist.size()!=0)
+                    {
+                        categorylist.clear();
+                    }
+                    //获取商品类别
+                    productCategoryList = DataSupport.findAll(ProductCategory.class);
+                    // categorylist 增加元素。
+                    CommonAdapterData commonDataAll=new CommonAdapterData();
+                    commonDataAll.setName("全部产品");
+                    categorylist.add(commonDataAll);
+                    CommonAdapterData commonDataN=new CommonAdapterData();
+                    commonDataN.setName("未分类");
+                    categorylist.add(commonDataN);
+                    for(ProductCategory productCategory: productCategoryList)
+
+                    {
+
+                        CommonAdapterData commonData=new CommonAdapterData();
+                        if(productCategory.getName().equals(data.getStringExtra("returncategory")))
+                        {
+                            proudctcategoryData=commonData;
+                        }
+                        commonData.setName(productCategory.getName());
+                        commonData.setId(productCategory.getId());
+                        categorylist.add(commonData);
+
+                    }
+                    //如果左菜单是"商品全部"，不改变leftListSelecte的值。
+                    if(leftListSelecte!=0 && data.getStringExtra("returncategory")!=null) {
+                        leftListSelecte = categorylist.indexOf(proudctcategoryData);
+
+
+                    }
+                    leftAdapter = new CommonAdapter(ProductTowListView.this, R.layout.custom_item, categorylist);
+                    leftAdapter.setSeclection(leftListSelecte);
+                    leftListView.setAdapter(leftAdapter);
 
                 }
                 break;
@@ -279,18 +369,18 @@ public class ProductTowListView extends CustomSearchBase implements View.OnClick
     @Override
     public void onClick(View v) {
         switch(v.getId())
-        {
+        {   //返回
             case R.id.custom_toobar_left:
                 ProductTowListView.this.finish();
                 break;
-
+            //新增按钮
             case R.id.custom_toobar_right:
 
                 intent.removeExtra("product_item");
                 intent.putExtra("action","add");
-                startActivityForResult(intent,1);
+                startActivityForResult(intent,3);
                 break;
-
+            //扫描
             case R.id.customtoobar_screen:
                 Intent openCameraIntent = new Intent(ProductTowListView.this, CommonScanActivity.class);
                 openCameraIntent.putExtra(Constant.REQUEST_SCAN_MODE,Constant.REQUEST_SCAN_MODE_ALL_MODE);
@@ -328,4 +418,28 @@ public class ProductTowListView extends CustomSearchBase implements View.OnClick
 
         }
     };
+//自定义广播类型
+    class NetworkChangeReceiver extends BroadcastReceiver {
+//重写onReceive方法
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            ConnectivityManager connectionManager = (ConnectivityManager)
+                    getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo networkInfo = connectionManager.getActiveNetworkInfo();
+            if (networkInfo != null && networkInfo.isConnected()) {
+
+            } else {
+                Toast.makeText(context, "没有网络，请确认WIFI是否打开",
+                        Toast.LENGTH_SHORT).show();
+            }
+
+        }
+
+    }
+//反注册广播
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(networkChangeReceiver);
+    }
 }

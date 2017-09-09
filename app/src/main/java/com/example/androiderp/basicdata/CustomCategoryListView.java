@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import com.example.androiderp.CustomDataClass.CustomCategory;
 import com.example.androiderp.R;
-import com.example.androiderp.adaper.CommonDataStructure;
+import com.example.androiderp.adaper.CommonAdapterData;
 import com.example.androiderp.adaper.CommonListViewAdapter;
 import com.example.androiderp.adaper.DataStructure;
 import com.example.androiderp.custom.CustomSearch;
@@ -34,9 +34,9 @@ import java.util.List;
 public class CustomCategoryListView extends CustomSearchBase implements View.OnClickListener,
         AdapterView.OnItemClickListener,
         SlideAndDragListView.OnMenuItemClickListener, SlideAndDragListView.OnItemDeleteListener {
-    private List<CommonDataStructure> listdatas = new ArrayList<CommonDataStructure>();
+    private List<CommonAdapterData> listdatas = new ArrayList<CommonAdapterData>();
     private CommonListViewAdapter adapter;
-    private SlideAndDragListView<CommonDataStructure> listView;
+    private SlideAndDragListView<CommonAdapterData> listView;
     private DisplayMetrics dm;
     private List<CustomCategory> customCategoryList;
     private TextView toobarBack, toobarAdd, toobarTile;
@@ -72,7 +72,7 @@ public class CustomCategoryListView extends CustomSearchBase implements View.OnC
             indexPositon = customCategoryList.indexOf(customCategory);
         }
 
-            CommonDataStructure commonData=new CommonDataStructure();
+            CommonAdapterData commonData=new CommonAdapterData();
             commonData.setName(customCategory.getName());
             commonData.setId(customCategory.getId());
             commonData.setImage(R.drawable.seclec_arrow);
@@ -211,7 +211,7 @@ public class CustomCategoryListView extends CustomSearchBase implements View.OnC
         for(CustomCategory customCategory: customCategoryList)
 
         {
-            CommonDataStructure commonData=new CommonDataStructure();
+            CommonAdapterData commonData=new CommonAdapterData();
             commonData.setName(customCategory.getName());
             commonData.setId(customCategory.getId());
             commonData.setImage(R.drawable.seclec_arrow);
@@ -307,7 +307,7 @@ public class CustomCategoryListView extends CustomSearchBase implements View.OnC
                     for(CustomCategory customCategory: customCategoryList)
 
                     {
-                        CommonDataStructure commonData=new CommonDataStructure();
+                        CommonAdapterData commonData=new CommonAdapterData();
                         commonData.setName(customCategory.getName());
                         commonData.setId(customCategory.getId());
                         commonData.setImage(R.drawable.seclec_arrow);

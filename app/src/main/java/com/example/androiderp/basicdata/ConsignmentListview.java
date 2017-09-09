@@ -13,12 +13,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.androiderp.CustomDataClass.Brand;
 import com.example.androiderp.CustomDataClass.Consignment;
 import com.example.androiderp.CustomDataClass.ProductCategory;
 import com.example.androiderp.CustomDataClass.SalesOut;
 import com.example.androiderp.R;
-import com.example.androiderp.adaper.CommonDataStructure;
+import com.example.androiderp.adaper.CommonAdapterData;
 import com.example.androiderp.adaper.CommonListViewAdapter;
 import com.example.androiderp.adaper.DataStructure;
 import com.example.androiderp.custom.CustomSearch;
@@ -38,11 +37,11 @@ import java.util.List;
 public class ConsignmentListview extends CustomSearchBase implements View.OnClickListener,
         AdapterView.OnItemClickListener,
         SlideAndDragListView.OnMenuItemClickListener, SlideAndDragListView.OnItemDeleteListener {
-    private List<CommonDataStructure> listdatas = new ArrayList<CommonDataStructure>();
+    private List<CommonAdapterData> listdatas = new ArrayList<CommonAdapterData>();
     private CommonListViewAdapter adapter;
-    private SlideAndDragListView<CommonDataStructure> listView;
+    private SlideAndDragListView<CommonAdapterData> listView;
     private DisplayMetrics dm;
-    private List<CommonDataStructure> commonDataStructureSearch= new ArrayList<CommonDataStructure>();
+    private List<CommonAdapterData> commonAdapterDataSearch = new ArrayList<CommonAdapterData>();
     private List<Consignment> consignmentList;
     private TextView toobarBack, toobarAdd, toobarTile;
     private CustomSearch customSearch;
@@ -79,7 +78,7 @@ public class ConsignmentListview extends CustomSearchBase implements View.OnClic
             indexPositon = consignmentList.indexOf(consignment);
         }
 
-            CommonDataStructure commonData=new CommonDataStructure();
+            CommonAdapterData commonData=new CommonAdapterData();
             commonData.setName(consignment.getName());
             commonData.setId(consignment.getId());
             commonData.setImage(R.drawable.seclec_arrow);
@@ -221,7 +220,7 @@ public class ConsignmentListview extends CustomSearchBase implements View.OnClic
         for(Consignment consignment:consignmentList)
 
         {
-            CommonDataStructure commonData=new CommonDataStructure();
+            CommonAdapterData commonData=new CommonAdapterData();
             commonData.setName(consignment.getName());
             commonData.setId(consignment.getId());
             commonData.setImage(R.drawable.seclec_arrow);
@@ -317,7 +316,7 @@ public class ConsignmentListview extends CustomSearchBase implements View.OnClic
                     for(Consignment consignment: consignmentList)
 
                     {
-                        CommonDataStructure commonData=new CommonDataStructure();
+                        CommonAdapterData commonData=new CommonAdapterData();
                         commonData.setName(consignment.getName());
                         commonData.setId(consignment.getId());
                         commonData.setImage(R.drawable.seclec_arrow);
