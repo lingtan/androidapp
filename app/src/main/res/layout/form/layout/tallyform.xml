@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#F0F3F6"
+    >
+    <include layout="@layout/customtoobar_d" android:id="@+id/supplierform_toobar"/>
+    <ScrollView
+        android:id="@+id/tab"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:fillViewport="true"
+        android:scrollbars="none" >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+             >
+    <LinearLayout style="@style/wrap_layout" >
+        <!-- 无圆角-->
+        <LinearLayout style="@style/mid_layout"
+            android:id="@+id/balanceaccount_layout">
+            <TextView style="@style/usertext"
+                android:text="结算账户：" />
+
+            <TextView android:layout_width="170dp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_clo"
+                android:id="@+id/balanceaccount"
+                android:hint="选择结算账户"
+                android:layout_gravity="center_vertical"
+                />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/from_arrow"
+                android:gravity="right"/>
+        </LinearLayout>
+        <View style="@style/bg_line"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"/>
+        <!-- 下圆角-->
+        <LinearLayout style="@style/bottom_layout"
+            android:id="@+id/accounts_layout">
+            <TextView style="@style/usertext"
+                android:text="账目类型："
+                />
+
+
+            <TextView android:layout_width="170dp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_clo"
+                android:id="@+id/accounts"
+                android:hint="请选账目类型"
+                android:layout_gravity="center_vertical"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/from_arrow"
+                android:gravity="right"/>
+        </LinearLayout>
+        <View style="@style/bg_line"  android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"/>
+        <!-- 下圆角-->
+        <LinearLayout style="@style/bottom_layout">
+            <TextView style="@style/usertext"
+                android:text="交易金额" />
+            <EditText
+                android:layout_width="205dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/amount"
+                android:textSize="14dp"
+                android:hint="请输入金额"
+                android:textColorHint="#E56907"
+                android:maxLines="1"
+                android:inputType="phone"/>
+        </LinearLayout>
+        <View style="@style/bg_line"  android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"/>
+        <LinearLayout style="@style/top_layout"
+            android:id="@+id/businessdata_layout"
+           >
+            <TextView  style="@style/usertext"
+                android:text="业务日期" />
+            <TextView android:layout_width="170dp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_clo"
+                android:id="@+id/businessdata"
+                android:hint="业务日期"
+                />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/from_arrow"
+                android:gravity="right"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+            <LinearLayout style="@style/hide_layout_to"
+                android:layout_marginTop="10dp">
+        <LinearLayout style="@style/bottom_layout"
+            android:layout_marginTop="10dp"
+            android:gravity="top">
+            <TextView style="@style/usertext"
+                android:text="备注：" />
+            <EditText
+                android:layout_width="200dp"
+                android:layout_height="match_parent"
+                android:id="@+id/note"
+                android:textSize="14dp"
+                android:hint="商品备注信息"
+                android:background="@null"
+                android:gravity="top"
+                android:minLines="3"
+                android:inputType="text"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+ </LinearLayout>
+    </ScrollView>
+</LinearLayout>
+

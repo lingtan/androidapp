@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +12,6 @@ import android.widget.AdapterView;
 import com.example.androiderp.CustomDataClass.GridView;
 import com.example.androiderp.R;
 import com.example.androiderp.adaper.CusteomGridAdapter;
-import com.example.androiderp.basicdata.AccountListview;
 import com.example.androiderp.basicdata.AppropriationListView;
 import com.example.androiderp.basicdata.CustomTowListView;
 import com.example.androiderp.basicdata.EmployeeListview;
@@ -25,12 +23,12 @@ import com.example.androiderp.basicdata.StockListView;
 import com.example.androiderp.basicdata.PurchaseOutListView;
 import com.example.androiderp.basicdata.StockTakingListView;
 import com.example.androiderp.basicdata.SupplierTowListView;
+import com.example.androiderp.basicdata.TallyListView;
 import com.example.androiderp.custom.CustomGridView;
 import com.example.androiderp.form.AppropriationForm;
 import com.example.androiderp.form.PurchaseProductForm;
 import com.example.androiderp.form.SaleProductForm;
 import com.example.androiderp.form.StockTakingForm;
-import com.example.androiderp.home.ErpHome;
 
 import org.litepal.crud.DataSupport;
 
@@ -146,7 +144,7 @@ public class FirstFragment extends Fragment {
                         startActivity(intent);
                         break;
                     case "账户管理":
-                        intent = new Intent(context, AccountListview.class);
+                        intent = new Intent(context, TallyListView.class);
                         startActivity(intent);
                         break;
                     case "":

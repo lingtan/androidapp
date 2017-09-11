@@ -449,7 +449,7 @@ public class SaleProductForm extends CustomSearchBase implements View.OnClickLis
                 DatePickerDialog.OnDateSetListener listener=new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        data.setText(year+"-"+(++month)+"-"+day);
+                        data.setText(year+"-"+(++month)+"-"+dayOfMonth);
                     }
                 };
                 DatePickerDialog dialog=new DatePickerDialog(SaleProductForm.this, 0,listener,year,month,day);//后边三个参数为显示dialog时默认的日期，月份从0开始，0-11对应1-12个月

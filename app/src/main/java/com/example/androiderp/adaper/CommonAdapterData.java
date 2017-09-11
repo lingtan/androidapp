@@ -10,6 +10,7 @@ public class CommonAdapterData {
     private double saleamount;
     private double salesprice;
     private int image;
+    private int selectImage;
     private String category;
     private String badge;
     private int id;
@@ -76,6 +77,14 @@ public class CommonAdapterData {
 
     public void setImage(int image) {
         this.image = image;
+    }
+
+    public int getSelectImage() {
+        return selectImage;
+    }
+
+    public void setSelectImage(int selectImage) {
+        this.selectImage = selectImage;
     }
 
     public String getBadge() {

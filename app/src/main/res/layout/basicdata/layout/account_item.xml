@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:id="@+id/custom_item_layout"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/custom_item_layout_one"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:gravity="center"
+       >
+        <ImageView
+            android:id="@+id/account_image"
+            android:layout_width="34dp"
+            android:layout_height="28dp"
+            android:src="@drawable/toobar_add"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/account_name"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="40dp"
+            android:textStyle="bold"
+            android:textSize="13dip" />
+    <TextView
+        android:id="@+id/account_amount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="20dp"
+        android:layout_alignParentRight="true"
+        android:textColor="#E59842"
+        android:textSize="13dip" />
+
+    </RelativeLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true">
+
+        <ImageView
+            android:id="@+id/select_image"
+            android:layout_width="34dp"
+            android:layout_height="28dp"
+            android:layout_marginRight="16dp"
+            android:src="@drawable/toobar_add"
+            android:visibility="gone"
+            />
+    </LinearLayout>
+</RelativeLayout>
+
+
+
+
