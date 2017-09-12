@@ -35,7 +35,7 @@ android:padding="8dip">
                 android:textSize="14dip" />
 
         </RelativeLayout>
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
@@ -44,18 +44,20 @@ android:padding="8dip">
 
         <TextView
             android:id="@+id/tally_accounts"
-            android:layout_width="80dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
             android:textColor="#E59842"
-            android:textSize="12dip" />
+            android:layout_marginLeft="15dp"
+            android:textSize="14dip" />
     <TextView
             android:id="@+id/tally_amount"
-            android:layout_width="60dp"
+        android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+        android:layout_marginRight="15dp"
             android:textColor="#E59842"
             android:textSize="14dip" />
-</LinearLayout>
+</RelativeLayout>
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -68,7 +70,7 @@ android:padding="8dip">
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"
                 android:textColor="#343434"
-                android:textSize="12dip" />
+                android:textSize="14dip" />
 
 
         </LinearLayout>
@@ -82,7 +84,7 @@ android:padding="8dip">
             android:id="@+id/saleout_arrow"
             android:layout_width="34dp"
             android:layout_height="28dp"
-            android:layout_marginRight="16dp"
+            android:layout_marginRight="15dp"
             android:src="@drawable/toobar_add"
             />
     </LinearLayout>

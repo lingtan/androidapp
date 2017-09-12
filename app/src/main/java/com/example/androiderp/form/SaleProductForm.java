@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.androiderp.CustomDataClass.AppropriationEnty;
+import com.example.androiderp.CustomDataClass.BalanceAccount;
 import com.example.androiderp.CustomDataClass.Consignment;
 import com.example.androiderp.CustomDataClass.Custom;
 import com.example.androiderp.CustomDataClass.Employee;
@@ -35,11 +36,13 @@ import com.example.androiderp.CustomDataClass.ShoppingData;
 import com.example.androiderp.CustomDataClass.Stock;
 import com.example.androiderp.CustomDataClass.StockIniti;
 import com.example.androiderp.CustomDataClass.StockTakingEnty;
+import com.example.androiderp.CustomDataClass.Tally;
 import com.example.androiderp.R;
 import com.example.androiderp.adaper.CommonAdapterData;
 import com.example.androiderp.adaper.DataStructure;
 import com.example.androiderp.adaper.PopuMenuDataStructure;
 import com.example.androiderp.adaper.SaleProductListViewAdapter;
+import com.example.androiderp.basicdata.BalanceAccountListView;
 import com.example.androiderp.basicdata.ConsignmentListview;
 import com.example.androiderp.basicdata.EmployeeIntentListview;
 import com.example.androiderp.basicdata.ProductBadgeListView;
@@ -71,9 +74,9 @@ public class SaleProductForm extends CustomSearchBase implements View.OnClickLis
     private InputMethodManager manager;
     private EditText note;
     private LinearLayout productAddLayout;
-    private TextView toobarSave,toobarTile,toobarBack,toobarAdd,category,name,number,data,consign,totalAmout,totalQuantity;
+    private TextView toobarSave,toobarTile,toobarBack,toobarAdd,balanceAccount,category,name,number,data,consign,totalAmout,totalQuantity;
     private DisplayMetrics dm;
-    private LinearLayout categoryLayout,customLayout,stockLayout,dataLayout,consignmentLayout,screenLayout,totalLayout;
+    private LinearLayout categoryLayout,customLayout,stockLayout,dataLayout,balanceAccountLayout,consignmentLayout,screenLayout,totalLayout;
     private Custom custom;
     private Stock  stock;
     private Employee employee;
@@ -90,6 +93,7 @@ public class SaleProductForm extends CustomSearchBase implements View.OnClickLis
     private Menu menu;
     private List<Stock> stockList;
     private List<Employee> employeeList;
+    private BalanceAccount balanceAccountList;
     private Calendar calendar;
     private int year,month,day;
     private double quantityCount;
@@ -116,6 +120,7 @@ public class SaleProductForm extends CustomSearchBase implements View.OnClickLis
         number=(TextView)findViewById(R.id.stockin);
         data=(TextView)findViewById(R.id.businessdata);
         consign=(TextView)findViewById(R.id.billnumber);
+        balanceAccount=(TextView)findViewById(R.id.balanceaccount);
         note=(EditText)findViewById(R.id.note);
         screenLayout=(LinearLayout) findViewById(R.id.number_screen);
         category=(TextView)findViewById(R.id.documentmaker);
@@ -128,6 +133,8 @@ public class SaleProductForm extends CustomSearchBase implements View.OnClickLis
         customLayout=(LinearLayout)findViewById(R.id.stockout_layout);
         dataLayout=(LinearLayout)findViewById(R.id.businessdata_layout);
         consignmentLayout=(LinearLayout)findViewById(R.id.billnumber_layout);
+        balanceAccountLayout=(LinearLayout)findViewById(R.id.balanceaccount_layout);
+        balanceAccountLayout.setOnClickListener(this);
         totalQuantity=(TextView)findViewById(R.id.product_totalfqty);
         totalAmout=(TextView)findViewById(R.id.product_totalamount);
         totalLayout=(LinearLayout)findViewById(R.id.product_total_layout);
@@ -171,10 +178,11 @@ public class SaleProductForm extends CustomSearchBase implements View.OnClickLis
     private void  formInit()
     {
 
-            custom = DataSupport.findFirst(Custom.class);
+        custom = DataSupport.findFirst(Custom.class);
         stock = DataSupport.findFirst(Stock.class);
         employee = DataSupport.findFirst(Employee.class);
         consignment = DataSupport.findFirst(Consignment.class);
+        balanceAccountList=DataSupport.findFirst(BalanceAccount.class);
 
         if(custom==null)
         {
@@ -200,6 +208,12 @@ public class SaleProductForm extends CustomSearchBase implements View.OnClickLis
 
         }else {
             consign.setText(consignment.getName());
+        }
+        if(balanceAccountList==null)
+        {
+
+        }else {
+            balanceAccount.setText(balanceAccountList.getName());
         }
 
 
@@ -364,6 +378,15 @@ public class SaleProductForm extends CustomSearchBase implements View.OnClickLis
                     salesOut.setNote(note.getText().toString().trim());
                     salesOut.setBilltype("2");
                     salesOut.save();
+                    Tally tally=new Tally();
+                    tally.setNumber("JZLS" + fdate);
+                    tally.setBalanceAccount(balanceAccount.getText().toString());
+                    tally.setAccounts("客户");
+                    tally.setDealings(name.getText().toString());
+                    tally.setDate(fdate);
+                    tally.setAmount(amountCount);
+                    tally.setNote(note.getText().toString());
+                    tally.save();
                     Toast.makeText(SaleProductForm.this, "新增成功", Toast.LENGTH_SHORT).show();
                     toobarSave.setVisibility(View.GONE);
                     toobarAdd.setVisibility(View.VISIBLE);
@@ -396,6 +419,13 @@ public class SaleProductForm extends CustomSearchBase implements View.OnClickLis
                 Intent intentcustom=new Intent(SaleProductForm.this, SelectCustomListView.class);
                 intentcustom.putExtra("index",name.getText().toString());
                 startActivityForResult(intentcustom,8);
+
+
+                break;
+            case R.id.balanceaccount_layout:
+                Intent intentBalance=new Intent(SaleProductForm.this, BalanceAccountListView.class);
+                intentBalance.putExtra("index",balanceAccount.getText().toString());
+                startActivityForResult(intentBalance,13);
 
 
                 break;
@@ -543,6 +573,11 @@ public class SaleProductForm extends CustomSearchBase implements View.OnClickLis
             case 12:
                 if(resultCode==RESULT_OK){
                     category.setText(data.getStringExtra("data_return"));
+                }
+                break;
+            case 13:
+                if(resultCode==RESULT_OK){
+                    balanceAccount.setText(data.getStringExtra("data_return"));
                 }
                 break;
             case 4:

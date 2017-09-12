@@ -10,6 +10,7 @@ public class Tally extends DataSupport {
     private int id;
     private String number;
     private String balanceAccount;
+    private String dealings;
     private String accounts;
     private String business;
     private String date;
@@ -38,6 +39,14 @@ public class Tally extends DataSupport {
 
     public void setBalanceAccount(String balanceAccount) {
         this.balanceAccount = balanceAccount;
+    }
+
+    public String getDealings() {
+        return dealings;
+    }
+
+    public void setDealings(String dealings) {
+        this.dealings = dealings;
     }
 
     public String getAccounts() {

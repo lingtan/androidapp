@@ -350,6 +350,7 @@ public class ReturnPurchaseProductForm extends CustomSearchBase implements View.
                     salesOut.setNote(note.getText().toString().trim());
                     salesOut.setBilltype("1");
                     salesOut.save();
+                    
                     Toast.makeText(ReturnPurchaseProductForm.this, "新增成功", Toast.LENGTH_SHORT).show();
                     toobarSave.setVisibility(View.GONE);
                     toobarAdd.setVisibility(View.VISIBLE);

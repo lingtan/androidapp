@@ -87,24 +87,11 @@ public class TallyForm extends CustomSearchBase implements View.OnClickListener{
 // 设置图片大小
         errorIcon.setBounds(new Rect(0, 0, errorIcon.getIntrinsicWidth(), errorIcon.getIntrinsicHeight()));
         save.setText("保存");
-        formInit();
         getDate();
         toobarTile.setText("记账");
 
     }
-    private void  formInit()
-    {
 
-        stock = DataSupport.findFirst(Stock.class);
-
-        if(stock==null)
-        {
-
-        }else {
-            balanceAccount.setText(stock.getName());
-        }
-
-    }
 
     //获取当前日期
     private void getDate() {

@@ -74,7 +74,13 @@ public class TallyAdapter extends ArrayAdapter<Tally>   {
         DecimalFormat df = new DecimalFormat("#####0.00");
         // 重新获取ViewHolder
         viewHolder.number.setText(data.get(position).getNumber());
-        viewHolder.accounts.setText(data.get(position).getAccounts());
+        if(data.get(position).getDealings()!=null)
+        {
+            viewHolder.accounts.setText(data.get(position).getDealings());
+        }else {
+            viewHolder.accounts.setText(data.get(position).getAccounts());
+        }
+
         viewHolder.amount.setText("￥"+df.format(data.get(position).getAmount()));
         viewHolder.Fdate.setText(data.get(position).getDate().toString());
         viewHolder.note.setText(data.get(position).getNote());

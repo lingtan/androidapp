@@ -22,6 +22,7 @@ import android.widget.ListAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.androiderp.CustomDataClass.BalanceAccount;
 import com.example.androiderp.CustomDataClass.Consignment;
 import com.example.androiderp.CustomDataClass.Employee;
 import com.example.androiderp.CustomDataClass.Product;
@@ -32,11 +33,13 @@ import com.example.androiderp.CustomDataClass.SalesOutEnty;
 import com.example.androiderp.CustomDataClass.ShoppingData;
 import com.example.androiderp.CustomDataClass.Stock;
 import com.example.androiderp.CustomDataClass.Supplier;
+import com.example.androiderp.CustomDataClass.Tally;
 import com.example.androiderp.R;
 import com.example.androiderp.adaper.CommonAdapterData;
 import com.example.androiderp.adaper.DataStructure;
 import com.example.androiderp.adaper.PopuMenuDataStructure;
 import com.example.androiderp.adaper.SaleProductListViewAdapter;
+import com.example.androiderp.basicdata.BalanceAccountListView;
 import com.example.androiderp.basicdata.ConsignmentListview;
 import com.example.androiderp.basicdata.EmployeeIntentListview;
 import com.example.androiderp.basicdata.ProductBadgeListView;
@@ -69,9 +72,9 @@ public class PurchaseProductForm extends CustomSearchBase implements View.OnClic
     private InputMethodManager manager;
     private EditText note;
     private LinearLayout productAddLayout;
-    private TextView toobarSave, toobarTile, toobarBack, toobarAdd,category,name,number,data, consign, totalAmout, totalQuantity;
+    private TextView toobarSave,balanceAccount, toobarTile, toobarBack, toobarAdd,category,name,number,data, consign, totalAmout, totalQuantity;
     private DisplayMetrics dm;
-    private LinearLayout categoryLayout,customLayout,stockLayout,dataLayout,consignmentLayout,screenLayout,totalLayout;
+    private LinearLayout categoryLayout,customLayout,stockLayout,balanceAccountLayout,dataLayout,consignmentLayout,screenLayout,totalLayout;
     private Supplier supplier;
     private Stock stock;
     private Employee employee;
@@ -89,6 +92,7 @@ public class PurchaseProductForm extends CustomSearchBase implements View.OnClic
     private Menu menu;
     private List<Stock> stockList;
     private List<Employee> employeeList;
+    private BalanceAccount balanceAccountList;
     private Calendar calendar;
     private int year,month,day;
     private double countall;
@@ -110,6 +114,7 @@ public class PurchaseProductForm extends CustomSearchBase implements View.OnClic
         data=(TextView)findViewById(R.id.businessdata);
         consign =(TextView)findViewById(R.id.billnumber);
         note=(EditText)findViewById(R.id.note);
+        balanceAccount=(TextView)findViewById(R.id.balanceaccount);
         screenLayout=(LinearLayout) findViewById(R.id.number_screen);
         category=(TextView)findViewById(R.id.documentmaker);
         toobarSave =(TextView)findViewById(R.id.customtoobar_right);
@@ -124,6 +129,8 @@ public class PurchaseProductForm extends CustomSearchBase implements View.OnClic
         totalQuantity =(TextView)findViewById(R.id.product_totalfqty);
         totalAmout =(TextView)findViewById(R.id.product_totalamount);
         totalLayout=(LinearLayout)findViewById(R.id.product_total_layout);
+        balanceAccountLayout=(LinearLayout)findViewById(R.id.balanceaccount_layout);
+        balanceAccountLayout.setOnClickListener(this);
         stockLayout.setOnClickListener(this);
         customLayout.setOnClickListener(this);
         dataLayout.setOnClickListener(this);
@@ -167,6 +174,7 @@ public class PurchaseProductForm extends CustomSearchBase implements View.OnClic
         stock = DataSupport.findFirst(Stock.class);
         employee = DataSupport.findFirst(Employee.class);
         consignment = DataSupport.findFirst(Consignment.class);
+        balanceAccountList=DataSupport.findFirst(BalanceAccount.class);
         if(supplier ==null)
         {
 
@@ -191,6 +199,12 @@ public class PurchaseProductForm extends CustomSearchBase implements View.OnClic
 
         }else {
             consign.setText(consignment.getName());
+        }
+        if(balanceAccountList==null)
+        {
+
+        }else {
+            balanceAccount.setText(balanceAccountList.getName());
         }
 
 
@@ -340,6 +354,15 @@ public class PurchaseProductForm extends CustomSearchBase implements View.OnClic
                     salesOut.setNote(note.getText().toString().trim());
                     salesOut.setBilltype("1");
                     salesOut.save();
+                    Tally   tally=new Tally();
+                    tally.setNumber("JZLS" + fdate);
+                    tally.setBalanceAccount(balanceAccount.getText().toString());
+                    tally.setAccounts("供应商");
+                    tally.setDealings(name.getText().toString());
+                    tally.setDate(fdate);
+                    tally.setAmount(-amountCount);
+                    tally.setNote(note.getText().toString());
+                    tally.save();
                     Toast.makeText(PurchaseProductForm.this,"新增成功",Toast.LENGTH_SHORT).show();
                     toobarSave.setVisibility(View.GONE);
                     toobarAdd.setVisibility(View.VISIBLE);
@@ -369,6 +392,13 @@ public class PurchaseProductForm extends CustomSearchBase implements View.OnClic
                 Intent intentcustom=new Intent(PurchaseProductForm.this, SelectSupplierListView.class);
                 intentcustom.putExtra("index",name.getText().toString());
                 startActivityForResult(intentcustom,8);
+
+
+                break;
+            case R.id.balanceaccount_layout:
+                Intent intentBalance=new Intent(PurchaseProductForm.this, BalanceAccountListView.class);
+                intentBalance.putExtra("index",balanceAccount.getText().toString());
+                startActivityForResult(intentBalance,13);
 
 
                 break;
@@ -515,6 +545,11 @@ public class PurchaseProductForm extends CustomSearchBase implements View.OnClic
             case 12:
                 if(resultCode==RESULT_OK){
                     category.setText(data.getStringExtra("data_return"));
+                }
+
+            case 13:
+                if(resultCode==RESULT_OK){
+                    balanceAccount.setText(data.getStringExtra("data_return"));
                 }
                 break;
             case 4:

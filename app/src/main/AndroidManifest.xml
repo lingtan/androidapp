@@ -95,6 +95,7 @@
         <activity android:name=".basicdata.BrandListView"></activity>
         <activity android:name=".basicdata.AccountsListView"></activity>
         <activity android:name=".basicdata.TallyAccountsListView"></activity>
+        <activity android:name=".basicdata.TallyExpandableListView"></activity>
         <activity android:name=".basicdata.TallyAccountsEntyList"></activity>
         <activity android:name=".basicdata.BrandBadgeListView"></activity>
         <activity android:name=".basicdata.SupplierTowListView"></activity>
