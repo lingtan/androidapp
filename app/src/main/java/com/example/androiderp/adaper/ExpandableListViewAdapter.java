@@ -8,6 +8,7 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.example.androiderp.CustomDataClass.BalanceAccount;
+import com.example.androiderp.CustomDataClass.GroupItem;
 import com.example.androiderp.R;
 import java.text.DecimalFormat;
 import java.util.List;
@@ -19,9 +20,10 @@ import java.util.List;
 public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
 
     private Context context;
-    private List<BalanceAccount> group_list;
+    private List<GroupItem> group_list;
     private List<List<CommonAdapterData>> item_list;
-    public ExpandableListViewAdapter(Context context, List<BalanceAccount> groupData, List<List<CommonAdapterData>> itemData)
+    DecimalFormat df = new DecimalFormat("#####0.00");
+    public ExpandableListViewAdapter(Context context, List<GroupItem> groupData, List<List<CommonAdapterData>> itemData)
     {
         this.context = context;
         this.group_list=groupData;
@@ -166,7 +168,7 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
         }
 
         groupHolder.balanceaccount.setText(group_list.get(groupPosition).getName());
-        groupHolder.amount.setText(Integer.toString(item_list.get(groupPosition).size())+"条记录");
+        groupHolder.amount.setText(df.format(group_list.get(groupPosition).getAmount()));
         return convertView;
     }
 
@@ -200,7 +202,6 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
         {
             itemHolder = (ItemHolder)convertView.getTag();
         }
-        DecimalFormat df = new DecimalFormat("#####0.00");
         itemHolder.accounts.setText(item_list.get(groupPosition).get(childPosition).getName());
         itemHolder.accounts_amount.setText("￥"+df.format(item_list.get(groupPosition).get(childPosition).getSaleamount()));
         return convertView;

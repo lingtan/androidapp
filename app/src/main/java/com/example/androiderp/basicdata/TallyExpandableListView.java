@@ -15,9 +15,10 @@ import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
-
 import com.example.androiderp.CustomDataClass.Accounts;
 import com.example.androiderp.CustomDataClass.BalanceAccount;
+import com.example.androiderp.CustomDataClass.GroupItem;
+import com.example.androiderp.CustomDataClass.GroupMark;
 import com.example.androiderp.CustomDataClass.Tally;
 import com.example.androiderp.R;
 import com.example.androiderp.adaper.CommonAdapterData;
@@ -25,9 +26,7 @@ import com.example.androiderp.adaper.ExpandableListViewAdapter;
 import com.example.androiderp.custom.CustomSearch;
 import com.example.androiderp.custom.CustomSearchBase;
 import com.example.androiderp.form.TallyForm;
-
 import org.litepal.crud.DataSupport;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +34,8 @@ public class TallyExpandableListView extends CustomSearchBase implements View.On
     private ExpandableListViewAdapter adapter;
     private ExpandableListView listView;
     private DisplayMetrics dm;
+    private List<GroupItem>groupItemList=new ArrayList<GroupItem>();
+    private List<GroupMark>groupMarkList=new ArrayList<GroupMark>();
     private List<BalanceAccount> balanceAccountList;//组分类
     private List<Accounts> accountsList;//子项目
     private List<CommonAdapterData> accountsList1;//子项目
@@ -69,7 +70,15 @@ public class TallyExpandableListView extends CustomSearchBase implements View.On
         accountsList =DataSupport.findAll(Accounts.class);
         balanceAccountList=DataSupport.findAll(BalanceAccount.class);
         for (BalanceAccount balanceAccount:balanceAccountList) {
-
+            GroupMark groupMark=new GroupMark();
+            groupMark.setMark("false");
+            groupMark.setIndex(-1);
+            groupMarkList.add(groupMark);
+            GroupItem groupItem=new GroupItem();
+            amount = DataSupport.where("balanceAccount = ?", balanceAccount.getName()).sum(Tally.class, "amount", double.class);
+            groupItem.setName(balanceAccount.getName());
+            groupItem.setAmount(amount);
+            groupItemList.add(groupItem);
             for (Accounts accounts : accountsList)
 
             {
@@ -105,7 +114,7 @@ public class TallyExpandableListView extends CustomSearchBase implements View.On
 
         if(accountsList.size()!=0 && balanceAccountList.size()!=0) {
 
-                 adapter = new ExpandableListViewAdapter(TallyExpandableListView.this,balanceAccountList, item_list);
+                 adapter = new ExpandableListViewAdapter(TallyExpandableListView.this,groupItemList, item_list);
                  listView.setAdapter(adapter);
             
         }
@@ -114,7 +123,14 @@ public class TallyExpandableListView extends CustomSearchBase implements View.On
         listView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
 
-
+        if(groupMarkList.get(groupPosition).getMark().equals("false"))
+        {
+            groupMarkList.get(groupPosition).setMark("ture");
+            groupMarkList.get(groupPosition).setIndex(groupPosition);
+        }else {
+            groupMarkList.get(groupPosition).setMark("false");
+            groupMarkList.get(groupPosition).setIndex(-1);
+        }
 
                 return false;
             }
@@ -138,7 +154,70 @@ public class TallyExpandableListView extends CustomSearchBase implements View.On
 
     }
 
+    //筛选条件
+    public void search(String name) {
 
+        listdatas.clear();
+        item_list.clear();
+
+        for (BalanceAccount balanceAccount:balanceAccountList) {
+
+            for (Accounts accounts : accountsList)
+
+            {
+                amount = DataSupport.where("accounts= ? and balanceAccount = ?", accounts.getName(), balanceAccount.getName()).sum(Tally.class, "amount", double.class);
+                int index = accounts.getName().indexOf(name);
+                if(amount!=0) {
+                    if(index!=-1) {
+                        CommonAdapterData commonData = new CommonAdapterData();
+                        commonData.setName(accounts.getName());
+                        commonData.setNumber(balanceAccount.getName());
+                        commonData.setId(accounts.getId());
+                        commonData.setSaleamount(amount);
+                        commonData.setImage(R.drawable.accountsimage);
+                        commonData.setSelectImage(R.drawable.seclec_arrow);
+                        listdatas.add(commonData);
+                    }
+                }
+
+
+            }
+        }
+
+        item_list = new ArrayList<List<CommonAdapterData>>();
+        for (int i = 0; i < balanceAccountList.size(); i++) {
+            accountsList1 = new ArrayList<CommonAdapterData>();
+            for (int j = 0; j < listdatas.size(); j++) {
+                if (listdatas.get(j).getNumber().equals(balanceAccountList.get(i).getName())) {
+                    accountsList1.add(listdatas.get(j));
+                }
+
+            }
+
+            item_list.add(accountsList1);
+        }
+    }
+
+
+    //adapter刷新,重写Filter方式会出现BUG.
+    public void updateLayout() {
+        if(accountsList.size()!=0 && balanceAccountList.size()!=0) {
+
+            adapter = new ExpandableListViewAdapter(TallyExpandableListView.this,groupItemList, item_list);
+            listView.setAdapter(adapter);
+            for(GroupMark groupMark:groupMarkList)
+            {
+                if(groupMark.getMark().equals("ture"))
+                {
+                    listView.expandGroup(groupMark.getIndex());
+                }
+
+            }
+
+
+
+        }
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -148,9 +227,15 @@ public class TallyExpandableListView extends CustomSearchBase implements View.On
                 {
                     listdatas.clear();
                     item_list.clear();
+                    groupItemList.clear();
                     accountsList =DataSupport.findAll(Accounts.class);
                     balanceAccountList=DataSupport.findAll(BalanceAccount.class);
                     for (BalanceAccount balanceAccount:balanceAccountList) {
+                        GroupItem groupItem=new GroupItem();
+                        amount = DataSupport.where("balanceAccount = ?", balanceAccount.getName()).sum(Tally.class, "amount", double.class);
+                        groupItem.setName(balanceAccount.getName());
+                        groupItem.setAmount(amount);
+                        groupItemList.add(groupItem);
 
                         for (Accounts accounts : accountsList)
 
@@ -185,11 +270,20 @@ public class TallyExpandableListView extends CustomSearchBase implements View.On
                     }
                     if(accountsList.size()!=0 && balanceAccountList.size()!=0) {
 
-                        adapter = new ExpandableListViewAdapter(TallyExpandableListView.this,balanceAccountList, item_list);
+                        adapter = new ExpandableListViewAdapter(TallyExpandableListView.this,groupItemList, item_list);
                         listView.setAdapter(adapter);
                         //默认全部展开
 
-                                   listView.expandGroup(0);
+                        for(GroupMark groupMark:groupMarkList)
+                        {
+                            if(groupMark.getMark().equals("ture"))
+                            {
+                                listView.expandGroup(groupMark.getIndex());
+                            }
+
+                        }
+
+
 
 
                     }
@@ -238,6 +332,8 @@ public class TallyExpandableListView extends CustomSearchBase implements View.On
         @Override
         public void afterTextChanged(Editable s) {
 
+           search(customSearch.getText().toString());
+            updateLayout();
 
 
         }

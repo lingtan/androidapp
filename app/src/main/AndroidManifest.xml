@@ -88,13 +88,11 @@
         <activity android:name=".form.AccountsForm"></activity>
         <activity android:name=".form.BalanceAccountForm"></activity>
         <activity android:name=".basicdata.ProductTowListView"></activity>
-        <activity android:name=".basicdata.TallyListView"></activity>
         <activity android:name=".basicdata.ProductBadgeListView"></activity>
         <activity android:name=".basicdata.StockInitiListView"></activity>
         <activity android:name=".basicdata.ConsignmentListview"></activity>
         <activity android:name=".basicdata.BrandListView"></activity>
         <activity android:name=".basicdata.AccountsListView"></activity>
-        <activity android:name=".basicdata.TallyAccountsListView"></activity>
         <activity android:name=".basicdata.TallyExpandableListView"></activity>
         <activity android:name=".basicdata.TallyAccountsEntyList"></activity>
         <activity android:name=".basicdata.BrandBadgeListView"></activity>

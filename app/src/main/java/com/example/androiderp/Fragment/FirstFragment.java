@@ -24,7 +24,6 @@ import com.example.androiderp.basicdata.PurchaseOutListView;
 import com.example.androiderp.basicdata.StockTakingListView;
 import com.example.androiderp.basicdata.SupplierTowListView;
 import com.example.androiderp.basicdata.TallyExpandableListView;
-import com.example.androiderp.basicdata.TallyListView;
 import com.example.androiderp.custom.CustomGridView;
 import com.example.androiderp.form.AppropriationForm;
 import com.example.androiderp.form.PurchaseProductForm;
