@@ -228,9 +228,16 @@ public class TallyExpandableListView extends CustomSearchBase implements View.On
                     listdatas.clear();
                     item_list.clear();
                     groupItemList.clear();
+                    groupMarkList.clear();
+
+                    
                     accountsList =DataSupport.findAll(Accounts.class);
                     balanceAccountList=DataSupport.findAll(BalanceAccount.class);
                     for (BalanceAccount balanceAccount:balanceAccountList) {
+                        GroupMark groupMark=new GroupMark();
+                        groupMark.setMark("false");
+                        groupMark.setIndex(-1);
+                        groupMarkList.add(groupMark);
                         GroupItem groupItem=new GroupItem();
                         amount = DataSupport.where("balanceAccount = ?", balanceAccount.getName()).sum(Tally.class, "amount", double.class);
                         groupItem.setName(balanceAccount.getName());
@@ -278,6 +285,7 @@ public class TallyExpandableListView extends CustomSearchBase implements View.On
                         {
                             if(groupMark.getMark().equals("ture"))
                             {
+
                                 listView.expandGroup(groupMark.getIndex());
                             }
 

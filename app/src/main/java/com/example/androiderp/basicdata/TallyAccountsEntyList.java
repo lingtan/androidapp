@@ -43,7 +43,7 @@ public class TallyAccountsEntyList extends CustomSearchBase implements View.OnCl
 
     @Override
     public void iniView(){
-        setContentView(R.layout.custom_layout);
+        setContentView(R.layout.tallyaccounts_layout);
         toobarBack=(TextView)findViewById(R.id.custom_toobar_left) ;
         toobarTile=(TextView)findViewById(R.id.custom_toobar_midd);
         toobarAdd=(TextView)findViewById(R.id.custom_toobar_right);
