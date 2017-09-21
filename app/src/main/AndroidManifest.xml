@@ -83,6 +83,7 @@
         <activity android:name=".form.EmployeeForm"></activity>
         <activity android:name=".form.ConsignmentForm"></activity>
         <activity android:name=".form.ScrennProductShoppingForm"></activity>
+        <activity android:name=".form.TestUserForm"></activity>
         <activity android:name=".form.AccountForm"></activity>
         <activity android:name=".form.TallyForm"></activity>
         <activity android:name=".form.AccountsForm"></activity>
@@ -106,6 +107,8 @@
         <activity android:name=".basicdata.ProductCategoryListview"></activity>
         <activity android:name=".basicdata.SelectCustomListView"></activity>
         <activity android:name=".basicdata.UnitListView"></activity>
+        <activity android:name=".basicdata.TestUserListView"></activity>
+
         <activity
             android:name=".scanning.CommonScanActivity"
             android:label="@string/app_name"

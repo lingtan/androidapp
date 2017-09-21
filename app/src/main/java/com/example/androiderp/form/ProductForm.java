@@ -49,6 +49,7 @@ import com.example.androiderp.adaper.PopuMenuDataStructure;
 import com.example.androiderp.basicdata.BrandListView;
 import com.example.androiderp.basicdata.ProductCategoryListview;
 import com.example.androiderp.basicdata.StockInitiListView;
+import com.example.androiderp.basicdata.TestUserListView;
 import com.example.androiderp.basicdata.UnitListView;
 import com.example.androiderp.common.Common;
 import com.example.androiderp.custom.CustomPopupWindow;
@@ -494,7 +495,7 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
 
             case R.id.product_brand_layout:
 
-                Intent intentbrand=new Intent(ProductForm.this, BrandListView.class);
+                Intent intentbrand=new Intent(ProductForm.this, TestUserListView.class);
                 intentbrand.putExtra("index",brand.getText().toString());
                 startActivityForResult(intentbrand,2);
                 break;

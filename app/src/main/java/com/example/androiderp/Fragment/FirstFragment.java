@@ -24,6 +24,7 @@ import com.example.androiderp.basicdata.PurchaseOutListView;
 import com.example.androiderp.basicdata.StockTakingListView;
 import com.example.androiderp.basicdata.SupplierTowListView;
 import com.example.androiderp.basicdata.TallyExpandableListView;
+import com.example.androiderp.basicdata.TestUserListView;
 import com.example.androiderp.custom.CustomGridView;
 import com.example.androiderp.form.AppropriationForm;
 import com.example.androiderp.form.PurchaseProductForm;
@@ -145,6 +146,10 @@ public class FirstFragment extends Fragment {
                         break;
                     case "账户管理":
                         intent = new Intent(context, TallyExpandableListView.class);
+                        startActivity(intent);
+                        break;
+                    case "仓库预警":
+                        intent = new Intent(context, TestUserListView.class);
                         startActivity(intent);
                         break;
                     case "":
