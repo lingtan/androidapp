@@ -8,7 +8,6 @@ import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -32,10 +31,13 @@ import com.example.androiderp.listview.SlideAndDragListView;
 import com.example.androiderp.listview.Utils;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+
 import org.litepal.crud.DataSupport;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
 import okhttp3.Call;
 import okhttp3.Response;
 
@@ -50,7 +52,7 @@ public class TestUserListView extends CustomSearchBase implements View.OnClickLi
     private TextView toobarBack, toobarAdd, toobarTile;
     private CustomSearch customSearch;
     private ImageView lastCheckedOption;
-    private int indexPositon = -1,editPositon=-1;
+    private int indexPositon = -1, editPositon = -1;
     private String indexName;
     private Menu menu;
     private Dialog dialog;
@@ -87,7 +89,7 @@ public class TestUserListView extends CustomSearchBase implements View.OnClickLi
 
     }
 
-    private void getHttpData( final TestUser postTestUser) {
+    private void getHttpData(final TestUser postTestUser) {
 
 
         HttpUtil.sendOkHttpRequst(postTestUser, new okhttp3.Callback() {
@@ -115,7 +117,7 @@ public class TestUserListView extends CustomSearchBase implements View.OnClickLi
                     public void run() {
                         try {
 
-                            if(postTestUser.getRequestType().equals("select")) {
+                            if (postTestUser.getRequestType().equals("select")) {
                                 indexPositon = -1;
                                 Gson gson = new Gson();
                                 testUserList = gson.fromJson(response.body().string(), new TypeToken<List<TestUser>>() {
@@ -143,13 +145,12 @@ public class TestUserListView extends CustomSearchBase implements View.OnClickLi
                                     listView.setAdapter(adapter);
 
 
-                                }else {
+                                } else {
                                     Toast.makeText(TestUserListView.this, "没有数据", Toast.LENGTH_SHORT).show();
 
                                 }
 
-                            }else
-                            {
+                            } else {
                                 Gson gson = new Gson();
                                 ResultData resultData = (ResultData) gson.fromJson(response.body().string(), ResultData.class);
                                 if (resultData.getResult() > 0) {
@@ -216,10 +217,9 @@ public class TestUserListView extends CustomSearchBase implements View.OnClickLi
                 switch (buttonPosition) {
                     case 0:
                         Intent intent = new Intent(TestUserListView.this, TestUserForm.class);
-                        editPositon=itemPosition;
-                        ;
+                        editPositon = itemPosition;
                         intent.putExtra("action", "edit");
-                        intent.putExtra("customid",  listdatas.get(itemPosition));
+                        intent.putExtra("customid", listdatas.get(itemPosition));
                         startActivityForResult(intent, 1);
 
                         return Menu.ITEM_NOTHING;
@@ -236,7 +236,7 @@ public class TestUserListView extends CustomSearchBase implements View.OnClickLi
                                     Toast.makeText(TestUserListView.this, "业务已经发生不能删除", Toast.LENGTH_SHORT).show();
                                 } else {
                                     postDate.setName(listdatas.get(itemPosition - listView.getHeaderViewsCount()).getName().toString());
-                                    postDate.setRequestType( "delete");
+                                    postDate.setRequestType("delete");
                                     postDate.setServerIp(Common.ip);
                                     postDate.setServlet("UnitOperate");
                                     postDate.setUnitId(listdatas.get(itemPosition - listView.getHeaderViewsCount()).getId());
@@ -347,8 +347,8 @@ public class TestUserListView extends CustomSearchBase implements View.OnClickLi
 
             case 1:
                 if (resultCode == RESULT_OK) {
-                    editDate=data.getParcelableExtra("customid");
-                    if(editDate!=null) {
+                    editDate = data.getParcelableExtra("customid");
+                    if (editDate != null) {
                         listdatas.get(editPositon).setId(editDate.getId());
                         listdatas.get(editPositon).setName(editDate.getName());
                         adapter = new CommonListViewAdapter(TestUserListView.this, R.layout.custom_item, listdatas);
@@ -361,9 +361,9 @@ public class TestUserListView extends CustomSearchBase implements View.OnClickLi
                 break;
             case 2:
                 if (resultCode == RESULT_OK) {
-                    editDate=data.getParcelableExtra("customid");
-                    if(editDate!=null) {
-                        CommonAdapterData commonAdapterData=new CommonAdapterData();
+                    editDate = data.getParcelableExtra("customid");
+                    if (editDate != null) {
+                        CommonAdapterData commonAdapterData = new CommonAdapterData();
                         commonAdapterData.setId(editDate.getId());
                         commonAdapterData.setName(editDate.getName());
                         listdatas.add(commonAdapterData);
@@ -433,6 +433,6 @@ public class TestUserListView extends CustomSearchBase implements View.OnClickLi
         postDate.setRequestType("select");
         postDate.setServerIp(Common.ip);
         postDate.setServlet("UnitOperate");
-        getHttpData( postDate);
+        getHttpData(postDate);
     }
 }
