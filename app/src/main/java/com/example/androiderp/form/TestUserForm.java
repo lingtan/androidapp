@@ -223,7 +223,7 @@ public class TestUserForm extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    
+
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -236,24 +236,6 @@ public class TestUserForm extends AppCompatActivity implements View.OnClickListe
         return super.onTouchEvent(event);
     }
 
-    /**
-     * 显示进度对话框
-     */
-    private void showDialog() {
 
-        dialog = Common.createLoadingDialog(this, "正在加载中...");
-        dialog.setCancelable(true);//允许返回
-        dialog.show();//显示
-
-    }
-
-    /**
-     * 关闭进度对话框
-     */
-    private void closeDialog() {
-        if (dialog != null) {
-            dialog.dismiss();
-        }
-    }
 
 }
