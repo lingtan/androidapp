@@ -1,6 +1,11 @@
 package com.example.androiderp.adaper;
 
-public class CommonAdapterData {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import com.example.androiderp.CustomDataClass.TestUser;
+
+public class CommonAdapterData implements Parcelable{
 
 
 
@@ -94,4 +99,34 @@ public class CommonAdapterData {
     public void setBadge(String badge) {
         this.badge = badge;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+
+        dest.writeInt(id);
+        dest.writeString(name);
+
+
+    }
+    public static final Parcelable.Creator<CommonAdapterData> CREATOR=new Parcelable.Creator<CommonAdapterData>(){
+        @Override
+        public CommonAdapterData createFromParcel(Parcel source) {
+            CommonAdapterData testUser=new CommonAdapterData();
+            testUser.id=source.readInt();
+            testUser.name=source.readString();
+
+
+            return testUser;
+        }
+
+        @Override
+        public CommonAdapterData[] newArray(int size) {
+            return new CommonAdapterData[size];
+        }
+    };
 }

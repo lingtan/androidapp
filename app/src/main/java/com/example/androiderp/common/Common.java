@@ -37,7 +37,8 @@ public class Common extends AppCompatActivity {
     private PopuMenuAdapter menuAdapter;
     public ListView listView;
     private Context context;
-    public static final String ip="http://192.168.1.102:8080/webdemo/servlet/";
+    public static final String ip="http://eedd.v228.10000net.cn/webdemo/servlet/";
+    //public static final String ip="http://192.168.1.102:8080/webdemo/servlet/";
 
 
     public void PopupWindow(Context context, DisplayMetrics dm,List<PopuMenuDataStructure>  popuMenuDatas)

@@ -23,13 +23,14 @@ import okhttp3.Response;
 
 
 public class HttpUtil {
-    public  static void sendOkHttpRequst(String ip,String serlet,TestUser postTestUser,okhttp3.Callback callback) {
-        String address = ip + serlet;
+    public  static void sendOkHttpRequst(TestUser postTestUser,okhttp3.Callback callback) {
+        String address = postTestUser.getServerIp() + postTestUser.getServlet();
         Gson gson = new Gson();
         String json = gson.toJson(postTestUser);
+
         OkHttpClient client = new OkHttpClient();
         MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-        RequestBody body = RequestBody.create(JSON, json);
+        RequestBody body = RequestBody.create(JSON, AES.encode(json));
         Request request = new Request.Builder().url(address).post(body).build();
         client.newCall(request).enqueue(callback);
 

@@ -8,6 +8,7 @@ import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -31,19 +32,11 @@ import com.example.androiderp.listview.SlideAndDragListView;
 import com.example.androiderp.listview.Utils;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-
 import org.litepal.crud.DataSupport;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
 import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class TestUserListView extends CustomSearchBase implements View.OnClickListener,
@@ -57,18 +50,19 @@ public class TestUserListView extends CustomSearchBase implements View.OnClickLi
     private TextView toobarBack, toobarAdd, toobarTile;
     private CustomSearch customSearch;
     private ImageView lastCheckedOption;
-    private int indexPositon = -1;
+    private int indexPositon = -1,editPositon=-1;
     private String indexName;
     private Menu menu;
     private Dialog dialog;
     private TestUser postDate = new TestUser();
+    private CommonAdapterData editDate = new CommonAdapterData();
+
 
     @Override
     public void iniView() {
         setContentView(R.layout.customlistview_category_layout);
         initMenu();
         initUiAndListener();
-
         toobarBack = (TextView) findViewById(R.id.custom_toobar_left);
         toobarTile = (TextView) findViewById(R.id.custom_toobar_midd);
         toobarAdd = (TextView) findViewById(R.id.custom_toobar_right);
@@ -78,10 +72,6 @@ public class TestUserListView extends CustomSearchBase implements View.OnClickLi
         customSearch = (CustomSearch) findViewById(R.id.search);
         Intent intent = getIntent();
         indexName = intent.getStringExtra("index");
-
-        postDate.setName("");
-
-        getHttpData(Common.ip, "UserSelectAll", postDate, "select");
 
         toobarTile.setCompoundDrawables(null, null, null, null);
         toobarTile.setText("选择品牌");
@@ -97,20 +87,19 @@ public class TestUserListView extends CustomSearchBase implements View.OnClickLi
 
     }
 
+    private void getHttpData( final TestUser postTestUser) {
 
-    private void getHttpData(final String ip, final String serlet, final TestUser postTestUser, final String type) {
-        showDialog();
 
-        HttpUtil.sendOkHttpRequst(ip, serlet, postTestUser, new okhttp3.Callback() {
+        HttpUtil.sendOkHttpRequst(postTestUser, new okhttp3.Callback() {
 
             @Override
             public void onFailure(Call call, IOException e) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        closeDialog();
 
-                        Toast.makeText(TestUserListView.this, "连接失败", Toast.LENGTH_SHORT).show();
+
+                        Toast.makeText(TestUserListView.this, "网络连接失败", Toast.LENGTH_SHORT).show();
 
                     }
                 });
@@ -126,7 +115,7 @@ public class TestUserListView extends CustomSearchBase implements View.OnClickLi
                     public void run() {
                         try {
 
-                            if(type.equals("select")) {
+                            if(postTestUser.getRequestType().equals("select")) {
                                 indexPositon = -1;
                                 Gson gson = new Gson();
                                 testUserList = gson.fromJson(response.body().string(), new TypeToken<List<TestUser>>() {
@@ -140,6 +129,9 @@ public class TestUserListView extends CustomSearchBase implements View.OnClickLi
                                     }
                                     CommonAdapterData commonData = new CommonAdapterData();
                                     commonData.setName(testUser.getName());
+                                    commonData.setId(testUser.getUnitId());
+
+
                                     commonData.setImage(R.drawable.seclec_arrow);
                                     listdatas.add(commonData);
 
@@ -150,25 +142,32 @@ public class TestUserListView extends CustomSearchBase implements View.OnClickLi
                                     adapter.setSeclection(indexPositon);
                                     listView.setAdapter(adapter);
 
-                                    closeDialog();
+
+                                }else {
+                                    Toast.makeText(TestUserListView.this, "没有数据", Toast.LENGTH_SHORT).show();
+
                                 }
+
                             }else
                             {
                                 Gson gson = new Gson();
                                 ResultData resultData = (ResultData) gson.fromJson(response.body().string(), ResultData.class);
-                                if (Integer.parseInt(resultData.getResult()) > 0) {
-                                    closeDialog();
+                                if (resultData.getResult() > 0) {
+                                    Toast.makeText(TestUserListView.this, "操作成功", Toast.LENGTH_SHORT).show();
+
+
                                 } else {
-                                    closeDialog();
+
                                     Toast.makeText(TestUserListView.this, "操作失败", Toast.LENGTH_SHORT).show();
 
                                 }
+
                             }
 
 
                         } catch (Exception e) {
-                            Toast.makeText(TestUserListView.this, "没有数据", Toast.LENGTH_SHORT).show();
-                            closeDialog();
+                            Toast.makeText(TestUserListView.this, "网络连接失败", Toast.LENGTH_SHORT).show();
+
                             adapter = new CommonListViewAdapter(TestUserListView.this, R.layout.custom_item, listdatas);
                             adapter.setSeclection(indexPositon);
                             listView.setAdapter(adapter);
@@ -217,9 +216,10 @@ public class TestUserListView extends CustomSearchBase implements View.OnClickLi
                 switch (buttonPosition) {
                     case 0:
                         Intent intent = new Intent(TestUserListView.this, TestUserForm.class);
-
+                        editPositon=itemPosition;
+                        ;
                         intent.putExtra("action", "edit");
-                        intent.putExtra("customid", String.valueOf(listdatas.get(itemPosition).getName()));
+                        intent.putExtra("customid",  listdatas.get(itemPosition));
                         startActivityForResult(intent, 1);
 
                         return Menu.ITEM_NOTHING;
@@ -236,7 +236,11 @@ public class TestUserListView extends CustomSearchBase implements View.OnClickLi
                                     Toast.makeText(TestUserListView.this, "业务已经发生不能删除", Toast.LENGTH_SHORT).show();
                                 } else {
                                     postDate.setName(listdatas.get(itemPosition - listView.getHeaderViewsCount()).getName().toString());
-                                    getHttpData(Common.ip, "UserDelete", postDate, "delete");
+                                    postDate.setRequestType( "delete");
+                                    postDate.setServerIp(Common.ip);
+                                    postDate.setServlet("UnitOperate");
+                                    postDate.setUnitId(listdatas.get(itemPosition - listView.getHeaderViewsCount()).getId());
+                                    getHttpData(postDate);
                                     listdatas.remove(itemPosition - listView.getHeaderViewsCount());
                                     if (customSearch.getText().toString().isEmpty()) {
                                         if (indexPositon == itemPosition) {
@@ -298,7 +302,10 @@ public class TestUserListView extends CustomSearchBase implements View.OnClickLi
             listdatas.clear();
         }
         postDate.setName(name);
-        getHttpData(Common.ip, "ViewDictionary", postDate, "select");
+        postDate.setRequestType("select");
+        postDate.setServerIp(Common.ip);
+        postDate.setServlet("UnitOperate");
+        getHttpData(postDate);
     }
 
 
@@ -333,25 +340,39 @@ public class TestUserListView extends CustomSearchBase implements View.OnClickLi
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         postDate.setName("");
+        postDate.setRequestType("select");
+        postDate.setServerIp(Common.ip);
+        postDate.setServlet("UnitOperate");
         switch (requestCode) {
 
             case 1:
                 if (resultCode == RESULT_OK) {
-                    adapter = new CommonListViewAdapter(TestUserListView.this, R.layout.custom_item, listdatas);
-                    adapter.setSeclection(indexPositon);
-                    listView.setAdapter(adapter);
-
-                    getHttpData(Common.ip, "UserSelectAll", postDate, "select");
+                    editDate=data.getParcelableExtra("customid");
+                    if(editDate!=null) {
+                        listdatas.get(editPositon).setId(editDate.getId());
+                        listdatas.get(editPositon).setName(editDate.getName());
+                        adapter = new CommonListViewAdapter(TestUserListView.this, R.layout.custom_item, listdatas);
+                        adapter.setSeclection(indexPositon);
+                        listView.setAdapter(adapter);
+                        Toast.makeText(TestUserListView.this, "操作成功", Toast.LENGTH_SHORT).show();
+                    }
 
                 }
                 break;
             case 2:
                 if (resultCode == RESULT_OK) {
-                    adapter = new CommonListViewAdapter(TestUserListView.this, R.layout.custom_item, listdatas);
-                    adapter.setSeclection(indexPositon);
-                    listView.setAdapter(adapter);
+                    editDate=data.getParcelableExtra("customid");
+                    if(editDate!=null) {
+                        CommonAdapterData commonAdapterData=new CommonAdapterData();
+                        commonAdapterData.setId(editDate.getId());
+                        commonAdapterData.setName(editDate.getName());
+                        listdatas.add(commonAdapterData);
+                        adapter = new CommonListViewAdapter(TestUserListView.this, R.layout.custom_item, listdatas);
+                        adapter.setSeclection(indexPositon);
+                        listView.setAdapter(adapter);
+                        Toast.makeText(TestUserListView.this, "操作成功", Toast.LENGTH_SHORT).show();
+                    }
 
-                    getHttpData(Common.ip, "UserSelectAll", postDate, "select");
 
                 }
                 break;
@@ -402,5 +423,16 @@ public class TestUserListView extends CustomSearchBase implements View.OnClickLi
         if (dialog != null) {
             dialog.dismiss();
         }
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        postDate.setName("");
+        postDate.setRequestType("select");
+        postDate.setServerIp(Common.ip);
+        postDate.setServlet("UnitOperate");
+        getHttpData( postDate);
     }
 }
