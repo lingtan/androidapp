@@ -13,12 +13,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.androiderp.CustomDataClass.PostUserData;
 import com.example.androiderp.CustomDataClass.Product;
+import com.example.androiderp.CustomDataClass.ReturnUserData;
 import com.example.androiderp.CustomDataClass.Unit;
 import com.example.androiderp.R;
 import com.example.androiderp.adaper.CommonAdapterData;
 import com.example.androiderp.adaper.CommonListViewAdapter;
 import com.example.androiderp.adaper.DataStructure;
+import com.example.androiderp.common.Common;
+import com.example.androiderp.common.HttpUtil;
 import com.example.androiderp.custom.CustomSearch;
 import com.example.androiderp.custom.CustomSearchBase;
 import com.example.androiderp.form.UnitForm;
@@ -26,11 +30,17 @@ import com.example.androiderp.listview.Menu;
 import com.example.androiderp.listview.MenuItem;
 import com.example.androiderp.listview.SlideAndDragListView;
 import com.example.androiderp.listview.Utils;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.litepal.crud.DataSupport;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.Call;
+import okhttp3.Response;
 
 public class UnitListView extends CustomSearchBase implements View.OnClickListener,
         AdapterView.OnItemClickListener,
@@ -44,11 +54,14 @@ public class UnitListView extends CustomSearchBase implements View.OnClickListen
     private TextView toobarBack, toobarAdd, toobarTile;
     private CustomSearch customSearch;
     private ImageView lastCheckedOption;
-    private int indexPositon=-1;
+    private int indexPositon=-1,getEditPositon = -1;
     private String indexName;
     private Menu menu;
     private String returnName;
     private String searchVale;
+    private PostUserData postDate = new PostUserData();
+    private CommonAdapterData editDate = new CommonAdapterData();
+    private List<PostUserData> postUserDataList = new ArrayList<PostUserData>();
     @Override
     public void iniView(){
         setContentView(R.layout.customlistview_category_layout);
@@ -56,7 +69,7 @@ public class UnitListView extends CustomSearchBase implements View.OnClickListen
         initUiAndListener();
         toobarBack =(TextView)findViewById(R.id.custom_toobar_left) ;
         toobarTile =(TextView)findViewById(R.id.custom_toobar_midd);
-        toobarTile.setText("选择品牌");
+        toobarTile.setText("选择单位");
         toobarAdd =(TextView)findViewById(R.id.custom_toobar_right);
         toobarBack.setOnClickListener(this);
         toobarAdd.setOnClickListener(this);
@@ -64,23 +77,8 @@ public class UnitListView extends CustomSearchBase implements View.OnClickListen
         customSearch = (CustomSearch) findViewById(R.id.search);
         Intent intent=getIntent();
         indexName =intent.getStringExtra("index");
-        unitList = DataSupport.findAll(Unit.class);
         toobarTile.setCompoundDrawables(null,null,null,null);
-        for(Unit unit: unitList)
 
-        {   if(unit.getName().equals(indexName))
-        {
-            indexPositon = unitList.indexOf(unit);
-        }
-            CommonAdapterData commonData=new CommonAdapterData();
-            commonData.setName(unit.getName());
-            commonData.setId(unit.getId());
-            commonData.setImage(R.drawable.seclec_arrow);
-            listdatas.add(commonData);
-
-
-
-        }
 
 
         //构造函数第一参数是类的对象，第二个是布局文件，第三个是数据源
@@ -103,6 +101,102 @@ public class UnitListView extends CustomSearchBase implements View.OnClickListen
 
 
     }
+
+    private void getHttpData(final PostUserData postPostUserData) {
+
+
+        HttpUtil.sendOkHttpRequst(postPostUserData, new okhttp3.Callback() {
+
+            @Override
+            public void onFailure(Call call, IOException e) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+
+                        Toast.makeText(UnitListView.this, "网络连接失败", Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+
+            }
+
+            @Override
+            public void onResponse(Call call, final Response response) throws IOException {
+
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+
+                            if (postPostUserData.getRequestType().equals("select")) {
+                                indexPositon = -1;
+                                Gson gson = new Gson();
+                                postUserDataList = gson.fromJson(response.body().string(), new TypeToken<List<PostUserData>>() {
+                                }.getType());
+                                listdatas.clear();
+                                for (PostUserData postUserData : postUserDataList)
+
+                                {
+                                    if (postUserData.getName().equals(indexName)) {
+                                        indexPositon = postUserDataList.indexOf(postUserData);
+                                    }
+                                    CommonAdapterData commonData = new CommonAdapterData();
+                                    commonData.setName(postUserData.getName());
+                                    commonData.setId(postUserData.getUnitId());
+
+
+                                    commonData.setImage(R.drawable.seclec_arrow);
+                                    listdatas.add(commonData);
+
+
+                                }
+                                if (listdatas.size() != 0) {
+                                    adapter = new CommonListViewAdapter(UnitListView.this, R.layout.custom_item, listdatas);
+                                    adapter.setSeclection(indexPositon);
+                                    listView.setAdapter(adapter);
+
+
+                                } else {
+                                    Toast.makeText(UnitListView.this, "没有数据", Toast.LENGTH_SHORT).show();
+
+                                }
+
+                            } else {
+                                Gson gson = new Gson();
+                                ReturnUserData returnUserData = (ReturnUserData) gson.fromJson(response.body().string(), ReturnUserData.class);
+                                if (returnUserData.getResult() > 0) {
+                                    Toast.makeText(UnitListView.this, "操作成功", Toast.LENGTH_SHORT).show();
+
+
+                                } else {
+
+                                    Toast.makeText(UnitListView.this, "操作失败", Toast.LENGTH_SHORT).show();
+
+                                }
+
+                            }
+
+
+                        } catch (Exception e) {
+                            Toast.makeText(UnitListView.this, "网络连接失败", Toast.LENGTH_SHORT).show();
+
+                            adapter = new CommonListViewAdapter(UnitListView.this, R.layout.custom_item, listdatas);
+                            adapter.setSeclection(indexPositon);
+                            listView.setAdapter(adapter);
+
+                        }
+                    }
+                });
+
+
+            }
+        });
+
+
+    }
+
     public void initMenu() {
         menu = new Menu(true);
         menu.addItem(new MenuItem.Builder().setWidth((int) getResources().getDimension(R.dimen.slv_item_bg_btn_width))
@@ -136,9 +230,9 @@ public class UnitListView extends CustomSearchBase implements View.OnClickListen
                         Intent intent=new Intent(UnitListView.this,UnitForm.class);
 
 
-                            intent.putExtra("action", "edit");
-                            intent.putExtra("customid", String.valueOf(listdatas.get(itemPosition).getId()));
-                            indexName = listdatas.get(itemPosition).getName();
+                        getEditPositon = itemPosition;
+                        intent.putExtra("type", "edit");
+                        intent.putExtra("postdata", listdatas.get(itemPosition));
 
                         startActivityForResult(intent,1);
 
@@ -156,9 +250,12 @@ public class UnitListView extends CustomSearchBase implements View.OnClickListen
                                     adapter.notifyDataSetChanged();
                                     Toast.makeText(UnitListView.this,"业务已经发生不能删除",Toast.LENGTH_SHORT).show();
                                 }else {
-                                    DataStructure.deleteAll(Unit.class, "name = ?", listdatas.get(itemPosition - listView.getHeaderViewsCount()).getName().toString());
-
-
+                                    postDate.setName(listdatas.get(itemPosition - listView.getHeaderViewsCount()).getName().toString());
+                                    postDate.setRequestType("delete");
+                                    postDate.setServerIp(Common.ip);
+                                    postDate.setServlet("UnitOperate");
+                                    postDate.setUnitId(listdatas.get(itemPosition - listView.getHeaderViewsCount()).getId());
+                                    getHttpData(postDate);
                                     listdatas.remove(itemPosition - listView.getHeaderViewsCount());
                                     if (customSearch.getText().toString().isEmpty()) {
                                         if (indexPositon == itemPosition) {
@@ -198,8 +295,6 @@ public class UnitListView extends CustomSearchBase implements View.OnClickListen
 
         Intent intent=new Intent(UnitListView.this,UnitForm.class);
 
-
-            intent.putExtra("action", "edit");
             intent.putExtra("data_return", String.valueOf(listdatas.get(position).getName()));
             indexName = listdatas.get(position).getName();
 
@@ -214,41 +309,14 @@ public class UnitListView extends CustomSearchBase implements View.OnClickListen
         this.finish();
     }
     public void  searchItem(String name) {
-        if(listdatas.size()>0) {
+        if (listdatas.size() > 0) {
             listdatas.clear();
         }
-       unitList=DataStructure.where("name like ?","%" + name + "%").find(Unit.class);
-        for(Unit unit:unitList)
-
-        {
-            CommonAdapterData commonData=new CommonAdapterData();
-            commonData.setName(unit.getName());
-            commonData.setId(unit.getId());
-            commonData.setImage(R.drawable.seclec_arrow);
-            listdatas.add(commonData);
-
-        }
-
-        if(listdatas!=null) {
-            int index=-1;
-            if(!name.isEmpty())
-            {
-                for(int i=0;i<listdatas.size();i++)
-                {
-                    if(listdatas.get(i).getName().equals(indexName))
-                    {
-                        index=i;
-                    }
-                }
-            }else
-            {
-                index= indexPositon;
-            }
-
-            adapter.setSeclection(index);
-            adapter.notifyDataSetChanged();
-            listView.setAdapter(adapter);
-        }
+        postDate.setName(name);
+        postDate.setRequestType("select");
+        postDate.setServerIp(Common.ip);
+        postDate.setServlet("UnitOperate");
+        getHttpData(postDate);
     }
     @Override
     public void onClick(View v) {
@@ -270,7 +338,7 @@ public class UnitListView extends CustomSearchBase implements View.OnClickListen
 
             case R.id.custom_toobar_right:
                 Intent cate = new Intent(UnitListView.this, UnitForm.class);
-                cate.putExtra("action","add");
+                cate.putExtra("type","add");
                 startActivityForResult(cate,2);
                 break;
 
@@ -280,29 +348,24 @@ public class UnitListView extends CustomSearchBase implements View.OnClickListen
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        postDate.setName("");
+        postDate.setRequestType("select");
+        postDate.setServerIp(Common.ip);
+        postDate.setServlet("UnitOperate");
         switch (requestCode){
 
             case 1:
                 if(resultCode==RESULT_OK)
-                {   returnName=data.getStringExtra("returnName");
-                    indexName=returnName;
-                    if(listdatas.size()>0) {
-                        listdatas.clear();
+                {    editDate = data.getParcelableExtra("customid");
+                    if (editDate != null) {
+                        listdatas.get(getEditPositon).setId(editDate.getId());
+                        listdatas.get(getEditPositon).setName(editDate.getName());
+                        adapter = new CommonListViewAdapter(UnitListView.this, R.layout.custom_item, listdatas);
+                        adapter.setSeclection(indexPositon);
+                        listView.setAdapter(adapter);
+                        Toast.makeText(UnitListView.this, "操作成功", Toast.LENGTH_SHORT).show();
                     }
-                    if(customSearch.getText().toString().isEmpty()) {
 
-                        customSearch.requestFocusFromTouch();
-                        customSearch.setText("");
-                    }else {
-                        int i = returnName.indexOf(searchVale);
-                        if(i!=-1) {
-                            customSearch.requestFocusFromTouch();
-                            customSearch.setText(searchVale);
-                        }else {
-                            customSearch.requestFocusFromTouch();
-                            customSearch.setText(returnName);
-                        }
-                    }
 
                 }
                 break;
@@ -310,25 +373,17 @@ public class UnitListView extends CustomSearchBase implements View.OnClickListen
             case 2:
                 if(resultCode==RESULT_OK)
                 {
-                    if(listdatas.size()!=0) {
-                        listdatas.clear();
+                    editDate = data.getParcelableExtra("customid");
+                    if (editDate != null) {
+                        CommonAdapterData commonAdapterData = new CommonAdapterData();
+                        commonAdapterData.setId(editDate.getId());
+                        commonAdapterData.setName(editDate.getName());
+                        listdatas.add(commonAdapterData);
+                        adapter = new CommonListViewAdapter(UnitListView.this, R.layout.custom_item, listdatas);
+                        adapter.setSeclection(indexPositon);
+                        listView.setAdapter(adapter);
+                        Toast.makeText(UnitListView.this, "操作成功", Toast.LENGTH_SHORT).show();
                     }
-                    unitList = DataSupport.findAll(Unit.class);
-                    for(Unit unit: unitList)
-
-                    {
-                        CommonAdapterData commonData=new CommonAdapterData();
-                        commonData.setName(unit.getName());
-                        commonData.setId(unit.getId());
-                        commonData.setImage(R.drawable.seclec_arrow);
-                        listdatas.add(commonData);
-
-
-
-                    }
-                    adapter = new CommonListViewAdapter(UnitListView.this, R.layout.custom_item, listdatas);
-                    adapter.setSeclection(indexPositon);
-                    listView.setAdapter(adapter);
 
 
                 }
@@ -362,4 +417,14 @@ public class UnitListView extends CustomSearchBase implements View.OnClickListen
 
         }
     };
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        postDate.setName("");
+        postDate.setRequestType("select");
+        postDate.setServerIp(Common.ip);
+        postDate.setServlet("UnitOperate");
+        getHttpData(postDate);
+    }
 }

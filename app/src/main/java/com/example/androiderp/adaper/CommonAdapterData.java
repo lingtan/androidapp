@@ -3,8 +3,6 @@ package com.example.androiderp.adaper;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.example.androiderp.CustomDataClass.TestUser;
-
 public class CommonAdapterData implements Parcelable{
 
 

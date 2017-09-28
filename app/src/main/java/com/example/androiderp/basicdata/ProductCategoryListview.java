@@ -15,18 +15,16 @@ import android.widget.Toast;
 
 import com.example.androiderp.CustomDataClass.Product;
 import com.example.androiderp.CustomDataClass.ProductCategory;
-import com.example.androiderp.CustomDataClass.ResultData;
-import com.example.androiderp.CustomDataClass.TestUser;
+import com.example.androiderp.CustomDataClass.ReturnUserData;
+import com.example.androiderp.CustomDataClass.PostUserData;
 import com.example.androiderp.R;
 import com.example.androiderp.adaper.CommonAdapterData;
 import com.example.androiderp.adaper.CommonListViewAdapter;
-import com.example.androiderp.adaper.DataStructure;
 import com.example.androiderp.common.Common;
 import com.example.androiderp.common.HttpUtil;
 import com.example.androiderp.custom.CustomSearch;
 import com.example.androiderp.custom.CustomSearchBase;
 import com.example.androiderp.form.ProductCategoryForm;
-import com.example.androiderp.form.ProductForm;
 import com.example.androiderp.listview.Menu;
 import com.example.androiderp.listview.MenuItem;
 import com.example.androiderp.listview.SlideAndDragListView;
@@ -54,13 +52,13 @@ public class ProductCategoryListview extends CustomSearchBase implements View.On
     private TextView toobarBack, toobarAdd, toobarTile;
     private CustomSearch customSearch;
     private ImageView lastCheckedOption;
-    private int indexPositon=-1,editPositon = -1;
+    private int indexPositon=-1, getEditPositon = -1;
     private String indexName;
     private String returnName;
     private String searchVale;
     private Menu menu;
-    private List<TestUser> postUserList = new ArrayList<TestUser>();
-    private TestUser postDate = new TestUser();
+    private List<PostUserData> postUserList = new ArrayList<PostUserData>();
+    private PostUserData postDate = new PostUserData();
     private CommonAdapterData editDate = new CommonAdapterData();
     @Override
     public void iniView(){
@@ -90,10 +88,10 @@ public class ProductCategoryListview extends CustomSearchBase implements View.On
 
     }
 
-    private void getHttpData(final TestUser postTestUser) {
+    private void getHttpData(final PostUserData postPostUserData) {
 
 
-        HttpUtil.sendOkHttpRequst(postTestUser, new okhttp3.Callback() {
+        HttpUtil.sendOkHttpRequst(postPostUserData, new okhttp3.Callback() {
 
             @Override
             public void onFailure(Call call, IOException e) {
@@ -118,21 +116,21 @@ public class ProductCategoryListview extends CustomSearchBase implements View.On
                     public void run() {
                         try {
 
-                            if (postTestUser.getRequestType().equals("select")) {
+                            if (postPostUserData.getRequestType().equals("select")) {
                                 indexPositon = -1;
                                 Gson gson = new Gson();
-                                postUserList = gson.fromJson(response.body().string(), new TypeToken<List<TestUser>>() {
+                                postUserList = gson.fromJson(response.body().string(), new TypeToken<List<PostUserData>>() {
                                 }.getType());
                                 listdatas.clear();
-                                for (TestUser testUser : postUserList)
+                                for (PostUserData postUserData : postUserList)
 
                                 {
-                                    if (testUser.getName().equals(indexName)) {
-                                        indexPositon = postUserList.indexOf(testUser);
+                                    if (postUserData.getName().equals(indexName)) {
+                                        indexPositon = postUserList.indexOf(postUserData);
                                     }
                                     CommonAdapterData commonData = new CommonAdapterData();
-                                    commonData.setName(testUser.getName());
-                                    commonData.setId(testUser.getUnitId());
+                                    commonData.setName(postUserData.getName());
+                                    commonData.setId(postUserData.getUnitId());
 
 
                                     commonData.setImage(R.drawable.seclec_arrow);
@@ -153,8 +151,8 @@ public class ProductCategoryListview extends CustomSearchBase implements View.On
 
                             } else {
                                 Gson gson = new Gson();
-                                ResultData resultData = (ResultData) gson.fromJson(response.body().string(), ResultData.class);
-                                if (resultData.getResult() > 0) {
+                                ReturnUserData returnUserData = (ReturnUserData) gson.fromJson(response.body().string(), ReturnUserData.class);
+                                if (returnUserData.getResult() > 0) {
                                     Toast.makeText(ProductCategoryListview.this, "操作成功", Toast.LENGTH_SHORT).show();
 
 
@@ -217,9 +215,9 @@ public class ProductCategoryListview extends CustomSearchBase implements View.On
                     case 0:
                         Intent intent=new Intent(ProductCategoryListview.this,ProductCategoryForm.class);
 
-                        editPositon = itemPosition;
-                            intent.putExtra("action", "edit");
-                            intent.putExtra("customid", listdatas.get(itemPosition));
+                        getEditPositon = itemPosition;
+                            intent.putExtra("type", "edit");
+                            intent.putExtra("postdata", listdatas.get(itemPosition));
                         startActivityForResult(intent,1);
 
                         return Menu.ITEM_NOTHING;
@@ -299,40 +297,14 @@ public class ProductCategoryListview extends CustomSearchBase implements View.On
         this.finish();
     }
     public void  searchItem(String name) {
-        if(listdatas.size()>0) {
+        if (listdatas.size() > 0) {
             listdatas.clear();
         }
-        productCategoryList=DataStructure.where("name like ?","%" + name + "%").find(ProductCategory.class);
-        for(ProductCategory brand:productCategoryList)
-
-        {
-            CommonAdapterData commonData=new CommonAdapterData();
-            commonData.setName(brand.getName());
-            commonData.setId(brand.getId());
-            commonData.setImage(R.drawable.seclec_arrow);
-            listdatas.add(commonData);
-
-        }
-
-        if(listdatas!=null) {
-            int index=-1;
-            if(!name.isEmpty())
-            {
-                for(int i=0;i<listdatas.size();i++)
-                {
-                    if(listdatas.get(i).getName().equals(indexName))
-                    {
-                        index=i;
-                    }
-                }
-            }else
-            {
-                index= indexPositon;
-            }
-            adapter.notifyDataSetChanged();
-            adapter.setSeclection(index);
-            listView.setAdapter(adapter);
-        }
+        postDate.setName(name);
+        postDate.setRequestType("select");
+        postDate.setServerIp(Common.ip);
+        postDate.setServlet("ProductCategoryOperate");
+        getHttpData(postDate);
     }
 
 
@@ -356,7 +328,7 @@ public class ProductCategoryListview extends CustomSearchBase implements View.On
 
             case R.id.custom_toobar_right:
                 Intent cate = new Intent(ProductCategoryListview.this, ProductCategoryForm.class);
-                cate.putExtra("action","add");
+                cate.putExtra("type","add");
                 startActivityForResult(cate,2);
                 break;
 
@@ -376,8 +348,8 @@ public class ProductCategoryListview extends CustomSearchBase implements View.On
                 {
                     editDate = data.getParcelableExtra("customid");
                     if (editDate != null) {
-                        listdatas.get(editPositon).setId(editDate.getId());
-                        listdatas.get(editPositon).setName(editDate.getName());
+                        listdatas.get(getEditPositon).setId(editDate.getId());
+                        listdatas.get(getEditPositon).setName(editDate.getName());
                         adapter = new CommonListViewAdapter(ProductCategoryListview.this, R.layout.custom_item, listdatas);
                         adapter.setSeclection(indexPositon);
                         listView.setAdapter(adapter);

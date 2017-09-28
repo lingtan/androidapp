@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -15,30 +14,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.androiderp.CustomDataClass.Brand;
-import com.example.androiderp.CustomDataClass.ResultData;
-import com.example.androiderp.CustomDataClass.ShoppingData;
-import com.example.androiderp.CustomDataClass.TestUser;
+import com.example.androiderp.CustomDataClass.ReturnUserData;
+import com.example.androiderp.CustomDataClass.PostUserData;
 import com.example.androiderp.R;
 import com.example.androiderp.adaper.CommonAdapterData;
-import com.example.androiderp.adaper.CommonListViewAdapter;
 import com.example.androiderp.adaper.DataStructure;
-import com.example.androiderp.basicdata.TestUserListView;
-import com.example.androiderp.common.AES;
 import com.example.androiderp.common.Common;
 import com.example.androiderp.common.HttpUtil;
 import com.example.androiderp.common.MD5;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
 import java.util.List;
 
 import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
 import okhttp3.Response;
 
 /**
@@ -49,13 +38,13 @@ public class TestUserForm extends AppCompatActivity implements View.OnClickListe
     private InputMethodManager manager;
     private EditText userName;
     private TextView toobarSave, toobarTile, toobarBack;
-    private String  edit;
-    private CommonAdapterData testUser;
+    private String  getPostType;
+    private CommonAdapterData getPostData;
     private List<Brand> brandList;
-    private String getData;
+    private String getPostName;
     private boolean isSave = false;
     private Dialog dialog;
-    private TestUser postDate = new TestUser();
+    private PostUserData postUserData = new PostUserData();
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,8 +52,8 @@ public class TestUserForm extends AppCompatActivity implements View.OnClickListe
         manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         userName = (EditText) findViewById(R.id.customcategory_name);
         final Intent intent = getIntent();
-        testUser=intent.getParcelableExtra("customid");
-        edit = intent.getStringExtra("action");
+        getPostData =intent.getParcelableExtra("postdata");
+        getPostType = intent.getStringExtra("type");
         toobarSave = (TextView) findViewById(R.id.custom_toobar_right);
         toobarTile = (TextView) findViewById(R.id.custom_toobar_midd);
         toobarBack = (TextView) findViewById(R.id.custom_toobar_left);
@@ -78,13 +67,13 @@ public class TestUserForm extends AppCompatActivity implements View.OnClickListe
     }
 
     private void formInit() {
-        if (testUser != null) {
+        if (getPostData != null) {
 
-            getData =testUser.getName();
-            userName.setText(testUser.getName());
+            getPostName = getPostData.getName();
+            userName.setText(getPostData.getName());
 
         }
-        if (edit.equals("edit")) {
+        if (getPostType.equals("edit")) {
             toobarTile.setText("品牌修改");
         } else {
             toobarTile.setText("品牌新增");
@@ -103,26 +92,26 @@ public class TestUserForm extends AppCompatActivity implements View.OnClickListe
                 } else if (brandList.size() > 0) {
                     Toast.makeText(TestUserForm.this, "品牌已经存在", Toast.LENGTH_SHORT).show();
                 } else {
-                    if (edit.equals("edit")) {
-                        postDate.setOriginal(getData.toString());
-                        postDate.setUnitId(testUser.getId());
-                        postDate.setName(userName.getText().toString().trim());
-                        postDate.setRequestType("update");
-                        postDate.setServerIp(Common.ip);
-                        postDate.setServlet("UnitOperate");
-                        getHttpData(postDate);
+                    if (getPostType.equals("edit")) {
+                        postUserData.setOriginal(getPostName.toString());
+                        postUserData.setUnitId(getPostData.getId());
+                        postUserData.setName(userName.getText().toString().trim());
+                        postUserData.setRequestType("update");
+                        postUserData.setServerIp(Common.ip);
+                        postUserData.setServlet("BrandOperate");
+                        getHttpData(postUserData);
                         isSave = true;
 
                     } else {
                         //getHttpData(Common.ip + "UnitOperate", userName.getText().toString().trim(), "insert");
                         try {
                             String md5=MD5.getMD5("888");
-                            postDate.setName(userName.getText().toString().trim());
-                            postDate.setNote(md5);
-                            postDate.setRequestType("insert");
-                            postDate.setServerIp(Common.ip);
-                            postDate.setServlet("UnitOperate");
-                            getHttpData(postDate);
+                            postUserData.setName(userName.getText().toString().trim());
+                            postUserData.setNote(md5);
+                            postUserData.setRequestType("insert");
+                            postUserData.setServerIp(Common.ip);
+                            postUserData.setServlet("BrandOperate");
+                            getHttpData(postUserData);
 
 
                         }catch (Exception e)
@@ -135,12 +124,12 @@ public class TestUserForm extends AppCompatActivity implements View.OnClickListe
                 }
                 break;
             case R.id.custom_toobar_left:
-                if (edit.equals("edit")) {
+                if (getPostType.equals("edit")) {
                     Intent intent = new Intent();
                     if (isSave) {
                         intent.putExtra("returnName", userName.getText().toString());
                     } else {
-                        intent.putExtra("returnName", getData);
+                        intent.putExtra("returnName", getPostName);
                     }
                     setResult(RESULT_OK, intent);
                     finish();
@@ -151,10 +140,10 @@ public class TestUserForm extends AppCompatActivity implements View.OnClickListe
 
         }
     }
-    private void getHttpData( final TestUser postTestUser) {
+    private void getHttpData( final PostUserData postPostUserData) {
 
 
-        HttpUtil.sendOkHttpRequst(postTestUser, new okhttp3.Callback() {
+        HttpUtil.sendOkHttpRequst(postPostUserData, new okhttp3.Callback() {
 
             @Override
             public void onFailure(Call call, IOException e) {
@@ -181,22 +170,22 @@ public class TestUserForm extends AppCompatActivity implements View.OnClickListe
 
 
                             Gson gson = new Gson();
-                            ResultData resultData = (ResultData) gson.fromJson(response.body().string(), ResultData.class);
+                            ReturnUserData returnUserData = (ReturnUserData) gson.fromJson(response.body().string(), ReturnUserData.class);
 
 
-                                if (resultData.getResult() > 0) {
+                                if (returnUserData.getResult() > 0) {
                                     Intent intent = new Intent();
                                     setResult(RESULT_OK, intent);
-                                    if(testUser!=null) {
+                                    if(getPostData !=null) {
                                         CommonAdapterData user = new CommonAdapterData();
-                                        user.setId(testUser.getId());
+                                        user.setId(getPostData.getId());
                                         user.setName(userName.getText().toString().trim());
                                         intent.putExtra("customid", user);
                                     }else
                                     {
                                         CommonAdapterData user = new CommonAdapterData();
                                         user.setName(userName.getText().toString().trim());
-                                        user.setId(resultData.getResult());
+                                        user.setId(returnUserData.getResult());
                                         intent.putExtra("customid", user);
                                     }
                                     TestUserForm.this.finish();

@@ -15,8 +15,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.androiderp.CustomDataClass.Product;
-import com.example.androiderp.CustomDataClass.ResultData;
-import com.example.androiderp.CustomDataClass.TestUser;
+import com.example.androiderp.CustomDataClass.ReturnUserData;
+import com.example.androiderp.CustomDataClass.PostUserData;
 import com.example.androiderp.R;
 import com.example.androiderp.adaper.CommonAdapterData;
 import com.example.androiderp.adaper.CommonListViewAdapter;
@@ -48,15 +48,15 @@ public class TestUserListView extends CustomSearchBase implements View.OnClickLi
     private CommonListViewAdapter adapter;
     private SlideAndDragListView<CommonAdapterData> listView;
     private DisplayMetrics dm;
-    private List<TestUser> testUserList = new ArrayList<TestUser>();
+    private List<PostUserData> postUserDataList = new ArrayList<PostUserData>();
     private TextView toobarBack, toobarAdd, toobarTile;
     private CustomSearch customSearch;
     private ImageView lastCheckedOption;
-    private int indexPositon = -1, editPositon = -1;
+    private int indexPositon = -1, getEditPositon = -1;
     private String indexName;
     private Menu menu;
     private Dialog dialog;
-    private TestUser postDate = new TestUser();
+    private PostUserData postDate = new PostUserData();
     private CommonAdapterData editDate = new CommonAdapterData();
 
 
@@ -89,10 +89,10 @@ public class TestUserListView extends CustomSearchBase implements View.OnClickLi
 
     }
 
-    private void getHttpData(final TestUser postTestUser) {
+    private void getHttpData(final PostUserData postPostUserData) {
 
 
-        HttpUtil.sendOkHttpRequst(postTestUser, new okhttp3.Callback() {
+        HttpUtil.sendOkHttpRequst(postPostUserData, new okhttp3.Callback() {
 
             @Override
             public void onFailure(Call call, IOException e) {
@@ -117,21 +117,21 @@ public class TestUserListView extends CustomSearchBase implements View.OnClickLi
                     public void run() {
                         try {
 
-                            if (postTestUser.getRequestType().equals("select")) {
+                            if (postPostUserData.getRequestType().equals("select")) {
                                 indexPositon = -1;
                                 Gson gson = new Gson();
-                                testUserList = gson.fromJson(response.body().string(), new TypeToken<List<TestUser>>() {
+                                postUserDataList = gson.fromJson(response.body().string(), new TypeToken<List<PostUserData>>() {
                                 }.getType());
                                 listdatas.clear();
-                                for (TestUser testUser : testUserList)
+                                for (PostUserData postUserData : postUserDataList)
 
                                 {
-                                    if (testUser.getName().equals(indexName)) {
-                                        indexPositon = testUserList.indexOf(testUser);
+                                    if (postUserData.getName().equals(indexName)) {
+                                        indexPositon = postUserDataList.indexOf(postUserData);
                                     }
                                     CommonAdapterData commonData = new CommonAdapterData();
-                                    commonData.setName(testUser.getName());
-                                    commonData.setId(testUser.getUnitId());
+                                    commonData.setName(postUserData.getName());
+                                    commonData.setId(postUserData.getUnitId());
 
 
                                     commonData.setImage(R.drawable.seclec_arrow);
@@ -152,8 +152,8 @@ public class TestUserListView extends CustomSearchBase implements View.OnClickLi
 
                             } else {
                                 Gson gson = new Gson();
-                                ResultData resultData = (ResultData) gson.fromJson(response.body().string(), ResultData.class);
-                                if (resultData.getResult() > 0) {
+                                ReturnUserData returnUserData = (ReturnUserData) gson.fromJson(response.body().string(), ReturnUserData.class);
+                                if (returnUserData.getResult() > 0) {
                                     Toast.makeText(TestUserListView.this, "操作成功", Toast.LENGTH_SHORT).show();
 
 
@@ -217,9 +217,9 @@ public class TestUserListView extends CustomSearchBase implements View.OnClickLi
                 switch (buttonPosition) {
                     case 0:
                         Intent intent = new Intent(TestUserListView.this, TestUserForm.class);
-                        editPositon = itemPosition;
-                        intent.putExtra("action", "edit");
-                        intent.putExtra("customid", listdatas.get(itemPosition));
+                        getEditPositon = itemPosition;
+                        intent.putExtra("type", "edit");
+                        intent.putExtra("postdata", listdatas.get(itemPosition));
                         startActivityForResult(intent, 1);
 
                         return Menu.ITEM_NOTHING;
@@ -238,7 +238,7 @@ public class TestUserListView extends CustomSearchBase implements View.OnClickLi
                                     postDate.setName(listdatas.get(itemPosition - listView.getHeaderViewsCount()).getName().toString());
                                     postDate.setRequestType("delete");
                                     postDate.setServerIp(Common.ip);
-                                    postDate.setServlet("UnitOperate");
+                                    postDate.setServlet("BrandOperate");
                                     postDate.setUnitId(listdatas.get(itemPosition - listView.getHeaderViewsCount()).getId());
                                     getHttpData(postDate);
                                     listdatas.remove(itemPosition - listView.getHeaderViewsCount());
@@ -304,7 +304,7 @@ public class TestUserListView extends CustomSearchBase implements View.OnClickLi
         postDate.setName(name);
         postDate.setRequestType("select");
         postDate.setServerIp(Common.ip);
-        postDate.setServlet("UnitOperate");
+        postDate.setServlet("BrandOperate");
         getHttpData(postDate);
     }
 
@@ -328,7 +328,7 @@ public class TestUserListView extends CustomSearchBase implements View.OnClickLi
 
             case R.id.custom_toobar_right:
                 Intent cate = new Intent(TestUserListView.this, TestUserForm.class);
-                cate.putExtra("action", "add");
+                cate.putExtra("type", "add");
                 startActivityForResult(cate, 2);
                 break;
 
@@ -342,15 +342,15 @@ public class TestUserListView extends CustomSearchBase implements View.OnClickLi
         postDate.setName("");
         postDate.setRequestType("select");
         postDate.setServerIp(Common.ip);
-        postDate.setServlet("UnitOperate");
+        postDate.setServlet("BrandOperate");
         switch (requestCode) {
 
             case 1:
                 if (resultCode == RESULT_OK) {
                     editDate = data.getParcelableExtra("customid");
                     if (editDate != null) {
-                        listdatas.get(editPositon).setId(editDate.getId());
-                        listdatas.get(editPositon).setName(editDate.getName());
+                        listdatas.get(getEditPositon).setId(editDate.getId());
+                        listdatas.get(getEditPositon).setName(editDate.getName());
                         adapter = new CommonListViewAdapter(TestUserListView.this, R.layout.custom_item, listdatas);
                         adapter.setSeclection(indexPositon);
                         listView.setAdapter(adapter);
@@ -432,7 +432,7 @@ public class TestUserListView extends CustomSearchBase implements View.OnClickLi
         postDate.setName("");
         postDate.setRequestType("select");
         postDate.setServerIp(Common.ip);
-        postDate.setServlet("UnitOperate");
+        postDate.setServlet("BrandOperate");
         getHttpData(postDate);
     }
 }

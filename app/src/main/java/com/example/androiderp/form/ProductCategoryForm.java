@@ -12,14 +12,22 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.androiderp.CustomDataClass.Product;
 import com.example.androiderp.CustomDataClass.ProductCategory;
+import com.example.androiderp.CustomDataClass.ReturnUserData;
+import com.example.androiderp.CustomDataClass.PostUserData;
 import com.example.androiderp.R;
+import com.example.androiderp.adaper.CommonAdapterData;
 import com.example.androiderp.adaper.DataStructure;
+import com.example.androiderp.common.Common;
+import com.example.androiderp.common.HttpUtil;
+import com.example.androiderp.common.MD5;
+import com.google.gson.Gson;
 
-import org.litepal.crud.DataSupport;
-
+import java.io.IOException;
 import java.util.List;
+
+import okhttp3.Call;
+import okhttp3.Response;
 
 /**
  * Created by lingtan on 2017/5/15.
@@ -29,18 +37,21 @@ public class ProductCategoryForm extends AppCompatActivity implements View.OnCli
     private InputMethodManager manager;
     private EditText userName;
     private TextView toobarSave, toobarTile, toobarBack;
-    private ProductCategory productCategoryName;
-    private String customid,edit;
+    private String  getPostType;
     private boolean isSave=false;
     private List<ProductCategory> productCategoryList;
+    private CommonAdapterData getPostData;
+    private PostUserData postDate = new PostUserData();
+    private String getPostName;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.customcategory);
         manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         userName =(EditText)findViewById(R.id.customcategory_name);
         final Intent intent=getIntent();
-        customid=intent.getStringExtra("customid");
-        edit=intent.getStringExtra("action");
+        getPostData =intent.getParcelableExtra("postdata");
+        getPostType=intent.getStringExtra("type");
         toobarSave =(TextView)findViewById(R.id.custom_toobar_right);
         toobarTile =(TextView)findViewById(R.id.custom_toobar_midd);
         toobarBack =(TextView)findViewById(R.id.custom_toobar_left);
@@ -53,11 +64,11 @@ public class ProductCategoryForm extends AppCompatActivity implements View.OnCli
 
     }
 private  void formInit()
-{if(customid!=null) {
-    productCategoryName = DataSupport.find(ProductCategory.class, Long.parseLong(customid));
-    userName.setText(productCategoryName.getName());
+{if(getPostData !=null) {
+    getPostName = getPostData.getName();
+    userName.setText(getPostData.getName());
 }
-    if(edit.equals("edit"))
+    if(getPostType.equals("edit"))
     {
         toobarTile.setText("商品分类修改");
     }else {
@@ -78,41 +89,46 @@ private  void formInit()
                 {
                     Toast.makeText(ProductCategoryForm.this,"分类已经存在",Toast.LENGTH_SHORT).show();
                 }else {
-                    if (edit.equals("edit")) {
-                 ProductCategory       productCategory = new ProductCategory();
-                        productCategory.setName(userName.getText().toString());
-                        productCategory.update(Long.parseLong(customid));
-                        Intent intent = new Intent();
-                        intent.putExtra("returnName",userName.getText().toString());
-                        setResult(RESULT_OK,intent);
-                        Product product=new Product();
-                        product.setCategory(userName.getText().toString());
-                        product.updateAll("category = ?",productCategoryName.getName());
+                    if (getPostType.equals("edit")) {
+                        postDate.setOriginal(getPostName.toString());
+                        postDate.setUnitId(getPostData.getId());
+                        postDate.setName(userName.getText().toString().trim());
+                        postDate.setRequestType("update");
+                        postDate.setServerIp(Common.ip);
+                        postDate.setServlet("ProductCategoryOperate");
+                        getHttpData(postDate);
                         isSave=true;
 
 
-                        ProductCategoryForm.this.finish();
+
                     } else {
-                 ProductCategory       productCategory = new ProductCategory();
-                        productCategory.setName(userName.getText().toString());
-                        productCategory.save();
-                        Intent intent = new Intent();
-                        setResult(RESULT_OK,intent);
-                        ProductCategoryForm.this.finish();
+                        try {
+                            String md5=MD5.getMD5("888");
+                            postDate.setName(userName.getText().toString().trim());
+                            postDate.setNote(md5);
+                            postDate.setRequestType("insert");
+                            postDate.setServerIp(Common.ip);
+                            postDate.setServlet("ProductCategoryOperate");
+                            getHttpData(postDate);
+
+
+                        }catch (Exception e)
+                        {
+
+                        }
                     }
                 }
                 break;
             case R.id.custom_toobar_left:
 
 
-                if(edit.equals("edit"))
+                if(getPostType.equals("edit"))
                 {
                     Intent intent = new Intent();
-                    if(isSave) {
+                    if (isSave) {
                         intent.putExtra("returnName", userName.getText().toString());
-
-                    }else {
-                        intent.putExtra("returnName", productCategoryName.getName());
+                    } else {
+                        intent.putExtra("returnName", getPostName);
                     }
                     setResult(RESULT_OK,intent);
                     finish();
@@ -124,7 +140,77 @@ private  void formInit()
 
         }
     }
+    private void getHttpData( final PostUserData postPostUserData) {
 
+
+        HttpUtil.sendOkHttpRequst(postPostUserData, new okhttp3.Callback() {
+
+            @Override
+            public void onFailure(Call call, IOException e) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+
+                        Toast.makeText(ProductCategoryForm.this, "网络连接失败", Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+
+            }
+
+            @Override
+            public void onResponse(Call call, final Response response) throws IOException {
+
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+
+
+                            Gson gson = new Gson();
+                            ReturnUserData returnUserData = (ReturnUserData) gson.fromJson(response.body().string(), ReturnUserData.class);
+
+
+                            if (returnUserData.getResult() > 0) {
+                                Intent intent = new Intent();
+                                setResult(RESULT_OK, intent);
+                                if(getPostData !=null) {
+                                    CommonAdapterData user = new CommonAdapterData();
+                                    user.setId(getPostData.getId());
+                                    user.setName(userName.getText().toString().trim());
+                                    intent.putExtra("customid", user);
+                                }else
+                                {
+                                    CommonAdapterData user = new CommonAdapterData();
+                                    user.setName(userName.getText().toString().trim());
+                                    user.setId(returnUserData.getResult());
+                                    intent.putExtra("customid", user);
+                                }
+                                ProductCategoryForm.this.finish();
+
+
+                            } else {
+
+                                Toast.makeText(ProductCategoryForm.this, "操作失败", Toast.LENGTH_SHORT).show();
+                            }
+                        }catch (Exception e)
+                        {
+                            Toast.makeText(ProductCategoryForm.this, "网络连接失败", Toast.LENGTH_SHORT).show();
+                        }
+
+
+
+                    }
+                });
+
+
+            }
+        });
+
+
+    }
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         // TODO Auto-generated method stub

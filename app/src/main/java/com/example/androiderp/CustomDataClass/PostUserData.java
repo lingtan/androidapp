@@ -3,13 +3,11 @@ package com.example.androiderp.CustomDataClass;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.util.ArrayList;
-
 /**
  * Created by lingtan on 2017/9/18.
  */
 
-public class TestUser implements Parcelable{
+public class PostUserData implements Parcelable{
     private int unitId;
     private  String name;
     private  String note;
@@ -91,25 +89,25 @@ public class TestUser implements Parcelable{
         dest.writeString(serverIp);
         dest.writeString(servlet);
     }
-    public static final Parcelable.Creator<TestUser> CREATOR=new Parcelable.Creator<TestUser>(){
+    public static final Parcelable.Creator<PostUserData> CREATOR=new Parcelable.Creator<PostUserData>(){
         @Override
-        public TestUser createFromParcel(Parcel source) {
-            TestUser testUser=new TestUser();
-            testUser.unitId=source.readInt();
-            testUser.name=source.readString();
-            testUser.note=source.readString();
-            testUser.original=source.readString();
-            testUser.requestType=source.readString();
-            testUser.serverIp=source.readString();
-            testUser.serverIp=source.readString();
+        public PostUserData createFromParcel(Parcel source) {
+            PostUserData postUserData =new PostUserData();
+            postUserData.unitId=source.readInt();
+            postUserData.name=source.readString();
+            postUserData.note=source.readString();
+            postUserData.original=source.readString();
+            postUserData.requestType=source.readString();
+            postUserData.serverIp=source.readString();
+            postUserData.serverIp=source.readString();
 
 
-            return testUser;
+            return postUserData;
         }
 
         @Override
-        public TestUser[] newArray(int size) {
-            return new TestUser[size];
+        public PostUserData[] newArray(int size) {
+            return new PostUserData[size];
         }
     };
 }

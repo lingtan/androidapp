@@ -1,20 +1,12 @@
 package com.example.androiderp.common;
 
-import android.util.Log;
-
-import com.example.androiderp.CustomDataClass.TestUser;
+import com.example.androiderp.CustomDataClass.PostUserData;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
-import java.io.IOException;
-import java.util.List;
-
-import okhttp3.Call;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
-import okhttp3.Response;
 
 /**
  * Created by lingtan on 2017/9/18.
@@ -23,10 +15,10 @@ import okhttp3.Response;
 
 
 public class HttpUtil {
-    public  static void sendOkHttpRequst(TestUser postTestUser,okhttp3.Callback callback) {
-        String address = postTestUser.getServerIp() + postTestUser.getServlet();
+    public  static void sendOkHttpRequst(PostUserData postPostUserData, okhttp3.Callback callback) {
+        String address = postPostUserData.getServerIp() + postPostUserData.getServlet();
         Gson gson = new Gson();
-        String json = gson.toJson(postTestUser);
+        String json = gson.toJson(postPostUserData);
 
         OkHttpClient client = new OkHttpClient();
         MediaType JSON = MediaType.parse("application/json; charset=utf-8");
