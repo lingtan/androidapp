@@ -77,7 +77,7 @@ public class AccountsListView extends CustomSearchBase implements View.OnClickLi
         }
             CommonAdapterData commonData=new CommonAdapterData();
             commonData.setName(accounts.getName());
-            commonData.setId(accounts.getId());
+            commonData.setUnitId(accounts.getId());
             commonData.setImage(R.drawable.seclec_arrow);
             listdatas.add(commonData);
 
@@ -137,7 +137,7 @@ public class AccountsListView extends CustomSearchBase implements View.OnClickLi
                         Intent intent=new Intent(AccountsListView.this,AccountsForm.class);
 
                             intent.putExtra("action", "edit");
-                            intent.putExtra("customid", String.valueOf(listdatas.get(itemPosition).getId()));
+                            intent.putExtra("customid", String.valueOf(listdatas.get(itemPosition).getUnitId()));
                         startActivityForResult(intent,1);
 
                         return Menu.ITEM_NOTHING;
@@ -214,7 +214,7 @@ public class AccountsListView extends CustomSearchBase implements View.OnClickLi
         {
             CommonAdapterData commonData=new CommonAdapterData();
             commonData.setName(accounts.getName());
-            commonData.setId(accounts.getId());
+            commonData.setUnitId(accounts.getId());
             commonData.setImage(R.drawable.seclec_arrow);
             listdatas.add(commonData);
 
@@ -311,7 +311,7 @@ public class AccountsListView extends CustomSearchBase implements View.OnClickLi
                     {
                         CommonAdapterData commonData=new CommonAdapterData();
                         commonData.setName(accounts.getName());
-                        commonData.setId(accounts.getId());
+                        commonData.setUnitId(accounts.getId());
                         commonData.setImage(R.drawable.seclec_arrow);
                         listdatas.add(commonData);
 

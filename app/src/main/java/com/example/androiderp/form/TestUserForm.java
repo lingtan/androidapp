@@ -36,7 +36,7 @@ import okhttp3.Response;
 
 public class TestUserForm extends AppCompatActivity implements View.OnClickListener {
     private InputMethodManager manager;
-    private EditText userName;
+    private EditText userName,note;
     private TextView toobarSave, toobarTile, toobarBack;
     private String  getPostType;
     private CommonAdapterData getPostData;
@@ -51,6 +51,7 @@ public class TestUserForm extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.customcategory);
         manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         userName = (EditText) findViewById(R.id.customcategory_name);
+        note =(EditText)findViewById(R.id.customcategory_note);
         final Intent intent = getIntent();
         getPostData =intent.getParcelableExtra("postdata");
         getPostType = intent.getStringExtra("type");
@@ -68,9 +69,9 @@ public class TestUserForm extends AppCompatActivity implements View.OnClickListe
 
     private void formInit() {
         if (getPostData != null) {
-
             getPostName = getPostData.getName();
             userName.setText(getPostData.getName());
+            note.setText(getPostData.getNote());
 
         }
         if (getPostType.equals("edit")) {
@@ -94,8 +95,9 @@ public class TestUserForm extends AppCompatActivity implements View.OnClickListe
                 } else {
                     if (getPostType.equals("edit")) {
                         postUserData.setOriginal(getPostName.toString());
-                        postUserData.setUnitId(getPostData.getId());
+                        postUserData.setUnitId(getPostData.getUnitId());
                         postUserData.setName(userName.getText().toString().trim());
+                        postUserData.setNote(note.getText().toString().trim());
                         postUserData.setRequestType("update");
                         postUserData.setServerIp(Common.ip);
                         postUserData.setServlet("BrandOperate");
@@ -105,9 +107,9 @@ public class TestUserForm extends AppCompatActivity implements View.OnClickListe
                     } else {
                         //getHttpData(Common.ip + "UnitOperate", userName.getText().toString().trim(), "insert");
                         try {
-                            String md5=MD5.getMD5("888");
+
                             postUserData.setName(userName.getText().toString().trim());
-                            postUserData.setNote(md5);
+                            postUserData.setNote(note.getText().toString().trim());
                             postUserData.setRequestType("insert");
                             postUserData.setServerIp(Common.ip);
                             postUserData.setServlet("BrandOperate");
@@ -178,14 +180,14 @@ public class TestUserForm extends AppCompatActivity implements View.OnClickListe
                                     setResult(RESULT_OK, intent);
                                     if(getPostData !=null) {
                                         CommonAdapterData user = new CommonAdapterData();
-                                        user.setId(getPostData.getId());
+                                        user.setUnitId(getPostData.getUnitId());
                                         user.setName(userName.getText().toString().trim());
                                         intent.putExtra("customid", user);
                                     }else
                                     {
                                         CommonAdapterData user = new CommonAdapterData();
                                         user.setName(userName.getText().toString().trim());
-                                        user.setId(returnUserData.getResult());
+                                        user.setUnitId(returnUserData.getResult());
                                         intent.putExtra("customid", user);
                                     }
                                     TestUserForm.this.finish();

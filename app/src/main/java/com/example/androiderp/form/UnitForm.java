@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -39,7 +40,7 @@ import okhttp3.Response;
 
 public class UnitForm extends AppCompatActivity implements View.OnClickListener {
     private InputMethodManager manager;
-    private EditText userName;
+    private EditText userName,note;
     private TextView toobarSave, toobarTile, toobarBack;
     private String getPostName;
     private String  getPostType;
@@ -53,8 +54,9 @@ public class UnitForm extends AppCompatActivity implements View.OnClickListener 
         setContentView(R.layout.customcategory);
         manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         userName =(EditText)findViewById(R.id.customcategory_name);
+        note =(EditText)findViewById(R.id.customcategory_note);
         final Intent intent=getIntent();
-        getPostData =intent.getParcelableExtra("postdata");
+        getPostData =(CommonAdapterData)intent.getParcelableExtra("postdata");
         getPostType = intent.getStringExtra("type");
         toobarSave =(TextView)findViewById(R.id.custom_toobar_right);
         toobarTile =(TextView)findViewById(R.id.custom_toobar_midd);
@@ -69,9 +71,9 @@ public class UnitForm extends AppCompatActivity implements View.OnClickListener 
     }
 private  void formInit()
 { if (getPostData != null) {
-
     getPostName = getPostData.getName();
     userName.setText(getPostData.getName());
+    note.setText(getPostData.getNote());
 
 }
     if(getPostType.equals("edit"))
@@ -95,8 +97,9 @@ private  void formInit()
                     Toast.makeText(UnitForm.this,"单位已经存在",Toast.LENGTH_SHORT).show();
                 } else if  (getPostType.equals("edit"))
                 { postUserData.setOriginal(getPostName.toString());
-                    postUserData.setUnitId(getPostData.getId());
+                    postUserData.setUnitId(getPostData.getUnitId());
                     postUserData.setName(userName.getText().toString().trim());
+                    postUserData.setNote(note.getText().toString().trim());
                     postUserData.setRequestType("update");
                     postUserData.setServerIp(Common.ip);
                     postUserData.setServlet("UnitOperate");
@@ -106,9 +109,8 @@ private  void formInit()
                     }
                     else {
                     try {
-                        String md5=MD5.getMD5("888");
                         postUserData.setName(userName.getText().toString().trim());
-                        postUserData.setNote(md5);
+                        postUserData.setNote(note.getText().toString().trim());
                         postUserData.setRequestType("insert");
                         postUserData.setServerIp(Common.ip);
                         postUserData.setServlet("UnitOperate");
@@ -179,14 +181,14 @@ private  void formInit()
                                 setResult(RESULT_OK, intent);
                                 if(getPostData !=null) {
                                     CommonAdapterData user = new CommonAdapterData();
-                                    user.setId(getPostData.getId());
+                                    user.setUnitId(getPostData.getUnitId());
                                     user.setName(userName.getText().toString().trim());
                                     intent.putExtra("customid", user);
                                 }else
                                 {
                                     CommonAdapterData user = new CommonAdapterData();
                                     user.setName(userName.getText().toString().trim());
-                                    user.setId(returnUserData.getResult());
+                                    user.setUnitId(returnUserData.getResult());
                                     intent.putExtra("customid", user);
                                 }
                                 UnitForm.this.finish();

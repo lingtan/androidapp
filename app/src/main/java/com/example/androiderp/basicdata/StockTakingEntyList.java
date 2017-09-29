@@ -114,7 +114,7 @@ public class StockTakingEntyList extends CustomSearchBase implements View.OnClic
             note.setText(stockTaking.getNote());
           for(StockTakingEnty stockTakingEntyy: stockTakingEntyList) {
               CommonAdapterData commonData = new CommonAdapterData();
-              commonData.setId(stockTakingEntyy.getId());
+              commonData.setUnitId(stockTakingEntyy.getId());
               commonData.setNumber(stockTakingEntyy.getNumber());
               commonData.setName(stockTakingEntyy.getName());
               commonData.setFqty(stockTakingEntyy.getQuantity());

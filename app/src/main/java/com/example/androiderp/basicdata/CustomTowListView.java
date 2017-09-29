@@ -57,7 +57,7 @@ public class CustomTowListView extends CustomSearchBase implements View.OnClickL
             CommonAdapterData commonData=new CommonAdapterData();
             commonData.setName(custom.getName());
             commonData.setCategory(custom.getCategory());
-            commonData.setId(custom.getId());
+            commonData.setUnitId(custom.getId());
             commonAdapterDataList.add(commonData);
 
 
@@ -75,7 +75,7 @@ public class CustomTowListView extends CustomSearchBase implements View.OnClickL
         {
             CommonAdapterData commonData=new CommonAdapterData();
             commonData.setName(custom.getName());
-            commonData.setId(custom.getId());
+            commonData.setUnitId(custom.getId());
             categorylist.add(commonData);
 
         }
@@ -106,13 +106,13 @@ public class CustomTowListView extends CustomSearchBase implements View.OnClickL
                         if(commonAdapterDataSearch.size()!=0) {
 
                             intent.putExtra("action", "edit");
-                            intent.putExtra("custom_item", String.valueOf(commonAdapterDataSearch.get(position).getId()));
+                            intent.putExtra("custom_item", String.valueOf(commonAdapterDataSearch.get(position).getUnitId()));
 
 
                         }else {
 
                             intent.putExtra("action", "edit");
-                            intent.putExtra("custom_item", String.valueOf(commonAdapterDataList.get(position).getId()));
+                            intent.putExtra("custom_item", String.valueOf(commonAdapterDataList.get(position).getUnitId()));
 
                         }
                 startActivityForResult(intent,1);
@@ -146,7 +146,7 @@ public class CustomTowListView extends CustomSearchBase implements View.OnClickL
             CommonAdapterData commonData=new CommonAdapterData();
             commonData.setName(custom.getName());
             commonData.setCategory(custom.getCategory());
-            commonData.setId(custom.getId());
+            commonData.setUnitId(custom.getId());
             commonAdapterDataList.add(commonData);
 
 
@@ -187,7 +187,7 @@ public class CustomTowListView extends CustomSearchBase implements View.OnClickL
             CommonAdapterData commonData=new CommonAdapterData();
             commonData.setName(custom.getName());
             commonData.setCategory(custom.getCategory());
-            commonData.setId(custom.getId());
+            commonData.setUnitId(custom.getId());
             commonAdapterDataList.add(commonData);
 
 

@@ -79,7 +79,7 @@ public class StockIntentListview extends CustomSearchBase implements View.OnClic
 
             CommonAdapterData commonData=new CommonAdapterData();
             commonData.setName(stock.getName());
-            commonData.setId(stock.getId());
+            commonData.setUnitId(stock.getId());
             commonData.setImage(R.drawable.seclec_arrow);
             listdatas.add(commonData);
 
@@ -149,13 +149,13 @@ public class StockIntentListview extends CustomSearchBase implements View.OnClic
                         if(commonAdapterDataSearch.size()!=0) {
 
                             intent.putExtra("action", "edit");
-                            intent.putExtra("customid", String.valueOf(commonAdapterDataSearch.get(itemPosition).getId()));
+                            intent.putExtra("customid", String.valueOf(commonAdapterDataSearch.get(itemPosition).getUnitId()));
                             indexName = commonAdapterDataSearch.get(itemPosition).getName();
 
                         }else {
 
                             intent.putExtra("action", "edit");
-                            intent.putExtra("customid", String.valueOf(listdatas.get(itemPosition).getId()));
+                            intent.putExtra("customid", String.valueOf(listdatas.get(itemPosition).getUnitId()));
                             indexName =listdatas.get(itemPosition).getName();
                         }
                         startActivityForResult(intent,1);
@@ -333,7 +333,7 @@ public class StockIntentListview extends CustomSearchBase implements View.OnClic
                     {
                         CommonAdapterData commonData=new CommonAdapterData();
                         commonData.setName(stock.getName());
-                        commonData.setId(stock.getId());
+                        commonData.setUnitId(stock.getId());
                         commonData.setImage(R.drawable.seclec_arrow);
                         listdatas.add(commonData);
 

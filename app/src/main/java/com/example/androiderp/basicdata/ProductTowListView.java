@@ -99,7 +99,7 @@ public class ProductTowListView extends CustomSearchBase implements View.OnClick
         {
             CommonAdapterData commonData=new CommonAdapterData();
             commonData.setName(productCategory.getName());
-            commonData.setId(productCategory.getId());
+            commonData.setUnitId(productCategory.getId());
             categorylist.add(commonData);
 
         }
@@ -280,7 +280,7 @@ public class ProductTowListView extends CustomSearchBase implements View.OnClick
                             proudctcategoryData=commonData;
                         }
                         commonData.setName(productCategory.getName());
-                        commonData.setId(productCategory.getId());
+                        commonData.setUnitId(productCategory.getId());
                         categorylist.add(commonData);
 
                     }
@@ -343,7 +343,7 @@ public class ProductTowListView extends CustomSearchBase implements View.OnClick
                             proudctcategoryData=commonData;
                         }
                         commonData.setName(productCategory.getName());
-                        commonData.setId(productCategory.getId());
+                        commonData.setUnitId(productCategory.getId());
                         categorylist.add(commonData);
 
                     }

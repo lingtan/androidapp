@@ -54,7 +54,7 @@ public class SupplierListView extends CustomSearchBase implements View.OnClickLi
         {
             CommonAdapterData commonData=new CommonAdapterData();
             commonData.setName(supplier.getName());
-            commonData.setId(supplier.getId());
+            commonData.setUnitId(supplier.getId());
             commonAdapterDataList.add(commonData);
 
 
@@ -75,13 +75,13 @@ public class SupplierListView extends CustomSearchBase implements View.OnClickLi
                         if(commonAdapterDataSearch.size()!=0) {
 
                             intent.putExtra("action", "edit");
-                            intent.putExtra("supller_item", String.valueOf(commonAdapterDataSearch.get(position).getId()));
+                            intent.putExtra("supller_item", String.valueOf(commonAdapterDataSearch.get(position).getUnitId()));
 
 
                         }else {
 
                             intent.putExtra("action", "edit");
-                            intent.putExtra("supller_item", String.valueOf(commonAdapterDataList.get(position).getId()));
+                            intent.putExtra("supller_item", String.valueOf(commonAdapterDataList.get(position).getUnitId()));
 
                         }
                 startActivityForResult(intent,1);
@@ -162,7 +162,7 @@ public class SupplierListView extends CustomSearchBase implements View.OnClickLi
                     {
                         CommonAdapterData commonData=new CommonAdapterData();
                         commonData.setName(category.getName());
-                        commonData.setId(category.getId());
+                        commonData.setUnitId(category.getId());
                         commonAdapterDataList.add(commonData);
 
 

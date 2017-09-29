@@ -67,7 +67,7 @@ public class SelectSupplierListView extends CustomSearchBase implements View.OnC
             CommonAdapterData commonData=new CommonAdapterData();
             commonData.setName(supplier.getName());
             commonData.setCategory(supplier.getCategory());
-            commonData.setId(supplier.getId());
+            commonData.setUnitId(supplier.getId());
             commonData.setImage(R.drawable.seclec_arrow);
             commonAdapterDataList.add(commonData);
 
@@ -86,7 +86,7 @@ public class SelectSupplierListView extends CustomSearchBase implements View.OnC
         {
             CommonAdapterData commonData=new CommonAdapterData();
             commonData.setName(sCategory.getName());
-            commonData.setId(sCategory.getId());
+            commonData.setUnitId(sCategory.getId());
             categorylist.add(commonData);
 
         }
@@ -257,7 +257,7 @@ public class SelectSupplierListView extends CustomSearchBase implements View.OnC
                         CommonAdapterData commonData=new CommonAdapterData();
                         commonData.setName(supplier.getName());
                         commonData.setCategory(supplier.getCategory());
-                        commonData.setId(supplier.getId());
+                        commonData.setUnitId(supplier.getId());
                         commonData.setImage(R.drawable.seclec_arrow);
                         commonAdapterDataList.add(commonData);
 

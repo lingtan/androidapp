@@ -58,7 +58,7 @@ public class SupplierTowListView extends CustomSearchBase implements View.OnClic
             CommonAdapterData commonData=new CommonAdapterData();
             commonData.setName(supplier.getName());
             commonData.setCategory(supplier.getCategory());
-            commonData.setId(supplier.getId());
+            commonData.setUnitId(supplier.getId());
             commonAdapterDataList.add(commonData);
 
 
@@ -76,7 +76,7 @@ public class SupplierTowListView extends CustomSearchBase implements View.OnClic
         {
             CommonAdapterData commonData=new CommonAdapterData();
             commonData.setName(sCategory.getName());
-            commonData.setId(sCategory.getId());
+            commonData.setUnitId(sCategory.getId());
             categorylist.add(commonData);
 
         }
@@ -107,13 +107,13 @@ public class SupplierTowListView extends CustomSearchBase implements View.OnClic
                         if(commonAdapterDataSearch.size()!=0) {
 
                             intent.putExtra("action", "edit");
-                            intent.putExtra("supller_item", String.valueOf(commonAdapterDataSearch.get(position).getId()));
+                            intent.putExtra("supller_item", String.valueOf(commonAdapterDataSearch.get(position).getUnitId()));
 
 
                         }else {
 
                             intent.putExtra("action", "edit");
-                            intent.putExtra("supller_item", String.valueOf(commonAdapterDataList.get(position).getId()));
+                            intent.putExtra("supller_item", String.valueOf(commonAdapterDataList.get(position).getUnitId()));
 
                         }
                 startActivityForResult(intent,1);
@@ -147,7 +147,7 @@ public class SupplierTowListView extends CustomSearchBase implements View.OnClic
             CommonAdapterData commonData=new CommonAdapterData();
             commonData.setName(supplier.getName());
             commonData.setCategory(supplier.getCategory());
-            commonData.setId(supplier.getId());
+            commonData.setUnitId(supplier.getId());
             commonAdapterDataList.add(commonData);
 
 
@@ -189,7 +189,7 @@ public class SupplierTowListView extends CustomSearchBase implements View.OnClic
             CommonAdapterData commonData=new CommonAdapterData();
             commonData.setName(supplier.getName());
             commonData.setCategory(supplier.getCategory());
-            commonData.setId(supplier.getId());
+            commonData.setUnitId(supplier.getId());
             commonAdapterDataList.add(commonData);
 
 
@@ -255,7 +255,7 @@ public class SupplierTowListView extends CustomSearchBase implements View.OnClic
                     {
                         CommonAdapterData commonData=new CommonAdapterData();
                         commonData.setName(sCategory.getName());
-                        commonData.setId(sCategory.getId());
+                        commonData.setUnitId(sCategory.getId());
                         categorylist.add(commonData);
 
                     }

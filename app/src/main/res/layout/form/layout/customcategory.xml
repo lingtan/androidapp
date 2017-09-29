@@ -35,7 +35,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="14dp"
                 android:hint="备注信息"
-                android:id="@+id/customcategory_address"
+                android:id="@+id/customcategory_note"
                 android:maxLines="1"/>
         </LinearLayout>
 

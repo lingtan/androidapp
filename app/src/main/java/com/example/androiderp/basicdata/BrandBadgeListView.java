@@ -73,7 +73,7 @@ public class BrandBadgeListView extends CustomSearchBase implements View.OnClick
         }
             CommonAdapterData commonData=new CommonAdapterData();
             commonData.setName(brand.getName());
-            commonData.setId(brand.getId());
+            commonData.setUnitId(brand.getId());
             commonData.setImage(R.drawable.seclec_arrow);
             listdatas.add(commonData);
 
@@ -141,13 +141,13 @@ public class BrandBadgeListView extends CustomSearchBase implements View.OnClick
                         if(commonAdapterDataSearch.size()!=0) {
 
                             intent.putExtra("action", "edit");
-                            intent.putExtra("customid", String.valueOf(commonAdapterDataSearch.get(itemPosition).getId()));
+                            intent.putExtra("customid", String.valueOf(commonAdapterDataSearch.get(itemPosition).getUnitId()));
                             indexName= commonAdapterDataSearch.get(itemPosition).getName();
 
                         }else {
 
                             intent.putExtra("action", "edit");
-                            intent.putExtra("customid", String.valueOf(listdatas.get(itemPosition).getId()));
+                            intent.putExtra("customid", String.valueOf(listdatas.get(itemPosition).getUnitId()));
                             indexName=listdatas.get(itemPosition).getName();
                         }
                         startActivityForResult(intent,1);
@@ -316,7 +316,7 @@ public class BrandBadgeListView extends CustomSearchBase implements View.OnClick
                     {
                         CommonAdapterData commonData=new CommonAdapterData();
                         commonData.setName(brand.getName());
-                        commonData.setId(brand.getId());
+                        commonData.setUnitId(brand.getId());
                         commonData.setImage(R.drawable.seclec_arrow);
                         listdatas.add(commonData);
 

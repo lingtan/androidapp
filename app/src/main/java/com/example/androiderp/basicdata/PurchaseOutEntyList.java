@@ -111,7 +111,7 @@ public class PurchaseOutEntyList extends CustomSearchBase implements View.OnClic
             note.setText(salesOutlist.getNote());
           for(SalesOutEnty salesOutEnty:salesOutEntyList) {
               CommonAdapterData commonData = new CommonAdapterData();
-              commonData.setId(salesOutEnty.getId());
+              commonData.setUnitId(salesOutEnty.getId());
               commonData.setNumber(salesOutEnty.getNumber());
               commonData.setName(salesOutEnty.getName());
               commonData.setFqty(salesOutEnty.getQuantity());

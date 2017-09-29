@@ -70,7 +70,7 @@ public class SelectCustomListView extends CustomSearchBase implements View.OnCli
             CommonAdapterData commonData=new CommonAdapterData();
             commonData.setName(custom.getName());
             commonData.setCategory(custom.getCategory());
-            commonData.setId(custom.getId());
+            commonData.setUnitId(custom.getId());
             commonData.setImage(R.drawable.seclec_arrow);
             commonAdapterDataList.add(commonData);
 
@@ -89,7 +89,7 @@ public class SelectCustomListView extends CustomSearchBase implements View.OnCli
         {
             CommonAdapterData commonData=new CommonAdapterData();
             commonData.setName(custom.getName());
-            commonData.setId(custom.getId());
+            commonData.setUnitId(custom.getId());
             categorylist.add(commonData);
 
         }
@@ -259,7 +259,7 @@ public class SelectCustomListView extends CustomSearchBase implements View.OnCli
                         CommonAdapterData commonData=new CommonAdapterData();
                         commonData.setName(category.getName());
                         commonData.setCategory(category.getCategory());
-                        commonData.setId(category.getId());
+                        commonData.setUnitId(category.getId());
                         commonData.setImage(R.drawable.seclec_arrow);
                         commonAdapterDataList.add(commonData);
 

@@ -151,7 +151,7 @@ public class InventoryListView extends CustomSearchBase implements View.OnClickL
         {
             CommonAdapterData commonData=new CommonAdapterData();
             commonData.setName(productCategory.getName());
-            commonData.setId(productCategory.getId());
+            commonData.setUnitId(productCategory.getId());
             categorylist.add(commonData);
 
         }
@@ -387,7 +387,7 @@ public class InventoryListView extends CustomSearchBase implements View.OnClickL
                     }
                         CommonAdapterData commonData=new CommonAdapterData();
                         commonData.setName(productCategory.getName());
-                        commonData.setId(productCategory.getId());
+                        commonData.setUnitId(productCategory.getId());
                         if(categorycount>0) {
                             commonData.setBadge(String.valueOf(categorycount));
                         }
@@ -531,7 +531,7 @@ public class InventoryListView extends CustomSearchBase implements View.OnClickL
             }
             CommonAdapterData commonData=new CommonAdapterData();
             commonData.setName(productCategory.getName());
-            commonData.setId(productCategory.getId());
+            commonData.setUnitId(productCategory.getId());
             if(categorycount>0) {
                 commonData.setCategory(String.valueOf(categorycount));
             }

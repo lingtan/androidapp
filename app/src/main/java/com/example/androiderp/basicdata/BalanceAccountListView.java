@@ -76,7 +76,7 @@ public class BalanceAccountListView extends CustomSearchBase implements View.OnC
         }
             CommonAdapterData commonData=new CommonAdapterData();
             commonData.setName(balanceAccount.getName());
-            commonData.setId(balanceAccount.getId());
+            commonData.setUnitId(balanceAccount.getId());
             commonData.setImage(R.drawable.seclec_arrow);
             listdatas.add(commonData);
 
@@ -136,7 +136,7 @@ public class BalanceAccountListView extends CustomSearchBase implements View.OnC
                         Intent intent=new Intent(BalanceAccountListView.this,BalanceAccountForm.class);
 
                             intent.putExtra("action", "edit");
-                            intent.putExtra("customid", String.valueOf(listdatas.get(itemPosition).getId()));
+                            intent.putExtra("customid", String.valueOf(listdatas.get(itemPosition).getUnitId()));
                         startActivityForResult(intent,1);
 
                         return Menu.ITEM_NOTHING;
@@ -213,7 +213,7 @@ public class BalanceAccountListView extends CustomSearchBase implements View.OnC
         {
             CommonAdapterData commonData=new CommonAdapterData();
             commonData.setName(balanceAccount.getName());
-            commonData.setId(balanceAccount.getId());
+            commonData.setUnitId(balanceAccount.getId());
             commonData.setImage(R.drawable.seclec_arrow);
             listdatas.add(commonData);
 
@@ -310,7 +310,7 @@ public class BalanceAccountListView extends CustomSearchBase implements View.OnC
                     {
                         CommonAdapterData commonData=new CommonAdapterData();
                         commonData.setName(balanceAccount.getName());
-                        commonData.setId(balanceAccount.getId());
+                        commonData.setUnitId(balanceAccount.getId());
                         commonData.setImage(R.drawable.seclec_arrow);
                         listdatas.add(commonData);
 

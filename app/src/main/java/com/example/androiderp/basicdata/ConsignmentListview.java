@@ -80,7 +80,7 @@ public class ConsignmentListview extends CustomSearchBase implements View.OnClic
 
             CommonAdapterData commonData=new CommonAdapterData();
             commonData.setName(consignment.getName());
-            commonData.setId(consignment.getId());
+            commonData.setUnitId(consignment.getId());
             commonData.setImage(R.drawable.seclec_arrow);
             listdatas.add(commonData);
 
@@ -138,7 +138,7 @@ public class ConsignmentListview extends CustomSearchBase implements View.OnClic
                         Intent intent=new Intent(ConsignmentListview.this,ConsignmentForm.class);
 
                             intent.putExtra("action", "edit");
-                            intent.putExtra("customid", String.valueOf(listdatas.get(itemPosition).getId()));
+                            intent.putExtra("customid", String.valueOf(listdatas.get(itemPosition).getUnitId()));
                         startActivityForResult(intent,1);
 
                         return Menu.ITEM_NOTHING;
@@ -222,7 +222,7 @@ public class ConsignmentListview extends CustomSearchBase implements View.OnClic
         {
             CommonAdapterData commonData=new CommonAdapterData();
             commonData.setName(consignment.getName());
-            commonData.setId(consignment.getId());
+            commonData.setUnitId(consignment.getId());
             commonData.setImage(R.drawable.seclec_arrow);
             listdatas.add(commonData);
 
@@ -318,7 +318,7 @@ public class ConsignmentListview extends CustomSearchBase implements View.OnClic
                     {
                         CommonAdapterData commonData=new CommonAdapterData();
                         commonData.setName(consignment.getName());
-                        commonData.setId(consignment.getId());
+                        commonData.setUnitId(consignment.getId());
                         commonData.setImage(R.drawable.seclec_arrow);
                         listdatas.add(commonData);
 

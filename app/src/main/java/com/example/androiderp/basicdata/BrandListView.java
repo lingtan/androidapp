@@ -39,7 +39,6 @@ public class BrandListView extends CustomSearchBase implements View.OnClickListe
     private CommonListViewAdapter adapter;
     private SlideAndDragListView<CommonAdapterData>  listView;
     private DisplayMetrics dm;
-    private List<CommonAdapterData> commonAdapterDataSearch = new ArrayList<CommonAdapterData>();
     private List<Brand> brandList;
     private TextView toobarBack, toobarAdd,toobarTile;
     private CustomSearch customSearch;
@@ -75,7 +74,7 @@ public class BrandListView extends CustomSearchBase implements View.OnClickListe
         }
             CommonAdapterData commonData=new CommonAdapterData();
             commonData.setName(brand.getName());
-            commonData.setId(brand.getId());
+            commonData.setUnitId(brand.getId());
             commonData.setImage(R.drawable.seclec_arrow);
             listdatas.add(commonData);
 
@@ -135,7 +134,7 @@ public class BrandListView extends CustomSearchBase implements View.OnClickListe
                         Intent intent=new Intent(BrandListView.this,BrandForm.class);
 
                             intent.putExtra("action", "edit");
-                            intent.putExtra("customid", String.valueOf(listdatas.get(itemPosition).getId()));
+                            intent.putExtra("customid", String.valueOf(listdatas.get(itemPosition).getUnitId()));
                         startActivityForResult(intent,1);
 
                         return Menu.ITEM_NOTHING;
@@ -218,7 +217,7 @@ public class BrandListView extends CustomSearchBase implements View.OnClickListe
         {
             CommonAdapterData commonData=new CommonAdapterData();
             commonData.setName(brand.getName());
-            commonData.setId(brand.getId());
+            commonData.setUnitId(brand.getId());
             commonData.setImage(R.drawable.seclec_arrow);
             listdatas.add(commonData);
 
@@ -315,7 +314,7 @@ public class BrandListView extends CustomSearchBase implements View.OnClickListe
                     {
                         CommonAdapterData commonData=new CommonAdapterData();
                         commonData.setName(brand.getName());
-                        commonData.setId(brand.getId());
+                        commonData.setUnitId(brand.getId());
                         commonData.setImage(R.drawable.seclec_arrow);
                         listdatas.add(commonData);
 

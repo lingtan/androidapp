@@ -74,7 +74,7 @@ public class CustomCategoryListView extends CustomSearchBase implements View.OnC
 
             CommonAdapterData commonData=new CommonAdapterData();
             commonData.setName(customCategory.getName());
-            commonData.setId(customCategory.getId());
+            commonData.setUnitId(customCategory.getId());
             commonData.setImage(R.drawable.seclec_arrow);
             listdatas.add(commonData);
 
@@ -134,7 +134,7 @@ public class CustomCategoryListView extends CustomSearchBase implements View.OnC
 
 
                             intent.putExtra("action", "edit");
-                            intent.putExtra("customid", String.valueOf(listdatas.get(itemPosition).getId()));
+                            intent.putExtra("customid", String.valueOf(listdatas.get(itemPosition).getUnitId()));
                         startActivityForResult(intent,1);
 
                         return Menu.ITEM_NOTHING;
@@ -213,7 +213,7 @@ public class CustomCategoryListView extends CustomSearchBase implements View.OnC
         {
             CommonAdapterData commonData=new CommonAdapterData();
             commonData.setName(customCategory.getName());
-            commonData.setId(customCategory.getId());
+            commonData.setUnitId(customCategory.getId());
             commonData.setImage(R.drawable.seclec_arrow);
             listdatas.add(commonData);
 
@@ -309,7 +309,7 @@ public class CustomCategoryListView extends CustomSearchBase implements View.OnC
                     {
                         CommonAdapterData commonData=new CommonAdapterData();
                         commonData.setName(customCategory.getName());
-                        commonData.setId(customCategory.getId());
+                        commonData.setUnitId(customCategory.getId());
                         commonData.setImage(R.drawable.seclec_arrow);
                         listdatas.add(commonData);
 

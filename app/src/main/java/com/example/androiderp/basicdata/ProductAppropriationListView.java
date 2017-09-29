@@ -156,7 +156,7 @@ public class ProductAppropriationListView extends CustomSearchBase implements Vi
         {
             CommonAdapterData commonData=new CommonAdapterData();
             commonData.setName(productCategory.getName());
-            commonData.setId(productCategory.getId());
+            commonData.setUnitId(productCategory.getId());
             categorylist.add(commonData);
 
         }
@@ -403,7 +403,7 @@ public class ProductAppropriationListView extends CustomSearchBase implements Vi
                     }
                         CommonAdapterData commonData=new CommonAdapterData();
                         commonData.setName(productCategory.getName());
-                        commonData.setId(productCategory.getId());
+                        commonData.setUnitId(productCategory.getId());
                         if(categorycount>0) {
                             commonData.setBadge(String.valueOf(df.format(categorycount)));
                         }
@@ -558,7 +558,7 @@ public class ProductAppropriationListView extends CustomSearchBase implements Vi
             }
             CommonAdapterData commonData=new CommonAdapterData();
             commonData.setName(productCategory.getName());
-            commonData.setId(productCategory.getId());
+            commonData.setUnitId(productCategory.getId());
             if(categorycount>0) {
                 commonData.setCategory(String.valueOf(categorycount));
             }

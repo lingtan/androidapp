@@ -88,7 +88,7 @@ public class TallyExpandableListView extends CustomSearchBase implements View.On
                    CommonAdapterData commonData = new CommonAdapterData();
                    commonData.setName(accounts.getName());
                    commonData.setNumber(balanceAccount.getName());
-                   commonData.setId(accounts.getId());
+                   commonData.setUnitId(accounts.getId());
                    commonData.setSaleamount(amount);
                    commonData.setImage(R.drawable.accountsimage);
                    commonData.setSelectImage(R.drawable.seclec_arrow);
@@ -172,7 +172,7 @@ public class TallyExpandableListView extends CustomSearchBase implements View.On
                         CommonAdapterData commonData = new CommonAdapterData();
                         commonData.setName(accounts.getName());
                         commonData.setNumber(balanceAccount.getName());
-                        commonData.setId(accounts.getId());
+                        commonData.setUnitId(accounts.getId());
                         commonData.setSaleamount(amount);
                         commonData.setImage(R.drawable.accountsimage);
                         commonData.setSelectImage(R.drawable.seclec_arrow);
@@ -253,7 +253,7 @@ public class TallyExpandableListView extends CustomSearchBase implements View.On
                                 CommonAdapterData commonData = new CommonAdapterData();
                                 commonData.setName(accounts.getName());
                                 commonData.setNumber(balanceAccount.getName());
-                                commonData.setId(accounts.getId());
+                                commonData.setUnitId(accounts.getId());
                                 commonData.setSaleamount(amount);
                                 commonData.setImage(R.drawable.accountsimage);
                                 commonData.setSelectImage(R.drawable.seclec_arrow);

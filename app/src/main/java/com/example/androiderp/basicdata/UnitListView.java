@@ -7,6 +7,7 @@ import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -45,23 +46,19 @@ import okhttp3.Response;
 public class UnitListView extends CustomSearchBase implements View.OnClickListener,
         AdapterView.OnItemClickListener,
         SlideAndDragListView.OnMenuItemClickListener, SlideAndDragListView.OnItemDeleteListener {
-    private List<CommonAdapterData> listdatas = new ArrayList<CommonAdapterData>();
     private CommonListViewAdapter adapter;
     private SlideAndDragListView<CommonAdapterData> listView;
     private DisplayMetrics dm;
-    private List<CommonAdapterData> commonAdapterDataSearch = new ArrayList<CommonAdapterData>();
     private List<Unit> unitList;
     private TextView toobarBack, toobarAdd, toobarTile;
     private CustomSearch customSearch;
     private ImageView lastCheckedOption;
     private int indexPositon=-1,getEditPositon = -1;
-    private String indexName;
+    private String indexName, searchVale;
     private Menu menu;
-    private String returnName;
-    private String searchVale;
     private PostUserData postDate = new PostUserData();
     private CommonAdapterData editDate = new CommonAdapterData();
-    private List<PostUserData> postUserDataList = new ArrayList<PostUserData>();
+    private List<CommonAdapterData> postUserDataList = new ArrayList<CommonAdapterData>();
     @Override
     public void iniView(){
         setContentView(R.layout.customlistview_category_layout);
@@ -85,15 +82,6 @@ public class UnitListView extends CustomSearchBase implements View.OnClickListen
         dm=new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
 
-
-        if(listdatas.size()!=0) {
-
-                 adapter = new CommonListViewAdapter(UnitListView.this, R.layout.custom_item, listdatas);
-                 adapter.setSeclection(indexPositon);
-                 listView.setAdapter(adapter);
-
-
-        }
 
         customSearch.addTextChangedListener(textWatcher);
 
@@ -133,35 +121,35 @@ public class UnitListView extends CustomSearchBase implements View.OnClickListen
                             if (postPostUserData.getRequestType().equals("select")) {
                                 indexPositon = -1;
                                 Gson gson = new Gson();
-                                postUserDataList = gson.fromJson(response.body().string(), new TypeToken<List<PostUserData>>() {
+                                postUserDataList = gson.fromJson(response.body().string(), new TypeToken<List<CommonAdapterData>>() {
                                 }.getType());
-                                listdatas.clear();
-                                for (PostUserData postUserData : postUserDataList)
 
-                                {
-                                    if (postUserData.getName().equals(indexName)) {
-                                        indexPositon = postUserDataList.indexOf(postUserData);
+                                if (postUserDataList.size() != 0) {
+                                    for(CommonAdapterData commonAdapterData:postUserDataList)
+                                    {
+                                        if (commonAdapterData.getName().equals(indexName)) {
+                                            indexPositon = postUserDataList.indexOf(commonAdapterData);
+                                        }
+
+
+
+                                        commonAdapterData.setSelectImage(R.drawable.seclec_arrow);
                                     }
-                                    CommonAdapterData commonData = new CommonAdapterData();
-                                    commonData.setName(postUserData.getName());
-                                    commonData.setId(postUserData.getUnitId());
 
-
-                                    commonData.setImage(R.drawable.seclec_arrow);
-                                    listdatas.add(commonData);
-
-
-                                }
-                                if (listdatas.size() != 0) {
-                                    adapter = new CommonListViewAdapter(UnitListView.this, R.layout.custom_item, listdatas);
+                                    adapter = new CommonListViewAdapter(UnitListView.this, R.layout.custom_item, postUserDataList);
                                     adapter.setSeclection(indexPositon);
                                     listView.setAdapter(adapter);
 
 
                                 } else {
+                                    adapter = new CommonListViewAdapter(UnitListView.this, R.layout.custom_item, postUserDataList);
+                                    listView.setAdapter(adapter);
                                     Toast.makeText(UnitListView.this, "没有数据", Toast.LENGTH_SHORT).show();
 
                                 }
+
+
+
 
                             } else {
                                 Gson gson = new Gson();
@@ -182,7 +170,7 @@ public class UnitListView extends CustomSearchBase implements View.OnClickListen
                         } catch (Exception e) {
                             Toast.makeText(UnitListView.this, "网络连接失败", Toast.LENGTH_SHORT).show();
 
-                            adapter = new CommonListViewAdapter(UnitListView.this, R.layout.custom_item, listdatas);
+                            adapter = new CommonListViewAdapter(UnitListView.this, R.layout.custom_item, postUserDataList);
                             adapter.setSeclection(indexPositon);
                             listView.setAdapter(adapter);
 
@@ -232,8 +220,7 @@ public class UnitListView extends CustomSearchBase implements View.OnClickListen
 
                         getEditPositon = itemPosition;
                         intent.putExtra("type", "edit");
-                        intent.putExtra("postdata", listdatas.get(itemPosition));
-
+                        intent.putExtra("postdata", postUserDataList.get(itemPosition));
                         startActivityForResult(intent,1);
 
                         return Menu.ITEM_NOTHING;
@@ -244,19 +231,19 @@ public class UnitListView extends CustomSearchBase implements View.OnClickListen
                         dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                List<Product> productList=DataSupport.where("unit =?",listdatas.get(itemPosition - listView.getHeaderViewsCount()).getName().toString()).find(Product.class);
+                                List<Product> productList=DataSupport.where("unit =?",postUserDataList.get(itemPosition - listView.getHeaderViewsCount()).getName().toString()).find(Product.class);
                                 if(productList.size()>0)
                                 {
                                     adapter.notifyDataSetChanged();
                                     Toast.makeText(UnitListView.this,"业务已经发生不能删除",Toast.LENGTH_SHORT).show();
                                 }else {
-                                    postDate.setName(listdatas.get(itemPosition - listView.getHeaderViewsCount()).getName().toString());
+                                    postDate.setName(postUserDataList.get(itemPosition - listView.getHeaderViewsCount()).getName().toString());
                                     postDate.setRequestType("delete");
                                     postDate.setServerIp(Common.ip);
                                     postDate.setServlet("UnitOperate");
-                                    postDate.setUnitId(listdatas.get(itemPosition - listView.getHeaderViewsCount()).getId());
+                                    postDate.setUnitId(postUserDataList.get(itemPosition - listView.getHeaderViewsCount()).getUnitId());
                                     getHttpData(postDate);
-                                    listdatas.remove(itemPosition - listView.getHeaderViewsCount());
+                                    postUserDataList.remove(itemPosition - listView.getHeaderViewsCount());
                                     if (customSearch.getText().toString().isEmpty()) {
                                         if (indexPositon == itemPosition) {
                                             indexPositon = -1;
@@ -295,8 +282,8 @@ public class UnitListView extends CustomSearchBase implements View.OnClickListen
 
         Intent intent=new Intent(UnitListView.this,UnitForm.class);
 
-            intent.putExtra("data_return", String.valueOf(listdatas.get(position).getName()));
-            indexName = listdatas.get(position).getName();
+            intent.putExtra("data_return", String.valueOf(postUserDataList.get(position).getName()));
+            indexName = postUserDataList.get(position).getName();
 
         setResult(RESULT_OK,intent);
 
@@ -309,9 +296,7 @@ public class UnitListView extends CustomSearchBase implements View.OnClickListen
         this.finish();
     }
     public void  searchItem(String name) {
-        if (listdatas.size() > 0) {
-            listdatas.clear();
-        }
+
         postDate.setName(name);
         postDate.setRequestType("select");
         postDate.setServerIp(Common.ip);
@@ -325,7 +310,7 @@ public class UnitListView extends CustomSearchBase implements View.OnClickListen
             case R.id.custom_toobar_left:
                 Intent intent=getIntent();
                 if(indexPositon!=-1) {
-                    intent.putExtra("data_return", listdatas.get(indexPositon).getName());
+                    intent.putExtra("data_return", postUserDataList.get(indexPositon).getName());
                 }
                 setResult(RESULT_OK,intent);
                 UnitListView.this.finish();
@@ -358,9 +343,9 @@ public class UnitListView extends CustomSearchBase implements View.OnClickListen
                 if(resultCode==RESULT_OK)
                 {    editDate = data.getParcelableExtra("customid");
                     if (editDate != null) {
-                        listdatas.get(getEditPositon).setId(editDate.getId());
-                        listdatas.get(getEditPositon).setName(editDate.getName());
-                        adapter = new CommonListViewAdapter(UnitListView.this, R.layout.custom_item, listdatas);
+                        postUserDataList.get(getEditPositon).setUnitId(editDate.getUnitId());
+                        postUserDataList.get(getEditPositon).setName(editDate.getName());
+                        adapter = new CommonListViewAdapter(UnitListView.this, R.layout.custom_item, postUserDataList);
                         adapter.setSeclection(indexPositon);
                         listView.setAdapter(adapter);
                         Toast.makeText(UnitListView.this, "操作成功", Toast.LENGTH_SHORT).show();
@@ -376,10 +361,10 @@ public class UnitListView extends CustomSearchBase implements View.OnClickListen
                     editDate = data.getParcelableExtra("customid");
                     if (editDate != null) {
                         CommonAdapterData commonAdapterData = new CommonAdapterData();
-                        commonAdapterData.setId(editDate.getId());
+                        commonAdapterData.setUnitId(editDate.getUnitId());
                         commonAdapterData.setName(editDate.getName());
-                        listdatas.add(commonAdapterData);
-                        adapter = new CommonListViewAdapter(UnitListView.this, R.layout.custom_item, listdatas);
+                        postUserDataList.add(commonAdapterData);
+                        adapter = new CommonListViewAdapter(UnitListView.this, R.layout.custom_item,postUserDataList);
                         adapter.setSeclection(indexPositon);
                         listView.setAdapter(adapter);
                         Toast.makeText(UnitListView.this, "操作成功", Toast.LENGTH_SHORT).show();

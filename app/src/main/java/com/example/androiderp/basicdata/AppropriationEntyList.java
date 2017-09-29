@@ -117,7 +117,7 @@ public class AppropriationEntyList extends CustomSearchBase implements View.OnCl
             note.setText(appropriation.getNote());
           for(AppropriationEnty appropriationEnty:appropriationEntyList) {
               CommonAdapterData commonData = new CommonAdapterData();
-              commonData.setId(appropriationEnty.getId());
+              commonData.setUnitId(appropriationEnty.getId());
               commonData.setNumber(appropriationEnty.getNumber());
               commonData.setName(appropriationEnty.getName());
               commonData.setFqty(appropriationEnty.getQuantity());

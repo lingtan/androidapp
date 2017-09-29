@@ -44,11 +44,10 @@ import okhttp3.Response;
 public class TestUserListView extends CustomSearchBase implements View.OnClickListener,
         AdapterView.OnItemClickListener,
         SlideAndDragListView.OnMenuItemClickListener, SlideAndDragListView.OnItemDeleteListener {
-    private List<CommonAdapterData> listdatas = new ArrayList<CommonAdapterData>();
     private CommonListViewAdapter adapter;
     private SlideAndDragListView<CommonAdapterData> listView;
     private DisplayMetrics dm;
-    private List<PostUserData> postUserDataList = new ArrayList<PostUserData>();
+    private List<CommonAdapterData> postUserDataList = new ArrayList<CommonAdapterData>();
     private TextView toobarBack, toobarAdd, toobarTile;
     private CustomSearch customSearch;
     private ImageView lastCheckedOption;
@@ -120,32 +119,28 @@ public class TestUserListView extends CustomSearchBase implements View.OnClickLi
                             if (postPostUserData.getRequestType().equals("select")) {
                                 indexPositon = -1;
                                 Gson gson = new Gson();
-                                postUserDataList = gson.fromJson(response.body().string(), new TypeToken<List<PostUserData>>() {
+                                postUserDataList = gson.fromJson(response.body().string(), new TypeToken<List<CommonAdapterData>>() {
                                 }.getType());
-                                listdatas.clear();
-                                for (PostUserData postUserData : postUserDataList)
 
-                                {
-                                    if (postUserData.getName().equals(indexName)) {
-                                        indexPositon = postUserDataList.indexOf(postUserData);
+                                if (postUserDataList.size() != 0) {
+
+                                    for(CommonAdapterData commonAdapterData:postUserDataList)
+                                    {
+                                        if (commonAdapterData.getName().equals(indexName)) {
+                                            indexPositon = postUserDataList.indexOf(commonAdapterData);
+                                        }
+
+                                        commonAdapterData.setSelectImage(R.drawable.seclec_arrow);
                                     }
-                                    CommonAdapterData commonData = new CommonAdapterData();
-                                    commonData.setName(postUserData.getName());
-                                    commonData.setId(postUserData.getUnitId());
 
-
-                                    commonData.setImage(R.drawable.seclec_arrow);
-                                    listdatas.add(commonData);
-
-
-                                }
-                                if (listdatas.size() != 0) {
-                                    adapter = new CommonListViewAdapter(TestUserListView.this, R.layout.custom_item, listdatas);
+                                    adapter = new CommonListViewAdapter(TestUserListView.this, R.layout.custom_item, postUserDataList);
                                     adapter.setSeclection(indexPositon);
                                     listView.setAdapter(adapter);
 
 
                                 } else {
+                                    adapter = new CommonListViewAdapter(TestUserListView.this, R.layout.custom_item, postUserDataList);
+                                    listView.setAdapter(adapter);
                                     Toast.makeText(TestUserListView.this, "没有数据", Toast.LENGTH_SHORT).show();
 
                                 }
@@ -169,7 +164,7 @@ public class TestUserListView extends CustomSearchBase implements View.OnClickLi
                         } catch (Exception e) {
                             Toast.makeText(TestUserListView.this, "网络连接失败", Toast.LENGTH_SHORT).show();
 
-                            adapter = new CommonListViewAdapter(TestUserListView.this, R.layout.custom_item, listdatas);
+                            adapter = new CommonListViewAdapter(TestUserListView.this, R.layout.custom_item, postUserDataList);
                             adapter.setSeclection(indexPositon);
                             listView.setAdapter(adapter);
 
@@ -219,7 +214,7 @@ public class TestUserListView extends CustomSearchBase implements View.OnClickLi
                         Intent intent = new Intent(TestUserListView.this, TestUserForm.class);
                         getEditPositon = itemPosition;
                         intent.putExtra("type", "edit");
-                        intent.putExtra("postdata", listdatas.get(itemPosition));
+                        intent.putExtra("postdata", postUserDataList.get(itemPosition));
                         startActivityForResult(intent, 1);
 
                         return Menu.ITEM_NOTHING;
@@ -230,18 +225,18 @@ public class TestUserListView extends CustomSearchBase implements View.OnClickLi
                         dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                List<Product> productList = DataSupport.where("brand =?", listdatas.get(itemPosition - listView.getHeaderViewsCount()).getName().toString()).find(Product.class);
+                                List<Product> productList = DataSupport.where("brand =?", postUserDataList.get(itemPosition - listView.getHeaderViewsCount()).getName().toString()).find(Product.class);
                                 if (productList.size() > 0) {
                                     adapter.notifyDataSetChanged();
                                     Toast.makeText(TestUserListView.this, "业务已经发生不能删除", Toast.LENGTH_SHORT).show();
                                 } else {
-                                    postDate.setName(listdatas.get(itemPosition - listView.getHeaderViewsCount()).getName().toString());
+                                    postDate.setName(postUserDataList.get(itemPosition - listView.getHeaderViewsCount()).getName().toString());
                                     postDate.setRequestType("delete");
                                     postDate.setServerIp(Common.ip);
                                     postDate.setServlet("BrandOperate");
-                                    postDate.setUnitId(listdatas.get(itemPosition - listView.getHeaderViewsCount()).getId());
+                                    postDate.setUnitId(postUserDataList.get(itemPosition - listView.getHeaderViewsCount()).getUnitId());
                                     getHttpData(postDate);
-                                    listdatas.remove(itemPosition - listView.getHeaderViewsCount());
+                                    postUserDataList.remove(itemPosition - listView.getHeaderViewsCount());
                                     if (customSearch.getText().toString().isEmpty()) {
                                         if (indexPositon == itemPosition) {
                                             indexPositon = -1;
@@ -282,8 +277,8 @@ public class TestUserListView extends CustomSearchBase implements View.OnClickLi
 
 
         Intent intent = getIntent();
-        intent.putExtra("data_return", String.valueOf(listdatas.get(position).getName()));
-        indexName = listdatas.get(position).getName();
+        intent.putExtra("data_return", String.valueOf(postUserDataList.get(position).getName()));
+        indexName = postUserDataList.get(position).getName();
 
         setResult(RESULT_OK, intent);
 
@@ -298,8 +293,8 @@ public class TestUserListView extends CustomSearchBase implements View.OnClickLi
 
     //筛选条件
     public void searchItem(String name) {
-        if (listdatas.size() > 0) {
-            listdatas.clear();
+        if (postUserDataList.size() > 0) {
+            postUserDataList.clear();
         }
         postDate.setName(name);
         postDate.setRequestType("select");
@@ -315,7 +310,7 @@ public class TestUserListView extends CustomSearchBase implements View.OnClickLi
             case R.id.custom_toobar_left:
                 Intent intent = getIntent();
                 if (indexPositon != -1) {
-                    intent.putExtra("data_return", listdatas.get(indexPositon).getName());
+                    intent.putExtra("data_return", postUserDataList.get(indexPositon).getName());
                 }
                 setResult(RESULT_OK, intent);
                 TestUserListView.this.finish();
@@ -349,9 +344,9 @@ public class TestUserListView extends CustomSearchBase implements View.OnClickLi
                 if (resultCode == RESULT_OK) {
                     editDate = data.getParcelableExtra("customid");
                     if (editDate != null) {
-                        listdatas.get(getEditPositon).setId(editDate.getId());
-                        listdatas.get(getEditPositon).setName(editDate.getName());
-                        adapter = new CommonListViewAdapter(TestUserListView.this, R.layout.custom_item, listdatas);
+                        postUserDataList.get(getEditPositon).setUnitId(editDate.getUnitId());
+                        postUserDataList.get(getEditPositon).setName(editDate.getName());
+                        adapter = new CommonListViewAdapter(TestUserListView.this, R.layout.custom_item, postUserDataList);
                         adapter.setSeclection(indexPositon);
                         listView.setAdapter(adapter);
                         Toast.makeText(TestUserListView.this, "操作成功", Toast.LENGTH_SHORT).show();
@@ -364,10 +359,10 @@ public class TestUserListView extends CustomSearchBase implements View.OnClickLi
                     editDate = data.getParcelableExtra("customid");
                     if (editDate != null) {
                         CommonAdapterData commonAdapterData = new CommonAdapterData();
-                        commonAdapterData.setId(editDate.getId());
+                        commonAdapterData.setUnitId(editDate.getUnitId());
                         commonAdapterData.setName(editDate.getName());
-                        listdatas.add(commonAdapterData);
-                        adapter = new CommonListViewAdapter(TestUserListView.this, R.layout.custom_item, listdatas);
+                        postUserDataList.add(commonAdapterData);
+                        adapter = new CommonListViewAdapter(TestUserListView.this, R.layout.custom_item, postUserDataList);
                         adapter.setSeclection(indexPositon);
                         listView.setAdapter(adapter);
                         Toast.makeText(TestUserListView.this, "操作成功", Toast.LENGTH_SHORT).show();

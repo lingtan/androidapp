@@ -84,10 +84,10 @@ public class CommonListViewAdapter extends ArrayAdapter<CommonAdapterData>   {
             itemLayout.setBackgroundColor(Color.parseColor("#ffffff"));
         }
         // 重新获取ViewHolder
-        viewHolder.name.setText(data.get(position).getName());
-        viewHolder.image.setImageResource(data.get(position).getImage());
 
-        Log.d("lingtant",String.valueOf(position));
+        viewHolder.name.setText(data.get(position).getName());
+        viewHolder.image.setImageResource(data.get(position).getSelectImage());
+
 
         /*首先响应子控件的事件
         viewHolder.name.setOnClickListener(new View.OnClickListener() {

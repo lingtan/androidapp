@@ -93,7 +93,7 @@ public class ProductBadgeListView extends CustomSearchBase implements View.OnCli
         {
             CommonAdapterData commonData=new CommonAdapterData();
             commonData.setName(productCategory.getName());
-            commonData.setId(productCategory.getId());
+            commonData.setUnitId(productCategory.getId());
             categorylist.add(commonData);
 
         }
@@ -336,7 +336,7 @@ public class ProductBadgeListView extends CustomSearchBase implements View.OnCli
 
                         CommonAdapterData commonData=new CommonAdapterData();
                         commonData.setName(productCategory.getName());
-                        commonData.setId(productCategory.getId());
+                        commonData.setUnitId(productCategory.getId());
                         if(categorycount>0) {
                             commonData.setBadge(String.valueOf(df.format(categorycount)));
                         }
@@ -492,7 +492,7 @@ public class ProductBadgeListView extends CustomSearchBase implements View.OnCli
             }
             CommonAdapterData commonData=new CommonAdapterData();
             commonData.setName(productCategory.getName());
-            commonData.setId(productCategory.getId());
+            commonData.setUnitId(productCategory.getId());
             if(categorycount>0) {
                 commonData.setCategory(String.valueOf(categorycount));
             }

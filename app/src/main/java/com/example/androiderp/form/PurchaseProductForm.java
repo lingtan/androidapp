@@ -293,7 +293,7 @@ public class PurchaseProductForm extends CustomSearchBase implements View.OnClic
 
         Intent intent=new Intent(PurchaseProductForm.this,ScrennProductShoppingForm.class);
         intent.putExtra("action", "edit");
-        intent.putExtra("product_item", String.valueOf(listdatas.get(position).getId()));
+        intent.putExtra("product_item", String.valueOf(listdatas.get(position).getUnitId()));
         startActivityForResult(intent,7);
     }
 
@@ -585,7 +585,7 @@ public class PurchaseProductForm extends CustomSearchBase implements View.OnClic
                            if(flag==true)
                            {
                                CommonAdapterData commonData = new CommonAdapterData();
-                               commonData.setId(product.getId());
+                               commonData.setUnitId(product.getId());
                                commonData.setNumber(product.getNumber());
                                commonData.setName(product.getName());
                                commonData.setFqty(1);
@@ -640,7 +640,7 @@ public class PurchaseProductForm extends CustomSearchBase implements View.OnClic
                             }
                         }
                         CommonAdapterData commonData=new CommonAdapterData();
-                        commonData.setId(shopping.getId());
+                        commonData.setUnitId(shopping.getId());
                         commonData.setName(shopping.getName());
                         commonData.setNumber(shopping.getNumber());
                         commonData.setFqty(shopping.getQuantity());

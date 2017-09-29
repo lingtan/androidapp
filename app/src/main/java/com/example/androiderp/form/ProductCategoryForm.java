@@ -35,13 +35,13 @@ import okhttp3.Response;
 
 public class ProductCategoryForm extends AppCompatActivity implements View.OnClickListener {
     private InputMethodManager manager;
-    private EditText userName;
+    private EditText userName,note;
     private TextView toobarSave, toobarTile, toobarBack;
     private String  getPostType;
     private boolean isSave=false;
     private List<ProductCategory> productCategoryList;
     private CommonAdapterData getPostData;
-    private PostUserData postDate = new PostUserData();
+    private PostUserData postUserData = new PostUserData();
     private String getPostName;
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +49,7 @@ public class ProductCategoryForm extends AppCompatActivity implements View.OnCli
         setContentView(R.layout.customcategory);
         manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         userName =(EditText)findViewById(R.id.customcategory_name);
+        note =(EditText)findViewById(R.id.customcategory_note);
         final Intent intent=getIntent();
         getPostData =intent.getParcelableExtra("postdata");
         getPostType=intent.getStringExtra("type");
@@ -90,13 +91,14 @@ private  void formInit()
                     Toast.makeText(ProductCategoryForm.this,"分类已经存在",Toast.LENGTH_SHORT).show();
                 }else {
                     if (getPostType.equals("edit")) {
-                        postDate.setOriginal(getPostName.toString());
-                        postDate.setUnitId(getPostData.getId());
-                        postDate.setName(userName.getText().toString().trim());
-                        postDate.setRequestType("update");
-                        postDate.setServerIp(Common.ip);
-                        postDate.setServlet("ProductCategoryOperate");
-                        getHttpData(postDate);
+                        postUserData.setOriginal(getPostName.toString());
+                        postUserData.setUnitId(getPostData.getUnitId());
+                        postUserData.setName(userName.getText().toString().trim());
+                        postUserData.setNote(note.getText().toString().trim());
+                        postUserData.setRequestType("update");
+                        postUserData.setServerIp(Common.ip);
+                        postUserData.setServlet("ProductCategoryOperate");
+                        getHttpData(postUserData);
                         isSave=true;
 
 
@@ -104,12 +106,13 @@ private  void formInit()
                     } else {
                         try {
                             String md5=MD5.getMD5("888");
-                            postDate.setName(userName.getText().toString().trim());
-                            postDate.setNote(md5);
-                            postDate.setRequestType("insert");
-                            postDate.setServerIp(Common.ip);
-                            postDate.setServlet("ProductCategoryOperate");
-                            getHttpData(postDate);
+                            postUserData.setName(userName.getText().toString().trim());
+                            postUserData.setNote(note.getText().toString().trim());
+                            postUserData.setNote(md5);
+                            postUserData.setRequestType("insert");
+                            postUserData.setServerIp(Common.ip);
+                            postUserData.setServlet("ProductCategoryOperate");
+                            getHttpData(postUserData);
 
 
                         }catch (Exception e)
@@ -178,14 +181,15 @@ private  void formInit()
                                 setResult(RESULT_OK, intent);
                                 if(getPostData !=null) {
                                     CommonAdapterData user = new CommonAdapterData();
-                                    user.setId(getPostData.getId());
+                                    user.setUnitId(getPostData.getUnitId());
                                     user.setName(userName.getText().toString().trim());
+
                                     intent.putExtra("customid", user);
                                 }else
                                 {
                                     CommonAdapterData user = new CommonAdapterData();
                                     user.setName(userName.getText().toString().trim());
-                                    user.setId(returnUserData.getResult());
+                                    user.setUnitId(returnUserData.getResult());
                                     intent.putExtra("customid", user);
                                 }
                                 ProductCategoryForm.this.finish();
