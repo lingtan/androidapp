@@ -96,7 +96,7 @@ private  void formInit()
                 {
                     Toast.makeText(UnitForm.this,"单位已经存在",Toast.LENGTH_SHORT).show();
                 } else if  (getPostType.equals("edit"))
-                { postUserData.setOriginal(getPostName.toString());
+                {
                     postUserData.setUnitId(getPostData.getUnitId());
                     postUserData.setName(userName.getText().toString().trim());
                     postUserData.setNote(note.getText().toString().trim());

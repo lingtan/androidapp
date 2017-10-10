@@ -94,7 +94,6 @@ public class TestUserForm extends AppCompatActivity implements View.OnClickListe
                     Toast.makeText(TestUserForm.this, "品牌已经存在", Toast.LENGTH_SHORT).show();
                 } else {
                     if (getPostType.equals("edit")) {
-                        postUserData.setOriginal(getPostName.toString());
                         postUserData.setUnitId(getPostData.getUnitId());
                         postUserData.setName(userName.getText().toString().trim());
                         postUserData.setNote(note.getText().toString().trim());

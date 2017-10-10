@@ -86,7 +86,6 @@ private  void formInit()
                     userName.setError("需要输入仓库");
                 } else {
                     if (getPostType.equals("edit")) {
-                        postUserData.setOriginal(getPostName.toString());
                         postUserData.setUnitId(getPostData.getUnitId());
                         postUserData.setName(userName.getText().toString().trim());
                         postUserData.setNote(note.getText().toString().trim());

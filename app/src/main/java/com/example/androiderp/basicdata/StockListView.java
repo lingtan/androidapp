@@ -7,19 +7,16 @@ import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.example.androiderp.CustomDataClass.PostUserData;
-import com.example.androiderp.CustomDataClass.ReturnUserData;
 import com.example.androiderp.CustomDataClass.SalesOut;
-import com.example.androiderp.CustomDataClass.Stock;
 import com.example.androiderp.R;
 import com.example.androiderp.adaper.CommonAdapterData;
 import com.example.androiderp.adaper.CommonListViewAdapter;
-import com.example.androiderp.adaper.DataStructure;
 import com.example.androiderp.common.Common;
 import com.example.androiderp.common.HttpUtil;
 import com.example.androiderp.custom.CustomSearch;
@@ -29,15 +26,10 @@ import com.example.androiderp.listview.Menu;
 import com.example.androiderp.listview.MenuItem;
 import com.example.androiderp.listview.SlideAndDragListView;
 import com.example.androiderp.listview.Utils;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
 import org.litepal.crud.DataSupport;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
 import okhttp3.Call;
 import okhttp3.Response;
 
@@ -50,32 +42,32 @@ public class StockListView extends CustomSearchBase implements View.OnClickListe
     private TextView toobarBack, toobarAdd, toobarTile;
     private CustomSearch customSearch;
     private Menu menu;
-    private List<SalesOut> salesOutList =new ArrayList<SalesOut>();
-    private int  getEditPositon = -1;
+    private List<SalesOut> salesOutList = new ArrayList<SalesOut>();
+    private int getEditPositon = -1;
     private PostUserData postDate = new PostUserData();
     private CommonAdapterData editDate = new CommonAdapterData();
     private List<CommonAdapterData> postUserDataList = new ArrayList<CommonAdapterData>();
+    private Common common=new Common();
+
     @Override
-    public void iniView(){
+    public void iniView() {
         setContentView(R.layout.customlistview_category_layout);
         initMenu();
         initUiAndListener();
-        toobarBack =(TextView)findViewById(R.id.custom_toobar_left) ;
-        toobarTile =(TextView)findViewById(R.id.custom_toobar_midd);
+        toobarBack = (TextView) findViewById(R.id.custom_toobar_left);
+        toobarTile = (TextView) findViewById(R.id.custom_toobar_midd);
         toobarTile.setText("新增仓库");
-        toobarAdd =(TextView)findViewById(R.id.custom_toobar_right);
+        toobarAdd = (TextView) findViewById(R.id.custom_toobar_right);
         toobarBack.setOnClickListener(this);
         toobarAdd.setOnClickListener(this);
         toobarTile.setOnClickListener(this);
         customSearch = (CustomSearch) findViewById(R.id.search);
-        toobarTile.setCompoundDrawables(null,null,null,null);
+        toobarTile.setCompoundDrawables(null, null, null, null);
 
         //构造函数第一参数是类的对象，第二个是布局文件，第三个是数据源
-        dm=new DisplayMetrics();
+        dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         customSearch.addTextChangedListener(textWatcher);
-
-
 
 
     }
@@ -90,66 +82,32 @@ public class StockListView extends CustomSearchBase implements View.OnClickListe
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-
-
                         Toast.makeText(StockListView.this, "网络连接失败", Toast.LENGTH_SHORT).show();
-
                     }
                 });
 
             }
 
             @Override
-            public void onResponse(Call call, final Response response) throws IOException {
-
-
+            public void onResponse(final Call call, final Response response) throws IOException {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         try {
 
-                            if (postPostUserData.getRequestType().equals("select")) {
-                                Gson gson = new Gson();
-                                postUserDataList = gson.fromJson(response.body().string(), new TypeToken<List<CommonAdapterData>>() {
-                                }.getType());
-
-                                if (postUserDataList.size() != 0) {
-
-                                    adapter = new CommonListViewAdapter(StockListView.this, R.layout.custom_item, postUserDataList);
-                                    listView.setAdapter(adapter);
-
-
-                                } else {
-                                    adapter = new CommonListViewAdapter(StockListView.this, R.layout.custom_item, postUserDataList);
-                                    listView.setAdapter(adapter);
-
-                                    Toast.makeText(StockListView.this, "没有数据", Toast.LENGTH_SHORT).show();
-
-                                }
-
-                            } else {
-                                Gson gson = new Gson();
-                                ReturnUserData returnUserData = (ReturnUserData) gson.fromJson(response.body().string(), ReturnUserData.class);
-                                if (returnUserData.getResult() > 0) {
-                                    Toast.makeText(StockListView.this, "操作成功", Toast.LENGTH_SHORT).show();
-
-
-                                } else {
-
-                                    Toast.makeText(StockListView.this, "操作失败", Toast.LENGTH_SHORT).show();
-
-                                }
-
-                            }
+                         common.JsonUpdateUi(response.body().string(),"", postPostUserData.getRequestType(), StockListView.this, adapter, R.layout.custom_item, listView);
+                         postUserDataList=common.postUserDataList;
 
 
                         } catch (Exception e) {
-                            Toast.makeText(StockListView.this, "网络连接失败", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "网络连接失败", Toast.LENGTH_SHORT).show();
 
-                            adapter = new CommonListViewAdapter(StockListView.this, R.layout.custom_item, postUserDataList);
+                            adapter = new CommonListViewAdapter(getApplicationContext(), R.layout.custom_item, postUserDataList);
                             listView.setAdapter(adapter);
 
                         }
+
+
                     }
                 });
 
@@ -159,6 +117,9 @@ public class StockListView extends CustomSearchBase implements View.OnClickListe
 
 
     }
+
+
+
     public void initMenu() {
         menu = new Menu(true);
         menu.addItem(new MenuItem.Builder().setWidth((int) getResources().getDimension(R.dimen.slv_item_bg_btn_width))
@@ -183,42 +144,41 @@ public class StockListView extends CustomSearchBase implements View.OnClickListe
         listView.setOnMenuItemClickListener(this);
         listView.setOnItemDeleteListener(this);
     }
+
     @Override
     public int onMenuItemClick(View v, final int itemPosition, int buttonPosition, int direction) {
         switch (direction) {
             case MenuItem.DIRECTION_RIGHT:
                 switch (buttonPosition) {
                     case 0:
-                        Intent intent=new Intent(StockListView.this,StockForm.class);
+                        Intent intent = new Intent(StockListView.this, StockForm.class);
                         getEditPositon = itemPosition;
                         intent.putExtra("type", "edit");
                         intent.putExtra("postdata", postUserDataList.get(itemPosition));
-                        startActivityForResult(intent,1);
+                        startActivityForResult(intent, 1);
 
                         return Menu.ITEM_NOTHING;
                     case 1:
-                        AlertDialog.Builder dialog=new AlertDialog.Builder(StockListView.this);
+                        AlertDialog.Builder dialog = new AlertDialog.Builder(StockListView.this);
                         dialog.setTitle("提示");
                         dialog.setMessage("您确认要删除该仓库？");
                         dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
 
-                                if(isCustom(postUserDataList.get(itemPosition - listView.getHeaderViewsCount()).getName().toString()))
-                                {
-                                    Toast.makeText(StockListView.this,"已经有业务发生，不能删除",Toast.LENGTH_SHORT).show();
+                                if (isCustom(postUserDataList.get(itemPosition - listView.getHeaderViewsCount()).getName().toString())) {
+                                    Toast.makeText(StockListView.this, "已经有业务发生，不能删除", Toast.LENGTH_SHORT).show();
                                     adapter.notifyDataSetChanged();
-                                }else {
+                                } else {
                                     postDate.setName(postUserDataList.get(itemPosition - listView.getHeaderViewsCount()).getName().toString());
                                     postDate.setRequestType("delete");
                                     postDate.setServerIp(Common.ip);
-                                    postDate.setServlet("StockOperate");
+                                    postDate.setServlet("UserOperate");
                                     postDate.setUnitId(postUserDataList.get(itemPosition - listView.getHeaderViewsCount()).getUnitId());
                                     getHttpData(postDate);
-
-                                            postUserDataList.remove(itemPosition - listView.getHeaderViewsCount());
-                                            adapter.notifyDataSetChanged();
-
+                                    postUserDataList.remove(itemPosition - listView.getHeaderViewsCount());
+                                    adapter = new CommonListViewAdapter(getApplicationContext(),  R.layout.custom_item, postUserDataList);
+                                    listView.setAdapter(adapter);
 
 
                                 }
@@ -232,11 +192,12 @@ public class StockListView extends CustomSearchBase implements View.OnClickListe
                             }
                         });
                         dialog.show();
-                    return Menu.ITEM_NOTHING;
+                        return Menu.ITEM_NOTHING;
                 }
         }
         return Menu.ITEM_NOTHING;
     }
+
     @Override
     public void onItemDelete(View view, int position) {
 
@@ -248,6 +209,7 @@ public class StockListView extends CustomSearchBase implements View.OnClickListe
 
 
     }
+
     //筛选条件
     public void searchItem(String name) {
 
@@ -261,8 +223,7 @@ public class StockListView extends CustomSearchBase implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        switch(v.getId())
-        {
+        switch (v.getId()) {
             case R.id.custom_toobar_left:
                 StockListView.this.finish();
                 break;
@@ -274,21 +235,22 @@ public class StockListView extends CustomSearchBase implements View.OnClickListe
 
             case R.id.custom_toobar_right:
                 Intent cate = new Intent(StockListView.this, StockForm.class);
-                cate.putExtra("type","add");
-                startActivityForResult(cate,2);
+                cate.putExtra("type", "add");
+                startActivityForResult(cate, 2);
                 break;
 
 
         }
 
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         postDate.setName("");
         postDate.setRequestType("select");
         postDate.setServerIp(Common.ip);
         postDate.setServlet("StockOperate");
-        switch (requestCode){
+        switch (requestCode) {
             case 1:
                 if (resultCode == RESULT_OK) {
                     editDate = data.getParcelableExtra("customid");
@@ -321,6 +283,7 @@ public class StockListView extends CustomSearchBase implements View.OnClickListe
             default:
         }
     }
+
     private TextWatcher textWatcher = new TextWatcher() {
 
         @Override
@@ -340,32 +303,31 @@ public class StockListView extends CustomSearchBase implements View.OnClickListe
         @Override
         public void afterTextChanged(Editable s) {
 
-           searchItem(customSearch.getText().toString());
+            searchItem(customSearch.getText().toString());
 
 
         }
     };
 
-    public boolean isCustom(String name)
-    {
+    public boolean isCustom(String name) {
 
-        salesOutList =DataSupport.where("stock =?",name).find(SalesOut.class);
+        salesOutList = DataSupport.where("stock =?", name).find(SalesOut.class);
 
-        if (salesOutList.size()>0)
-        {
+        if (salesOutList.size() > 0) {
             return true;
-        }else {
+        } else {
             return false;
         }
 
     }
+
     @Override
     protected void onResume() {
         super.onResume();
         postDate.setName("");
         postDate.setRequestType("select");
         postDate.setServerIp(Common.ip);
-        postDate.setServlet("StockOperate");
+        postDate.setServlet("UserOperate");
         getHttpData(postDate);
     }
 }

@@ -17,11 +17,19 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.androiderp.CustomDataClass.Product;
+import com.example.androiderp.CustomDataClass.ReturnUserData;
 import com.example.androiderp.R;
+import com.example.androiderp.adaper.CommonAdapterData;
+import com.example.androiderp.adaper.CommonListViewAdapter;
 import com.example.androiderp.adaper.PopuMenuAdapter;
 import com.example.androiderp.adaper.PopuMenuDataStructure;
+import com.example.androiderp.basicdata.StockListView;
+import com.example.androiderp.listview.SlideAndDragListView;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.litepal.crud.DataSupport;
 
@@ -35,10 +43,12 @@ import java.util.List;
 public class Common extends AppCompatActivity {
     public   PopupWindow mPopWindow;
     private PopuMenuAdapter menuAdapter;
+    public List<CommonAdapterData> postUserDataList = new ArrayList<CommonAdapterData>();
+    public int indexPositon=-1;
     public ListView listView;
     private Context context;
     //public static final String ip="http://eedd.v228.10000net.cn/webdemo/servlet/";
-    public static final String ip="http://192.168.1.102:8080/webdemo/servlet/";
+    public static final String ip="http://127.0.0.1:8080/webdemo/servlet/";
 
 
     public void PopupWindow(Context context, DisplayMetrics dm,List<PopuMenuDataStructure>  popuMenuDatas)
@@ -109,6 +119,60 @@ public class Common extends AppCompatActivity {
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.MATCH_PARENT));// 设置布局
         return loadingDialog;
+
+    }
+
+    public  void  JsonUpdateUi(String returnData,String indexName, String type, Context context, CommonListViewAdapter adapter, int textViewResourceId, SlideAndDragListView<CommonAdapterData> listView) {
+
+
+        if (type.equals("select")) {
+            Gson gson = new Gson();
+            postUserDataList = gson.fromJson(returnData, new TypeToken<List<CommonAdapterData>>() {
+            }.getType());
+
+            if (postUserDataList.size() != 0) {
+                for(CommonAdapterData commonAdapterData:postUserDataList)
+                {
+                    if (commonAdapterData.getName().equals(indexName)) {
+                        indexPositon = postUserDataList.indexOf(commonAdapterData);
+                    }
+
+
+
+                    commonAdapterData.setSelectImage(R.drawable.seclec_arrow);
+                }
+
+
+                adapter = new CommonListViewAdapter(context, textViewResourceId, postUserDataList);
+                adapter.setSeclection(indexPositon);
+                listView.setAdapter(adapter);
+
+
+            } else {
+                adapter = new CommonListViewAdapter(context, textViewResourceId, postUserDataList);
+                listView.setAdapter(adapter);
+
+                Toast.makeText(context, "没有数据", Toast.LENGTH_SHORT).show();
+
+            }
+
+        } else {
+            Gson gson = new Gson();
+            ReturnUserData returnUserData = (ReturnUserData) gson.fromJson(returnData, ReturnUserData.class);
+            if (returnUserData.getResult() > 0) {
+
+
+                Toast.makeText(context, "操作成功", Toast.LENGTH_SHORT).show();
+
+
+            } else {
+
+                Toast.makeText(context, "操作失败", Toast.LENGTH_SHORT).show();
+
+            }
+
+
+        }
 
     }
 

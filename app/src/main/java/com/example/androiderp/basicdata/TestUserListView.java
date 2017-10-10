@@ -1,6 +1,7 @@
 package com.example.androiderp.basicdata;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -57,6 +58,7 @@ public class TestUserListView extends CustomSearchBase implements View.OnClickLi
     private Dialog dialog;
     private PostUserData postDate = new PostUserData();
     private CommonAdapterData editDate = new CommonAdapterData();
+    private Common common=new Common();
 
 
     @Override
@@ -115,60 +117,20 @@ public class TestUserListView extends CustomSearchBase implements View.OnClickLi
                     @Override
                     public void run() {
                         try {
-
-                            if (postPostUserData.getRequestType().equals("select")) {
-                                indexPositon = -1;
-                                Gson gson = new Gson();
-                                postUserDataList = gson.fromJson(response.body().string(), new TypeToken<List<CommonAdapterData>>() {
-                                }.getType());
-
-                                if (postUserDataList.size() != 0) {
-
-                                    for(CommonAdapterData commonAdapterData:postUserDataList)
-                                    {
-                                        if (commonAdapterData.getName().equals(indexName)) {
-                                            indexPositon = postUserDataList.indexOf(commonAdapterData);
-                                        }
-
-                                        commonAdapterData.setSelectImage(R.drawable.seclec_arrow);
-                                    }
-
-                                    adapter = new CommonListViewAdapter(TestUserListView.this, R.layout.custom_item, postUserDataList);
-                                    adapter.setSeclection(indexPositon);
-                                    listView.setAdapter(adapter);
-
-
-                                } else {
-                                    adapter = new CommonListViewAdapter(TestUserListView.this, R.layout.custom_item, postUserDataList);
-                                    listView.setAdapter(adapter);
-                                    Toast.makeText(TestUserListView.this, "没有数据", Toast.LENGTH_SHORT).show();
-
-                                }
-
-                            } else {
-                                Gson gson = new Gson();
-                                ReturnUserData returnUserData = (ReturnUserData) gson.fromJson(response.body().string(), ReturnUserData.class);
-                                if (returnUserData.getResult() > 0) {
-                                    Toast.makeText(TestUserListView.this, "操作成功", Toast.LENGTH_SHORT).show();
-
-
-                                } else {
-
-                                    Toast.makeText(TestUserListView.this, "操作失败", Toast.LENGTH_SHORT).show();
-
-                                }
-
-                            }
+                            indexPositon = -1;
+                            common.JsonUpdateUi(response.body().string(),indexName, postPostUserData.getRequestType(), getApplicationContext(), adapter, R.layout.custom_item, listView);
+                            postUserDataList=common.postUserDataList;
+                            indexPositon=common.indexPositon;
 
 
                         } catch (Exception e) {
-                            Toast.makeText(TestUserListView.this, "网络连接失败", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "网络连接失败", Toast.LENGTH_SHORT).show();
 
-                            adapter = new CommonListViewAdapter(TestUserListView.this, R.layout.custom_item, postUserDataList);
-                            adapter.setSeclection(indexPositon);
+                            adapter = new CommonListViewAdapter(getApplicationContext(), R.layout.custom_item, postUserDataList);
                             listView.setAdapter(adapter);
 
                         }
+
                     }
                 });
 
@@ -232,11 +194,14 @@ public class TestUserListView extends CustomSearchBase implements View.OnClickLi
                                 } else {
                                     postDate.setName(postUserDataList.get(itemPosition - listView.getHeaderViewsCount()).getName().toString());
                                     postDate.setRequestType("delete");
+                                    postDate.setClassType(1);
                                     postDate.setServerIp(Common.ip);
                                     postDate.setServlet("BrandOperate");
                                     postDate.setUnitId(postUserDataList.get(itemPosition - listView.getHeaderViewsCount()).getUnitId());
                                     getHttpData(postDate);
                                     postUserDataList.remove(itemPosition - listView.getHeaderViewsCount());
+                                    adapter = new CommonListViewAdapter(getApplicationContext(), R.layout.custom_item, postUserDataList);
+                                    listView.setAdapter(adapter);
                                     if (customSearch.getText().toString().isEmpty()) {
                                         if (indexPositon == itemPosition) {
                                             indexPositon = -1;
@@ -298,6 +263,7 @@ public class TestUserListView extends CustomSearchBase implements View.OnClickLi
         }
         postDate.setName(name);
         postDate.setRequestType("select");
+        postDate.setClassType(1);
         postDate.setServerIp(Common.ip);
         postDate.setServlet("BrandOperate");
         getHttpData(postDate);
@@ -426,6 +392,7 @@ public class TestUserListView extends CustomSearchBase implements View.OnClickLi
         super.onResume();
         postDate.setName("");
         postDate.setRequestType("select");
+        postDate.setClassType(1);
         postDate.setServerIp(Common.ip);
         postDate.setServlet("BrandOperate");
         getHttpData(postDate);

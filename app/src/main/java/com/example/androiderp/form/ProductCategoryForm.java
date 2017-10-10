@@ -91,7 +91,6 @@ private  void formInit()
                     Toast.makeText(ProductCategoryForm.this,"分类已经存在",Toast.LENGTH_SHORT).show();
                 }else {
                     if (getPostType.equals("edit")) {
-                        postUserData.setOriginal(getPostName.toString());
                         postUserData.setUnitId(getPostData.getUnitId());
                         postUserData.setName(userName.getText().toString().trim());
                         postUserData.setNote(note.getText().toString().trim());

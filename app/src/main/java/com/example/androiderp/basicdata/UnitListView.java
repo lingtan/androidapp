@@ -7,7 +7,6 @@ import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -21,7 +20,6 @@ import com.example.androiderp.CustomDataClass.Unit;
 import com.example.androiderp.R;
 import com.example.androiderp.adaper.CommonAdapterData;
 import com.example.androiderp.adaper.CommonListViewAdapter;
-import com.example.androiderp.adaper.DataStructure;
 import com.example.androiderp.common.Common;
 import com.example.androiderp.common.HttpUtil;
 import com.example.androiderp.custom.CustomSearch;
@@ -59,6 +57,7 @@ public class UnitListView extends CustomSearchBase implements View.OnClickListen
     private PostUserData postDate = new PostUserData();
     private CommonAdapterData editDate = new CommonAdapterData();
     private List<CommonAdapterData> postUserDataList = new ArrayList<CommonAdapterData>();
+    private Common common=new Common();
     @Override
     public void iniView(){
         setContentView(R.layout.customlistview_category_layout);
@@ -117,61 +116,16 @@ public class UnitListView extends CustomSearchBase implements View.OnClickListen
                     @Override
                     public void run() {
                         try {
-
-                            if (postPostUserData.getRequestType().equals("select")) {
-                                indexPositon = -1;
-                                Gson gson = new Gson();
-                                postUserDataList = gson.fromJson(response.body().string(), new TypeToken<List<CommonAdapterData>>() {
-                                }.getType());
-
-                                if (postUserDataList.size() != 0) {
-                                    for(CommonAdapterData commonAdapterData:postUserDataList)
-                                    {
-                                        if (commonAdapterData.getName().equals(indexName)) {
-                                            indexPositon = postUserDataList.indexOf(commonAdapterData);
-                                        }
-
-
-
-                                        commonAdapterData.setSelectImage(R.drawable.seclec_arrow);
-                                    }
-
-                                    adapter = new CommonListViewAdapter(UnitListView.this, R.layout.custom_item, postUserDataList);
-                                    adapter.setSeclection(indexPositon);
-                                    listView.setAdapter(adapter);
-
-
-                                } else {
-                                    adapter = new CommonListViewAdapter(UnitListView.this, R.layout.custom_item, postUserDataList);
-                                    listView.setAdapter(adapter);
-                                    Toast.makeText(UnitListView.this, "没有数据", Toast.LENGTH_SHORT).show();
-
-                                }
-
-
-
-
-                            } else {
-                                Gson gson = new Gson();
-                                ReturnUserData returnUserData = (ReturnUserData) gson.fromJson(response.body().string(), ReturnUserData.class);
-                                if (returnUserData.getResult() > 0) {
-                                    Toast.makeText(UnitListView.this, "操作成功", Toast.LENGTH_SHORT).show();
-
-
-                                } else {
-
-                                    Toast.makeText(UnitListView.this, "操作失败", Toast.LENGTH_SHORT).show();
-
-                                }
-
-                            }
+                            indexPositon = -1;
+                            common.JsonUpdateUi(response.body().string(),indexName, postPostUserData.getRequestType(), getApplicationContext(), adapter, R.layout.custom_item, listView);
+                            postUserDataList=common.postUserDataList;
+                            indexPositon=common.indexPositon;
 
 
                         } catch (Exception e) {
-                            Toast.makeText(UnitListView.this, "网络连接失败", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "网络连接失败", Toast.LENGTH_SHORT).show();
 
-                            adapter = new CommonListViewAdapter(UnitListView.this, R.layout.custom_item, postUserDataList);
-                            adapter.setSeclection(indexPositon);
+                            adapter = new CommonListViewAdapter(getApplicationContext(), R.layout.custom_item, postUserDataList);
                             listView.setAdapter(adapter);
 
                         }
@@ -244,6 +198,8 @@ public class UnitListView extends CustomSearchBase implements View.OnClickListen
                                     postDate.setUnitId(postUserDataList.get(itemPosition - listView.getHeaderViewsCount()).getUnitId());
                                     getHttpData(postDate);
                                     postUserDataList.remove(itemPosition - listView.getHeaderViewsCount());
+                                    adapter = new CommonListViewAdapter(getApplicationContext(), R.layout.custom_item, postUserDataList);
+                                    listView.setAdapter(adapter);
                                     if (customSearch.getText().toString().isEmpty()) {
                                         if (indexPositon == itemPosition) {
                                             indexPositon = -1;

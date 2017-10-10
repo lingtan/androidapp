@@ -37,7 +37,6 @@ public class EmployeeForm extends AppCompatActivity implements View.OnClickListe
     private InputMethodManager manager;
     private EditText userName,note;
     private TextView toobarSave, toobarTile, toobarBack;
-    private Employee employee;
     private CommonAdapterData getPostData;
     private String getPostName;
     private String  getPostType;
@@ -85,7 +84,6 @@ private  void formInit()
                     userName.setError("需要输入职员");
                 } else {
                     if (getPostType.equals("edit")) {
-                        postUserData.setOriginal(getPostName.toString());
                         postUserData.setUnitId(getPostData.getUnitId());
                         postUserData.setName(userName.getText().toString().trim());
                         postUserData.setNote(note.getText().toString().trim());

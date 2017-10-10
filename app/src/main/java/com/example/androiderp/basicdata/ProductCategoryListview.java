@@ -59,6 +59,7 @@ public class ProductCategoryListview extends CustomSearchBase implements View.On
     private List<CommonAdapterData> postUserDataList = new ArrayList<CommonAdapterData>();
     private PostUserData postUserData = new PostUserData();
     private CommonAdapterData editDate = new CommonAdapterData();
+    private Common common=new Common();
     @Override
     public void iniView(){
         setContentView(R.layout.customlistview_category_layout);
@@ -114,56 +115,16 @@ public class ProductCategoryListview extends CustomSearchBase implements View.On
                     @Override
                     public void run() {
                         try {
-
-                            if (postPostUserData.getRequestType().equals("select")) {
-                                indexPositon = -1;
-                                Gson gson = new Gson();
-                                postUserDataList = gson.fromJson(response.body().string(), new TypeToken<List<CommonAdapterData>>() {
-                                }.getType());
-
-                                if (postUserDataList.size() != 0) {
-
-                                    for(CommonAdapterData commonAdapterData: postUserDataList)
-                                    {
-                                        if (commonAdapterData.getName().equals(indexName)) {
-                                            indexPositon = postUserDataList.indexOf(commonAdapterData);
-                                        }
-
-                                        commonAdapterData.setSelectImage(R.drawable.seclec_arrow);
-                                    }
-                                    adapter = new CommonListViewAdapter(ProductCategoryListview.this, R.layout.custom_item, postUserDataList);
-                                    adapter.setSeclection(indexPositon);
-                                    listView.setAdapter(adapter);
-
-
-                                } else {
-                                    adapter = new CommonListViewAdapter(ProductCategoryListview.this, R.layout.custom_item, postUserDataList);
-                                    listView.setAdapter(adapter);
-                                    Toast.makeText(ProductCategoryListview.this, "没有数据", Toast.LENGTH_SHORT).show();
-
-                                }
-
-                            } else {
-                                Gson gson = new Gson();
-                                ReturnUserData returnUserData = (ReturnUserData) gson.fromJson(response.body().string(), ReturnUserData.class);
-                                if (returnUserData.getResult() > 0) {
-                                    Toast.makeText(ProductCategoryListview.this, "操作成功", Toast.LENGTH_SHORT).show();
-
-
-                                } else {
-
-                                    Toast.makeText(ProductCategoryListview.this, "操作失败", Toast.LENGTH_SHORT).show();
-
-                                }
-
-                            }
+                            indexPositon = -1;
+                            common.JsonUpdateUi(response.body().string(),indexName, postPostUserData.getRequestType(), getApplicationContext(), adapter, R.layout.custom_item, listView);
+                            postUserDataList=common.postUserDataList;
+                            indexPositon=common.indexPositon;
 
 
                         } catch (Exception e) {
-                            Toast.makeText(ProductCategoryListview.this, "网络连接失败", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "网络连接失败", Toast.LENGTH_SHORT).show();
 
-                            adapter = new CommonListViewAdapter(ProductCategoryListview.this, R.layout.custom_item, postUserDataList);
-                            adapter.setSeclection(indexPositon);
+                            adapter = new CommonListViewAdapter(getApplicationContext(), R.layout.custom_item, postUserDataList);
                             listView.setAdapter(adapter);
 
                         }
@@ -235,6 +196,8 @@ public class ProductCategoryListview extends CustomSearchBase implements View.On
                                     postUserData.setUnitId(postUserDataList.get(itemPosition - listView.getHeaderViewsCount()).getUnitId());
                                     getHttpData(postUserData);
                                 postUserDataList.remove(itemPosition - listView.getHeaderViewsCount());
+                                    adapter = new CommonListViewAdapter(getApplicationContext(), R.layout.custom_item, postUserDataList);
+                                    listView.setAdapter(adapter);
                                 if(customSearch.getText().toString().isEmpty()) {
                                     if (indexPositon == itemPosition) {
                                         indexPositon = -1;
