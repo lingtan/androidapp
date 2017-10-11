@@ -7,8 +7,8 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import com.example.androiderp.CustomDataClass.BalanceAccount;
-import com.example.androiderp.CustomDataClass.GroupItem;
+
+import com.example.androiderp.bean.GroupItem;
 import com.example.androiderp.R;
 import java.text.DecimalFormat;
 import java.util.List;

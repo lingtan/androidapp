@@ -11,13 +11,13 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.example.androiderp.R;
-import com.example.androiderp.basicdata.AppropriationListView;
-import com.example.androiderp.basicdata.CustomTowListView;
-import com.example.androiderp.basicdata.InventoryListView;
-import com.example.androiderp.basicdata.SaleOutListView;
-import com.example.androiderp.form.AppropriationForm;
-import com.example.androiderp.form.ReturnSaleProductForm;
-import com.example.androiderp.form.SaleProductForm;
+import com.example.androiderp.activities.warehouseview.AppropriationView;
+import com.example.androiderp.activities.basicview.CustomMoreView;
+import com.example.androiderp.activities.warehouseview.InventoryView;
+import com.example.androiderp.activities.salesview.SaleView;
+import com.example.androiderp.activities.warehouseform.AppropriationForm;
+import com.example.androiderp.activities.salesfrom.SaleReturnForm;
+import com.example.androiderp.activities.salesfrom.SaleForm;
 
 /**
  * Created by lingtan on 2017/5/18.
@@ -52,11 +52,11 @@ public class ThressFragment extends Fragment implements View.OnClickListener {
         switch (v.getId())
 
         {   case R.id.thressfragmnet_xscklayout:
-            intent = new Intent(context,SaleProductForm.class);
+            intent = new Intent(context,SaleForm.class);
             startActivity(intent);
             break;
             case R.id.thressfragmnet_xsthlayout:
-                intent = new Intent(context, ReturnSaleProductForm.class);
+                intent = new Intent(context, SaleReturnForm.class);
                 startActivity(intent);
                 break;
             case R.id.thressfragmnet_dblayout:
@@ -64,19 +64,19 @@ public class ThressFragment extends Fragment implements View.OnClickListener {
                 startActivity(intent);
                 break;
             case R.id.thressfragmnet_dblslayout:
-                intent = new Intent(context, AppropriationListView.class);
+                intent = new Intent(context, AppropriationView.class);
                 startActivity(intent);
                 break;
             case R.id.thressfragmnet_xslslayout:
-                intent = new Intent(context, SaleOutListView.class);
+                intent = new Intent(context, SaleView.class);
                 startActivity(intent);
                 break;
             case R.id.thressfragmnet_kccxlayout:
-                intent = new Intent(context, InventoryListView.class);
+                intent = new Intent(context, InventoryView.class);
                 startActivity(intent);
                 break;
             case R.id.thressfragmnet_khlayout:
-                intent = new Intent(context,   CustomTowListView.class);
+                intent = new Intent(context,   CustomMoreView.class);
                 startActivity(intent);
                 break;
             default:

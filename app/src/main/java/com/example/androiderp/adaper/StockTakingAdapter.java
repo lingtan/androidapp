@@ -8,9 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.androiderp.CustomDataClass.Appropriation;
-import com.example.androiderp.CustomDataClass.StockIniti;
-import com.example.androiderp.CustomDataClass.StockTaking;
+import com.example.androiderp.bean.StockTaking;
 import com.example.androiderp.R;
 
 import java.text.DecimalFormat;

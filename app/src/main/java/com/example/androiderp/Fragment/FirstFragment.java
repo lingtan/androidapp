@@ -9,27 +9,27 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 
-import com.example.androiderp.CustomDataClass.GridView;
 import com.example.androiderp.R;
 import com.example.androiderp.adaper.CusteomGridAdapter;
-import com.example.androiderp.basicdata.AppropriationListView;
-import com.example.androiderp.basicdata.CustomTowListView;
-import com.example.androiderp.basicdata.EmployeeListview;
-import com.example.androiderp.basicdata.HomeMoreListView;
-import com.example.androiderp.basicdata.InventoryListView;
-import com.example.androiderp.basicdata.ProductTowListView;
-import com.example.androiderp.basicdata.SaleOutListView;
-import com.example.androiderp.basicdata.StockListView;
-import com.example.androiderp.basicdata.PurchaseOutListView;
-import com.example.androiderp.basicdata.StockTakingListView;
-import com.example.androiderp.basicdata.SupplierTowListView;
-import com.example.androiderp.basicdata.TallyExpandableListView;
-import com.example.androiderp.basicdata.TestUserListView;
-import com.example.androiderp.custom.CustomGridView;
-import com.example.androiderp.form.AppropriationForm;
-import com.example.androiderp.form.PurchaseProductForm;
-import com.example.androiderp.form.SaleProductForm;
-import com.example.androiderp.form.StockTakingForm;
+import com.example.androiderp.activities.warehouseview.AppropriationView;
+import com.example.androiderp.activities.basicview.CustomMoreView;
+import com.example.androiderp.activities.basicview.EmployeeView;
+import com.example.androiderp.activities.homeview.HomeMoreView;
+import com.example.androiderp.activities.warehouseview.InventoryView;
+import com.example.androiderp.activities.basicview.ProductMoreView;
+import com.example.androiderp.activities.salesview.SaleView;
+import com.example.androiderp.activities.basicview.StockListView;
+import com.example.androiderp.activities.purchaseview.PurchaseView;
+import com.example.androiderp.activities.warehouseview.StockTakingView;
+import com.example.androiderp.activities.basicview.SupplierMoreView;
+import com.example.androiderp.activities.accountsview.TallyExpandableView;
+import com.example.androiderp.activities.basicview.BrandView;
+import com.example.androiderp.activities.warehouseform.AppropriationForm;
+import com.example.androiderp.activities.purchaseform.PurchaseProductForm;
+import com.example.androiderp.activities.salesfrom.SaleForm;
+import com.example.androiderp.activities.warehouseform.StockTakingForm;
+import com.example.androiderp.bean.GridView;
+import com.example.androiderp.ui.CGridView;
 
 import org.litepal.crud.DataSupport;
 
@@ -53,7 +53,7 @@ public class FirstFragment extends Fragment {
             R.drawable.hoem_fistfragment_search,R.drawable.home_fisrtfragment_cgcx, R.drawable.home_fisrtfragment_xscx,
             R.drawable.home_firstfragmnet_more};
     private   Intent intent;
-    CustomGridView gridView;
+    CGridView gridView;
     @Override
     public View onCreateView(LayoutInflater inflater,  ViewGroup container,  Bundle savedInstanceState) {
         gridViewAddList = DataSupport.findAll(GridView.class);
@@ -77,7 +77,7 @@ public class FirstFragment extends Fragment {
         gridView2.setImage(imgs[6]);
         gridViewList.add(gridView2);
      View view=inflater.inflate(R.layout.customgridview_layout,container,false);
-        gridView=(CustomGridView)view.findViewById(R.id.customgridview_gridview);
+        gridView=(CGridView)view.findViewById(R.id.customgridview_gridview);
         gridView.setAdapter(new CusteomGridAdapter(getActivity(),gridViewList));
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -86,7 +86,7 @@ public class FirstFragment extends Fragment {
 
                 switch (gridViewList.get(position).getName().toString()) {
                     case "商品管理":
-                        intent = new Intent(context, ProductTowListView.class);
+                        intent = new Intent(context, ProductMoreView.class);
                         startActivity(intent);
                         break;
                     case "采购新增":
@@ -94,28 +94,28 @@ public class FirstFragment extends Fragment {
                         startActivity(intent);
                         break;
                     case "销售新增":
-                        intent = new Intent(context, SaleProductForm.class);
+                        intent = new Intent(context, SaleForm.class);
                         startActivity(intent);
 
                         break;
                     case "库存查询":
-                        intent = new Intent(context, InventoryListView.class);
+                        intent = new Intent(context, InventoryView.class);
                         startActivity(intent);
                         break;
                     case "采购流水":
-                        intent = new Intent(context, PurchaseOutListView.class);
+                        intent = new Intent(context, PurchaseView.class);
                         startActivity(intent);
                         break;
                     case "销售流水":
-                        intent = new Intent(context, SaleOutListView.class);
+                        intent = new Intent(context, SaleView.class);
                         startActivity(intent);
                         break;
                     case "供应商管理":
-                        intent = new Intent(context, SupplierTowListView.class);
+                        intent = new Intent(context, SupplierMoreView.class);
                         startActivity(intent);
                         break;
                     case "客户管理":
-                        intent = new Intent(context, CustomTowListView.class);
+                        intent = new Intent(context, CustomMoreView.class);
                         startActivity(intent);
                         break;
                     case "仓库管理":
@@ -127,7 +127,7 @@ public class FirstFragment extends Fragment {
                         startActivity(intent);
                         break;
                     case "调拨流水":
-                        intent = new Intent(context, AppropriationListView.class);
+                        intent = new Intent(context, AppropriationView.class);
                         startActivity(intent);
                         break;
 
@@ -137,23 +137,23 @@ public class FirstFragment extends Fragment {
                         break;
 
                     case "职员管理":
-                        intent = new Intent(context, EmployeeListview.class);
+                        intent = new Intent(context, EmployeeView.class);
                         startActivity(intent);
                         break;
                     case "盘点流水":
-                        intent = new Intent(context, StockTakingListView.class);
+                        intent = new Intent(context, StockTakingView.class);
                         startActivity(intent);
                         break;
                     case "账户管理":
-                        intent = new Intent(context, TallyExpandableListView.class);
+                        intent = new Intent(context, TallyExpandableView.class);
                         startActivity(intent);
                         break;
                     case "仓库预警":
-                        intent = new Intent(context, TestUserListView.class);
+                        intent = new Intent(context, BrandView.class);
                         startActivity(intent);
                         break;
                     case "":
-                        intent = new Intent(context, HomeMoreListView.class);
+                        intent = new Intent(context, HomeMoreView.class);
                         startActivityForResult(intent,1);
                         break;
 

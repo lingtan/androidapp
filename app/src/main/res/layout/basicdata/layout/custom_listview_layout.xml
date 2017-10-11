@@ -7,7 +7,6 @@
     android:orientation="vertical"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    tools:context=".basicdata.CustomListView"
    >
 
     <include layout="@layout/custom_toobar" android:id="@+id/id_toobar"/>
@@ -17,7 +16,7 @@
     android:background="#E0E0E0"
     android:layout_marginTop="50dp"
     android:padding="5dp">
-    <com.example.androiderp.custom.CustomSearch
+    <com.example.androiderp.ui.CSearch
         android:id="@+id/search"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"

@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.example.androiderp.CustomDataClass.SalesOut;
+import com.example.androiderp.bean.SalesOut;
 import com.example.androiderp.R;
 
 import java.text.DecimalFormat;

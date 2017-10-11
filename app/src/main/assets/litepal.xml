@@ -5,30 +5,30 @@
     <version value="45" ></version>
 
     <list>
-        <mapping class="com.example.androiderp.adaper.DataStructure"></mapping>
-        <mapping class="com.example.androiderp.CustomDataClass.Custom"></mapping>
-        <mapping class="com.example.androiderp.CustomDataClass.Supplier"></mapping>
-        <mapping class="com.example.androiderp.CustomDataClass.CustomCategory"></mapping>
-        <mapping class="com.example.androiderp.CustomDataClass.SupplierCategory"></mapping>
-        <mapping class="com.example.androiderp.CustomDataClass.Unit"></mapping>
-        <mapping class="com.example.androiderp.CustomDataClass.Brand"></mapping>
-        <mapping class="com.example.androiderp.CustomDataClass.Product"></mapping>
-        <mapping class="com.example.androiderp.CustomDataClass.ProductCategory"></mapping>
-        <mapping class="com.example.androiderp.CustomDataClass.Stock"></mapping>
-        <mapping class="com.example.androiderp.CustomDataClass.Employee"></mapping>
-        <mapping class="com.example.androiderp.CustomDataClass.Consignment"></mapping>
-        <mapping class="com.example.androiderp.CustomDataClass.SalesOut"></mapping>
-        <mapping class="com.example.androiderp.CustomDataClass.SalesOutEnty"></mapping>
-        <mapping class="com.example.androiderp.CustomDataClass.Appropriation"></mapping>
-        <mapping class="com.example.androiderp.CustomDataClass.AppropriationEnty"></mapping>
-        <mapping class="com.example.androiderp.CustomDataClass.StockIniti"></mapping>
-        <mapping class="com.example.androiderp.CustomDataClass.StockTaking"></mapping>
-        <mapping class="com.example.androiderp.CustomDataClass.StockTakingEnty"></mapping>
-        <mapping class="com.example.androiderp.CustomDataClass.GridView"></mapping>
-        <mapping class="com.example.androiderp.CustomDataClass.Account"></mapping>
-        <mapping class="com.example.androiderp.CustomDataClass.Tally"></mapping>
-        <mapping class="com.example.androiderp.CustomDataClass.Accounts"></mapping>
-        <mapping class="com.example.androiderp.CustomDataClass.BalanceAccount"></mapping>
+        <mapping class="com.example.androiderp.bean.DataStructure"></mapping>
+        <mapping class="com.example.androiderp.bean.Custom"></mapping>
+        <mapping class="com.example.androiderp.bean.Supplier"></mapping>
+        <mapping class="com.example.androiderp.bean.CustomCategory"></mapping>
+        <mapping class="com.example.androiderp.bean.SupplierCategory"></mapping>
+        <mapping class="com.example.androiderp.bean.Unit"></mapping>
+        <mapping class="com.example.androiderp.bean.Brand"></mapping>
+        <mapping class="com.example.androiderp.bean.Product"></mapping>
+        <mapping class="com.example.androiderp.bean.ProductCategory"></mapping>
+        <mapping class="com.example.androiderp.bean.Stock"></mapping>
+        <mapping class="com.example.androiderp.bean.Employee"></mapping>
+        <mapping class="com.example.androiderp.bean.Consignment"></mapping>
+        <mapping class="com.example.androiderp.bean.SalesOut"></mapping>
+        <mapping class="com.example.androiderp.bean.SalesOutEnty"></mapping>
+        <mapping class="com.example.androiderp.bean.Appropriation"></mapping>
+        <mapping class="com.example.androiderp.bean.AppropriationEnty"></mapping>
+        <mapping class="com.example.androiderp.bean.StockIniti"></mapping>
+        <mapping class="com.example.androiderp.bean.StockTaking"></mapping>
+        <mapping class="com.example.androiderp.bean.StockTakingEnty"></mapping>
+        <mapping class="com.example.androiderp.bean.GridView"></mapping>
+        <mapping class="com.example.androiderp.bean.Account"></mapping>
+        <mapping class="com.example.androiderp.bean.Tally"></mapping>
+        <mapping class="com.example.androiderp.bean.Accounts"></mapping>
+        <mapping class="com.example.androiderp.bean.BalanceAccount"></mapping>
 
     </list>
 </litepal>

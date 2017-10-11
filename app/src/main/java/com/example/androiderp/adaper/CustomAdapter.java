@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.androiderp.R;
+import com.example.androiderp.bean.DataStructure;
 
 import java.util.List;
 //继承ArrayAdapter<DataStructure>

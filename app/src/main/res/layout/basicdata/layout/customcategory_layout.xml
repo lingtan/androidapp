@@ -6,12 +6,11 @@
     android:layout_height="match_parent"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    tools:context=".basicdata.CustomListView"
    >
 
     <include layout="@layout/customcategory_toobar" android:id="@+id/customcategory_toobar"/>
 
-    <com.example.androiderp.custom.CustomSearch
+    <com.example.androiderp.ui.CSearch
         android:id="@+id/customcategory_layout_search"
         style="@style/editTextStyle"
        />

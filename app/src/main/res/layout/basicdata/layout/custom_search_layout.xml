@@ -14,7 +14,7 @@
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         app:layout_scrollFlags="scroll|enterAlways|snap"
         >
-        <com.example.androiderp.custom.CustomHomeSearch
+        <com.example.androiderp.ui.CHomeSearch
             android:id="@+id/home_custom_search"
             android:drawableLeft="@drawable/customlist_search"
             style="@style/home_search_Style"

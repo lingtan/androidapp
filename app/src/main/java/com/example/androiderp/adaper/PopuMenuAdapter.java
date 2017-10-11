@@ -1,7 +1,6 @@
 package com.example.androiderp.adaper;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.androiderp.R;
+import com.example.androiderp.bean.PopuMenuDataStructure;
 
 import java.util.List;
 

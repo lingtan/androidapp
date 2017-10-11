@@ -2,7 +2,6 @@ package com.example.androiderp.adaper;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +11,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.example.androiderp.CustomDataClass.Product;
+import com.example.androiderp.bean.Product;
 import com.example.androiderp.R;
 
 import java.util.List;

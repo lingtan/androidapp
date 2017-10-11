@@ -12,7 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.example.androiderp.CustomDataClass.StockInitiTem;
+import com.example.androiderp.bean.StockInitiTem;
 import com.example.androiderp.R;
 
 import java.text.DecimalFormat;

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.example.androiderp.custom.CustomToobarAdd
+<com.example.androiderp.ui.CToobarMore
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/custom_toobar_layout"
@@ -58,4 +58,4 @@
         android:textColor="@android:color/white"
         android:textSize="14dp" />
 
-</com.example.androiderp.custom.CustomToobarAdd>
+</com.example.androiderp.ui.CToobarMore>

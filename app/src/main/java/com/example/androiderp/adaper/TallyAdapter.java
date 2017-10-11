@@ -8,7 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.androiderp.CustomDataClass.Tally;
+import com.example.androiderp.bean.Tally;
 import com.example.androiderp.R;
 
 import java.text.DecimalFormat;

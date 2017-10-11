@@ -11,18 +11,13 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.example.androiderp.R;
-import com.example.androiderp.basicdata.AppropriationListView;
-import com.example.androiderp.basicdata.CustomListView;
-import com.example.androiderp.basicdata.CustomTowListView;
-import com.example.androiderp.basicdata.InventoryListView;
-import com.example.androiderp.basicdata.ProductAppropriationListView;
-import com.example.androiderp.basicdata.SaleOutListView;
-import com.example.androiderp.basicdata.StockListView;
-import com.example.androiderp.basicdata.StockTakingListView;
-import com.example.androiderp.form.AppropriationForm;
-import com.example.androiderp.form.ReturnSaleProductForm;
-import com.example.androiderp.form.SaleProductForm;
-import com.example.androiderp.form.StockTakingForm;
+import com.example.androiderp.activities.warehouseview.AppropriationView;
+import com.example.androiderp.activities.warehouseview.InventoryView;
+import com.example.androiderp.activities.salesview.SaleView;
+import com.example.androiderp.activities.basicview.StockListView;
+import com.example.androiderp.activities.warehouseview.StockTakingView;
+import com.example.androiderp.activities.warehouseform.AppropriationForm;
+import com.example.androiderp.activities.warehouseform.StockTakingForm;
 
 /**
  * Created by lingtan on 2017/5/18.
@@ -59,7 +54,7 @@ public class FouthFragment extends Fragment implements View.OnClickListener {
 
         {
             case R.id.fourthfragment_kccxlayout:
-                intent = new Intent(context, InventoryListView.class);
+                intent = new Intent(context, InventoryView.class);
                 startActivity(intent);
                 break;
 
@@ -68,7 +63,7 @@ public class FouthFragment extends Fragment implements View.OnClickListener {
             startActivity(intent);
             break;
             case R.id.fourthfragment_pdlslayout:
-                intent = new Intent(context, StockTakingListView.class);
+                intent = new Intent(context, StockTakingView.class);
                 startActivity(intent);
                 break;
             case R.id.fourthfragment_dblayout:
@@ -76,11 +71,11 @@ public class FouthFragment extends Fragment implements View.OnClickListener {
                 startActivity(intent);
                 break;
             case R.id.fourthfragment_dblslayout:
-                intent = new Intent(context, AppropriationListView.class);
+                intent = new Intent(context, AppropriationView.class);
                 startActivity(intent);
                 break;
             case R.id.thressfragmnet_xslslayout:
-                intent = new Intent(context, SaleOutListView.class);
+                intent = new Intent(context, SaleView.class);
                 startActivity(intent);
                 break;
             case R.id.thressfragmnet_khlayout:

@@ -10,7 +10,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    tools:context="com.example.androiderp.login.Login">
+    tools:context="com.example.androiderp.activities.homeview.LoginView">
 
     <LinearLayout
         android:id="@+id/login_layout_one"
@@ -18,7 +18,7 @@
         android:layout_height="match_parent"
         android:layout_marginTop="60dp"
         android:orientation="vertical">
-        <com.example.androiderp.custom.CustomEditText
+        <com.example.androiderp.ui.CEditText
             android:id="@+id/login_layout_one_one_name"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
@@ -37,7 +37,7 @@
             app:errorTextAppearance="@style/MyErrorStyle">
 
         </android.support.design.widget.TextInputLayout>
-        <com.example.androiderp.custom.CustomEditText
+        <com.example.androiderp.ui.CEditText
             android:id="@+id/login_layout_one_tow_password"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"

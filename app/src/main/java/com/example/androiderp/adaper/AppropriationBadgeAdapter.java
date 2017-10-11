@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.example.androiderp.CustomDataClass.Product;
+import com.example.androiderp.bean.Product;
 import com.example.androiderp.R;
 
 import java.text.DecimalFormat;

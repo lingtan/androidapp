@@ -11,13 +11,13 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.example.androiderp.R;
-import com.example.androiderp.basicdata.AppropriationListView;
-import com.example.androiderp.basicdata.InventoryListView;
-import com.example.androiderp.basicdata.PurchaseOutListView;
-import com.example.androiderp.basicdata.SupplierTowListView;
-import com.example.androiderp.form.AppropriationForm;
-import com.example.androiderp.form.PurchaseProductForm;
-import com.example.androiderp.form.ReturnPurchaseProductForm;
+import com.example.androiderp.activities.warehouseview.AppropriationView;
+import com.example.androiderp.activities.warehouseview.InventoryView;
+import com.example.androiderp.activities.purchaseview.PurchaseView;
+import com.example.androiderp.activities.basicview.SupplierMoreView;
+import com.example.androiderp.activities.warehouseform.AppropriationForm;
+import com.example.androiderp.activities.purchaseform.PurchaseProductForm;
+import com.example.androiderp.activities.purchaseform.ReturnPurchaseProductForm;
 
 /**
  * Created by lingtan on 2017/5/18.
@@ -57,7 +57,7 @@ public class SecondFragment extends Fragment implements View.OnClickListener {
             startActivity(intent);
             break;
             case R.id.secondfragment_layout_gyslayout:
-                intent = new Intent(context, SupplierTowListView.class);
+                intent = new Intent(context, SupplierMoreView.class);
                 startActivity(intent);
                 break;
             case R.id.secondfragmnet_cgthlayout:
@@ -65,11 +65,11 @@ public class SecondFragment extends Fragment implements View.OnClickListener {
                 startActivity(intent);
                 break;
             case R.id.secondfragmnet_cglslayout:
-                intent = new Intent(context, PurchaseOutListView.class);
+                intent = new Intent(context, PurchaseView.class);
                 startActivity(intent);
                 break;
             case R.id.secondfragment_ckxclayout:
-                intent = new Intent(context, InventoryListView.class);
+                intent = new Intent(context, InventoryView.class);
                 startActivity(intent);
                 break;
             case R.id.secondfragment_dblayout:
@@ -77,7 +77,7 @@ public class SecondFragment extends Fragment implements View.OnClickListener {
                 startActivity(intent);
                 break;
             case R.id.secondfragment_dblslayout:
-                intent = new Intent(context,  AppropriationListView.class);
+                intent = new Intent(context,  AppropriationView.class);
                 startActivity(intent);
                 break;
             default:

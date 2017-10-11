@@ -8,7 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.androiderp.CustomDataClass.GridView;
+import com.example.androiderp.bean.GridView;
 import com.example.androiderp.R;
 
 import java.util.List;

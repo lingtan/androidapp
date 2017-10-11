@@ -6,11 +6,10 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import com.example.androiderp.CustomDataClass.Appropriation;
+import com.example.androiderp.bean.Appropriation;
 import com.example.androiderp.R;
 import java.text.DecimalFormat;
 import java.util.List;
-import java.util.List.*;
 
 //继承ArrayAdapter<DataStructure>
 public class AppropriationAdapter extends ArrayAdapter<Appropriation>   {
