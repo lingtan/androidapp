@@ -38,6 +38,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.androiderp.basic.BasicView;
+import com.example.androiderp.bean.AcivityPostBen;
 import com.example.androiderp.bean.Product;
 import com.example.androiderp.bean.SalesOutEnty;
 import com.example.androiderp.bean.StockIniti;
@@ -46,10 +48,7 @@ import com.example.androiderp.bean.StockInitiTem;
 import com.example.androiderp.R;
 import com.example.androiderp.bean.DataStructure;
 import com.example.androiderp.bean.PopuMenuDataStructure;
-import com.example.androiderp.activities.basicview.ProductCategoryView;
 import com.example.androiderp.activities.warehouseview.StockInitiView;
-import com.example.androiderp.activities.basicview.BrandView;
-import com.example.androiderp.activities.basicview.UnitListView;
 import com.example.androiderp.tools.Common;
 import com.example.androiderp.ui.CPopupWindow;
 import com.example.androiderp.ui.CPictureFullPopupWindow;
@@ -99,6 +98,7 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
     private List<String> imagePathData=new ArrayList<String>();
     private List<ImageView> imageViewData=new ArrayList<ImageView>();
     private String categoryReturnVale;
+    private AcivityPostBen acivityPostBen=new AcivityPostBen();
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
@@ -486,23 +486,32 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                 }
              break;
             case R.id.documentmaker_layout:
-
-                Intent intentcategory=new Intent(ProductForm.this, ProductCategoryView.class);
-                intentcategory.putExtra("index",category.getText().toString());
+                acivityPostBen.setAcivityName("产品类别");
+                acivityPostBen.setRequestServlet("BrandOperate");
+                acivityPostBen.setName(category.getText().toString());
+                acivityPostBen.setSetClassType(2);
+                Intent intentcategory=new Intent(ProductForm.this, BasicView.class);
+                intentcategory.putExtra("acivityPostBen",acivityPostBen);
                 startActivityForResult(intentcategory,1);
                 break;
 
             case R.id.product_brand_layout:
-
-                Intent intentbrand=new Intent(ProductForm.this, BrandView.class);
-                intentbrand.putExtra("index",brand.getText().toString());
+                acivityPostBen.setAcivityName("品牌");
+                acivityPostBen.setRequestServlet("BrandOperate");
+                acivityPostBen.setName(brand.getText().toString());
+                acivityPostBen.setSetClassType(1);
+                Intent intentbrand=new Intent(ProductForm.this, BasicView.class);
+                intentbrand.putExtra("acivityPostBen",acivityPostBen);
                 startActivityForResult(intentbrand,2);
                 break;
 
             case R.id.product_unit_layout:
-
-                Intent intentunit=new Intent(ProductForm.this, UnitListView.class);
-                intentunit.putExtra("index",unit.getText().toString());
+                acivityPostBen.setAcivityName("单位");
+                acivityPostBen.setRequestServlet("BrandOperate");
+                acivityPostBen.setName(unit.getText().toString());
+                acivityPostBen.setSetClassType(3);
+                Intent intentunit=new Intent(ProductForm.this, BasicView.class);
+                intentunit.putExtra("acivityPostBen",acivityPostBen);
                 startActivityForResult(intentunit,3);
                 break;
             case R.id.loginbutton:

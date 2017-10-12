@@ -22,8 +22,8 @@ import android.widget.ListAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.androiderp.activities.basicview.EmployeeView;
 import com.example.androiderp.activities.salesfrom.ShoppingScrennForm;
+import com.example.androiderp.basic.BasicView;
 import com.example.androiderp.bean.BalanceAccount;
 import com.example.androiderp.bean.Consignment;
 import com.example.androiderp.bean.Employee;
@@ -45,7 +45,6 @@ import com.example.androiderp.activities.accountsview.BalanceAccountView;
 import com.example.androiderp.activities.basicview.ConsignmentView;
 import com.example.androiderp.activities.basicview.ProductSelectView;
 import com.example.androiderp.activities.basicview.SupplierSelectView;
-import com.example.androiderp.activities.warehouseview.StockIntentView;
 import com.example.androiderp.tools.Common;
 import com.example.androiderp.ui.CSearchBase;
 import com.example.androiderp.listview.Menu;
@@ -383,7 +382,7 @@ public class PurchaseProductForm extends CSearchBase implements View.OnClickList
                         common.mPopWindow.dismiss();
                     }
                 }else {
-                    Intent intentstock=new Intent(PurchaseProductForm.this, StockIntentView.class);
+                    Intent intentstock=new Intent(PurchaseProductForm.this, BasicView.class);
                     intentstock.putExtra("index",number.getText().toString());
                     startActivityForResult(intentstock,11);
                 }
@@ -443,7 +442,7 @@ public class PurchaseProductForm extends CSearchBase implements View.OnClickList
                         common.mPopWindow.dismiss();
                     }
                 }else {
-                    Intent intentemployee=new Intent(PurchaseProductForm.this, EmployeeView.class);
+                    Intent intentemployee=new Intent(PurchaseProductForm.this, BasicView.class);
                     intentemployee.putExtra("index",category.getText().toString());
                     startActivityForResult(intentemployee,12);
                 }

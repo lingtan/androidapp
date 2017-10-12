@@ -13,21 +13,20 @@ import com.example.androiderp.R;
 import com.example.androiderp.adaper.CusteomGridAdapter;
 import com.example.androiderp.activities.warehouseview.AppropriationView;
 import com.example.androiderp.activities.basicview.CustomMoreView;
-import com.example.androiderp.activities.basicview.EmployeeView;
 import com.example.androiderp.activities.homeview.HomeMoreView;
 import com.example.androiderp.activities.warehouseview.InventoryView;
 import com.example.androiderp.activities.basicview.ProductMoreView;
 import com.example.androiderp.activities.salesview.SaleView;
-import com.example.androiderp.activities.basicview.StockListView;
 import com.example.androiderp.activities.purchaseview.PurchaseView;
 import com.example.androiderp.activities.warehouseview.StockTakingView;
 import com.example.androiderp.activities.basicview.SupplierMoreView;
 import com.example.androiderp.activities.accountsview.TallyExpandableView;
-import com.example.androiderp.activities.basicview.BrandView;
 import com.example.androiderp.activities.warehouseform.AppropriationForm;
 import com.example.androiderp.activities.purchaseform.PurchaseProductForm;
 import com.example.androiderp.activities.salesfrom.SaleForm;
 import com.example.androiderp.activities.warehouseform.StockTakingForm;
+import com.example.androiderp.basic.BasicView;
+import com.example.androiderp.bean.AcivityPostBen;
 import com.example.androiderp.bean.GridView;
 import com.example.androiderp.ui.CGridView;
 
@@ -43,6 +42,7 @@ import java.util.List;
 public class FirstFragment extends Fragment {
     private List<GridView> gridViewList=new ArrayList<GridView>();
     private List<GridView> gridViewAddList=new ArrayList<GridView>();
+    private AcivityPostBen acivityPostBen=new AcivityPostBen();
     private String[] img_text = {
             "商品管理", "采购新增","销售新增",
             "库存查询","采购流水", "销售流水",
@@ -119,8 +119,13 @@ public class FirstFragment extends Fragment {
                         startActivity(intent);
                         break;
                     case "仓库管理":
-                        intent = new Intent(context, StockListView.class);
-                        startActivity(intent);
+                        acivityPostBen.setAcivityName("仓库");
+                        acivityPostBen.setRequestServlet("BrandOperate");
+                        acivityPostBen.setName("");
+                        acivityPostBen.setSetClassType(4);
+                        Intent intentStock = new Intent(context, BasicView.class);
+                        intentStock.putExtra("acivityPostBen",acivityPostBen);
+                        startActivity(intentStock);
                         break;
                     case "库存调拨":
                         intent = new Intent(context, AppropriationForm.class);
@@ -137,8 +142,13 @@ public class FirstFragment extends Fragment {
                         break;
 
                     case "职员管理":
-                        intent = new Intent(context, EmployeeView.class);
-                        startActivity(intent);
+                        acivityPostBen.setAcivityName("职员");
+                        acivityPostBen.setRequestServlet("BrandOperate");
+                        acivityPostBen.setName("");
+                        acivityPostBen.setSetClassType(5);
+                        Intent intentEmp = new Intent(context, BasicView.class);
+                        intentEmp.putExtra("acivityPostBen",acivityPostBen);
+                        startActivity(intentEmp);
                         break;
                     case "盘点流水":
                         intent = new Intent(context, StockTakingView.class);
@@ -149,7 +159,7 @@ public class FirstFragment extends Fragment {
                         startActivity(intent);
                         break;
                     case "仓库预警":
-                        intent = new Intent(context, BrandView.class);
+                        intent = new Intent(context, StockTakingView.class);
                         startActivity(intent);
                         break;
                     case "":

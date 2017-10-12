@@ -1,4 +1,4 @@
-package com.example.androiderp.activities.basicfrom;
+package com.example.androiderp.basic;
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,15 +12,19 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.androiderp.bean.AcivityPostBen;
+import com.example.androiderp.bean.AdapterBean;
 import com.example.androiderp.bean.PostUserData;
 import com.example.androiderp.bean.ReturnUserData;
+import com.example.androiderp.bean.Unit;
 import com.example.androiderp.R;
-import com.example.androiderp.adaper.CommonAdapterData;
+import com.example.androiderp.bean.DataStructure;
 import com.example.androiderp.tools.Common;
 import com.example.androiderp.tools.HttpUtil;
 import com.google.gson.Gson;
 
 import java.io.IOException;
+import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Response;
@@ -29,24 +33,28 @@ import okhttp3.Response;
  * Created by lingtan on 2017/5/15.
  */
 
-public class EmployeeForm extends AppCompatActivity implements View.OnClickListener {
+public class BasicForm extends AppCompatActivity implements View.OnClickListener {
     private InputMethodManager manager;
-    private EditText userName,note;
+    private EditText name,note;
     private TextView toobarSave, toobarTile, toobarBack;
-    private CommonAdapterData getPostData;
     private String getPostName;
     private String  getPostType;
+    private AdapterBean getPostData;
     private boolean isSave=false;
+    private List<Unit> unitList;
     private PostUserData postUserData = new PostUserData();
+    private AcivityPostBen acivityPostBen;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.customcategory);
         manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        userName =(EditText)findViewById(R.id.customcategory_name);
+        name =(EditText)findViewById(R.id.customcategory_name);
         note =(EditText)findViewById(R.id.customcategory_note);
         final Intent intent=getIntent();
         getPostData =intent.getParcelableExtra("postdata");
         getPostType = intent.getStringExtra("type");
+        acivityPostBen=intent.getParcelableExtra("acivityPostBen");
         toobarSave =(TextView)findViewById(R.id.custom_toobar_right);
         toobarTile =(TextView)findViewById(R.id.custom_toobar_midd);
         toobarBack =(TextView)findViewById(R.id.custom_toobar_left);
@@ -59,15 +67,17 @@ public class EmployeeForm extends AppCompatActivity implements View.OnClickListe
 
     }
 private  void formInit()
-{if(getPostData!=null) {
+{ if (getPostData != null) {
     getPostName = getPostData.getName();
-    userName.setText(getPostData.getName());
+    name.setText(getPostData.getName());
+    note.setText(getPostData.getNote());
+
 }
     if(getPostType.equals("edit"))
     {
-        toobarTile.setText("职员修改");
+        toobarTile.setText(acivityPostBen.getAcivityName()+"修改");
     }else {
-        toobarTile.setText("职员新增");
+        toobarTile.setText(acivityPostBen.getAcivityName()+"新增");
     }
 
 }
@@ -76,42 +86,49 @@ private  void formInit()
         switch (v.getId())
         {
             case R.id.custom_toobar_right:
-                if (TextUtils.isEmpty(userName.getText().toString())) {
-                    userName.setError("需要输入职员");
-                } else {
-                    if (getPostType.equals("edit")) {
-                        postUserData.setUnitId(getPostData.getUnitId());
-                        postUserData.setName(userName.getText().toString().trim());
-                        postUserData.setNote(note.getText().toString().trim());
-                        postUserData.setRequestType("update");
-                        postUserData.setServerIp(Common.ip);
-                        postUserData.setServlet("EmployeeOperate");
-                        getHttpData(postUserData);
-                        isSave = true;
-                    } else {
-                        try {
-                            //String md5= MD5.getMD5("888");
-                            postUserData.setName(userName.getText().toString().trim());
-                            postUserData.setNote(note.getText().toString().trim());
-                            postUserData.setRequestType("insert");
-                            postUserData.setServerIp(Common.ip);
-                            postUserData.setServlet("EmployeeOperate");
-                            getHttpData(postUserData);
+                 unitList= DataStructure.where("name = ?", name.getText().toString()).find(Unit.class);
+                if (TextUtils.isEmpty(name.getText().toString())) {
+                    name.setError("需要输入"+acivityPostBen.getAcivityName());
+                }else if (unitList.size()>0)
+                {
+                    Toast.makeText(BasicForm.this,acivityPostBen.getAcivityName()+"已经存在",Toast.LENGTH_SHORT).show();
+                } else if  (getPostType.equals("edit"))
+                {
+                    postUserData.setUnitId(getPostData.getUnitId());
+                    postUserData.setName(name.getText().toString().trim());
+                    postUserData.setNote(note.getText().toString().trim());
+                    postUserData.setRequestType("update");
+                    postUserData.setServerIp(Common.ip);
+                    postUserData.setServlet(acivityPostBen.getRequestServlet());
+                    postUserData.setClassType(acivityPostBen.getSetClassType());
+                    getHttpData(postUserData);
+                    isSave = true;
 
-
-                        }catch (Exception e)
-                        {
-
-                        }
                     }
-                }
+                    else {
+                    try {
+                        postUserData.setName(name.getText().toString().trim());
+                        postUserData.setNote(note.getText().toString().trim());
+                        postUserData.setRequestType("insert");
+                        postUserData.setServerIp(Common.ip);
+                        postUserData.setServlet(acivityPostBen.getRequestServlet());
+                        postUserData.setClassType(acivityPostBen.getSetClassType());
+                        getHttpData(postUserData);
+
+
+                    }catch (Exception e)
+                    {
+
+                    }
+                    }
+
                 break;
             case R.id.custom_toobar_left:
                 if(getPostType.equals("edit"))
                 {
                     Intent intent = new Intent();
                     if (isSave) {
-                        intent.putExtra("returnName", userName.getText().toString());
+                        intent.putExtra("returnName", name.getText().toString());
                     } else {
                         intent.putExtra("returnName", getPostName);
                     }
@@ -125,7 +142,6 @@ private  void formInit()
 
         }
     }
-
     private void getHttpData( final PostUserData postPostUserData) {
 
 
@@ -138,7 +154,7 @@ private  void formInit()
                     public void run() {
 
 
-                        Toast.makeText(EmployeeForm.this, "网络连接失败", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(BasicForm.this, "网络连接失败", Toast.LENGTH_SHORT).show();
 
                     }
                 });
@@ -163,27 +179,28 @@ private  void formInit()
                                 Intent intent = new Intent();
                                 setResult(RESULT_OK, intent);
                                 if(getPostData !=null) {
-                                    CommonAdapterData user = new CommonAdapterData();
-                                    user.setUnitId(getPostData.getUnitId());
-                                    user.setName(userName.getText().toString().trim());
-                                    intent.putExtra("customid", user);
+                                    getPostData.setUnitId(getPostData.getUnitId());
+                                    getPostData.setName(name.getText().toString().trim());
+                                    getPostData.setNote(note.getText().toString().trim());
+                                    intent.putExtra("getPostData", getPostData);
                                 }else
                                 {
-                                    CommonAdapterData user = new CommonAdapterData();
-                                    user.setName(userName.getText().toString().trim());
+                                    AdapterBean user = new AdapterBean();
+                                    user.setName(name.getText().toString().trim());
                                     user.setUnitId(returnUserData.getResult());
-                                    intent.putExtra("customid", user);
+                                    user.setNote(note.getText().toString().trim());
+                                    intent.putExtra("getPostData", user);
                                 }
-                                EmployeeForm.this.finish();
+                                BasicForm.this.finish();
 
 
                             } else {
 
-                                Toast.makeText(EmployeeForm.this, "操作失败", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(BasicForm.this, "操作失败", Toast.LENGTH_SHORT).show();
                             }
                         }catch (Exception e)
                         {
-                            Toast.makeText(EmployeeForm.this, "网络连接失败", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(BasicForm.this, "网络连接失败", Toast.LENGTH_SHORT).show();
                         }
 
 
@@ -197,8 +214,6 @@ private  void formInit()
 
 
     }
-
-
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         // TODO Auto-generated method stub

@@ -38,7 +38,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".utili.SenHome"></activity>
         <activity
             android:name=".activities.basicfrom.CustomForm"
             android:launchMode="singleTop"></activity>
@@ -53,7 +52,6 @@
         <activity android:name=".activities.warehouseview.StockTakingEntyView"></activity>
         <activity android:name=".activities.warehouseview.InventoryView"></activity>
         <activity android:name=".activities.warehouseview.InventoryEntyView"></activity>
-        <activity android:name=".activities.warehouseview.StockIntentView"></activity>
         <activity android:name=".activities.basicview.ProductSearchView"></activity>
         <activity android:name=".activities.salesview.SaleSearchView"></activity>
         <activity android:name=".activities.homeview.HomeMoreView"></activity>
@@ -70,17 +68,14 @@
         <activity android:name=".activities.purchaseform.ReturnPurchaseProductForm"></activity>
         <activity android:name=".activities.salesfrom.SaleReturnForm"></activity>
         <activity android:name=".activities.warehouseform.StockTakingForm"></activity>
-        <activity android:name=".activities.basicfrom.UnitForm"></activity>
-        <activity android:name=".activities.basicfrom.StockForm"></activity>
+        <activity android:name=".basic.BasicForm"></activity>
         <activity android:name=".activities.basicfrom.SupplierForm"></activity>
         <activity android:name=".activities.purchaseform.PurchaseProductForm"></activity>
         <activity android:name=".activities.basicfrom.ProductForm"></activity>
         <activity android:name=".activities.purchaseform.ShoppingProductForm"></activity>
         <activity android:name=".activities.warehouseform.AppropriationForm"></activity>
-        <activity android:name=".activities.basicfrom.EmployeeForm"></activity>
         <activity android:name=".activities.basicfrom.ConsignmentForm"></activity>
         <activity android:name=".activities.salesfrom.ShoppingScrennForm"></activity>
-        <activity android:name=".activities.basicfrom.BrandForm"></activity>
         <activity android:name=".activities.accountsform.AccountForm"></activity>
         <activity android:name=".activities.accountsform.TallyForm"></activity>
         <activity android:name=".activities.accountsform.AccountsForm"></activity>
@@ -93,18 +88,13 @@
         <activity android:name=".activities.accountsview.TallyExpandableView"></activity>
         <activity android:name=".activities.accountsview.TallyAccountsEntyView"></activity>
         <activity android:name=".activities.basicview.SupplierMoreView"></activity>
-        <activity android:name=".activities.basicview.EmployeeView"></activity>
         <activity android:name=".activities.basicview.SupplierSelectView"></activity>
-        <activity android:name=".activities.basicview.StockListView"></activity>
         <activity android:name=".activities.purchaseview.PurchaseView"></activity>
         <activity android:name=".activities.purchaseview.PurchaseEntyView"></activity>
         <activity android:name=".activities.accountsview.BalanceAccountView"></activity>
-        <activity android:name=".activities.basicview.ProductCategoryView"></activity>
         <activity android:name=".activities.basicview.CustomSelectView"></activity>
-        <activity android:name=".activities.basicview.UnitListView"></activity>
-        <activity android:name=".activities.basicview.BrandView"></activity>
 
-        <activity
+        <activity android:name=".basic.BasicView"></activity>
             android:name=".scanning.CommonScanActivity"
             android:label="@string/app_name"
             android:theme="@android:style/Theme.Light.NoTitleBar" />

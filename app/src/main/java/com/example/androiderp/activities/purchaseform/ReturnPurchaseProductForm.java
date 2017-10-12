@@ -22,8 +22,8 @@ import android.widget.ListAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.androiderp.activities.basicview.EmployeeView;
 import com.example.androiderp.activities.salesfrom.ShoppingScrennForm;
+import com.example.androiderp.basic.BasicView;
 import com.example.androiderp.bean.AppropriationEnty;
 import com.example.androiderp.bean.Consignment;
 import com.example.androiderp.bean.Employee;
@@ -46,7 +46,6 @@ import com.example.androiderp.adaper.SaleProductListViewAdapter;
 import com.example.androiderp.activities.basicview.ConsignmentView;
 import com.example.androiderp.activities.basicview.ProductSelectView;
 import com.example.androiderp.activities.basicview.SupplierSelectView;
-import com.example.androiderp.activities.warehouseview.StockIntentView;
 import com.example.androiderp.tools.Common;
 import com.example.androiderp.ui.CSearchBase;
 import com.example.androiderp.listview.Menu;
@@ -372,7 +371,7 @@ public class ReturnPurchaseProductForm extends CSearchBase implements View.OnCli
                         common.mPopWindow.dismiss();
                     }
                 }else {
-                    Intent intentstock=new Intent(ReturnPurchaseProductForm.this, StockIntentView.class);
+                    Intent intentstock=new Intent(ReturnPurchaseProductForm.this, BasicView.class);
                     intentstock.putExtra("index",number.getText().toString());
                     startActivityForResult(intentstock,11);
                 }
@@ -427,7 +426,7 @@ public class ReturnPurchaseProductForm extends CSearchBase implements View.OnCli
                 else {
                     common.mPopWindow.dismiss();
                 }}else {
-                    Intent intentemployee=new Intent(ReturnPurchaseProductForm.this, EmployeeView.class);
+                    Intent intentemployee=new Intent(ReturnPurchaseProductForm.this, BasicView.class);
                     intentemployee.putExtra("index",category.getText().toString());
                     startActivityForResult(intentemployee,12);
                 }

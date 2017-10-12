@@ -14,10 +14,11 @@ import com.example.androiderp.R;
 import com.example.androiderp.activities.warehouseview.AppropriationView;
 import com.example.androiderp.activities.warehouseview.InventoryView;
 import com.example.androiderp.activities.salesview.SaleView;
-import com.example.androiderp.activities.basicview.StockListView;
 import com.example.androiderp.activities.warehouseview.StockTakingView;
 import com.example.androiderp.activities.warehouseform.AppropriationForm;
 import com.example.androiderp.activities.warehouseform.StockTakingForm;
+import com.example.androiderp.basic.BasicView;
+import com.example.androiderp.bean.AcivityPostBen;
 
 /**
  * Created by lingtan on 2017/5/18.
@@ -25,6 +26,7 @@ import com.example.androiderp.activities.warehouseform.StockTakingForm;
 
 public class FouthFragment extends Fragment implements View.OnClickListener {
     private   Intent intent;
+    private AcivityPostBen acivityPostBen=new AcivityPostBen();
     @Override
     public View onCreateView(LayoutInflater inflater,  ViewGroup container,  Bundle savedInstanceState) {
         View view=inflater.inflate(R.layout.fourthfragment_layout,container,false);
@@ -79,8 +81,12 @@ public class FouthFragment extends Fragment implements View.OnClickListener {
                 startActivity(intent);
                 break;
             case R.id.thressfragmnet_khlayout:
-                intent = new Intent(context,   StockListView.class);
-                startActivity(intent);
+                acivityPostBen.setAcivityName("仓库");
+                acivityPostBen.setRequestServlet("StockOperate");
+                acivityPostBen.setName("");
+                Intent intentStock = new Intent(context, BasicView.class);
+                intentStock.putExtra("acivityPostBen",acivityPostBen);
+                startActivity(intentStock);
                 break;
             default:
                 break;

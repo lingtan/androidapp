@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.androiderp.activities.salesfrom.ShoppingScrennForm;
+import com.example.androiderp.basic.BasicView;
 import com.example.androiderp.bean.AppropriationEnty;
 import com.example.androiderp.bean.Product;
 import com.example.androiderp.bean.ProductCategory;
@@ -37,7 +38,6 @@ import com.example.androiderp.adaper.CommonAdapterData;
 import com.example.androiderp.bean.DataStructure;
 import com.example.androiderp.bean.PopuMenuDataStructure;
 import com.example.androiderp.activities.purchaseview.ProductStockTakingView;
-import com.example.androiderp.activities.warehouseview.StockIntentView;
 import com.example.androiderp.tools.Common;
 import com.example.androiderp.ui.CSearchBase;
 import com.example.androiderp.listview.Menu;
@@ -289,7 +289,7 @@ public class StockTakingForm extends CSearchBase implements View.OnClickListener
                         common.mPopWindow.dismiss();
                     }
                 }else {
-                    Intent intentstock=new Intent(StockTakingForm.this, StockIntentView.class);
+                    Intent intentstock=new Intent(StockTakingForm.this, BasicView.class);
                     intentstock.putExtra("index",stockname.getText().toString());
                     startActivityForResult(intentstock,11);
                 }

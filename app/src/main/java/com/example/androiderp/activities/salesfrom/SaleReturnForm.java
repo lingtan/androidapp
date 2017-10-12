@@ -22,7 +22,7 @@ import android.widget.ListAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.androiderp.activities.basicview.EmployeeView;
+import com.example.androiderp.basic.BasicView;
 import com.example.androiderp.bean.AppropriationEnty;
 import com.example.androiderp.bean.Consignment;
 import com.example.androiderp.bean.Custom;
@@ -43,7 +43,6 @@ import com.example.androiderp.adaper.SaleProductListViewAdapter;
 import com.example.androiderp.activities.basicview.ConsignmentView;
 import com.example.androiderp.activities.basicview.ProductSelectView;
 import com.example.androiderp.activities.basicview.CustomSelectView;
-import com.example.androiderp.activities.warehouseview.StockIntentView;
 import com.example.androiderp.tools.Common;
 import com.example.androiderp.ui.CSearchBase;
 import com.example.androiderp.listview.Menu;
@@ -371,7 +370,7 @@ public class SaleReturnForm extends CSearchBase implements View.OnClickListener,
                         common.mPopWindow.dismiss();
                     }
                 }else {
-                    Intent intentstock=new Intent(SaleReturnForm.this, StockIntentView.class);
+                    Intent intentstock=new Intent(SaleReturnForm.this, BasicView.class);
                     intentstock.putExtra("index",number.getText().toString());
                     startActivityForResult(intentstock,11);
 
@@ -426,7 +425,7 @@ public class SaleReturnForm extends CSearchBase implements View.OnClickListener,
                     common.mPopWindow.dismiss();
                 }}else {
 
-                    Intent intentemployee=new Intent(SaleReturnForm.this, EmployeeView.class);
+                    Intent intentemployee=new Intent(SaleReturnForm.this, BasicView.class);
                     intentemployee.putExtra("index",category.getText().toString());
                     startActivityForResult(intentemployee,12);
                 }

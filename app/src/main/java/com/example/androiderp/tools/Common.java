@@ -19,10 +19,11 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.androiderp.adaper.BasicAdapter;
+import com.example.androiderp.bean.AdapterBean;
 import com.example.androiderp.bean.ReturnUserData;
 import com.example.androiderp.R;
 import com.example.androiderp.adaper.CommonAdapterData;
-import com.example.androiderp.adaper.CommonListViewAdapter;
 import com.example.androiderp.adaper.PopuMenuAdapter;
 import com.example.androiderp.bean.PopuMenuDataStructure;
 import com.example.androiderp.listview.SlideAndDragListView;
@@ -39,7 +40,7 @@ import java.util.List;
 public class Common extends AppCompatActivity {
     public   PopupWindow mPopWindow;
     private PopuMenuAdapter menuAdapter;
-    public List<CommonAdapterData> postUserDataList = new ArrayList<CommonAdapterData>();
+    public List<AdapterBean> HttpResponseList = new ArrayList<AdapterBean>();
     public int indexPositon=-1;
     public ListView listView;
     private Context context;
@@ -118,34 +119,34 @@ public class Common extends AppCompatActivity {
 
     }
 
-    public  void  JsonUpdateUi(String returnData,String indexName, String type, Context context, CommonListViewAdapter adapter, int textViewResourceId, SlideAndDragListView<CommonAdapterData> listView) {
+    public  void  JsonUpdateUi(String returnData, String indexName, String type, Context context, BasicAdapter adapter, int textViewResourceId, SlideAndDragListView<AdapterBean> listView) {
 
 
         if (type.equals("select")) {
             Gson gson = new Gson();
-            postUserDataList = gson.fromJson(returnData, new TypeToken<List<CommonAdapterData>>() {
+            HttpResponseList = gson.fromJson(returnData, new TypeToken<List<AdapterBean>>() {
             }.getType());
 
-            if (postUserDataList.size() != 0) {
-                for(CommonAdapterData commonAdapterData:postUserDataList)
+            if (HttpResponseList.size() != 0) {
+                for(AdapterBean adapterBean: HttpResponseList)
                 {
-                    if (commonAdapterData.getName().equals(indexName)) {
-                        indexPositon = postUserDataList.indexOf(commonAdapterData);
+                    if (adapterBean.getName().equals(indexName)) {
+                        indexPositon = HttpResponseList.indexOf(adapterBean);
                     }
 
 
 
-                    commonAdapterData.setSelectImage(R.drawable.seclec_arrow);
+                    adapterBean.setSelectImage(R.drawable.seclec_arrow);
                 }
 
 
-                adapter = new CommonListViewAdapter(context, textViewResourceId, postUserDataList);
+                adapter = new BasicAdapter(context, textViewResourceId, HttpResponseList);
                 adapter.setSeclection(indexPositon);
                 listView.setAdapter(adapter);
 
 
             } else {
-                adapter = new CommonListViewAdapter(context, textViewResourceId, postUserDataList);
+                adapter = new BasicAdapter(context, textViewResourceId, HttpResponseList);
                 listView.setAdapter(adapter);
 
                 Toast.makeText(context, "没有数据", Toast.LENGTH_SHORT).show();
