@@ -11,6 +11,11 @@ public class PostUserData implements Parcelable{
     private int unitId;
     private  String name;
     private  String note;
+    private String address;
+    private String phone;
+    private String fax;
+    private int category_id;
+    private String category_name;
     private  int classType;
     private  String requestType;
     private  String serverIp;
@@ -40,6 +45,45 @@ public class PostUserData implements Parcelable{
         this.note = note;
     }
 
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getFax() {
+        return fax;
+    }
+
+    public void setFax(String fax) {
+        this.fax = fax;
+    }
+
+    public int getCategory_id() {
+        return category_id;
+    }
+
+    public void setCategory_id(int category_id) {
+        this.category_id = category_id;
+    }
+
+    public String getCategory_name() {
+        return category_name;
+    }
+
+    public void setCategory_name(String category_name) {
+        this.category_name = category_name;
+    }
 
     public int getClassType() {
         return classType;
@@ -89,6 +133,11 @@ public class PostUserData implements Parcelable{
         dest.writeString(requestType);
         dest.writeString(serverIp);
         dest.writeString(servlet);
+        dest.writeString(address);
+        dest.writeString(phone);
+        dest.writeString(fax);
+        dest.writeInt(category_id);
+        dest.writeString(category_name);
     }
     public static final Parcelable.Creator<PostUserData> CREATOR=new Parcelable.Creator<PostUserData>(){
         @Override
@@ -101,6 +150,11 @@ public class PostUserData implements Parcelable{
             postUserData.requestType=source.readString();
             postUserData.serverIp=source.readString();
             postUserData.serverIp=source.readString();
+            postUserData.address=source.readString();
+            postUserData.phone=source.readString();
+            postUserData.fax=source.readString();
+            postUserData.category_id=source.readInt();
+            postUserData.category_name=source.readString();
 
 
             return postUserData;

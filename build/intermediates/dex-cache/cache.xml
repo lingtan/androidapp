@@ -10,5 +10,14 @@
         sha1="d5d13ea991eab0252e3710e5df3d6a9d4b21d461">
         <dex dex="/Users/lingtan/Desktop/androiderp/app/build/intermediates/pre-dexed/debug/butterknife-7.0.1_78f5b0706e31b1230c7386f65e4b0d8be420ddc4.jar" />
     </item>
+    <item
+        is-multidex="false"
+        jar="/Users/lingtan/.android/build-cache/a730daf2cea525cb5d12996246f72153a543b25d/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="e699699fae0092703de1d02b217f43803d0f7e0a">
+        <dex dex="/Users/lingtan/Desktop/androiderp/app/build/intermediates/pre-dexed/debug/classes_483098c593a7e66f169a90d13341db9e4e3048d7.jar" />
+    </item>
 
 </items>

@@ -9,7 +9,7 @@ public class AcivityPostBen implements Parcelable{
     private String name;
     private String requestServlet;
     private  String acivityName;
-
+    private String isSelect="";
     public int getSetClassType() {
         return setClassType;
     }
@@ -42,6 +42,14 @@ public class AcivityPostBen implements Parcelable{
         this.name = name;
     }
 
+    public String getIsSelect() {
+        return isSelect;
+    }
+
+    public void setIsSelect(String isSelect) {
+        this.isSelect = isSelect;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -54,6 +62,7 @@ public class AcivityPostBen implements Parcelable{
         dest.writeString(requestServlet);
         dest.writeString(acivityName);
         dest.writeString(name);
+        dest.writeString(isSelect);
 
 
 
@@ -68,6 +77,7 @@ public class AcivityPostBen implements Parcelable{
             acivityPostBen.requestServlet=source.readString();
            acivityPostBen.acivityName=source.readString();
             acivityPostBen.name=source.readString();
+            acivityPostBen.isSelect=source.readString();
 
             return acivityPostBen;
         }

@@ -412,7 +412,7 @@ public class StockTakingForm extends CSearchBase implements View.OnClickListener
                            if(flag==true)
                            {
                                CommonAdapterData commonData = new CommonAdapterData();
-                               commonData.setUnitId(product.getId());
+                               commonData.setUnitId(product.getProduct_id());
                                commonData.setNumber(product.getNumber());
                                commonData.setName(product.getName());
                                commonData.setFqty(1);

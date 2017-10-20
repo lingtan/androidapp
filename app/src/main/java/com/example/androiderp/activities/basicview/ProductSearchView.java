@@ -72,13 +72,13 @@ public class ProductSearchView extends CSearchBase implements View.OnClickListen
                         if(commonDataStructureSearch.size()!=0) {
 
                             intent.putExtra("action", "edit");
-                            intent.putExtra("product_item", String.valueOf(commonDataStructureSearch.get(position).getId()));
+                            intent.putExtra("product_item", String.valueOf(commonDataStructureSearch.get(position).getProduct_id()));
 
 
                         }else {
 
                             intent.putExtra("action", "edit");
-                            intent.putExtra("product_item", String.valueOf(productList.get(position).getId()));
+                            intent.putExtra("product_item", String.valueOf(productList.get(position).getProduct_id()));
 
                         }
                 startActivityForResult(intent,1);

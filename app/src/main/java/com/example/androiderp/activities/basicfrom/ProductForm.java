@@ -2,6 +2,7 @@ package com.example.androiderp.activities.basicfrom;
 
 import android.Manifest;
 import android.annotation.TargetApi;
+import android.app.Dialog;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -40,7 +41,11 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.androiderp.basic.BasicView;
 import com.example.androiderp.bean.AcivityPostBen;
+import com.example.androiderp.bean.AdapterBean;
+import com.example.androiderp.bean.PostProductData;
+import com.example.androiderp.bean.PostUserData;
 import com.example.androiderp.bean.Product;
+import com.example.androiderp.bean.ReturnUserData;
 import com.example.androiderp.bean.SalesOutEnty;
 import com.example.androiderp.bean.StockIniti;
 import com.example.androiderp.bean.StockInitiData;
@@ -50,10 +55,15 @@ import com.example.androiderp.bean.DataStructure;
 import com.example.androiderp.bean.PopuMenuDataStructure;
 import com.example.androiderp.activities.warehouseview.StockInitiView;
 import com.example.androiderp.tools.Common;
+import com.example.androiderp.tools.GlobalVariable;
+import com.example.androiderp.tools.HttpUtil;
 import com.example.androiderp.ui.CPopupWindow;
 import com.example.androiderp.ui.CPictureFullPopupWindow;
 import com.example.androiderp.scanning.CommonScanActivity;
 import com.example.androiderp.scanning.utils.Constant;
+import com.example.androiderp.ui.DataLoadingDialog;
+import com.google.gson.Gson;
+
 import org.litepal.crud.DataSupport;
 import java.io.File;
 import java.io.IOException;
@@ -62,6 +72,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import okhttp3.Call;
+import okhttp3.Response;
 
 /**
  * Created by lingtan on 2017/5/15.
@@ -77,14 +90,12 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
     private LinearLayout categoryLayout,brandLayout,unitLayout,hideLayoutOne,hideLayoutTow,hideLayoutthree;
     private RelativeLayout pictureThressLayout,pictureSecondLayout,pictureFisrtLayout;
     private RelativeLayout moreLayout;
-    private Product customlist;
-    private String categoryid,customid,edit;
+    private String categoryid,customid;
     private Button deleteButton;
     private Drawable errorIcon;
     private Common common;
     private Intent intentBack;
     private List<PopuMenuDataStructure> popuMenuDatas;
-    private List<Product> productList;
     private List<SalesOutEnty> salesOutEntyList =new ArrayList<SalesOutEnty>();
     List<StockInitiTem> stockInitiTemList = new ArrayList<StockInitiTem>();
     private CPopupWindow cPopupWindow;
@@ -98,7 +109,14 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
     private List<String> imagePathData=new ArrayList<String>();
     private List<ImageView> imageViewData=new ArrayList<ImageView>();
     private String categoryReturnVale;
-    private AcivityPostBen acivityPostBen=new AcivityPostBen();
+    private AcivityPostBen acivityPost=new AcivityPostBen();
+    DecimalFormat df = new DecimalFormat("#####0.00");
+    private AcivityPostBen getAcivityPostBen=new AcivityPostBen();
+    private AcivityPostBen postAcivityPostBen=new AcivityPostBen();
+    private PostProductData postUserData = new PostProductData();
+    private Product getPostData;
+    private Dialog dialog;
+    private String getPostType;
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
@@ -107,8 +125,9 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         intentBack = new Intent(ProductForm.this, ProductForm.class);
         final Intent intent=getIntent();
-        customid=intent.getStringExtra("product_item");
-        edit=intent.getStringExtra("action");
+        getPostData =intent.getParcelableExtra("postdata");
+        getPostType = intent.getStringExtra("type");
+        getAcivityPostBen=intent.getParcelableExtra("acivityPostBen");
         manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         name=(EditText)findViewById(R.id.name);
         number=(EditText)findViewById(R.id.number);
@@ -187,20 +206,19 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
     private void  formInit()
     {
 
-        if(customid!=null) {
-            customlist = DataSupport.find(Product.class, Long.parseLong(customid));
-            name.setText(customlist.getName());
-            number.setText(customlist.getNumber());
-            purchasePrice.setText(customlist.getPurchasePrice());
-            salesPrice.setText(customlist.getSalesPrice());
-            barcode.setText(customlist.getBarcode());
-            model.setText(customlist.getModel());
-            note.setText(customlist.getNote());
-            category.setText(customlist.getCategory());
-            categoryReturnVale=customlist.getCategory();
-            brand.setText(customlist.getBrand());
-            unit.setText(customlist.getUnit());
-            if(edit.equals("edit")) {
+        if(getPostData!=null) {
+            name.setText(getPostData.getName());
+            number.setText(getPostData.getNumber());
+            purchasePrice.setText(df.format(getPostData.getPurchasePrice()));
+            salesPrice.setText(df.format(getPostData.getSalesPrice()));
+            barcode.setText(getPostData.getBarcode());
+            model.setText(getPostData.getModel());
+            note.setText(getPostData.getNote());
+            category.setText(getPostData.getCategory_name());
+            categoryReturnVale= getPostData.getCategory_name();
+            brand.setText(getPostData.getBrand_name());
+            unit.setText(getPostData.getUnit_name());
+            if(getPostType.equals("edit")) {
                 number.setKeyListener(null);
                 toobarAdd.setVisibility(View.VISIBLE);
                 deleteButton.setVisibility(View.VISIBLE);
@@ -208,15 +226,15 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                 toobarAdd.setVisibility(View.GONE);
                 deleteButton.setVisibility(View.GONE);
             }
-            if(customlist.getPhotoFirstPath()!=null&&!customlist.getPhotoFirstPath().isEmpty())
+            if(getPostData.getPhotoFirstPath()!=null&&!getPostData.getPhotoFirstPath().isEmpty())
             {   pictureFisrtLayout.setVisibility(View.VISIBLE);
-                Glide.with(this).load(customlist.getPhotoFirstPath()).override(100,100).into(pictureFisrt);
-                imagePathData.add(customlist.getPhotoFirstPath());
+                Glide.with(this).load(getPostData.getPhotoFirstPath()).override(100,100).into(pictureFisrt);
+                imagePathData.add(getPostData.getPhotoFirstPath());
                 pictureFisrt.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 
-                        pictureFullPopupWindow = new CPictureFullPopupWindow(ProductForm.this,customlist.getPhotoFirstPath());
+                        pictureFullPopupWindow = new CPictureFullPopupWindow(ProductForm.this, getPostData.getPhotoFirstPath());
 
                         pictureFullPopupWindow.showAtLocation(ProductForm.this.findViewById(R.id.main), Gravity.CENTER|Gravity.CENTER_HORIZONTAL, 0, 0);
 
@@ -230,11 +248,11 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                         pictureFisrt.setImageDrawable(null);
                         Product      product = new Product();
                         product.setPhotoFirstPath("");
-                        if(customlist.getPhotoMainPath().equals(customlist.getPhotoFirstPath())) {
+                        if(getPostData.getPhotoMainPath().equals(getPostData.getPhotoFirstPath())) {
                             product.setPhotoMainPath("");
                         }
-                        product.update(Long.parseLong(customid));
-                        File file=new File(customlist.getPhotoFirstPath());
+
+                        File file=new File(getPostData.getPhotoFirstPath());
                         file.delete();
                         pictureFisrtLayout.setVisibility(View.GONE);
 
@@ -249,23 +267,23 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                    @Override
                    public boolean onLongClick(View v) {
                        Product      product = new Product();
-                       product.setPhotoMainPath(customlist.getPhotoFirstPath());
-                       product.update(Long.parseLong(customid));
+                       product.setPhotoMainPath(getPostData.getPhotoFirstPath());
+
                        Toast.makeText(ProductForm.this,"次图片已经设置为封面",Toast.LENGTH_SHORT).show();
                        return true;
                    }
                });
             }
 
-            if(customlist.getPhotoSecondPath()!=null&&!customlist.getPhotoSecondPath().isEmpty())
+            if(getPostData.getPhotoSecondPath()!=null&&!getPostData.getPhotoSecondPath().isEmpty())
             {   pictureSecondLayout.setVisibility(View.VISIBLE);
-                Glide.with(this).load(customlist.getPhotoSecondPath()).override(100,100).into(pictureSecond);
-                imagePathData.add(customlist.getPhotoSecondPath());
+                Glide.with(this).load(getPostData.getPhotoSecondPath()).override(100,100).into(pictureSecond);
+                imagePathData.add(getPostData.getPhotoSecondPath());
                 pictureSecond.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 
-                        pictureFullPopupWindow = new CPictureFullPopupWindow(ProductForm.this,customlist.getPhotoSecondPath());
+                        pictureFullPopupWindow = new CPictureFullPopupWindow(ProductForm.this, getPostData.getPhotoSecondPath());
 
                         pictureFullPopupWindow.showAtLocation(ProductForm.this.findViewById(R.id.main), Gravity.CENTER|Gravity.CENTER_HORIZONTAL, 0, 0);
 
@@ -277,11 +295,11 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                         pictureSecond.setImageDrawable(null);
                         Product      product = new Product();
                         product.setPhotoSecondPath("");
-                        if(customlist.getPhotoMainPath().equals(customlist.getPhotoSecondPath())) {
+                        if(getPostData.getPhotoMainPath().equals(getPostData.getPhotoSecondPath())) {
                             product.setPhotoMainPath("");
                         }
-                        product.update(Long.parseLong(customid));
-                        File file=new File(customlist.getPhotoSecondPath());
+
+                        File file=new File(getPostData.getPhotoSecondPath());
                         file.delete();
                         pictureSecondLayout.setVisibility(View.GONE);
 
@@ -293,8 +311,8 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                     @Override
                     public boolean onLongClick(View v) {
                         Product      product = new Product();
-                        product.setPhotoMainPath(customlist.getPhotoSecondPath());
-                        product.update(Long.parseLong(customid));
+                        product.setPhotoMainPath(getPostData.getPhotoSecondPath());
+
 
                         Toast.makeText(ProductForm.this,"次图片已经设置为封面",Toast.LENGTH_SHORT).show();
                         return true;
@@ -302,15 +320,15 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                 });
             }
 
-            if(customlist.getPhotoThressPath()!=null&&!customlist.getPhotoThressPath().isEmpty())
+            if(getPostData.getPhotoThressPath()!=null&&!getPostData.getPhotoThressPath().isEmpty())
             {   pictureThressLayout.setVisibility(View.VISIBLE);
-                Glide.with(this).load(customlist.getPhotoThressPath()).override(100,100).into(pictureThress);
-                imagePathData.add(customlist.getPhotoThressPath());
+                Glide.with(this).load(getPostData.getPhotoThressPath()).override(100,100).into(pictureThress);
+                imagePathData.add(getPostData.getPhotoThressPath());
                 pictureThress.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 
-                        pictureFullPopupWindow = new CPictureFullPopupWindow(ProductForm.this,customlist.getPhotoThressPath());
+                        pictureFullPopupWindow = new CPictureFullPopupWindow(ProductForm.this, getPostData.getPhotoThressPath());
 
                         pictureFullPopupWindow.showAtLocation(ProductForm.this.findViewById(R.id.main), Gravity.CENTER|Gravity.CENTER_HORIZONTAL, 0, 0);
 
@@ -323,11 +341,11 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                         pictureThress.setImageDrawable(null);
                         Product      product = new Product();
                         product.setPhotoThressPath("");
-                        if(customlist.getPhotoMainPath().equals(customlist.getPhotoThressPath())) {
+                        if(getPostData.getPhotoMainPath().equals(getPostData.getPhotoThressPath())) {
                             product.setPhotoMainPath("");
                         }
-                        product.update(Long.parseLong(customid));
-                        File file=new File(customlist.getPhotoThressPath());
+
+                        File file=new File(getPostData.getPhotoThressPath());
                         file.delete();
                         pictureThressLayout.setVisibility(View.GONE);
 
@@ -339,8 +357,8 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                     @Override
                     public boolean onLongClick(View v) {
                         Product      product = new Product();
-                        product.setPhotoMainPath(customlist.getPhotoThressPath());
-                        product.update(Long.parseLong(customid));
+                        product.setPhotoMainPath(getPostData.getPhotoThressPath());
+
                         Toast.makeText(ProductForm.this,"次图片已经设置为封面",Toast.LENGTH_SHORT).show();
                         return true;
                     }
@@ -350,8 +368,8 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
 
 
         }
-        if(edit!=null) {
-            if (edit.equals("edit")) {
+        if(getPostType!=null) {
+            if (getPostType.equals("edit")) {
                 toobarTile.setText("商品修改");
             } else {
                 toobarTile.setText("商品新增");
@@ -374,70 +392,78 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
 
         {
             case R.id.customtoobar_right:
-                productList =DataStructure.where("number = ?",number.getText().toString()).find(Product.class);
                 if (TextUtils.isEmpty(name.getText().toString())) {
                     name.setError("需要输入商品名称",errorIcon);
                 }else if (TextUtils.isEmpty(category.getText().toString()))
                 {
                     category.setError("请选择分类",errorIcon);
                 }
-                else if (edit.equals("edit")) {
-              Product      product = new Product();
-                    product.setName(name.getText().toString());
-                    product.setNumber(number.getText().toString());
-                    product.setPurchasePrice(purchasePrice.getText().toString());
-                    product.setSalesPrice(salesPrice.getText().toString());
-                    product.setBarcode(barcode.getText().toString());
-                    product.setModel(model.getText().toString());
-                    product.setNote(note.getText().toString());
-                    product.setCategory(category.getText().toString());
-                    product.setBrand(brand.getText().toString());
-                    product.setUnit(unit.getText().toString());
-                    product.update(Long.parseLong(customid));
+                else if (getPostType.equals("edit")) {
+                    postUserData.setProduct_id(getPostData.getProduct_id());
+                    postUserData.setName(name.getText().toString());
+                    postUserData.setNumber(number.getText().toString());
+                    postUserData.setPurchasePrice( Double.parseDouble(purchasePrice.getText().toString()));
+                    postUserData.setSalesPrice(Double.parseDouble(salesPrice.getText().toString()));
+                    postUserData.setBarcode(barcode.getText().toString());
+                    postUserData.setModel(model.getText().toString());
+                    postUserData.setNote(note.getText().toString());
+                    postUserData.setCategory_name(category.getText().toString());
+                    postUserData.setBrand_name(brand.getText().toString());
+                    postUserData.setUnit_name(unit.getText().toString());
                     categoryReturnVale=category.getText().toString();
-                    Toast.makeText(ProductForm.this,"修改成功",Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent();
-                    setResult(RESULT_OK,intent);
+                    postUserData.setRequestType(GlobalVariable.cfUpdate);
+                    postUserData.setServerIp(Common.ip);
+                    postUserData.setServlet(getAcivityPostBen.getRequestServlet());
+                    postUserData.setClassType(getAcivityPostBen.getSetClassType());
+                    postUserData.setPhotoFirstPath(getPostData.getPhotoFirstPath());
+                    postUserData.setPhotoSecondPath(getPostData.getPhotoSecondPath());
+                    postUserData.setPhotoThressPath(getPostData.getPhotoThressPath());
+                    postUserData.setPhotoMainPath(getPostData.getPhotoMainPath());
+
+                    showDialog();
+                    getHttpData(postUserData);
                     hintKbTwo();
 
-                } else if (productList.size()>0)
-                {
-                    Toast.makeText(ProductForm.this,"货号已经存在",Toast.LENGTH_SHORT).show();
-                }else
+                } else
 
                 {
-              Product      product = new Product();
-                    product.setName(name.getText().toString());
-                    product.setNumber(number.getText().toString());
-                    product.setPurchasePrice(purchasePrice.getText().toString());
-                    product.setSalesPrice(salesPrice.getText().toString());
-                    product.setBarcode(barcode.getText().toString());
-                    product.setModel(model.getText().toString());
-                    product.setNote(note.getText().toString());
-                    product.setCategory(category.getText().toString());
-                    product.setBrand(brand.getText().toString());
-                    product.setUnit(unit.getText().toString());
-                    product.setImage(R.drawable.listvist_item_delete);
-                    product.setBadgeShow("");
+
+                    postUserData.setName(name.getText().toString());
+                    postUserData.setNumber(number.getText().toString());
+                    postUserData.setPurchasePrice( Double.parseDouble(purchasePrice.getText().toString()));
+                    postUserData.setSalesPrice( Double.parseDouble(salesPrice.getText().toString()));
+                    postUserData.setBarcode(barcode.getText().toString());
+                    postUserData.setModel(model.getText().toString());
+                    postUserData.setNote(note.getText().toString());
+                    postUserData.setCategory_name(category.getText().toString());
+                    postUserData.setBrand_name(brand.getText().toString());
+                    postUserData.setUnit_name(unit.getText().toString());
+                    postUserData.setImage(R.drawable.listvist_item_delete);
+                    postUserData.setBadgeShow("");
                     if(pictureFisrt.getDrawable()!=null)
                     {
-                        product.setPhotoFirstPath(pictureFisrtSrc);
+                        postUserData.setPhotoFirstPath(pictureFisrtSrc);
                     }
                     if(pictureSecond.getDrawable()!=null)
                     {
-                        product.setPhotoSecondPath(pictureSecondSrc);
+                        postUserData.setPhotoSecondPath(pictureSecondSrc);
                     }
                     if(pictureThress.getDrawable()!=null) {
-                        product.setPhotoThressPath(pictureThressSrc);
+                        postUserData.setPhotoThressPath(pictureThressSrc);
                     }
                     if(pictureMainSrc==null)
                     {
-                        product.setPhotoMainPath(pictureFisrtSrc);
+                        postUserData.setPhotoMainPath(pictureFisrtSrc);
                     }else {
-                        product.setPhotoMainPath(pictureMainSrc);
+                        postUserData.setPhotoMainPath(pictureMainSrc);
                     }
 
-                    product.save();
+                    postUserData.setRequestType(GlobalVariable.cfInsert);
+                    postUserData.setServerIp(Common.ip);
+                    postUserData.setServlet("ProductOperate");
+                    postUserData.setClassType(1);
+                    showDialog();
+                    getHttpData(postUserData);
 
                     for(int i = 0; i < stockInitiTemList.size(); i++) {
 
@@ -454,9 +480,7 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
 
                     }
 
-                        Toast.makeText(ProductForm.this,"新增成功",Toast.LENGTH_SHORT).show();
-                    customid=String.valueOf(DataSupport.findLast(Product.class).getId());
-                    edit="edit";
+                    getPostType="edit";
                     hideLayoutthree.setVisibility(View.GONE);
                     toobarAdd.setVisibility(View.VISIBLE);
                     deleteButton.setVisibility(View.VISIBLE);
@@ -469,7 +493,7 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
 
             break;
             case R.id.customtoobar_left:
-                if(edit.equals("edit"))
+                if(getPostType.equals("edit"))
                 {Intent intent = new Intent();
                     intent.putExtra("category",categoryid);
                     intent.putExtra("returncategory",categoryReturnVale);
@@ -486,32 +510,35 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                 }
              break;
             case R.id.documentmaker_layout:
-                acivityPostBen.setAcivityName("产品类别");
-                acivityPostBen.setRequestServlet("BrandOperate");
-                acivityPostBen.setName(category.getText().toString());
-                acivityPostBen.setSetClassType(2);
+                postAcivityPostBen.setAcivityName("产品类别");
+                postAcivityPostBen.setRequestServlet("BrandOperate");
+                postAcivityPostBen.setName(category.getText().toString());
+                postAcivityPostBen.setSetClassType(2);
+                postAcivityPostBen.setIsSelect("YES");
                 Intent intentcategory=new Intent(ProductForm.this, BasicView.class);
-                intentcategory.putExtra("acivityPostBen",acivityPostBen);
+                intentcategory.putExtra("acivityPostBen",postAcivityPostBen);
                 startActivityForResult(intentcategory,1);
                 break;
 
             case R.id.product_brand_layout:
-                acivityPostBen.setAcivityName("品牌");
-                acivityPostBen.setRequestServlet("BrandOperate");
-                acivityPostBen.setName(brand.getText().toString());
-                acivityPostBen.setSetClassType(1);
+                postAcivityPostBen.setAcivityName("品牌");
+                postAcivityPostBen.setRequestServlet("BrandOperate");
+                postAcivityPostBen.setName(brand.getText().toString());
+                postAcivityPostBen.setSetClassType(1);
+                postAcivityPostBen.setIsSelect("YES");
                 Intent intentbrand=new Intent(ProductForm.this, BasicView.class);
-                intentbrand.putExtra("acivityPostBen",acivityPostBen);
+                intentbrand.putExtra("acivityPostBen",postAcivityPostBen);
                 startActivityForResult(intentbrand,2);
                 break;
 
             case R.id.product_unit_layout:
-                acivityPostBen.setAcivityName("单位");
-                acivityPostBen.setRequestServlet("BrandOperate");
-                acivityPostBen.setName(unit.getText().toString());
-                acivityPostBen.setSetClassType(3);
+                postAcivityPostBen.setAcivityName("单位");
+                postAcivityPostBen.setRequestServlet("BrandOperate");
+                postAcivityPostBen.setName(unit.getText().toString());
+                postAcivityPostBen.setSetClassType(3);
+                postAcivityPostBen.setIsSelect("YES");
                 Intent intentunit=new Intent(ProductForm.this, BasicView.class);
-                intentunit.putExtra("acivityPostBen",acivityPostBen);
+                intentunit.putExtra("acivityPostBen",postAcivityPostBen);
                 startActivityForResult(intentunit,3);
                 break;
             case R.id.loginbutton:
@@ -521,27 +548,16 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                 dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if(isCustom(number.getText().toString()))
-                        {
-                            Toast.makeText(ProductForm.this,"已经有业务发生，不能删除",Toast.LENGTH_SHORT).show();
-
-                        }else {
-                            DataStructure.deleteAll(Product.class, "name = ?", name.getText().toString());
-
-                            AlertDialog.Builder dialogOK = new AlertDialog.Builder(ProductForm.this);
-                            dialogOK.setMessage("该商品已经删除");
-                            dialogOK.setNegativeButton("确认", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    Intent intent = new Intent();
-                                    intent.putExtra("returncategory",categoryReturnVale);
-                                    setResult(RESULT_OK, intent);
-                                    finish();
-                                }
-                            });
-                            dialogOK.show();
-
-                        }
+                        postUserData.setProduct_id(getPostData.getProduct_id());
+                        postUserData.setServerIp(Common.ip);
+                        postUserData.setRequestType(GlobalVariable.cfDelete);
+                        postUserData.setServlet(getAcivityPostBen.getRequestServlet());
+                        postUserData.setClassType(getAcivityPostBen.getSetClassType());
+                        postUserData.setRequestType(GlobalVariable.cfDelete);
+                        showDialog();
+                        getHttpData(postUserData);
+                        Intent intent = new Intent();
+                        setResult(RESULT_OK,intent);
 
 
                     }
@@ -585,7 +601,7 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                 moreLayout.setVisibility(View.GONE);
                 hideLayoutOne.setVisibility(View.VISIBLE);
                 hideLayoutTow.setVisibility(View.VISIBLE);
-                if (edit.equals("edit")) {
+                if (getPostType.equals("edit")) {
                    hideLayoutthree.setVisibility(View.GONE);
                 }else {
                     hideLayoutthree.setVisibility(View.VISIBLE);
@@ -723,11 +739,11 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                             if(customid!=null) {
                                 Product product = new Product();
                                 product.setPhotoFirstPath(imageUri.toString());
-                                if(pictureMainSrc==null&&(customlist.getPhotoMainPath()==null||customlist.getPhotoMainPath().isEmpty()))
+                                if(pictureMainSrc==null&&(getPostData.getPhotoMainPath()==null|| getPostData.getPhotoMainPath().isEmpty()))
                                 {
                                     product.setPhotoMainPath(imageUri.toString());
                                 }
-                                product.update(Long.parseLong(customid));
+
                             }
                             pictureFisrtSrc=imageUri.toString();
 
@@ -738,7 +754,7 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                                     if(customid!=null) {
                                         Product product = new Product();
                                         product.setPhotoMainPath(imageUri.toString());
-                                        product.update(Long.parseLong(customid));
+
                                     }else {
                                         pictureMainSrc=imageUri.toString();
                                     }
@@ -767,7 +783,7 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                             if(customid!=null) {
                                 Product product = new Product();
                                 product.setPhotoSecondPath(imageUri.toString());
-                                product.update(Long.parseLong(customid));
+
                             }
                             pictureSecond.setOnLongClickListener(new View.OnLongClickListener() {
                                 @Override
@@ -775,7 +791,7 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                                     if(customid!=null) {
                                         Product product = new Product();
                                         product.setPhotoMainPath(imageUri.toString());
-                                        product.update(Long.parseLong(customid));
+
                                     }else  {
                                         pictureMainSrc=imageUri.toString();
                                     }
@@ -803,7 +819,7 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                             if(customid!=null) {
                                 Product product = new Product();
                                 product.setPhotoThressPath(imageUri.toString());
-                                product.update(Long.parseLong(customid));
+
                             }
                             pictureThress.setOnLongClickListener(new View.OnLongClickListener() {
                                 @Override
@@ -811,7 +827,7 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                                     if(customid!=null) {
                                         Product product = new Product();
                                         product.setPhotoMainPath(imageUri.toString());
-                                        product.update(Long.parseLong(customid));
+
                                     }else  {
                                         pictureMainSrc=imageUri.toString();
                                     }
@@ -993,11 +1009,11 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                 if(customid!=null) {
                     Product product = new Product();
                     product.setPhotoFirstPath(imagePath);
-                    if(pictureMainSrc==null&&(customlist.getPhotoMainPath()==null||customlist.getPhotoMainPath().isEmpty()))
+                    if(pictureMainSrc==null&&(getPostData.getPhotoMainPath()==null|| getPostData.getPhotoMainPath().isEmpty()))
                     {
                         product.setPhotoMainPath(imagePath);
                     }
-                    product.update(Long.parseLong(customid));
+
                 }
 
                 pictureFisrt.setOnLongClickListener(new View.OnLongClickListener() {
@@ -1006,7 +1022,7 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                         if(customid!=null) {
                             Product product = new Product();
                             product.setPhotoMainPath(imagePath);
-                            product.update(Long.parseLong(customid));
+
                         }else {
 
                             pictureMainSrc=imagePath;
@@ -1036,7 +1052,7 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                 if(customid!=null) {
                     Product product = new Product();
                     product.setPhotoSecondPath(imagePath);
-                    product.update(Long.parseLong(customid));
+
                 }
                 pictureSecond.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
@@ -1044,7 +1060,7 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                         if(customid!=null) {
                             Product product = new Product();
                             product.setPhotoMainPath(imagePath);
-                            product.update(Long.parseLong(customid));
+
                         }else {
 
                             pictureMainSrc=imagePath;
@@ -1073,7 +1089,7 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                 if(customid!=null) {
                     Product product = new Product();
                     product.setPhotoThressPath(imagePath);
-                    product.update(Long.parseLong(customid));
+
                 }
                 pictureThress.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
@@ -1081,7 +1097,7 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                         if(customid!=null) {
                             Product product = new Product();
                             product.setPhotoMainPath(imagePath);
-                            product.update(Long.parseLong(customid));
+
                         }else {
 
                             pictureMainSrc=imagePath;
@@ -1109,4 +1125,90 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
     }
 
 
+    private void getHttpData( final PostProductData postPostUserData) {
+
+
+        HttpUtil.sendProductRequst(postPostUserData, new okhttp3.Callback() {
+
+            @Override
+            public void onFailure(Call call, IOException e) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+
+                        Toast.makeText(getApplicationContext(), "网络连接失败", Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+
+            }
+
+            @Override
+            public void onResponse(Call call, final Response response) throws IOException {
+
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+
+
+                            Gson gson = new Gson();
+                            ReturnUserData returnUserData = (ReturnUserData) gson.fromJson(response.body().string(), ReturnUserData.class);
+                            Log.d("lingtana",returnUserData.getError());
+
+                            if (returnUserData.getResult() > 0) {
+                                Intent intent = new Intent();
+
+                                if(getPostData !=null) {
+                                    setResult(RESULT_OK, intent);
+
+                                }else
+                                {
+                                    setResult(RESULT_OK, intent);
+
+                                }
+                                finish();
+                                Toast.makeText(getApplicationContext(), "操作成功", Toast.LENGTH_SHORT).show();
+                            } else {
+                                closeDialog();
+                                Toast.makeText(getApplicationContext(), "操作失败", Toast.LENGTH_SHORT).show();
+                            }
+                        }catch (Exception e)
+                        {
+                            closeDialog();
+                            Toast.makeText(getApplicationContext(), "网络连接失败", Toast.LENGTH_SHORT).show();
+                        }
+
+
+
+                    }
+                });
+
+
+            }
+        });
+
+
+    }
+
+    /**
+     * 显示进度对话框
+     */
+    private void showDialog() {
+
+        dialog = new DataLoadingDialog(this);
+        dialog.show();//显示
+
+    }
+
+    /**
+     * 关闭进度对话框
+     */
+    private void closeDialog() {
+        if (dialog != null) {
+            dialog.dismiss();
+        }
+    }
 }

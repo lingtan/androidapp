@@ -7,12 +7,14 @@ import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.androiderp.activities.basicfrom.CustomForm;
 import com.example.androiderp.adaper.BasicAdapter;
 import com.example.androiderp.bean.AcivityPostBen;
 import com.example.androiderp.bean.AdapterBean;
@@ -240,12 +242,10 @@ public class BasicView extends CSearchBase implements View.OnClickListener,
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        if(!indexName.isEmpty()) {
-            Intent intent = new Intent(BasicView.this, BasicForm.class);
-
-            intent.putExtra("data_return", String.valueOf(HttpResponseList.get(position).getName()));
+        if(acivityPostBen.getIsSelect().equals("YES")) {
+            Intent intent = new Intent();
+            intent.putExtra("data_return", HttpResponseList.get(position).getName());
             indexName = HttpResponseList.get(position).getName();
-
             setResult(RESULT_OK, intent);
 
             if (lastCheckedOption != null) {

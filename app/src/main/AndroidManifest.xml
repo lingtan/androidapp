@@ -26,79 +26,270 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.homeview.LoginView">
+        \
+        <activity android:name=".activities.homeview.LoginView"
+
+                  android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.homeview.HomeView">
+
+        <activity android:name=".activities.homeview.HomeView"
+
+            android:screenOrientation="portrait"
+            >
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".activities.basicfrom.CustomForm"
-            android:launchMode="singleTop"></activity>
-        <activity android:name=".activities.basicview.SupplierView"></activity>
-        <activity android:name=".activities.basicview.CustomMoreView"></activity>
-        <activity android:name=".activities.salesview.SaleView"></activity>
-        <activity android:name=".activities.salesview.SaleEntyView"></activity>
-        <activity android:name=".activities.basicview.ProductAppropriationView"></activity>
-        <activity android:name=".activities.warehouseview.AppropriationView"></activity>
-        <activity android:name=".activities.warehouseview.AppropriationEntyView"></activity>
-        <activity android:name=".activities.warehouseview.StockTakingView"></activity>
-        <activity android:name=".activities.warehouseview.StockTakingEntyView"></activity>
-        <activity android:name=".activities.warehouseview.InventoryView"></activity>
-        <activity android:name=".activities.warehouseview.InventoryEntyView"></activity>
-        <activity android:name=".activities.basicview.ProductSearchView"></activity>
-        <activity android:name=".activities.salesview.SaleSearchView"></activity>
-        <activity android:name=".activities.homeview.HomeMoreView"></activity>
-        <activity android:name=".activities.purchaseview.PurchaseSearchView"></activity>
-        <activity android:name=".activities.warehouseview.InventorySearchView"></activity>
-        <activity android:name=".activities.purchaseview.ProductStockTakingView"></activity>
-        <activity android:name=".activities.basicview.CustomSearchView"></activity>
-        <activity android:name=".activities.basicview.SupplierCategoryView"></activity>
-        <activity android:name=".activities.basicview.CustomCategoryView"></activity>
-        <activity android:name=".activities.basicfrom.SupplierCategoryForm"></activity>
-        <activity android:name=".activities.basicfrom.CustomCategoryForm"></activity>
-        <activity android:name=".activities.warehouseform.AppropriationShoppingForm"></activity>
-        <activity android:name=".activities.basicfrom.ProductCategoryForm"></activity>
-        <activity android:name=".activities.purchaseform.ReturnPurchaseProductForm"></activity>
-        <activity android:name=".activities.salesfrom.SaleReturnForm"></activity>
-        <activity android:name=".activities.warehouseform.StockTakingForm"></activity>
-        <activity android:name=".basic.BasicForm"></activity>
-        <activity android:name=".activities.basicfrom.SupplierForm"></activity>
-        <activity android:name=".activities.purchaseform.PurchaseProductForm"></activity>
-        <activity android:name=".activities.basicfrom.ProductForm"></activity>
-        <activity android:name=".activities.purchaseform.ShoppingProductForm"></activity>
-        <activity android:name=".activities.warehouseform.AppropriationForm"></activity>
-        <activity android:name=".activities.basicfrom.ConsignmentForm"></activity>
-        <activity android:name=".activities.salesfrom.ShoppingScrennForm"></activity>
-        <activity android:name=".activities.accountsform.AccountForm"></activity>
-        <activity android:name=".activities.accountsform.TallyForm"></activity>
-        <activity android:name=".activities.accountsform.AccountsForm"></activity>
-        <activity android:name=".activities.accountsform.BalanceAccountForm"></activity>
-        <activity android:name=".activities.basicview.ProductMoreView"></activity>
-        <activity android:name=".activities.basicview.ProductSelectView"></activity>
-        <activity android:name=".activities.warehouseview.StockInitiView"></activity>
-        <activity android:name=".activities.basicview.ConsignmentView"></activity>
-        <activity android:name=".activities.accountsview.AccountsView"></activity>
-        <activity android:name=".activities.accountsview.TallyExpandableView"></activity>
-        <activity android:name=".activities.accountsview.TallyAccountsEntyView"></activity>
-        <activity android:name=".activities.basicview.SupplierMoreView"></activity>
-        <activity android:name=".activities.basicview.SupplierSelectView"></activity>
-        <activity android:name=".activities.purchaseview.PurchaseView"></activity>
-        <activity android:name=".activities.purchaseview.PurchaseEntyView"></activity>
-        <activity android:name=".activities.accountsview.BalanceAccountView"></activity>
-        <activity android:name=".activities.basicview.CustomSelectView"></activity>
 
-        <activity android:name=".basic.BasicView"></activity>
-            android:name=".scanning.CommonScanActivity"
-            android:label="@string/app_name"
-            android:theme="@android:style/Theme.Light.NoTitleBar" />
-        <activity android:name=".activities.salesfrom.SaleForm"></activity>
+            android:screenOrientation="portrait"
+            ></activity>
+
+        <activity android:name=".activities.basicview.SupplierView"
+
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity android:name=".activities.basicview.CustomMoreView"
+
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity android:name=".activities.salesview.SaleView"
+
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity android:name=".activities.salesview.SaleEntyView"
+
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity android:name=".activities.basicview.ProductAppropriationView"
+
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity android:name=".activities.warehouseview.AppropriationView"
+
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity android:name=".activities.warehouseview.AppropriationEntyView"
+
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity android:name=".activities.warehouseview.StockTakingView"
+
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity android:name=".activities.warehouseview.StockTakingEntyView"
+
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity android:name=".activities.warehouseview.InventoryView"
+
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity android:name=".activities.warehouseview.InventoryEntyView"
+
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity android:name=".activities.basicview.ProductSearchView"
+
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity android:name=".activities.salesview.SaleSearchView"
+
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity android:name=".activities.homeview.HomeMoreView"
+
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity android:name=".activities.purchaseview.PurchaseSearchView"
+
+            android:screenOrientation="portrait"></activity>
+
+        <activity android:name=".activities.warehouseview.InventorySearchView"
+
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity android:name=".activities.purchaseview.ProductStockTakingView"
+
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity android:name=".activities.basicview.CustomSearchView"
+
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity android:name=".activities.basicfrom.CustomCategoryForm"
+
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity android:name=".activities.warehouseform.AppropriationShoppingForm"
+
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity android:name=".activities.basicfrom.ProductCategoryForm"
+
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity android:name=".activities.purchaseform.PurchaseReturnForm"
+
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity android:name=".activities.salesfrom.SaleReturnForm"
+
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity android:name=".activities.warehouseform.StockTakingForm"
+
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity android:name=".basic.BasicForm"
+
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity android:name=".activities.basicfrom.SupplierForm"
+
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity android:name=".activities.purchaseform.PurchaseForm"
+
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity android:name=".activities.basicfrom.ProductForm"
+
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity android:name=".activities.purchaseform.ShoppingForm"
+
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity android:name=".activities.warehouseform.AppropriationForm"
+
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity android:name=".activities.salesfrom.ShoppingScrennForm"
+
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity android:name=".activities.accountsform.AccountForm"
+
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity android:name=".activities.accountsform.TallyForm"
+
+            android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".activities.accountsform.AccountsForm"
+
+            android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".activities.accountsform.BalanceAccountForm"
+
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity android:name=".activities.basicview.ProductMoreView"
+
+            android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".activities.basicview.ProductSelectView"
+
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity android:name=".activities.warehouseview.StockInitiView"
+
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity android:name=".activities.accountsview.AccountsView"
+
+            android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".activities.accountsview.TallyExpandableView"
+
+            android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".activities.accountsview.TallyAccountsEntyView"
+
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity android:name=".activities.basicview.SupplierMoreView"
+
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity android:name=".activities.basicview.SupplierSelectView"
+
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity android:name=".activities.purchaseview.PurchaseView"
+
+            android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".activities.purchaseview.PurchaseEntyView"
+
+            android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".activities.accountsview.BalanceAccountView"
+
+            android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".activities.basicview.CustomSelectView"
+
+            android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".basic.BasicView"
+            android:screenOrientation="portrait">
+        </activity>
+       <activity android:name=".scanning.CommonScanActivity"
+        android:label="@string/app_name"
+        android:theme="@android:style/Theme.Light.NoTitleBar"
+           android:screenOrientation="portrait"/>
+
+        <activity android:name=".activities.salesfrom.SaleForm"
+
+            android:screenOrientation="portrait">
+        </activity>
+
 
     </application>
 

@@ -106,7 +106,7 @@ public class InventoryEntyView extends CSearchBase implements View.OnClickListen
             name.setText(product.getName());
             number.setText(product.getNumber());
             data.setText(product.getModel());
-            consignment.setText(product.getCategory());
+            consignment.setText(product.getCategory_name());
             note.setText(product.getNote());
           for(Stock stock:stockList) {
               if(stockInventory(stock.getName(),product.getNumber())>0) {

@@ -44,10 +44,8 @@ public class Common extends AppCompatActivity {
     public int indexPositon=-1;
     public ListView listView;
     private Context context;
-    //public static final String ip="http://eedd.v228.10000net.cn/webdemo/servlet/";
-    public static final String ip="http://192.168.0.103:8080/webdemo/servlet/";
-
-
+    //public static final String ip="http://eedd.v228.10000net.cn/javaweb/servlet/";
+    public static final String ip="http://192.168.1.101:8080/webdemo/servlet/";
     public void PopupWindow(Context context, DisplayMetrics dm,List<PopuMenuDataStructure>  popuMenuDatas)
     {   this.context=context;
         if(mPopWindow==null) {
@@ -115,6 +113,19 @@ public class Common extends AppCompatActivity {
         loadingDialog.setContentView(layout, new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.MATCH_PARENT));// 设置布局
+        return loadingDialog;
+
+    }
+
+    public static Dialog dataLoadingDialog(Context context) {
+
+        LayoutInflater inflater = LayoutInflater.from(context);
+        View v = inflater.inflate(R.layout.data_loading, null);// 得到加载view
+        LinearLayout layout = (LinearLayout) v.findViewById(R.id.loading_dialog_layout);// 加载布局
+
+        Dialog loadingDialog = new Dialog(context, R.style.loadingdialog);// 创建自定义样式dialog
+
+        loadingDialog.setCancelable(true);// 不可以用“返回键”取消
         return loadingDialog;
 
     }

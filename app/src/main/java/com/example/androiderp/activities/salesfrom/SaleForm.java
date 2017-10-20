@@ -22,9 +22,10 @@ import android.widget.ListAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.androiderp.basic.BasicView;
+import com.example.androiderp.bean.AcivityPostBen;
 import com.example.androiderp.bean.AppropriationEnty;
 import com.example.androiderp.bean.BalanceAccount;
-import com.example.androiderp.bean.Consignment;
 import com.example.androiderp.bean.Custom;
 import com.example.androiderp.bean.Employee;
 import com.example.androiderp.bean.PostUserData;
@@ -44,7 +45,6 @@ import com.example.androiderp.bean.DataStructure;
 import com.example.androiderp.bean.PopuMenuDataStructure;
 import com.example.androiderp.adaper.SaleProductListViewAdapter;
 import com.example.androiderp.activities.accountsview.BalanceAccountView;
-import com.example.androiderp.activities.basicview.ConsignmentView;
 import com.example.androiderp.activities.basicview.ProductSelectView;
 import com.example.androiderp.activities.basicview.CustomSelectView;
 import com.example.androiderp.tools.Common;
@@ -87,7 +87,6 @@ public class SaleForm extends CSearchBase implements View.OnClickListener, Adapt
     private Custom custom;
     private Stock stock;
     private Employee employee;
-    private Consignment consignment;
     private Drawable errorIcon;
     private Common common;
     private List<PopuMenuDataStructure> popuMenuDatas;
@@ -109,6 +108,7 @@ public class SaleForm extends CSearchBase implements View.OnClickListener, Adapt
     private double quantity;
     private int stockCheck = 1;
     private List<Integer> stockCheckList = new ArrayList<Integer>();
+    private AcivityPostBen acivityPostBen=new AcivityPostBen();
 
     public void iniView() {
         setContentView(R.layout.saleproductform);
@@ -183,7 +183,6 @@ public class SaleForm extends CSearchBase implements View.OnClickListener, Adapt
         custom = DataSupport.findFirst(Custom.class);
         stock = DataSupport.findFirst(Stock.class);
         employee = DataSupport.findFirst(Employee.class);
-        consignment = DataSupport.findFirst(Consignment.class);
         balanceAccountList = DataSupport.findFirst(BalanceAccount.class);
 
         if (custom == null) {
@@ -202,11 +201,7 @@ public class SaleForm extends CSearchBase implements View.OnClickListener, Adapt
         } else {
             category.setText(employee.getName());
         }
-        if (consignment == null) {
 
-        } else {
-            consign.setText(consignment.getName());
-        }
         if (balanceAccountList == null) {
 
         } else {
@@ -467,9 +462,14 @@ public class SaleForm extends CSearchBase implements View.OnClickListener, Adapt
                 dialog.show();
                 break;
             case R.id.billnumber_layout:
-                Intent intentconsignment = new Intent(SaleForm.this, ConsignmentView.class);
-                intentconsignment.putExtra("index", consign.getText().toString());
-                startActivityForResult(intentconsignment, 9);
+                acivityPostBen.setAcivityName("发货方式");
+                acivityPostBen.setRequestServlet("BrandOperate");
+                acivityPostBen.setName(consign.getText().toString());
+                acivityPostBen.setSetClassType(6);
+                acivityPostBen.setIsSelect("YES");
+                Intent intentconsignment=new Intent(SaleForm.this, BasicView.class);
+                intentconsignment.putExtra("acivityPostBen",acivityPostBen);
+                startActivityForResult(intentconsignment,9);
                 break;
             case R.id.customtoobar_r:
                 if (common.mPopWindow == null || !common.mPopWindow.isShowing()) {
@@ -586,7 +586,7 @@ public class SaleForm extends CSearchBase implements View.OnClickListener, Adapt
                             }
                             if (flag == true) {
                                 CommonAdapterData commonData = new CommonAdapterData();
-                                commonData.setUnitId(product.getId());
+                                commonData.setUnitId(product.getProduct_id());
                                 commonData.setNumber(product.getNumber());
                                 commonData.setName(product.getName());
                                 commonData.setFqty(1);

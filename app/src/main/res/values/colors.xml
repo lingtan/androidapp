@@ -28,4 +28,7 @@
     <color name="holo_orange_light">#ffffbb33</color>
     <color name="holo_orange_dark">#ffff8800</color>
     <color name="scan_bg">#7f000000</color>
+    <color name="dailog">#E6E6E6</color>
+
+
 </resources>

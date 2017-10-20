@@ -5,6 +5,7 @@
  */
 
 package com.example.androiderp.activities.basicview;
+import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -20,39 +21,54 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.example.androiderp.adaper.BasicAdapter;
+import com.example.androiderp.bean.AcivityPostBen;
+import com.example.androiderp.bean.AdapterBean;
+import com.example.androiderp.bean.PostProductData;
+import com.example.androiderp.bean.PostUserData;
 import com.example.androiderp.bean.Product;
-import com.example.androiderp.bean.ProductCategory;
 import com.example.androiderp.R;
-import com.example.androiderp.adaper.CommonAdapter;
-import com.example.androiderp.adaper.CommonAdapterData;
 import com.example.androiderp.adaper.ProductAdapter;
+import com.example.androiderp.tools.Common;
+import com.example.androiderp.tools.GlobalVariable;
+import com.example.androiderp.tools.HttpUtil;
 import com.example.androiderp.ui.CSearch;
 import com.example.androiderp.ui.CSearchBase;
 import com.example.androiderp.activities.basicfrom.ProductForm;
 import com.example.androiderp.scanning.CommonScanActivity;
 import com.example.androiderp.scanning.utils.Constant;
-import org.litepal.crud.DataSupport;
+import com.example.androiderp.ui.DataLoadingDialog;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.Call;
+import okhttp3.Response;
+
 public class ProductMoreView extends CSearchBase implements View.OnClickListener {
     private ProductAdapter rightAdapter;
-    private CommonAdapter leftAdapter;
+    private BasicAdapter leftAdapter;
     private ListView rightListView;
     private ListView leftListView;
     private DisplayMetrics dm;
-    private List<Product> productList;
     private TextView toobarBack, toobarAdd, toobarTile, countShow, toobarScreen;
     private CSearch search;
-    private Intent intent, intentScreen;
-    private List<ProductCategory> productCategoryList;
-    private List<CommonAdapterData> categorylist = new ArrayList<CommonAdapterData>();
-    private  String leftListSelecteText="全部产品";
-    private  int leftListSelecte=0;
+    private Intent  intentScreen;
     private String scanResult;
     private IntentFilter intentFilter;
     private NetworkChangeReceiver networkChangeReceiver;
-    private CommonAdapterData proudctcategoryData=new CommonAdapterData();
+    private AcivityPostBen acivityPostBen=new AcivityPostBen();
+    private  List<AdapterBean>  HttpResponseCategory=new ArrayList<>();
+    private  List<AdapterBean>  HttpResponseCategoryTemp=new ArrayList<>();
+    private   List<Product>  HttpResponseCustom=new ArrayList<>();
+    private PostProductData postDate = new PostProductData();
+    private Dialog dialog;
+    private  int selectPositon=0;
+    private String selectCategory;
 
     @Override
     public void iniView(){
@@ -64,7 +80,8 @@ public class ProductMoreView extends CSearchBase implements View.OnClickListener
         if(scanResult!=null)
         {
 
-            listViewUpdate(search(scanResult,leftListSelecteText),rightAdapter,rightListView);
+            search.requestFocusFromTouch();
+            search.setText(scanResult);
 
 
         }
@@ -86,23 +103,15 @@ public class ProductMoreView extends CSearchBase implements View.OnClickListener
     //读取数据库
     private void DataInit()
     {
-        productList = DataSupport.findAll(Product.class);
-        productCategoryList = DataSupport.findAll(ProductCategory.class);
-        CommonAdapterData commonDataAll=new CommonAdapterData();
-        commonDataAll.setName("全部产品");
-        categorylist.add(commonDataAll);
-        CommonAdapterData commonDataN=new CommonAdapterData();
-        commonDataN.setName("未分类");
-        categorylist.add(commonDataN);
-        for(ProductCategory productCategory: productCategoryList)
-
-        {
-            CommonAdapterData commonData=new CommonAdapterData();
-            commonData.setName(productCategory.getName());
-            commonData.setUnitId(productCategory.getId());
-            categorylist.add(commonData);
-
-        }
+        Intent intent=getIntent();
+        acivityPostBen=intent.getParcelableExtra("acivityPostBen");
+        postDate.setName("");
+        postDate.setRequestType(GlobalVariable.cmvCusmtAndCategory);
+        postDate.setServerIp(Common.ip);
+        postDate.setClassType(1);
+        postDate.setServlet("ProductOperate");
+        showDialog();
+        getHttpData(postDate);
     }
 //控件初始化
     private void widgetInit()
@@ -121,10 +130,9 @@ public class ProductMoreView extends CSearchBase implements View.OnClickListener
     {
 
         toobarTile.setText("商品信息");
-        countShow.setText(String.valueOf(productList.size()));//统计商品数量并显示
+        countShow.setText(String.valueOf(HttpResponseCustom.size()));//统计商品数量并显示
         dm=new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
-        intent= new Intent(ProductMoreView.this, ProductForm.class);
         intentScreen =getIntent();
         scanResult= intentScreen.getStringExtra("scanResult");//获取扫描返回结果
         toobarTile.setCompoundDrawables(null,null,null,null);//取消标题图片
@@ -135,11 +143,7 @@ public class ProductMoreView extends CSearchBase implements View.OnClickListener
         leftListView.setTextFilterEnabled(true);
         rightListView.setTextFilterEnabled(true);
         search.addTextChangedListener(textWatcher);
-        leftAdapter = new CommonAdapter(ProductMoreView.this, R.layout.custom_item, categorylist);
-        leftAdapter.setSeclection(leftListSelecte);//突出显示
-        leftListView.setAdapter(leftAdapter);
-        rightAdapter = new ProductAdapter(ProductMoreView.this, R.layout.product_item, productList);
-        rightListView.setAdapter(rightAdapter);
+
 
     }
 
@@ -149,12 +153,25 @@ public class ProductMoreView extends CSearchBase implements View.OnClickListener
         leftListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                leftListSelecte=position;
-                leftAdapter.setSeclection(position);
-                leftAdapter.notifyDataSetInvalidated();
-                listViewUpdate(categorySearch(categorylist.get(position).getName().toString()),rightAdapter,rightListView);
-                leftListSelecteText = categorylist.get(position).getName().toString();
-                countShow.setText(String.valueOf(productList.size()));
+                showDialog();
+                selectPositon=position;
+                leftAdapter.setSeclection(selectPositon);
+                leftAdapter.notifyDataSetChanged();
+                selectCategory=HttpResponseCategory.get(position).getName();
+                postDate.setName(search.getText().toString());
+                if(HttpResponseCategory.get(position).getName().equals("全部")) {
+                    postDate.setCategory_name("");
+
+                }else {
+                    postDate.setCategory_name(HttpResponseCategory.get(position).getName());
+                }
+                postDate.setName("");
+                postDate.setServerIp(Common.ip);
+                postDate.setRequestType(GlobalVariable.cfCatetorySelect);
+                postDate.setClassType(1);
+                postDate.setServlet("ProductOperate");
+                getHttpData(postDate);
+                countShow.setText(String.valueOf(HttpResponseCustom.size()));
             }
         });
         rightListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -162,9 +179,11 @@ public class ProductMoreView extends CSearchBase implements View.OnClickListener
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view,
                                     int position, long id) {
-                intent.removeExtra("product_item");
-                    intent.putExtra("action", "edit");
-                    intent.putExtra("product_item", String.valueOf(productList.get(position).getId()));
+
+                Intent  intent= new Intent(getApplicationContext(), ProductForm.class);
+                intent.putExtra("type", "edit");
+                intent.putExtra("postdata", HttpResponseCustom.get(position));
+                intent.putExtra("acivityPostBen",acivityPostBen);
                 startActivityForResult(intent,1);
 
 
@@ -173,198 +192,36 @@ public class ProductMoreView extends CSearchBase implements View.OnClickListener
 
     }
 
-    //内容查找
-    public List<Product> search(String searchKey, String selecteCategory) {
-        List<Product> searchData = new ArrayList<Product>();
-        if(selecteCategory==null)
-        {
-            selecteCategory="全部产";
-        }
 
-        if(selecteCategory.equals("未分类"))
-
-        {
-            searchData= DataSupport.where("category=? and (name like ? or number like ?)","", "%" + searchKey + "%","%" + searchKey + "%").find(Product.class);
-
-
-
-        }else if (selecteCategory.equals("全部产品"))
-        {
-            searchData=DataSupport.where("name like ? or number like ?","%" + searchKey + "%","%" + searchKey + "%").find(Product.class);
-
-        }
-
-        else {
-
-
-
-            searchData=DataSupport.where("category=? and (name like ? or number like ?)",selecteCategory,"%" + searchKey + "%","%" + searchKey + "%").find(Product.class);
-
-        }
-        productList=searchData;
-        return  searchData;
-    }
-
-    //类别
-    public List<Product> categorySearch(String searchKey) {
-
-         List<Product> searchData = new ArrayList<Product>();
-
-        if(searchKey.equals("未分类"))
-        {
-               searchData=DataSupport.where("category=?","").find(Product.class);
-
-        }else if (searchKey.equals("全部产品"))
-        {
-
-           searchData=DataSupport.findAll(Product.class);
-
-        }
-
-        else {
-
-                searchData= DataSupport.where("category=?", searchKey).find(Product.class);
-
-            }
-            productList=searchData;
-        return searchData;
-    }
-//adapter刷新
-    public void listViewUpdate(List<Product> searchData,ProductAdapter rightAdapter,ListView rightListView) {
-        if(searchData !=null) {
-            rightAdapter = new ProductAdapter(ProductMoreView.this, R.layout.product_item, searchData);
-            rightListView.setAdapter(rightAdapter);
-        }
-    }
 //处理返回结果
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode){
+        switch (requestCode) {
             case 1:
-                if(resultCode==RESULT_OK)
-               //如果左菜单是"全部产品"，就不改变leftListSelecteText的值。
-                {    if(leftListSelecte!=0)
+                if (resultCode == RESULT_OK) {
 
-                {
-                    leftListSelecteText=data.getStringExtra("returncategory");
-                    //重新统计商品数量并显示
-                    countShow.setText(String.valueOf(search(search.getText().toString(),data.getStringExtra("returncategory")).size()));
+
+                    postDate.setName("");
+                    postDate.setServerIp(Common.ip);
+                    postDate.setRequestType(GlobalVariable.cmvCusmtAndCategory);
+                    postDate.setClassType(acivityPostBen.getSetClassType());
+                    postDate.setServlet(acivityPostBen.getRequestServlet());
+                    showDialog();
+                    HttpResponseCustom.clear();
+                    rightAdapter.notifyDataSetChanged();
+                    getHttpData(postDate);
 
 
                 }
-                //通过查找方式，刷新Adapter
-                    listViewUpdate(search(search.getText().toString(),leftListSelecteText),rightAdapter,rightListView);
 
-
-                //清空左菜单数据集合
-                    if(categorylist.size()!=0)
-                    {
-                        categorylist.clear();
-                    }
-                 //获取商品类别
-                    productCategoryList = DataSupport.findAll(ProductCategory.class);
-                 // categorylist 增加元素。
-                    CommonAdapterData commonDataAll=new CommonAdapterData();
-                    commonDataAll.setName("全部产品");
-                    categorylist.add(commonDataAll);
-                    CommonAdapterData commonDataN=new CommonAdapterData();
-                    commonDataN.setName("未分类");
-                    categorylist.add(commonDataN);
-                    for(ProductCategory productCategory: productCategoryList)
-
-                    {
-
-                        CommonAdapterData commonData=new CommonAdapterData();
-                        if(productCategory.getName().equals(data.getStringExtra("returncategory")))
-                        {
-                            proudctcategoryData=commonData;
-                        }
-                        commonData.setName(productCategory.getName());
-                        commonData.setUnitId(productCategory.getId());
-                        categorylist.add(commonData);
-
-                    }
-                    //如果左菜单是"商品全部"，不改变leftListSelecte的值。
-                    if(leftListSelecte!=0 &&data.getStringExtra("returncategory")!=null) {
-                        leftListSelecte = categorylist.indexOf(proudctcategoryData);
-
-                    }
-                    leftAdapter = new CommonAdapter(ProductMoreView.this, R.layout.custom_item, categorylist);
-                    leftAdapter.setSeclection(leftListSelecte);
-                    leftListView.setAdapter(leftAdapter);
-
-                   }
-                break;
             case 2:
-                if(resultCode==RESULT_OK) {
-                    //通过扫描返回的结果改变customSearch的值
-                    search.requestFocusFromTouch();//customSearch获得焦点
+                if (resultCode == RESULT_OK) {
+                   search.requestFocusFromTouch();
                     search.setText(data.getStringExtra("scanResult"));
 
                 }
-                break;
-            case 3:
-                if(resultCode==RESULT_OK)
-                {
-                     if(leftListSelecte!=0 && data.getStringExtra("returncategory")!=null)
-
-                    {
-
-
-                        leftListSelecteText=data.getStringExtra("returncategory");
-                        //重新统计商品数量并显示
-                        countShow.setText(String.valueOf(search(search.getText().toString(),data.getStringExtra("returncategory")).size()));
-
-
-                    }
-
-                    listViewUpdate(search(search.getText().toString(),leftListSelecteText),rightAdapter,rightListView);
-                    //清空左菜单数据集合
-                    if(categorylist.size()!=0)
-                    {
-                        categorylist.clear();
-                    }
-                    //获取商品类别
-                    productCategoryList = DataSupport.findAll(ProductCategory.class);
-                    // categorylist 增加元素。
-                    CommonAdapterData commonDataAll=new CommonAdapterData();
-                    commonDataAll.setName("全部产品");
-                    categorylist.add(commonDataAll);
-                    CommonAdapterData commonDataN=new CommonAdapterData();
-                    commonDataN.setName("未分类");
-                    categorylist.add(commonDataN);
-                    for(ProductCategory productCategory: productCategoryList)
-
-                    {
-
-                        CommonAdapterData commonData=new CommonAdapterData();
-                        if(productCategory.getName().equals(data.getStringExtra("returncategory")))
-                        {
-                            proudctcategoryData=commonData;
-                        }
-                        commonData.setName(productCategory.getName());
-                        commonData.setUnitId(productCategory.getId());
-                        categorylist.add(commonData);
-
-                    }
-                    //如果左菜单是"商品全部"，不改变leftListSelecte的值。
-                    if(leftListSelecte!=0 && data.getStringExtra("returncategory")!=null) {
-                        leftListSelecte = categorylist.indexOf(proudctcategoryData);
-
-
-                    }
-                    leftAdapter = new CommonAdapter(ProductMoreView.this, R.layout.custom_item, categorylist);
-                    leftAdapter.setSeclection(leftListSelecte);
-                    leftListView.setAdapter(leftAdapter);
-
-                }
-                break;
-
-
-            default:
-                }
         }
-
+    }
 
     @Override
     public void onClick(View v) {
@@ -375,10 +232,13 @@ public class ProductMoreView extends CSearchBase implements View.OnClickListener
                 break;
             //新增按钮
             case R.id.custom_toobar_right:
-
-                intent.removeExtra("product_item");
-                intent.putExtra("action","add");
-                startActivityForResult(intent,3);
+                Intent  intent= new Intent(getApplicationContext(), ProductForm.class);
+                acivityPostBen.setAcivityName(acivityPostBen.getAcivityName()+"资料");
+                acivityPostBen.setRequestServlet("ProductOperate");
+                acivityPostBen.setSetClassType(acivityPostBen.getSetClassType());
+                intent.putExtra("acivityPostBen",acivityPostBen);
+                intent.putExtra("type","add");
+                startActivityForResult(intent,1);
                 break;
             //扫描
             case R.id.customtoobar_screen:
@@ -390,6 +250,118 @@ public class ProductMoreView extends CSearchBase implements View.OnClickListener
 
 
         }
+
+    }
+    public void  searchItem(String name) {
+
+        postDate.setName(name);
+        if(selectCategory.equals("全部"))
+        {
+            postDate.setCategory_name("");
+        }else
+        {
+            postDate.setCategory_name(selectCategory);
+        }
+
+        postDate.setRequestType(GlobalVariable.cfCatetorySelect);
+        postDate.setClassType(acivityPostBen.getSetClassType());
+        postDate.setServlet(acivityPostBen.getRequestServlet());
+        showDialog();
+        getHttpData(postDate);
+    }
+    private void getHttpData(final PostProductData postPostUserData) {
+
+
+
+        HttpUtil.sendProductRequst(postPostUserData, new okhttp3.Callback() {
+
+            @Override
+            public void onFailure(Call call, IOException e) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        closeDialog();
+                        Toast.makeText(getApplicationContext(), "网络连接失败", Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+
+            }
+
+            @Override
+            public void onResponse(Call call, final Response response) throws IOException {
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+
+                            if(postDate.getRequestType().equals(GlobalVariable.cmvCusmtAndCategory)) {
+                                JSONObject jsonObject = new JSONObject(response.body().string());
+                                JSONArray jsonArray = jsonObject.getJSONArray("custom");
+                                JSONArray jsonArray1 = jsonObject.getJSONArray("customcategory");
+                                Gson gson = new Gson();
+                                HttpResponseCategory.clear();
+                                HttpResponseCategoryTemp = gson.fromJson(jsonArray1.toString(), new TypeToken<List<AdapterBean>>() {
+                                }.getType());
+                                AdapterBean adapterBean=new AdapterBean();
+                                adapterBean.setName("全部");
+                                HttpResponseCategory.add(adapterBean);
+                                HttpResponseCategory.addAll(HttpResponseCategoryTemp);
+                                HttpResponseCustom= gson.fromJson(jsonArray.toString(), new TypeToken<List<Product>>() {
+                                }.getType());
+                                if(HttpResponseCategory!=null&&HttpResponseCustom!=null) {
+                                    leftAdapter = new BasicAdapter(getApplicationContext(), R.layout.custom_item, HttpResponseCategory);
+                                    leftAdapter.setSeclection(selectPositon);
+                                    selectCategory=HttpResponseCategory.get(0).getName();
+                                    leftListView.setAdapter(leftAdapter);
+                                    rightAdapter = new ProductAdapter(getApplicationContext(), R.layout.product_item, HttpResponseCustom);
+                                    rightListView.setAdapter(rightAdapter);
+                                }
+
+
+                            }else
+                            {
+
+                                Gson gson = new Gson();
+                                HttpResponseCustom = gson.fromJson(response.body().string(), new TypeToken<List<Product>>() {
+                                }.getType());
+                                if(HttpResponseCustom!=null) {
+                                    if (HttpResponseCustom.size() != 0) {
+
+
+                                        rightAdapter = new ProductAdapter(getApplicationContext(), R.layout.product_item, HttpResponseCustom);
+                                        rightListView.setAdapter(rightAdapter);
+
+
+                                    } else {
+
+                                        rightAdapter = new ProductAdapter(getApplicationContext(), R.layout.product_item, HttpResponseCustom);
+                                        rightListView.setAdapter(rightAdapter);
+                                        Toast.makeText(getApplicationContext(), "没有数据", Toast.LENGTH_SHORT).show();
+
+                                    }
+                                }else
+                                {
+                                    HttpResponseCustom.clear();
+                                    rightAdapter.notifyDataSetChanged();
+                                }
+
+                            }
+                            closeDialog();
+
+                        } catch (Exception e) {
+                            Toast.makeText(getApplicationContext(), "网络", Toast.LENGTH_SHORT).show();
+                            closeDialog();
+                        }
+                    }
+                });
+
+
+            }
+        });
+
 
     }
 
@@ -414,7 +386,7 @@ public class ProductMoreView extends CSearchBase implements View.OnClickListener
         public void afterTextChanged(Editable s) {
 
 
-            listViewUpdate(search(search.getText().toString(),leftListSelecteText),rightAdapter,rightListView);
+            searchItem(search.getText().toString());
 
         }
     };
@@ -441,5 +413,25 @@ public class ProductMoreView extends CSearchBase implements View.OnClickListener
     protected void onDestroy() {
         super.onDestroy();
         unregisterReceiver(networkChangeReceiver);
+    }
+
+    /**
+     * 显示进度对话框
+     */
+    private void showDialog() {
+
+        dialog = new DataLoadingDialog(this);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();//显示
+
+    }
+
+    /**
+     * 关闭进度对话框
+     */
+    private void closeDialog() {
+        if (dialog != null) {
+            dialog.dismiss();
+        }
     }
 }

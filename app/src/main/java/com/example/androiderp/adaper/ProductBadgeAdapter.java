@@ -106,7 +106,7 @@ public class ProductBadgeAdapter extends ArrayAdapter<Product> implements View.O
         viewHolder.name.setText(data.get(position).getName().toString());
         viewHolder.number.setText(data.get(position).getNumber());
         viewHolder.model.setText(data.get(position).getModel());
-        viewHolder.salesPrice.setText("¥"+data.get(position).getSalesPrice().toString());
+        viewHolder.salesPrice.setText("¥"+data.get(position).getSalesPrice());
         viewHolder.image.setImageResource(data.get(position).getImage());
         viewHolder.badgeShow.setText(data.get(position).getBadgeShow());
         viewHolder.image.setOnClickListener(this);

@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.example.androiderp.bean.User;
 import com.example.androiderp.R;
 import com.example.androiderp.tools.Common;
+import com.example.androiderp.ui.DataLoadingDialog;
 
 /**
  * Created by lingtan on 2017/5/8.
@@ -132,7 +133,7 @@ public class LoginView extends AppCompatActivity implements View.OnClickListener
      */
     private void showDialog() {
 
-           dialog = Common.createLoadingDialog(this, "正在加载中...");
+           dialog = new DataLoadingDialog(this);
             dialog.setCancelable(true);//允许返回
             dialog.show();//显示
 

@@ -22,12 +22,13 @@ import com.example.androiderp.activities.warehouseview.StockTakingView;
 import com.example.androiderp.activities.basicview.SupplierMoreView;
 import com.example.androiderp.activities.accountsview.TallyExpandableView;
 import com.example.androiderp.activities.warehouseform.AppropriationForm;
-import com.example.androiderp.activities.purchaseform.PurchaseProductForm;
+import com.example.androiderp.activities.purchaseform.PurchaseForm;
 import com.example.androiderp.activities.salesfrom.SaleForm;
 import com.example.androiderp.activities.warehouseform.StockTakingForm;
 import com.example.androiderp.basic.BasicView;
 import com.example.androiderp.bean.AcivityPostBen;
 import com.example.androiderp.bean.GridView;
+import com.example.androiderp.tools.GlobalVariable;
 import com.example.androiderp.ui.CGridView;
 
 import org.litepal.crud.DataSupport;
@@ -86,11 +87,17 @@ public class FirstFragment extends Fragment {
 
                 switch (gridViewList.get(position).getName().toString()) {
                     case "商品管理":
-                        intent = new Intent(context, ProductMoreView.class);
-                        startActivity(intent);
+
+                        acivityPostBen.setAcivityName("产品");
+                        acivityPostBen.setRequestServlet("ProductOperate");
+                        acivityPostBen.setName("");
+                        acivityPostBen.setSetClassType(GlobalVariable.customMoreViewType);
+                        Intent intentProduct = new Intent(context, ProductMoreView.class);
+                        intentProduct.putExtra("acivityPostBen",acivityPostBen);
+                        startActivity(intentProduct);
                         break;
                     case "采购新增":
-                        intent = new Intent(context, PurchaseProductForm.class);
+                        intent = new Intent(context, PurchaseForm.class);
                         startActivity(intent);
                         break;
                     case "销售新增":
@@ -111,12 +118,22 @@ public class FirstFragment extends Fragment {
                         startActivity(intent);
                         break;
                     case "供应商管理":
-                        intent = new Intent(context, SupplierMoreView.class);
-                        startActivity(intent);
+                        acivityPostBen.setAcivityName("供应商");
+                        acivityPostBen.setRequestServlet("ContactOperate");
+                        acivityPostBen.setName("");
+                        acivityPostBen.setSetClassType(GlobalVariable.supplierMoreViewType);
+                        Intent intentSupplier = new Intent(context, CustomMoreView.class);
+                        intentSupplier.putExtra("acivityPostBen",acivityPostBen);
+                        startActivity(intentSupplier);
                         break;
                     case "客户管理":
-                        intent = new Intent(context, CustomMoreView.class);
-                        startActivity(intent);
+                        acivityPostBen.setAcivityName("客户");
+                        acivityPostBen.setRequestServlet("ContactOperate");
+                        acivityPostBen.setName("");
+                        acivityPostBen.setSetClassType(GlobalVariable.customMoreViewType);
+                        Intent intentCustom = new Intent(context, CustomMoreView.class);
+                        intentCustom.putExtra("acivityPostBen",acivityPostBen);
+                        startActivity(intentCustom);
                         break;
                     case "仓库管理":
                         acivityPostBen.setAcivityName("仓库");

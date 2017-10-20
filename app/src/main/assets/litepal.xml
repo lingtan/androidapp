@@ -12,7 +12,6 @@
         <mapping class="com.example.androiderp.bean.SupplierCategory"></mapping>
         <mapping class="com.example.androiderp.bean.Unit"></mapping>
         <mapping class="com.example.androiderp.bean.Brand"></mapping>
-        <mapping class="com.example.androiderp.bean.Product"></mapping>
         <mapping class="com.example.androiderp.bean.ProductCategory"></mapping>
         <mapping class="com.example.androiderp.bean.Stock"></mapping>
         <mapping class="com.example.androiderp.bean.Employee"></mapping>

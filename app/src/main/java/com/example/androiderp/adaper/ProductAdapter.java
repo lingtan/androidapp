@@ -92,7 +92,7 @@ public class ProductAdapter extends ArrayAdapter<Product>   {
         viewHolder.name.setText(data.get(position).getName().toString());
         viewHolder.number.setText(data.get(position).getNumber());
         viewHolder.model.setText(data.get(position).getModel());
-        viewHolder.salesPrice.setText("¥"+data.get(position).getSalesPrice().toString());
+        viewHolder.salesPrice.setText("¥"+data.get(position).getSalesPrice());
         viewHolder.image.setImageResource(data.get(position).getImage());
         if(data.get(position).getPhotoMainPath()!=null&&!data.get(position).getPhotoMainPath().isEmpty()) {
             Glide.with(context).load(data.get(position).getPhotoMainPath()).override(100, 100).into(viewHolder.imageMain);

@@ -15,6 +15,8 @@ public class Custom extends DataSupport {
     private String fax;
     private String category;
 
+
+
     public int getId() {
         return id;
     }

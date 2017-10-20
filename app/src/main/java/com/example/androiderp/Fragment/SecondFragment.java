@@ -16,8 +16,8 @@ import com.example.androiderp.activities.warehouseview.InventoryView;
 import com.example.androiderp.activities.purchaseview.PurchaseView;
 import com.example.androiderp.activities.basicview.SupplierMoreView;
 import com.example.androiderp.activities.warehouseform.AppropriationForm;
-import com.example.androiderp.activities.purchaseform.PurchaseProductForm;
-import com.example.androiderp.activities.purchaseform.ReturnPurchaseProductForm;
+import com.example.androiderp.activities.purchaseform.PurchaseForm;
+import com.example.androiderp.activities.purchaseform.PurchaseReturnForm;
 
 /**
  * Created by lingtan on 2017/5/18.
@@ -53,7 +53,7 @@ public class SecondFragment extends Fragment implements View.OnClickListener {
         switch (v.getId())
 
         {   case R.id.secondfragment_layout_cglayout:
-            intent = new Intent(context, PurchaseProductForm.class);
+            intent = new Intent(context, PurchaseForm.class);
             startActivity(intent);
             break;
             case R.id.secondfragment_layout_gyslayout:
@@ -61,7 +61,7 @@ public class SecondFragment extends Fragment implements View.OnClickListener {
                 startActivity(intent);
                 break;
             case R.id.secondfragmnet_cgthlayout:
-                intent = new Intent(context, ReturnPurchaseProductForm.class);
+                intent = new Intent(context, PurchaseReturnForm.class);
                 startActivity(intent);
                 break;
             case R.id.secondfragmnet_cglslayout:

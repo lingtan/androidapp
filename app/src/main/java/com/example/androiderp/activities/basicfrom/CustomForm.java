@@ -1,5 +1,6 @@
 package com.example.androiderp.activities.basicfrom;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -16,17 +17,32 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.androiderp.basic.BasicForm;
+import com.example.androiderp.basic.BasicView;
+import com.example.androiderp.bean.AcivityPostBen;
+import com.example.androiderp.bean.AdapterBean;
 import com.example.androiderp.bean.Custom;
 import com.example.androiderp.bean.CustomCategory;
+import com.example.androiderp.bean.PostUserData;
+import com.example.androiderp.bean.ReturnUserData;
 import com.example.androiderp.bean.SalesOut;
 import com.example.androiderp.R;
 import com.example.androiderp.bean.DataStructure;
-import com.example.androiderp.activities.basicview.CustomCategoryView;
+import com.example.androiderp.tools.Common;
+import com.example.androiderp.tools.GlobalVariable;
+import com.example.androiderp.tools.HttpUtil;
+import com.example.androiderp.ui.DataLoadingDialog;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 
 import org.litepal.crud.DataSupport;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.Call;
+import okhttp3.Response;
 
 /**
  * Created by lingtan on 2017/5/15.
@@ -38,19 +54,22 @@ public class CustomForm extends AppCompatActivity implements View.OnClickListene
     private TextView toobarSave, toobarTile, toobarBack, toobarAdd,category;
     private DisplayMetrics dm;
     private LinearLayout linearLayout;
-    private Custom custom;
     private List<Custom> customList;
-    private String edit,customid;
+    private String getPostType;
     private Button deleteButton;
-    private List<SalesOut> salesOutList =new ArrayList<SalesOut>();
+    private AcivityPostBen acivityPostBen=new AcivityPostBen();
+    private PostUserData postUserData = new PostUserData();
+    private AdapterBean getPostData;
+    private Dialog dialog;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.userform);
         dm=new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         final Intent intent=getIntent();
-        edit=intent.getStringExtra("action");
-        customid=intent.getStringExtra("custom_item");
+        getPostData =intent.getParcelableExtra("postdata");
+        getPostType = intent.getStringExtra("type");
+        acivityPostBen=intent.getParcelableExtra("acivityPostBen");
         manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         name=(EditText)findViewById(R.id.username);
         address=(EditText)findViewById(R.id.useraddress);
@@ -72,34 +91,25 @@ public class CustomForm extends AppCompatActivity implements View.OnClickListene
     }
     private void formInit()
     {
-        if(customid!=null) {
+        if(getPostData!=null) {
 
-
-            custom = DataSupport.find(Custom.class, Long.parseLong(customid));
-            name.setText(custom.getName());
-            address.setText(custom.getAddress());
-            phone.setText(custom.getPhone());
-            fax.setText(custom.getFax());
-            category.setText(custom.getCategory());
+            name.setText(getPostData.getName());
+            address.setText(getPostData.getAddress());
+            category.setText(getPostData.getCategory_name());
+            phone.setText(getPostData.getPhone());
+            fax.setText(getPostData.getFax());
 
                 toobarAdd.setVisibility(View.VISIBLE);
                 deleteButton.setVisibility(View.VISIBLE);
 
         }else {
-         CustomCategory  cCategory  = DataSupport.find(CustomCategory.class, 1);
-            if(cCategory==null)
-            {
-
-            }else {
-                category.setText(cCategory.getName());
-            }
 
         }
-        if(edit.equals("edit"))
+        if(getPostType.equals("edit"))
         {
-            toobarTile.setText("客户信息");
+            toobarTile.setText(acivityPostBen.getAcivityName());
         }else {
-            toobarTile.setText("客户新增");
+            toobarTile.setText(acivityPostBen.getAcivityName()+"新增");
         }
 
 
@@ -110,40 +120,47 @@ public class CustomForm extends AppCompatActivity implements View.OnClickListene
             case R.id.customtoobar_right:
                 customList= DataStructure.where("name = ?",name.getText().toString()).find(Custom.class);
                 if (TextUtils.isEmpty(name.getText().toString())) {
-                    name.setError("需要输入客户名称");
+                    name.setError("需要输入"+acivityPostBen.getAcivityName());
                 } else if (customList.size()>0)
                 {
                     Toast.makeText(CustomForm.this,"客户方式已经存在",Toast.LENGTH_SHORT).show();
                 }else {
-                    if (edit.equals("edit")) {
-                  Custom      custom = new Custom();
-                        custom.setName(name.getText().toString());
-                        custom.setAddress(address.getText().toString());
-                        custom.setPhone(phone.getText().toString());
-                        custom.setFax(fax.getText().toString());
-                        custom.setCategory(category.getText().toString());
-                        custom.update(Long.parseLong(customid));
-                        Intent intent = new Intent();
-                        setResult(RESULT_OK,intent);
-                        Toast.makeText(CustomForm.this,"修改成功",Toast.LENGTH_SHORT).show();
+                    if (getPostType.equals("edit")) {
+                        postUserData.setUnitId(getPostData.getContact_id());
+                        postUserData.setName(name.getText().toString());
+                        postUserData.setAddress(address.getText().toString());
+                        postUserData.setPhone(phone.getText().toString());
+                        postUserData.setFax(fax.getText().toString());
+                        postUserData.setCategory_name(category.getText().toString());
+                        postUserData.setRequestType(GlobalVariable.cfUpdate);
+                        postUserData.setServerIp(Common.ip);
+                        postUserData.setServlet(acivityPostBen.getRequestServlet());
+                        postUserData.setClassType(acivityPostBen.getSetClassType());
+                        showDialog();
+                        getHttpData(postUserData);
                         hintKbTwo();
                     } else {
-                  Custom      custom = new Custom();
-                        custom.setName(name.getText().toString());
-                        custom.setAddress(address.getText().toString());
-                        custom.setPhone(phone.getText().toString());
-                        custom.setFax(fax.getText().toString());
-                        custom.setCategory(category.getText().toString());
-                        custom.save();
-                        Toast.makeText(CustomForm.this,"新增成功",Toast.LENGTH_SHORT).show();
-                        edit="edit";
+
+                        postUserData.setName(name.getText().toString());
+                        postUserData.setAddress(address.getText().toString());
+                        postUserData.setPhone(phone.getText().toString());
+                        postUserData.setFax(fax.getText().toString());
+                        postUserData.setCategory_name(category.getText().toString());
+                        postUserData.setRequestType(GlobalVariable.cfInsert);
+                        postUserData.setServerIp(Common.ip);
+                        postUserData.setServlet(acivityPostBen.getRequestServlet());
+                        postUserData.setClassType(acivityPostBen.getSetClassType());
+                        showDialog();
+                        getHttpData(postUserData);
+                        getPostType="edit";
                         toobarAdd.setVisibility(View.VISIBLE);
                         deleteButton.setVisibility(View.VISIBLE);
                         hintKbTwo();
-                        Intent intent = new Intent();
-                        setResult(RESULT_OK,intent);
 
                     }
+
+
+
                 }
                 break;
             case R.id.loginbutton:
@@ -153,28 +170,17 @@ public class CustomForm extends AppCompatActivity implements View.OnClickListene
                 dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if(isCustom(name.getText().toString()))
-                        {
-                            Toast.makeText(CustomForm.this,"已经有业务发生，不能删除",Toast.LENGTH_SHORT).show();
-
-                        }else {
                             DataStructure.deleteAll(Custom.class, "name = ?", name.getText().toString());
-
-                            AlertDialog.Builder dialogOK = new AlertDialog.Builder(CustomForm.this);
-                            dialogOK.setMessage("该客户已经删除");
-                            dialogOK.setNegativeButton("确认", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    Intent intent = new Intent();
-                                    setResult(RESULT_OK, intent);
-                                    finish();
-
-                                }
-                            });
-                            dialogOK.show();
-                        }
-
-
+                        postUserData.setUnitId(getPostData.getContact_id());
+                        postUserData.setServerIp(Common.ip);
+                        postUserData.setRequestType(GlobalVariable.cfDelete);
+                        postUserData.setServlet(acivityPostBen.getRequestServlet());
+                        postUserData.setClassType(acivityPostBen.getSetClassType());
+                        getPostData.setOperationType("delete");
+                        showDialog();
+                        getHttpData(postUserData);
+                        Intent intent = new Intent();
+                        setResult(RESULT_OK,intent);
 
 
                     }
@@ -188,24 +194,26 @@ public class CustomForm extends AppCompatActivity implements View.OnClickListene
                 dialog.show();
                 break;
             case  R.id.customtoobar_left:
-                if(edit.equals("edit"))
-                {
-                    Intent intent = new Intent();
-                    setResult(RESULT_OK,intent);
-                    CustomForm.this.finish();
-                }else {
-                    Intent intent = new Intent();
-                    setResult(RESULT_OK,intent);
-                    finish();
-                }
+                finish();
 
                 break;
 
             case R.id.usercategory_layout:
+             AcivityPostBen acivityPostBenc=new AcivityPostBen();
+                acivityPostBenc.setAcivityName(acivityPostBen.getAcivityName());
+                acivityPostBenc.setRequestServlet("BrandOperate");
+                acivityPostBenc.setName(category.getText().toString());
+                if(acivityPostBen.getSetClassType()==1)
+                {
+                    acivityPostBenc.setSetClassType(8);
+                }else {
+                    acivityPostBenc.setSetClassType(7);
+                }
 
-                Intent intent=new Intent(CustomForm.this, CustomCategoryView.class);
-                intent.putExtra("index",category.getText().toString());
-                startActivityForResult(intent,1);
+                acivityPostBenc.setIsSelect("YES");
+                Intent intentcategory=new Intent(CustomForm.this, BasicView.class);
+                intentcategory.putExtra("acivityPostBen",acivityPostBenc);
+                startActivityForResult(intentcategory,1);
                 break;
             case R.id.customtoobar_r:
                 name.setText("");
@@ -216,13 +224,92 @@ public class CustomForm extends AppCompatActivity implements View.OnClickListene
                 toobarAdd.setVisibility(View.INVISIBLE);
                 toobarTile.setText("客户新增");
                 deleteButton.setVisibility(View.INVISIBLE);
-                edit="";
+                getPostType="";
                 break;
 
 
         }
     }
+    private void getHttpData( final PostUserData postPostUserData) {
 
+
+        HttpUtil.sendOkHttpRequst(postPostUserData, new okhttp3.Callback() {
+
+            @Override
+            public void onFailure(Call call, IOException e) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+
+                        Toast.makeText(getApplicationContext(), "网络连接失败", Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+
+            }
+
+            @Override
+            public void onResponse(Call call, final Response response) throws IOException {
+
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+
+
+                            Gson gson = new Gson();
+                            ReturnUserData returnUserData = (ReturnUserData) gson.fromJson(response.body().string(), ReturnUserData.class);
+
+
+                            if (returnUserData.getResult() > 0) {
+                                Intent intent = new Intent();
+
+                                if(getPostData !=null) {
+                                    setResult(RESULT_OK, intent);
+                                    getPostData.setContact_id(getPostData.getContact_id());
+                                    getPostData.setName(name.getText().toString().trim());
+                                    getPostData.setAddress(address.getText().toString().trim());
+                                    getPostData.setCategory_name(category.getText().toString().trim());
+                                    getPostData.setPhone(phone.getText().toString().trim());
+                                    getPostData.setFax(fax.getText().toString().trim());
+                                    intent.putExtra("getPostData", getPostData);
+                                }else
+                                {
+                                    setResult(RESULT_OK, intent);
+                                    AdapterBean user = new AdapterBean();
+                                    user.setContact_id(returnUserData.getResult());
+                                    user.setName(name.getText().toString().trim());
+                                    user.setAddress(address.getText().toString().trim());
+                                    user.setCategory_name(category.getText().toString().trim());
+                                    user.setPhone(phone.getText().toString().trim());
+                                    user.setFax(fax.getText().toString().trim());
+                                    intent.putExtra("getPostData", user);
+                                }
+                                finish();
+                                Toast.makeText(getApplicationContext(), "操作成功", Toast.LENGTH_SHORT).show();
+                            } else {
+                                closeDialog();
+                                Toast.makeText(getApplicationContext(), "操作失败", Toast.LENGTH_SHORT).show();
+                            }
+                        }catch (Exception e)
+                        {
+                            closeDialog();
+                            Toast.makeText(getApplicationContext(), "网络连接失败", Toast.LENGTH_SHORT).show();
+                        }
+
+
+
+                    }
+                });
+
+
+            }
+        });
+
+
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode){
@@ -243,18 +330,23 @@ public class CustomForm extends AppCompatActivity implements View.OnClickListene
         }
     }
 
-    public boolean isCustom(String name)
-    {
+    /**
+     * 显示进度对话框
+     */
+    private void showDialog() {
 
-        salesOutList =DataSupport.where("customer=?",name).find(SalesOut.class);
+        dialog = new DataLoadingDialog(this);
+        dialog.show();//显示
 
-        if (salesOutList.size()>0)
-        {
-            return true;
-        }else {
-            return false;
+    }
+
+    /**
+     * 关闭进度对话框
+     */
+    private void closeDialog() {
+        if (dialog != null) {
+            dialog.dismiss();
         }
-
     }
 
 }

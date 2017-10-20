@@ -81,12 +81,14 @@ public class BasicAdapter extends ArrayAdapter<AdapterBean>   {
         }else {
             itemLayout.setBackgroundColor(Color.TRANSPARENT);
 
-            itemLayout.setBackgroundColor(Color.parseColor("#ffffff"));
+            //itemLayout.setBackgroundColor(Color.parseColor("#ffffff"));
         }
         // 重新获取ViewHolder
 
-        viewHolder.name.setText(data.get(position).getName());
-        viewHolder.image.setImageResource(data.get(position).getSelectImage());
+                viewHolder.name.setText(data.get(position).getName());
+                viewHolder.image.setImageResource(data.get(position).getSelectImage());
+
+
 
 
         /*首先响应子控件的事件

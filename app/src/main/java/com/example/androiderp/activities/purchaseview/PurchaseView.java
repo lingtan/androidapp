@@ -14,7 +14,7 @@ import com.example.androiderp.R;
 import com.example.androiderp.adaper.SaleOutAdapter;
 import com.example.androiderp.ui.CSearch;
 import com.example.androiderp.ui.CSearchBase;
-import com.example.androiderp.activities.purchaseform.PurchaseProductForm;
+import com.example.androiderp.activities.purchaseform.PurchaseForm;
 
 import org.litepal.crud.DataSupport;
 
@@ -152,7 +152,7 @@ public class PurchaseView extends CSearchBase implements View.OnClickListener {
                 break;
 
             case R.id.custom_toobar_right:
-                intentadd = new Intent(PurchaseView.this, PurchaseProductForm.class);
+                intentadd = new Intent(PurchaseView.this, PurchaseForm.class);
                 startActivity(intentadd);
                 break;
 

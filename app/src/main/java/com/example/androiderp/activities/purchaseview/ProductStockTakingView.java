@@ -192,13 +192,13 @@ public class ProductStockTakingView extends CSearchBase implements View.OnClickL
                 if(productSearch.size()!=0) {
 
                     intent.putExtra("action", "edit");
-                    intent.putExtra("product_item", String.valueOf(productSearch.get(position).getId()));
+                    intent.putExtra("product_item", String.valueOf(productSearch.get(position).getProduct_id()));
 
 
                 }else {
 
                     intent.putExtra("action", "edit");
-                    intent.putExtra("product_item", String.valueOf(productList.get(position).getId()));
+                    intent.putExtra("product_item", String.valueOf(productList.get(position).getProduct_id()));
 
                 }
                 startActivityForResult(intent,1);
@@ -245,7 +245,7 @@ public class ProductStockTakingView extends CSearchBase implements View.OnClickL
         if(leftListSelecteText.equals("未分类"))
         {
             for (int i = 0; i < productList.size(); i++) {
-                if(productList.get(i).getCategory()==null)
+                if(productList.get(i).getCategory_name()==null)
                 { int index = productList.get(i).getNumber().indexOf(name);
                     if (index != -1) {
                         productSearch.add(productList.get(i));
@@ -269,7 +269,7 @@ public class ProductStockTakingView extends CSearchBase implements View.OnClickL
         else {
             for (int i = 0; i < productList.size(); i++) {
                 int index = productList.get(i).getNumber().indexOf(name);
-                int indey = productList.get(i).getCategory().indexOf(leftListSelecteText);
+                int indey = productList.get(i).getCategory_name().indexOf(leftListSelecteText);
                 // 存在匹配的数据
                 if (index != -1 & indey != -1) {
                     productSearch.add(productList.get(i));
@@ -287,7 +287,7 @@ public class ProductStockTakingView extends CSearchBase implements View.OnClickL
         if(name.equals("未分类"))
         {
             for (int i = 0; i < productList.size(); i++) {
-               if(productList.get(i).getCategory()==null)
+               if(productList.get(i).getCategory_name()==null)
                {
                     productSearch.add(productList.get(i));
                }
@@ -305,8 +305,8 @@ public class ProductStockTakingView extends CSearchBase implements View.OnClickL
 
         else {
         for (int i = 0; i < productList.size(); i++) {
-              if(productList.get(i).getCategory()!=null){
-                int index = productList.get(i).getCategory().indexOf(name);
+              if(productList.get(i).getCategory_name()!=null){
+                int index = productList.get(i).getCategory_name().indexOf(name);
                 // 存在匹配的数据
                 if (index != -1) {
                     productSearch.add(productList.get(i));
@@ -435,7 +435,7 @@ public class ProductStockTakingView extends CSearchBase implements View.OnClickL
                         {
                             intent.removeExtra("action");
                             intent.putExtra("action", "edit");
-                            intent.putExtra("product_item", String.valueOf(product.getId()));
+                            intent.putExtra("product_item", String.valueOf(product.getProduct_id()));
                             startActivityForResult(intent,1);
                         }
 

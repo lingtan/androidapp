@@ -23,7 +23,7 @@ import com.example.androiderp.ui.CBadgeView;
 import com.example.androiderp.ui.CSearch;
 import com.example.androiderp.ui.CSearchBase;
 import com.example.androiderp.activities.basicfrom.ProductForm;
-import com.example.androiderp.activities.purchaseform.ShoppingProductForm;
+import com.example.androiderp.activities.purchaseform.ShoppingForm;
 import com.example.androiderp.activities.salesfrom.SaleForm;
 import com.example.androiderp.scanning.CommonScanActivity;
 import com.example.androiderp.scanning.utils.Constant;
@@ -74,7 +74,7 @@ public class ProductSelectView extends CSearchBase implements View.OnClickListen
         countShow =(TextView)findViewById(R.id.product_item_layout_count) ;
         accountLayout =(LinearLayout)findViewById(R.id.product_item_layout_bottom);
         productList = DataSupport.findAll(Product.class);
-        intent= new Intent(ProductSelectView.this, ShoppingProductForm.class);
+        intent= new Intent(ProductSelectView.this, ShoppingForm.class);
         productCategoryList = DataSupport.findAll(ProductCategory.class);
         CommonAdapterData commonDataAll=new CommonAdapterData();
         commonDataAll.setName("全部产品");
@@ -134,13 +134,13 @@ public class ProductSelectView extends CSearchBase implements View.OnClickListen
                 if(productSearch.size()!=0) {
 
                     intent.putExtra("action", "edit");
-                    intent.putExtra("product_item", String.valueOf(productSearch.get(position).getId()));
+                    intent.putExtra("product_item", String.valueOf(productSearch.get(position).getProduct_id()));
 
 
                 }else {
 
                     intent.putExtra("action", "edit");
-                    intent.putExtra("product_item", String.valueOf(productList.get(position).getId()));
+                    intent.putExtra("product_item", String.valueOf(productList.get(position).getProduct_id()));
 
                 }
                 startActivityForResult(intent,1);
@@ -187,7 +187,7 @@ public class ProductSelectView extends CSearchBase implements View.OnClickListen
         if(leftListSelecteText.equals("未分类"))
         {
             for (int i = 0; i < productList.size(); i++) {
-                if(productList.get(i).getCategory()==null)
+                if(productList.get(i).getCategory_name()==null)
                 { int index = productList.get(i).getNumber().indexOf(name);
                     if (index != -1) {
                         productSearch.add(productList.get(i));
@@ -211,7 +211,7 @@ public class ProductSelectView extends CSearchBase implements View.OnClickListen
         else {
             for (int i = 0; i < productList.size(); i++) {
                 int index = productList.get(i).getNumber().indexOf(name);
-                int indey = productList.get(i).getCategory().indexOf(leftListSelecteText);
+                int indey = productList.get(i).getCategory_name().indexOf(leftListSelecteText);
                 // 存在匹配的数据
                 if (index != -1 & indey != -1) {
                     productSearch.add(productList.get(i));
@@ -229,7 +229,7 @@ public class ProductSelectView extends CSearchBase implements View.OnClickListen
         if(name.equals("未分类"))
         {
             for (int i = 0; i < productList.size(); i++) {
-               if(productList.get(i).getCategory()==null)
+               if(productList.get(i).getCategory_name()==null)
                {
                     productSearch.add(productList.get(i));
                }
@@ -247,8 +247,8 @@ public class ProductSelectView extends CSearchBase implements View.OnClickListen
 
         else {
         for (int i = 0; i < productList.size(); i++) {
-              if(productList.get(i).getCategory()!=null){
-                int index = productList.get(i).getCategory().indexOf(name);
+              if(productList.get(i).getCategory_id()!=null){
+                int index = productList.get(i).getCategory_name().indexOf(name);
                 // 存在匹配的数据
                 if (index != -1) {
                     productSearch.add(productList.get(i));
@@ -378,7 +378,7 @@ public class ProductSelectView extends CSearchBase implements View.OnClickListen
                         {
                             intent.removeExtra("action");
                             intent.putExtra("action", "edit");
-                            intent.putExtra("product_item", String.valueOf(product.getId()));
+                            intent.putExtra("product_item", String.valueOf(product.getProduct_id()));
                             startActivityForResult(intent,1);
                         }
 

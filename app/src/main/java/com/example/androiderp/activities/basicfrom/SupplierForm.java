@@ -19,12 +19,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.androiderp.basic.BasicView;
+import com.example.androiderp.bean.AcivityPostBen;
 import com.example.androiderp.bean.SalesOut;
 import com.example.androiderp.bean.Supplier;
 import com.example.androiderp.bean.SupplierCategory;
 import com.example.androiderp.R;
 import com.example.androiderp.bean.DataStructure;
-import com.example.androiderp.activities.basicview.SupplierCategoryView;
 
 import org.litepal.crud.DataSupport;
 
@@ -46,6 +47,7 @@ public class SupplierForm extends AppCompatActivity implements View.OnClickListe
     private Button deleteButton;
     private Drawable errorIcon;
     private List<SalesOut> salesOutList =new ArrayList<SalesOut>();
+    private AcivityPostBen acivityPostBen=new AcivityPostBen();
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
@@ -97,13 +99,7 @@ public class SupplierForm extends AppCompatActivity implements View.OnClickListe
             deleteButton.setVisibility(View.VISIBLE);
         }else {
 
-            SupplierCategory sCategory  = DataSupport.find(SupplierCategory.class, 1);
-            if(sCategory==null)
-            {
 
-            }else {
-                category.setText(sCategory.getName());
-            }
         }
         if(edit!=null) {
             if (edit.equals("edit")) {
@@ -175,10 +171,14 @@ public class SupplierForm extends AppCompatActivity implements View.OnClickListe
                 }
              break;
             case R.id.supplierform_category_layout:
-
-                Intent intent=new Intent(SupplierForm.this, SupplierCategoryView.class);
-                intent.putExtra("index",category.getText().toString());
-                startActivityForResult(intent,1);
+                acivityPostBen.setAcivityName("供应商类别");
+                acivityPostBen.setRequestServlet("BrandOperate");
+                acivityPostBen.setName(category.getText().toString());
+                acivityPostBen.setSetClassType(7);
+                acivityPostBen.setIsSelect("YES");
+                Intent intentcategory=new Intent(SupplierForm.this, BasicView.class);
+                intentcategory.putExtra("acivityPostBen",acivityPostBen);
+                startActivityForResult(intentcategory,1);
                 break;
             case R.id.loginbutton:
                 AlertDialog.Builder dialog=new AlertDialog.Builder(SupplierForm.this);

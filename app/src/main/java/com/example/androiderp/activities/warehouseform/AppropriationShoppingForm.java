@@ -109,7 +109,7 @@ public class AppropriationShoppingForm extends AppCompatActivity implements View
             product = DataSupport.find(Product.class, Long.parseLong(customid));
             name.setText(product.getName());
             number.setText(product.getNumber());
-            category.setText(product.getCategory());
+            category.setText(product.getCategory_name());
             if(edit.equals("edit")) {
                 toobarAdd.setVisibility(View.VISIBLE);
             }else {
@@ -135,7 +135,7 @@ public class AppropriationShoppingForm extends AppCompatActivity implements View
                     quantity.setError("销售数量不能为0",errorIcon);
                 }else {
                     productShopping = new ProductShopping();
-                    productShopping.setId(product.getId());
+                    productShopping.setId(product.getProduct_id());
                     productShopping.setName(name.getText().toString());
                     productShopping.setNumber(number.getText().toString());
                     productShopping.setCategory(category.getText().toString());

@@ -40,6 +40,7 @@ public class ShoppingScrennForm extends AppCompatActivity implements View.OnClic
     private Drawable errorIcon;
     private String  amountString;
     private Button saveButton;
+    DecimalFormat df = new DecimalFormat("#####0.00");
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
@@ -101,7 +102,7 @@ public class ShoppingScrennForm extends AppCompatActivity implements View.OnClic
                     toobarTile.setText("商品销售");
                 }else {
 
-                    DecimalFormat df = new DecimalFormat("#####0.00");
+
                     amountString=df.format(Double.valueOf(price.getText().toString().trim()) * Integer.parseInt(quantity.getText().toString().trim()));
 
                     toobarTile.setText("金额：¥"+amountString);
@@ -149,8 +150,8 @@ public class ShoppingScrennForm extends AppCompatActivity implements View.OnClic
             product = DataSupport.find(Product.class, Long.parseLong(customid));
             name.setText(product.getName());
             number.setText(product.getNumber());
-            price.setText(product.getSalesPrice());
-            category.setText(product.getCategory());
+            price.setText(df.format(product.getSalesPrice()));
+            category.setText(product.getCategory_name());
             if(edit.equals("edit")) {
                 toobarAdd.setVisibility(View.VISIBLE);
             }else {
