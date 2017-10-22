@@ -11,7 +11,7 @@ import android.widget.AdapterView;
 
 import com.example.androiderp.R;
 import com.example.androiderp.adaper.CusteomGridAdapter;
-import com.example.androiderp.activities.warehouseview.AppropriationView;
+import com.example.androiderp.activities.warehouseview.RequisitionView;
 import com.example.androiderp.activities.basicview.CustomMoreView;
 import com.example.androiderp.activities.homeview.HomeMoreView;
 import com.example.androiderp.activities.warehouseview.InventoryView;
@@ -146,7 +146,7 @@ public class FirstFragment extends Fragment {
                         startActivity(intent);
                         break;
                     case "调拨流水":
-                        intent = new Intent(context, AppropriationView.class);
+                        intent = new Intent(context, RequisitionView.class);
                         startActivity(intent);
                         break;
 

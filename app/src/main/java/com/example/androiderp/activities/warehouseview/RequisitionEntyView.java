@@ -37,7 +37,7 @@ import java.util.List;
  * Created by lingtan on 2017/5/15.
  */
 
-public class AppropriationEntyView extends CSearchBase implements View.OnClickListener, AdapterView.OnItemClickListener,
+public class RequisitionEntyView extends CSearchBase implements View.OnClickListener, AdapterView.OnItemClickListener,
         SlideAndDragListView.OnMenuItemClickListener, SlideAndDragListView.OnItemDeleteListener {
     private InputMethodManager manager;
     private TextView note,save,toobarTile,toobarBack,toobarAdd, documentmaker,stockout, stockin, businessdata, billnumber,totalQuantity;
@@ -56,13 +56,13 @@ public class AppropriationEntyView extends CSearchBase implements View.OnClickLi
     private Menu menu;
     private List<Stock> stockList;
     public void iniView() {
-        setContentView(R.layout.appropriationentyform);
+        setContentView(R.layout.requisition_enty);
         initMenu();
         initUiAndListener();
         dm=new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         showStockWindow();
-        intentBack= new Intent(AppropriationEntyView.this, AppropriationEntyView.class);
+        intentBack= new Intent(RequisitionEntyView.this, RequisitionEntyView.class);
         final Intent intent=getIntent();
         appropriatinId=intent.getStringExtra("custom_item");
         manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -126,7 +126,7 @@ public class AppropriationEntyView extends CSearchBase implements View.OnClickLi
           }
 
             totalQuantity.setText(df.format(quantityCount));
-            adapter = new AppropriationListViewAdapter(AppropriationEntyView.this, R.layout.saleproduct_item, listdatas);
+            adapter = new AppropriationListViewAdapter(RequisitionEntyView.this, R.layout.saleproduct_item, listdatas);
             listView.setAdapter(adapter);
             setListViewHeightBasedOnChildren(listView);
 
@@ -191,7 +191,7 @@ public class AppropriationEntyView extends CSearchBase implements View.OnClickLi
             break;
             case R.id.customtoobar_left:
 
-                    AppropriationEntyView.this.finish();
+                    RequisitionEntyView.this.finish();
 
              break;
             case R.id.customtoobar_r:
@@ -218,7 +218,7 @@ public class AppropriationEntyView extends CSearchBase implements View.OnClickLi
     private void showPopupWindow(final List<PopuMenuDataStructure> popuMenuData) {
         common = new Common();
 
-        common.PopupWindow(AppropriationEntyView.this, dm, popuMenuData);
+        common.PopupWindow(RequisitionEntyView.this, dm, popuMenuData);
         common.listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
@@ -256,7 +256,7 @@ public class AppropriationEntyView extends CSearchBase implements View.OnClickLi
                 if(resultCode==RESULT_OK){
                     Intent intent = new Intent();
                     setResult(RESULT_OK,intent);
-                   AppropriationEntyView.this.finish();
+                   RequisitionEntyView.this.finish();
                 }
                 break;
             default:
@@ -273,7 +273,7 @@ public class AppropriationEntyView extends CSearchBase implements View.OnClickLi
             popuMenuDatas.add(popuMenua);
 
         }
-        common.PopupWindow(AppropriationEntyView.this, dm, popuMenuDatas);
+        common.PopupWindow(RequisitionEntyView.this, dm, popuMenuDatas);
         common.listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override

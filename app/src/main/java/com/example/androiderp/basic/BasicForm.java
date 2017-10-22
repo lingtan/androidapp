@@ -50,10 +50,10 @@ public class BasicForm extends AppCompatActivity implements View.OnClickListener
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.customcategory);
+        setContentView(R.layout.basic);
         manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        name = (EditText) findViewById(R.id.customcategory_name);
-        note = (EditText) findViewById(R.id.customcategory_note);
+        name = (EditText) findViewById(R.id.basiclayout_name);
+        note = (EditText) findViewById(R.id.basiclayout_note);
         final Intent intent = getIntent();
         getPostData = intent.getParcelableExtra("postdata");
         getPostType = intent.getStringExtra("type");

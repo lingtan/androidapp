@@ -19,7 +19,7 @@ import android.widget.TextView;
 
 import com.example.androiderp.bean.Tally;
 import com.example.androiderp.R;
-import com.example.androiderp.activities.warehouseview.AppropriationEntyView;
+import com.example.androiderp.activities.warehouseview.RequisitionEntyView;
 import com.example.androiderp.adaper.TallyAdapter;
 import com.example.androiderp.ui.CSearch;
 import com.example.androiderp.ui.CSearchBase;
@@ -57,7 +57,7 @@ public class TallyAccountsEntyView extends CSearchBase implements View.OnClickLi
         toobarTile.setOnClickListener(this);
         search = (CSearch) findViewById(R.id.search);
         tallyList =DataSupport.where("balanceAccount = ? and accounts=?", tallybalanceAccount,accounts).find(Tally.class);
-        intentEdit= new Intent(TallyAccountsEntyView.this, AppropriationEntyView.class);
+        intentEdit= new Intent(TallyAccountsEntyView.this, RequisitionEntyView.class);
         toobarTile.setText("交易流水");
         toobarBack.setText("返回");
 

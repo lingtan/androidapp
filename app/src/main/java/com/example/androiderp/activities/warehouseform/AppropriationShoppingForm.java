@@ -40,7 +40,7 @@ public class AppropriationShoppingForm extends AppCompatActivity implements View
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.appropriationhoppingform);
+        setContentView(R.layout.requisition_shopping);
         dm=new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         final Intent intent=getIntent();

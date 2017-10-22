@@ -34,9 +34,9 @@ public class CustomCategoryForm extends AppCompatActivity implements View.OnClic
     private List<CustomCategory> customCategoryList;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.customcategory);
+        setContentView(R.layout.basic);
         manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        userName =(EditText)findViewById(R.id.customcategory_name);
+        userName =(EditText)findViewById(R.id.basiclayout_name);
         final Intent intent=getIntent();
         customid=intent.getStringExtra("customid");
         edit=intent.getStringExtra("action");

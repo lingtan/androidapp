@@ -89,24 +89,24 @@ public class AppropriationForm extends CSearchBase implements View.OnClickListen
 
 
     public void iniView() {
-        setContentView(R.layout.appropriationform);
+        setContentView(R.layout.requisition);
         initMenu();
         initUiAndListener();
         dm=new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         final Intent intent=getIntent();
         manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        appropriOut=(TextView)findViewById(R.id.stockout);
-        productAddLayout=(LinearLayout) findViewById(R.id.add_layout);
-        appropriIn=(TextView)findViewById(R.id.stockin);
-        note=(EditText)findViewById(R.id.note);
-        productScreenLayout=(LinearLayout) findViewById(R.id.screen_layout);
+        appropriOut=(TextView)findViewById(R.id.requisition_out);
+        productAddLayout=(LinearLayout) findViewById(R.id.requisition_add_layout);
+        appropriIn=(TextView)findViewById(R.id.requisition_in);
+        note=(EditText)findViewById(R.id.requisition_note);
+        productScreenLayout=(LinearLayout) findViewById(R.id.requisition_screen_layout);
         save=(TextView)findViewById(R.id.customtoobar_right);
         toobarTile=(TextView)findViewById(R.id.customtoobar_midd);
         toobarBack=(TextView)findViewById(R.id.customtoobar_left);
         toobarAdd=(TextView)findViewById(R.id.customtoobar_r) ;
-        appropriInLayout=(LinearLayout)findViewById(R.id.stockin_layout);
-        appropriOutLayout=(LinearLayout)findViewById(R.id.stockout_layout);
+        appropriInLayout=(LinearLayout)findViewById(R.id.requisition_in_layout);
+        appropriOutLayout=(LinearLayout)findViewById(R.id.requisition_out_layout);
         appropriInLayout.setOnClickListener(this);
         appropriOutLayout.setOnClickListener(this);
         save.setOnClickListener(this);
@@ -185,7 +185,7 @@ public class AppropriationForm extends CSearchBase implements View.OnClickListen
     }
 
     public void initUiAndListener() {
-        listView = (SlideAndDragListView) findViewById(R.id.saleproduct_listview);
+        listView = (SlideAndDragListView) findViewById(R.id.requisition_listview);
         listView.setMenu(menu);
         listView.setOnItemClickListener(this);
         listView.setOnMenuItemClickListener(this);
@@ -302,7 +302,7 @@ public class AppropriationForm extends CSearchBase implements View.OnClickListen
                 }
 
             break;
-            case R.id.stockin_layout:
+            case R.id.requisition_in_layout:
                 showStockWindow();
                 if(stockList.size()>1) {
                     if (common.mPopWindow == null || !common.mPopWindow.isShowing()) {
@@ -319,7 +319,7 @@ public class AppropriationForm extends CSearchBase implements View.OnClickListen
                 }
                 break;
 
-            case R.id.stockout_layout:
+            case R.id.requisition_out_layout:
 
                 showEmployeeWindow();
 
@@ -386,7 +386,7 @@ public class AppropriationForm extends CSearchBase implements View.OnClickListen
                     common.mPopWindow.dismiss();
                 }
                 break;
-            case R.id.add_layout:
+            case R.id.requisition_add_layout:
                 Intent intentbadge=new Intent(AppropriationForm.this, ProductAppropriationView.class);
                 intentbadge.putExtra("appropriout",appropriOut.getText().toString());
                 startActivityForResult(intentbadge,6);

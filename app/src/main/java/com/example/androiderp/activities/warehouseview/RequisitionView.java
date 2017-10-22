@@ -25,7 +25,7 @@ import org.litepal.crud.DataSupport;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AppropriationView extends CSearchBase implements View.OnClickListener {
+public class RequisitionView extends CSearchBase implements View.OnClickListener {
     private AppropriationAdapter adapter;
     private ListView listView;
     private DisplayMetrics dm;
@@ -47,7 +47,7 @@ public class AppropriationView extends CSearchBase implements View.OnClickListen
         toobarTile.setOnClickListener(this);
         search = (CSearch) findViewById(R.id.search);
         appropriationList=DataSupport.findAll(Appropriation.class);
-        intentEdit= new Intent(AppropriationView.this, AppropriationEntyView.class);
+        intentEdit= new Intent(RequisitionView.this, RequisitionEntyView.class);
         toobarTile.setText("调拨流水");
         toobarBack.setText("返回");
 
@@ -81,7 +81,7 @@ public class AppropriationView extends CSearchBase implements View.OnClickListen
         });
         if(appropriationList.size()!=0) {
 
-                 adapter = new AppropriationAdapter(AppropriationView.this, R.layout.appropriation_item, appropriationList);
+                 adapter = new AppropriationAdapter(RequisitionView.this, R.layout.appropriation_item, appropriationList);
                  listView.setAdapter(adapter);
             
         }
@@ -120,7 +120,7 @@ public class AppropriationView extends CSearchBase implements View.OnClickListen
 //adapter刷新,重写Filter方式会出现BUG.
     public void updateLayout(Object[] obj) {
         if(appropriationSearch!=null) {
-            adapter = new AppropriationAdapter(AppropriationView.this, R.layout.saleout_item, appropriationSearch);
+            adapter = new AppropriationAdapter(RequisitionView.this, R.layout.saleout_item, appropriationSearch);
             listView.setAdapter(adapter);
         }
     }
@@ -137,7 +137,7 @@ public class AppropriationView extends CSearchBase implements View.OnClickListen
                     }
                     appropriationList=DataSupport.findAll(Appropriation.class);
 
-                    adapter = new AppropriationAdapter(AppropriationView.this, R.layout.saleout_item, appropriationList);
+                    adapter = new AppropriationAdapter(RequisitionView.this, R.layout.saleout_item, appropriationList);
                     listView.setAdapter(adapter);
                 }
                 break;
@@ -151,11 +151,11 @@ public class AppropriationView extends CSearchBase implements View.OnClickListen
         switch(v.getId())
         {
             case R.id.custom_toobar_left:
-                AppropriationView.this.finish();
+                RequisitionView.this.finish();
                 break;
 
             case R.id.custom_toobar_right:
-                intentAdd = new Intent(AppropriationView.this, AppropriationForm.class);
+                intentAdd = new Intent(RequisitionView.this, AppropriationForm.class);
                 startActivity(intentAdd);
                 break;
 

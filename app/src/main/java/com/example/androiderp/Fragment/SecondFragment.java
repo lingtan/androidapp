@@ -11,7 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.example.androiderp.R;
-import com.example.androiderp.activities.warehouseview.AppropriationView;
+import com.example.androiderp.activities.warehouseview.RequisitionView;
 import com.example.androiderp.activities.warehouseview.InventoryView;
 import com.example.androiderp.activities.purchaseview.PurchaseView;
 import com.example.androiderp.activities.basicview.SupplierMoreView;
@@ -77,7 +77,7 @@ public class SecondFragment extends Fragment implements View.OnClickListener {
                 startActivity(intent);
                 break;
             case R.id.secondfragment_dblslayout:
-                intent = new Intent(context,  AppropriationView.class);
+                intent = new Intent(context,  RequisitionView.class);
                 startActivity(intent);
                 break;
             default:

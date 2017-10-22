@@ -11,7 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.example.androiderp.R;
-import com.example.androiderp.activities.warehouseview.AppropriationView;
+import com.example.androiderp.activities.warehouseview.RequisitionView;
 import com.example.androiderp.activities.basicview.CustomMoreView;
 import com.example.androiderp.activities.warehouseview.InventoryView;
 import com.example.androiderp.activities.salesview.SaleView;
@@ -64,7 +64,7 @@ public class ThressFragment extends Fragment implements View.OnClickListener {
                 startActivity(intent);
                 break;
             case R.id.thressfragmnet_dblslayout:
-                intent = new Intent(context, AppropriationView.class);
+                intent = new Intent(context, RequisitionView.class);
                 startActivity(intent);
                 break;
             case R.id.thressfragmnet_xslslayout:
