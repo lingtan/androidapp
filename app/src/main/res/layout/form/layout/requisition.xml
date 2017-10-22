@@ -5,7 +5,7 @@
     android:orientation="vertical"
     android:background="#F0F3F6"
     >
-    <include layout="@layout/customtoobar_d" android:id="@+id/supplierform_toobar"/>
+    <include layout="@layout/customtoobar_d" android:id="@+id/requisition_toobar"/>
     <ScrollView
         android:id="@+id/tab"
         android:layout_width="fill_parent"
@@ -20,14 +20,14 @@
     <LinearLayout style="@style/wrap_layout" >
         <!-- 无圆角-->
         <LinearLayout style="@style/mid_layout"
-            android:id="@+id/stockout_layout">
+            android:id="@+id/requisition_out_layout">
             <TextView style="@style/usertext"
                 android:text="调出仓库：" />
 
             <TextView android:layout_width="170dp"
                 android:layout_height="wrap_content"
                 android:textColor="@color/text_clo"
-                android:id="@+id/stockout"
+                android:id="@+id/requisition_out"
                 android:hint="请选择仓库"
                 android:layout_gravity="center_vertical"
                 />
@@ -42,7 +42,7 @@
             android:layout_marginRight="10dp"/>
         <!-- 下圆角-->
         <LinearLayout style="@style/bottom_layout"
-            android:id="@+id/stockin_layout">
+            android:id="@+id/requisition_in_layout">
             <TextView style="@style/usertext"
                 android:text="调入仓库："
                 />
@@ -51,7 +51,7 @@
             <TextView android:layout_width="170dp"
                 android:layout_height="wrap_content"
                 android:textColor="@color/text_clo"
-                android:id="@+id/stockin"
+                android:id="@+id/requisition_in"
                 android:hint="请选择仓库"
                 android:layout_gravity="center_vertical"/>
             <ImageView
@@ -79,7 +79,7 @@
             </LinearLayout>
         <LinearLayout style="@style/top_layout"
             android:gravity="center_horizontal"
-            android:id="@+id/screen_layout"
+            android:id="@+id/requisition_screen_layout"
             android:layout_weight="0.31">
             <ImageView
                 android:layout_width="wrap_content"
@@ -96,7 +96,7 @@
                 android:layout_marginBottom="2dp"/>
             <LinearLayout style="@style/top_layout"
                 android:gravity="center_horizontal"
-                android:id="@+id/add_layout"
+                android:id="@+id/requisition_add_layout"
                 android:layout_weight="0.31">
                 <ImageView
                     android:layout_width="wrap_content"
@@ -118,16 +118,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
                 android:layout_marginLeft="10dp"
-                android:id="@+id/item_tile"
+                android:id="@+id/requisition_itemtile"
                 android:gravity="center_vertical"
                 android:hint="产品左滑动可删除，点击产品可修改"
-                android:textSize="12dip" />
+                android:textSize="12sp" />
         </LinearLayout>
         <View style="@style/bg_line" />
         <LinearLayout android:layout_height="wrap_content"
             android:layout_width="match_parent">
             <com.example.androiderp.listview.SlideAndDragListView
-                android:id="@+id/appropriationform_listview"
+                android:id="@+id/requisition_listview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:divider="#c9cabb"
@@ -147,8 +147,8 @@
             <EditText
                 android:layout_width="200dp"
                 android:layout_height="match_parent"
-                android:id="@+id/note"
-                android:textSize="14dp"
+                android:id="@+id/requisition_note"
+                android:textSize="14sp"
                 android:hint="商品备注信息"
                 android:background="@null"
                 android:gravity="top"

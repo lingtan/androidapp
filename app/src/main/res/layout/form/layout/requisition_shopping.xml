@@ -18,7 +18,7 @@
                 android:layout_width="240dp"
                 android:layout_height="wrap_content"
                 android:hint="商品名称"
-                android:textSize="14dp"
+                android:textSize="14sp"
                 android:id="@+id/name"
                 android:maxLines="1"
                 android:background="@null"
@@ -37,7 +37,7 @@
             <EditText
                 android:layout_width="240dp"
                 android:layout_height="wrap_content"
-                android:textSize="14dp"
+                android:textSize="14sp"
                 android:hint="商品编码唯一，保存后不能修改"
                 android:id="@+id/number"
                 android:maxLines="1"

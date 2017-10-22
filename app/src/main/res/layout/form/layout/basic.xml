@@ -5,7 +5,7 @@
     android:orientation="vertical"
     android:background="#F0F3F6"
     >
-    <include layout="@layout/custom_toobar" android:id="@+id/id_toobar"/>
+    <include layout="@layout/custom_toobar" android:id="@+id/ibasiclayout_toobar"/>
     <LinearLayout style="@style/wrap_layout" >
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"/>
@@ -18,7 +18,7 @@
                 android:layout_height="wrap_content"
                 android:hint="请输入名称"
                 android:textSize="14dp"
-                android:id="@+id/customcategory_name"
+                android:id="@+id/basiclayout_name"
                 android:maxLines="1"/>
         </LinearLayout>
         <View style="@style/bg_line"
@@ -35,7 +35,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="14dp"
                 android:hint="备注信息"
-                android:id="@+id/customcategory_note"
+                android:id="@+id/basiclayout_note"
                 android:maxLines="1"/>
         </LinearLayout>
 

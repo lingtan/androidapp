@@ -89,7 +89,7 @@
             android:textColor="@color/holo_red_light"
             android:layout_marginLeft="10dp"
             android:layout_marginBottom="2dp"
-            android:textSize="16dip" />
+            android:textSize="16sp" />
     </LinearLayout>
         <LinearLayout
             android:layout_width="60dp"
@@ -103,7 +103,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="#ffffff"
                 android:text="选好了"
-                android:textSize="14dip" />
+                android:textSize="14sp" />
         </LinearLayout>
 
     </LinearLayout>
