@@ -127,7 +127,7 @@
         <LinearLayout android:layout_height="wrap_content"
             android:layout_width="match_parent">
             <com.example.androiderp.listview.SlideAndDragListView
-                android:id="@+id/saleproduct_listview"
+                android:id="@+id/appropriationform_listview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:divider="#c9cabb"

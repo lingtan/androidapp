@@ -3,6 +3,7 @@ package com.example.androiderp.ui;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -71,5 +72,6 @@ public abstract class CSearchBase extends AppCompatActivity {
             im.hideSoftInputFromWindow(token, InputMethodManager.HIDE_NOT_ALWAYS);
         }
     }
+
 
 }
