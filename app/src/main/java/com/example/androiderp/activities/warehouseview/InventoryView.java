@@ -1,5 +1,6 @@
 package com.example.androiderp.activities.warehouseview;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -13,7 +14,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.androiderp.activities.basicview.ProductSelectView;
+import com.example.androiderp.adaper.BasicAdapter;
+import com.example.androiderp.adaper.ProductBadgeAdapter;
+import com.example.androiderp.bean.AcivityPostBean;
+import com.example.androiderp.bean.AdapterBean;
 import com.example.androiderp.bean.AppropriationEnty;
+import com.example.androiderp.bean.PostProductData;
 import com.example.androiderp.bean.Product;
 import com.example.androiderp.bean.ProductCategory;
 import com.example.androiderp.bean.ProductShopping;
@@ -24,43 +31,53 @@ import com.example.androiderp.R;
 import com.example.androiderp.adaper.AppropriationBadgeAdapter;
 import com.example.androiderp.adaper.CommonAdapter;
 import com.example.androiderp.adaper.CommonAdapterData;
+import com.example.androiderp.tools.Common;
+import com.example.androiderp.tools.GlobalVariable;
+import com.example.androiderp.tools.HttpUtil;
 import com.example.androiderp.ui.CBadgeView;
 import com.example.androiderp.ui.CSearch;
 import com.example.androiderp.ui.CSearchBase;
 import com.example.androiderp.activities.basicfrom.ProductForm;
 import com.example.androiderp.scanning.CommonScanActivity;
 import com.example.androiderp.scanning.utils.Constant;
+import com.example.androiderp.ui.DataLoadingDialog;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.litepal.crud.DataSupport;
 
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+import okhttp3.Call;
+import okhttp3.Response;
+
 public class InventoryView extends CSearchBase implements View.OnClickListener, AppropriationBadgeAdapter.Callback{
     private AppropriationBadgeAdapter rightAdapter;
-    private CommonAdapter leftAdapter;
+    private BasicAdapter leftAdapter;
     private ListView rightListView;
     private ListView leftListView;
     private DisplayMetrics dm;
-    private List<Product> productSearch = new ArrayList<Product>();
-    private List<Product> productList;
+    private List<Product> productSearch = new ArrayList<>();
     private TextView toobarBack, toobarAdd, toobarTile, toobarScreen;
     private CSearch search;
     private Intent intent;
-    private List<ProductCategory> productCategoryList;
-    private List<CommonAdapterData> categorylist = new ArrayList<CommonAdapterData>();
+    private List<AdapterBean> categorylist = new ArrayList<>();
     private double quantityCount;
     private double categorycount;
     private double amountCount;
-    private HashSet<Long> selectedItems = new HashSet<Long>();
+    private HashSet<Long> selectedItems = new HashSet<>();
     private CBadgeView CBadgeView;
-    private List<ProductShopping> productShoppingList = new ArrayList<ProductShopping>();
+    private List<ProductShopping> productShoppingList = new ArrayList<>();
     private ImageView badgeImage;
     private  int leftListSelecte;
     private  String leftListSelecteText;
-    private List<StockIniti> stockInitiList = new ArrayList<StockIniti>();
+    private List<StockIniti> stockInitiList = new ArrayList<>();
     private List<StockTakingEnty> stockTakingEntyList = new ArrayList<StockTakingEnty>();
     private List<SalesOutEnty> salesOutEntyList;
     private List<SalesOutEnty> supplierOutEntieList;
@@ -68,8 +85,16 @@ public class InventoryView extends CSearchBase implements View.OnClickListener, 
     private double quantity;
     private int  stockCheck=1;
     private String appropriOutValue;
-    private List<Integer> stockCheckList=new ArrayList<Integer>();
+    private List<Integer> stockCheckList=new ArrayList<>();
     private DecimalFormat df = new DecimalFormat("#####0.00");
+    private AcivityPostBean getAcivityPostBean = new AcivityPostBean();
+    private AcivityPostBean postAcivityPostBen = new AcivityPostBean();
+    private List<AdapterBean> HttpResponseCategory = new ArrayList<>();
+    private List<Product> HttpResponseCustom = new ArrayList<>();
+    private List<Product> HttpResponseCustomTemp = new ArrayList<>();
+    private Dialog dialog;
+    private int selectPositon = 0;
+    private String selectCategory = "全部";
 
     @Override
     public void iniView(){
@@ -87,89 +112,47 @@ public class InventoryView extends CSearchBase implements View.OnClickListener, 
         Intent intentValue=getIntent();
         appropriOutValue=intentValue.getStringExtra("appropriout");
         search = (CSearch) findViewById(R.id.search);
-        productList = DataSupport.findAll(Product.class);
         stockInitiList = DataSupport.findAll(StockIniti.class);
         stockTakingEntyList = DataSupport.findAll(StockTakingEnty.class);
         salesOutEntyList =DataSupport.where("billtype =?","2").find(SalesOutEnty.class);
         supplierOutEntieList =DataSupport.where("billtype =?","1").find(SalesOutEnty.class);
-        for(Product product: productList)
 
-        {    fqty=0.00;
-            for(StockIniti stock: stockInitiList)
-
-            {
-                if(product.getNumber().equals(stock.getNumber()))
-            {
-                fqty+=stock.getQuantity();
-            }
-
-
-            }
-            for(StockTakingEnty stockTakingEnty: stockTakingEntyList)
-
-            {
-                if(product.getNumber().equals(stockTakingEnty.getNumber()))
-                {
-                    fqty+=stockTakingEnty.getQuantity();
-                }
-
-
-            }
-
-            for(SalesOutEnty salesOutEnty: salesOutEntyList)
-            {
-                if(product.getNumber().equals(salesOutEnty.getNumber()))
-                {
-                    fqty-=salesOutEnty.getQuantity();
-                }
-            }
-            for(SalesOutEnty salesOutEnty: supplierOutEntieList)
-            {
-                if(product.getNumber().equals(salesOutEnty.getNumber()))
-                {
-                    fqty+=salesOutEnty.getQuantity();
-                }
-            }
-            product.setQuantity(fqty);
-
-        }
         intent= new Intent(InventoryView.this, InventoryEntyView.class);
-        productCategoryList = DataSupport.findAll(ProductCategory.class);
-        CommonAdapterData commonDataAll=new CommonAdapterData();
-        commonDataAll.setName("全部产品");
-        categorylist.add(commonDataAll);
-        CommonAdapterData commonDataN=new CommonAdapterData();
-        commonDataN.setName("未分类");
-        categorylist.add(commonDataN);
+
         CBadgeView = new CBadgeView(this);
         badgeImage =(ImageView)findViewById(R.id.product_shopping_badge);
         CBadgeView.setTargetView(badgeImage);
         CBadgeView.setBadgeMargin(25,0,0,0);
         CBadgeView.setBadgeGravity(Gravity.RIGHT & Gravity.TOP);
-        for(ProductCategory productCategory: productCategoryList)
 
-        {
-            CommonAdapterData commonData=new CommonAdapterData();
-            commonData.setName(productCategory.getName());
-            commonData.setUnitId(productCategory.getId());
-            categorylist.add(commonData);
-
-        }
         //构造函数第一参数是类的对象，第二个是布局文件，第三个是数据源
         leftListView=(ListView) findViewById(R.id.left_list);
         leftListView.setTextFilterEnabled(true);
         rightListView = (ListView) findViewById(R.id.right_list);
         rightListView.setTextFilterEnabled(true);
+        leftAdapter = new BasicAdapter(getApplicationContext(), R.layout.custom_item, categorylist);
+        leftAdapter.setSeclection(0);
+        leftListView.setAdapter(leftAdapter);
+        rightAdapter = new AppropriationBadgeAdapter(getApplicationContext(), R.layout.appropriation_badge_item, HttpResponseCustom,this);
+        rightListView.setAdapter(rightAdapter);
+        PostProductData postDate = new PostProductData();
+        postDate.setName("");
+        postDate.setRequestType(GlobalVariable.cmvCusmtAndCategory);
+        getAcivityPostBean.setOperationType(GlobalVariable.cmvCusmtAndCategory);
+        postDate.setServerIp(Common.ip);
+        postDate.setClassType(1);
+        postDate.setServlet("ProductOperate");
+        getHttpData(postDate);
         leftListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 leftListSelecte =position;
                 leftAdapter.setSeclection(position);
                 leftAdapter.notifyDataSetInvalidated();
-                Object[] obj = categorySearch(categorylist.get(position).getName().toString());
+                Object[] obj = categorySearch(categorylist.get(position).getName());
                 updateLayout(obj);
-                toobarTile.setText(categorylist.get(position).getName().toString());
-                leftListSelecteText = categorylist.get(position).getName().toString();
+                toobarTile.setText(categorylist.get(position).getName());
+                leftListSelecteText = categorylist.get(position).getName();
             }
         });
         dm=new DisplayMetrics();
@@ -188,29 +171,18 @@ public class InventoryView extends CSearchBase implements View.OnClickListener, 
                 selectedItems =rightAdapter.selectedItems;
 
 
-                intent.removeExtra("action");
-                if(productSearch.size()!=0) {
+
 
                     intent.putExtra("action", "edit");
-                    intent.putExtra("product_item", String.valueOf(productSearch.get(position).getProduct_id()));
+                    intent.putExtra("product_item", String.valueOf(HttpResponseCustom.get(position).getProduct_id()));
 
 
-                }else {
-
-                    intent.putExtra("action", "edit");
-                    intent.putExtra("product_item", String.valueOf(productList.get(position).getProduct_id()));
-
-                }
                 startActivityForResult(intent,1);
 
             }
         });
 
-            leftAdapter = new CommonAdapter(InventoryView.this, R.layout.custom_item, categorylist);
-            leftAdapter.setSeclection(0);
-            leftListView.setAdapter(leftAdapter);
-            Object[] obj = categorySearch(categorylist.get(0).getName().toString());
-            updateLayout(obj);
+
 
 
 
@@ -229,12 +201,12 @@ public class InventoryView extends CSearchBase implements View.OnClickListener, 
         }
         if(leftListSelecteText.equals("未分类"))
         {
-            for (int i = 0; i < productList.size(); i++) {
-                if(productList.get(i).getCategory_name()==null)
-                { int index = productList.get(i).getNumber().indexOf(name);
-                    int indey = productList.get(i).getName().indexOf(name);
+            for (int i = 0; i < HttpResponseCustom.size(); i++) {
+                if(HttpResponseCustom.get(i).getCategory_name()==null)
+                { int index = HttpResponseCustom.get(i).getNumber().indexOf(name);
+                    int indey = HttpResponseCustom.get(i).getName().indexOf(name);
                     if (index != -1||indey!=-1) {
-                        productSearch.add(productList.get(i));
+                        productSearch.add(HttpResponseCustom.get(i));
                     }
 
                 }
@@ -242,11 +214,11 @@ public class InventoryView extends CSearchBase implements View.OnClickListener, 
 
         }else if (leftListSelecteText.equals("全部产品"))
         {
-            for (int i = 0; i < productList.size(); i++) {
-                int index = productList.get(i).getNumber().indexOf(name);
-                int indey = productList.get(i).getName().indexOf(name);
+            for (int i = 0; i < HttpResponseCustom.size(); i++) {
+                int index = HttpResponseCustom.get(i).getNumber().indexOf(name);
+                int indey = HttpResponseCustom.get(i).getName().indexOf(name);
                 if (index != -1||indey!=-1) {
-                    productSearch.add(productList.get(i));
+                    productSearch.add(HttpResponseCustom.get(i));
                 }
 
             }
@@ -254,12 +226,12 @@ public class InventoryView extends CSearchBase implements View.OnClickListener, 
         }
 
         else {
-            for (int i = 0; i < productList.size(); i++) {
-                int index = productList.get(i).getNumber().indexOf(name);
-                int indey = productList.get(i).getCategory_name().indexOf(leftListSelecteText);
+            for (int i = 0; i < HttpResponseCustom.size(); i++) {
+                int index = HttpResponseCustom.get(i).getNumber().indexOf(name);
+                int indey = HttpResponseCustom.get(i).getCategory_name().indexOf(leftListSelecteText);
                 // 存在匹配的数据
                 if (index != -1 & indey != -1) {
-                    productSearch.add(productList.get(i));
+                    productSearch.add(HttpResponseCustom.get(i));
                 }
             }
         }
@@ -273,30 +245,30 @@ public class InventoryView extends CSearchBase implements View.OnClickListener, 
         }
         if(name.equals("未分类"))
         {
-            for (int i = 0; i < productList.size(); i++) {
-               if(productList.get(i).getCategory_name()==null)
+            for (int i = 0; i < HttpResponseCustom.size(); i++) {
+               if(HttpResponseCustom.get(i).getCategory_name()==null)
                {
-                    productSearch.add(productList.get(i));
+                    productSearch.add(HttpResponseCustom.get(i));
                }
             }
 
         }else if (name.equals("全部产品"))
         {
-            for (int i = 0; i < productList.size(); i++) {
+            for (int i = 0; i < HttpResponseCustom.size(); i++) {
 
-                    productSearch.add(productList.get(i));
+                    productSearch.add(HttpResponseCustom.get(i));
 
             }
 
         }
 
         else {
-        for (int i = 0; i < productList.size(); i++) {
-              if(productList.get(i).getCategory_name()!=null){
-                int index = productList.get(i).getCategory_name().indexOf(name);
+        for (int i = 0; i < HttpResponseCustom.size(); i++) {
+              if(HttpResponseCustom.get(i).getCategory_name()!=null){
+                int index = HttpResponseCustom.get(i).getCategory_name().indexOf(name);
                 // 存在匹配的数据
                 if (index != -1) {
-                    productSearch.add(productList.get(i));
+                    productSearch.add(HttpResponseCustom.get(i));
                 }
             }
         }}
@@ -311,7 +283,146 @@ public class InventoryView extends CSearchBase implements View.OnClickListener, 
             rightListView.setAdapter(rightAdapter);
         }
     }
+    private void getHttpData(final PostProductData postPostUserData) {
+        showDialog();
 
+
+        HttpUtil.sendProductRequst(postPostUserData, new okhttp3.Callback() {
+
+            @Override
+            public void onFailure(Call call, IOException e) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        closeDialog();
+                        Toast.makeText(getApplicationContext(), "网络连接失败", Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+
+            }
+
+            @Override
+            public void onResponse(Call call, final Response response) throws IOException {
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+
+                            if (getAcivityPostBean.getOperationType().equals(GlobalVariable.cmvCusmtAndCategory)) {
+                                JSONObject jsonObject = new JSONObject(response.body().string());
+                                JSONArray jsonArray = jsonObject.getJSONArray("custom");
+                                JSONArray jsonArray1 = jsonObject.getJSONArray("customcategory");
+                                Gson gson = new Gson();
+                                categorylist.clear();
+                                HttpResponseCustom.clear();
+                                HttpResponseCategory= gson.fromJson(jsonArray1.toString(), new TypeToken<List<AdapterBean>>() {
+                                }.getType());
+
+                                AdapterBean commonDataAll=new AdapterBean();
+                                commonDataAll.setName("全部产品");
+                                categorylist.add(commonDataAll);
+                                AdapterBean commonDataN=new AdapterBean();
+                                commonDataN.setName("未分类");
+                                categorylist.add(commonDataN);
+                                categorylist.addAll(HttpResponseCategory);
+                                HttpResponseCustomTemp = gson.fromJson(jsonArray.toString(), new TypeToken<List<Product>>() {
+                                }.getType());
+                                HttpResponseCustom.addAll(HttpResponseCustomTemp);
+
+                                if (HttpResponseCategory != null && HttpResponseCustom != null) {
+                                    for(Product product: HttpResponseCustom)
+
+                                    {    fqty=0.00;
+                                        for(StockIniti stock: stockInitiList)
+
+                                        {
+                                            if(product.getNumber().equals(stock.getNumber()))
+                                            {
+                                                fqty+=stock.getQuantity();
+                                            }
+
+
+                                        }
+                                        for(StockTakingEnty stockTakingEnty: stockTakingEntyList)
+
+                                        {
+                                            if(product.getNumber().equals(stockTakingEnty.getNumber()))
+                                            {
+                                                fqty+=stockTakingEnty.getQuantity();
+                                            }
+
+
+                                        }
+
+                                        for(SalesOutEnty salesOutEnty: salesOutEntyList)
+                                        {
+                                            if(product.getNumber().equals(salesOutEnty.getNumber()))
+                                            {
+                                                fqty-=salesOutEnty.getQuantity();
+                                            }
+                                        }
+                                        for(SalesOutEnty salesOutEnty: supplierOutEntieList)
+                                        {
+                                            if(product.getNumber().equals(salesOutEnty.getNumber()))
+                                            {
+                                                fqty+=salesOutEnty.getQuantity();
+                                            }
+                                        }
+                                        product.setQuantity(fqty);
+
+                                    }
+                                    leftAdapter.setSeclection(selectPositon);
+                                    selectCategory = HttpResponseCategory.get(0).getName();
+                                    leftAdapter.notifyDataSetChanged();
+                                    rightAdapter.notifyDataSetChanged();
+                                }
+
+
+                            } else {
+
+                                Gson gson = new Gson();
+                                HttpResponseCustom= gson.fromJson(response.body().string(), new TypeToken<List<Product>>() {
+                                }.getType());
+                                HttpResponseCustom.clear();
+                                HttpResponseCustom.addAll(HttpResponseCustomTemp);
+                                if (HttpResponseCustom != null) {
+                                    if (HttpResponseCustom.size() != 0) {
+
+
+                                        rightAdapter.notifyDataSetChanged();
+
+
+                                    } else {
+
+                                        rightAdapter.notifyDataSetChanged();
+                                        Toast.makeText(getApplicationContext(), "没有数据", Toast.LENGTH_SHORT).show();
+
+                                    }
+                                } else {
+                                    HttpResponseCustom.clear();
+                                    rightAdapter.notifyDataSetChanged();
+                                }
+
+                            }
+                            closeDialog();
+
+                        } catch (Exception e) {
+                            Toast.makeText(getApplicationContext(), "网络", Toast.LENGTH_SHORT).show();
+                            Log.d("lingtana", e.toString());
+                            closeDialog();
+                        }
+                    }
+                });
+
+
+            }
+        });
+
+
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode){
@@ -319,7 +430,7 @@ public class InventoryView extends CSearchBase implements View.OnClickListener, 
                 if(resultCode==RESULT_OK)
                 {
 
-                    ProductShopping shopping=(ProductShopping) data.getParcelableExtra("shop_data");
+                    ProductShopping shopping= data.getParcelableExtra("shop_data");
                     Log.d("tongtan",String.valueOf(shopping.getId()));
                     Log.d("tongtan",shopping.getName());
                     for(ProductShopping shop: productShoppingList)
@@ -364,15 +475,14 @@ public class InventoryView extends CSearchBase implements View.OnClickListener, 
                     {
                         categorylist.clear();
                     }
-                    productCategoryList = DataSupport.findAll(ProductCategory.class);
-                    CommonAdapterData commonDataAll=new CommonAdapterData();
+
+                    AdapterBean commonDataAll=new AdapterBean();
                     commonDataAll.setName("全部产品");
-                    commonDataAll.setBadge(String.valueOf(quantityCount));
+                    commonDataAll.setBadge(String.valueOf(df.format(quantityCount)));
                     categorylist.add(commonDataAll);
-                    CommonAdapterData commonDataN=new CommonAdapterData();
+                    AdapterBean commonDataN=new AdapterBean();
                     commonDataN.setName("未分类");
-                    categorylist.add(commonDataN);
-                    for(ProductCategory productCategory: productCategoryList)
+                    for(AdapterBean productCategory: HttpResponseCategory)
                     {
                         categorycount=0;
                         for(ProductShopping shop: productShoppingList)
@@ -385,9 +495,9 @@ public class InventoryView extends CSearchBase implements View.OnClickListener, 
 
 
                     }
-                        CommonAdapterData commonData=new CommonAdapterData();
+                        AdapterBean commonData=new AdapterBean();
                         commonData.setName(productCategory.getName());
-                        commonData.setUnitId(productCategory.getId());
+                        commonData.setUnitId(productCategory.getUnitId());
                         if(categorycount>0) {
                             commonData.setBadge(String.valueOf(categorycount));
                         }
@@ -395,7 +505,7 @@ public class InventoryView extends CSearchBase implements View.OnClickListener, 
 
                     }
 
-                    leftAdapter = new CommonAdapter(InventoryView.this, R.layout.custom_item, categorylist);
+                    leftAdapter = new BasicAdapter(InventoryView.this, R.layout.custom_item, categorylist);
                     leftAdapter.setSeclection(leftListSelecte);
                     leftListView.setAdapter(leftAdapter);
                     DecimalFormat df = new DecimalFormat("#####0.00");
@@ -509,14 +619,16 @@ public class InventoryView extends CSearchBase implements View.OnClickListener, 
         {
             categorylist.clear();
         }
-        productCategoryList = DataSupport.findAll(ProductCategory.class);
-        CommonAdapterData commonDataAll=new CommonAdapterData();
+        AdapterBean commonDataAll=new AdapterBean();
         commonDataAll.setName("全部产品");
+        if(quantityCount>0) {
+            commonDataAll.setBadge(String.valueOf(df.format(quantityCount)));
+        }
         categorylist.add(commonDataAll);
-        CommonAdapterData commonDataN=new CommonAdapterData();
+        AdapterBean commonDataN=new AdapterBean();
         commonDataN.setName("未分类");
         categorylist.add(commonDataN);
-        for(ProductCategory productCategory: productCategoryList)
+        for(AdapterBean productCategory: HttpResponseCategory)
         {
             categorycount=0;
             for(ProductShopping shop: productShoppingList)
@@ -529,11 +641,11 @@ public class InventoryView extends CSearchBase implements View.OnClickListener, 
 
 
             }
-            CommonAdapterData commonData=new CommonAdapterData();
+            AdapterBean commonData=new AdapterBean();
             commonData.setName(productCategory.getName());
-            commonData.setUnitId(productCategory.getId());
+            commonData.setUnitId(productCategory.getUnitId());
             if(categorycount>0) {
-                commonData.setCategory(String.valueOf(categorycount));
+                commonData.setBadge(String.valueOf(categorycount));
             }
             categorylist.add(commonData);
 
@@ -571,4 +683,26 @@ public class InventoryView extends CSearchBase implements View.OnClickListener, 
         }
         return  stockCheck;
     }
+
+    /**
+     * 显示进度对话框
+     */
+    private void showDialog() {
+
+        dialog = new DataLoadingDialog(this);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();//显示
+
+    }
+
+    /**
+     * 关闭进度对话框
+     */
+    private void closeDialog() {
+        if (dialog != null) {
+            dialog.dismiss();
+        }
+    }
+
+
 }

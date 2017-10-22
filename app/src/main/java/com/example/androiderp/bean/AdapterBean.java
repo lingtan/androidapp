@@ -17,6 +17,7 @@ public class AdapterBean implements Parcelable{
     private  String note;
     private int selectImage;
     private  String operationType;
+    private String badge;
 
 
 
@@ -107,6 +108,14 @@ public class AdapterBean implements Parcelable{
         this.operationType = operationType;
     }
 
+    public String getBadge() {
+        return badge;
+    }
+
+    public void setBadge(String badge) {
+        this.badge = badge;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -126,6 +135,7 @@ public class AdapterBean implements Parcelable{
         dest.writeString(note);
         dest.writeInt(selectImage);
         dest.writeString(operationType);
+        dest.writeString(badge);
 
 
 
@@ -147,6 +157,7 @@ public class AdapterBean implements Parcelable{
             commonAdapterData.note=source.readString();
             commonAdapterData.selectImage =source.readInt();
             commonAdapterData.operationType=source.readString();
+            commonAdapterData.badge=source.readString();
 
             return commonAdapterData;
         }

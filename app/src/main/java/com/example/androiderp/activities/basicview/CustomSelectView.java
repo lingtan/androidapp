@@ -111,7 +111,7 @@ public class CustomSelectView extends CSearchBase implements View.OnClickListene
         });
         dm=new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
-        user=(User) getIntent().getParcelableExtra("user_data");
+        user= getIntent().getParcelableExtra("user_data");
         if(indexName.isEmpty())
         {
             indexPositon =-1;

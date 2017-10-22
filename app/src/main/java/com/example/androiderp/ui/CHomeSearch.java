@@ -21,7 +21,7 @@ import com.example.androiderp.R;
  * Created by lingtan on 2017/5/17.
  */
 
-public class CHomeSearch extends EditText implements View.OnFocusChangeListener, View.OnKeyListener, TextWatcher {
+public class CHomeSearch extends android.support.v7.widget.AppCompatEditText implements View.OnFocusChangeListener, View.OnKeyListener, TextWatcher {
     private static final String TAG = "SearchEditText";
     /**
      * 图标是否默认在左边

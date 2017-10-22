@@ -26,7 +26,7 @@
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
             android:ellipsize="middle"
-            android:singleLine="true"
+            android:maxLines="1"
             android:text="扫描结果"
             android:textSize="18sp" />
     </RelativeLayout>

@@ -24,7 +24,7 @@ import android.widget.Toast;
 
 import com.example.androiderp.activities.salesfrom.ShoppingScrennForm;
 import com.example.androiderp.basic.BasicView;
-import com.example.androiderp.bean.AcivityPostBen;
+import com.example.androiderp.bean.AcivityPostBean;
 import com.example.androiderp.bean.BalanceAccount;
 import com.example.androiderp.bean.Employee;
 import com.example.androiderp.bean.Product;
@@ -96,7 +96,7 @@ public class PurchaseForm extends CSearchBase implements View.OnClickListener, A
     private double countall;
     private double amountCount;
     private Intent intent;
-    private AcivityPostBen acivityPostBen=new AcivityPostBen();
+    private AcivityPostBean acivityPostBen=new AcivityPostBean();
     public void iniView() {
         setContentView(R.layout.purchaseproductform);
         initMenu();
@@ -228,7 +228,7 @@ public class PurchaseForm extends CSearchBase implements View.OnClickListener, A
     }
 
     public void initUiAndListener() {
-        listView = (SlideAndDragListView) findViewById(R.id.saleproduct_listview);
+        listView = (SlideAndDragListView) findViewById(R.id.purchaseform_listview);
         listView.setMenu(menu);
         listView.setOnItemClickListener(this);
         listView.setOnMenuItemClickListener(this);
@@ -670,7 +670,7 @@ public class PurchaseForm extends CSearchBase implements View.OnClickListener, A
                 if(resultCode==RESULT_OK) {
                     countall=0;
                     amountCount =0.00;
-                    ProductShopping shopping = (ProductShopping) data.getParcelableExtra("shop_data");
+                    ProductShopping shopping = data.getParcelableExtra("shop_data");
                     for ( CommonAdapterData commonData : listdatas)
 
                     {

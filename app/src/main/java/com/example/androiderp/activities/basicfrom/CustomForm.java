@@ -17,15 +17,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.androiderp.basic.BasicForm;
 import com.example.androiderp.basic.BasicView;
-import com.example.androiderp.bean.AcivityPostBen;
+import com.example.androiderp.bean.AcivityPostBean;
 import com.example.androiderp.bean.AdapterBean;
 import com.example.androiderp.bean.Custom;
-import com.example.androiderp.bean.CustomCategory;
 import com.example.androiderp.bean.PostUserData;
 import com.example.androiderp.bean.ReturnUserData;
-import com.example.androiderp.bean.SalesOut;
 import com.example.androiderp.R;
 import com.example.androiderp.bean.DataStructure;
 import com.example.androiderp.tools.Common;
@@ -33,12 +30,8 @@ import com.example.androiderp.tools.GlobalVariable;
 import com.example.androiderp.tools.HttpUtil;
 import com.example.androiderp.ui.DataLoadingDialog;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-
-import org.litepal.crud.DataSupport;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.Call;
@@ -57,7 +50,7 @@ public class CustomForm extends AppCompatActivity implements View.OnClickListene
     private List<Custom> customList;
     private String getPostType;
     private Button deleteButton;
-    private AcivityPostBen acivityPostBen=new AcivityPostBen();
+    private AcivityPostBean acivityPostBen=new AcivityPostBean();
     private PostUserData postUserData = new PostUserData();
     private AdapterBean getPostData;
     private Dialog dialog;
@@ -199,7 +192,7 @@ public class CustomForm extends AppCompatActivity implements View.OnClickListene
                 break;
 
             case R.id.usercategory_layout:
-             AcivityPostBen acivityPostBenc=new AcivityPostBen();
+             AcivityPostBean acivityPostBenc=new AcivityPostBean();
                 acivityPostBenc.setAcivityName(acivityPostBen.getAcivityName());
                 acivityPostBenc.setRequestServlet("BrandOperate");
                 acivityPostBenc.setName(category.getText().toString());
@@ -260,7 +253,7 @@ public class CustomForm extends AppCompatActivity implements View.OnClickListene
 
 
                             Gson gson = new Gson();
-                            ReturnUserData returnUserData = (ReturnUserData) gson.fromJson(response.body().string(), ReturnUserData.class);
+                            ReturnUserData returnUserData = gson.fromJson(response.body().string(), ReturnUserData.class);
 
 
                             if (returnUserData.getResult() > 0) {

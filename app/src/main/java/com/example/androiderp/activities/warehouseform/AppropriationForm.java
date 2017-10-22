@@ -516,7 +516,7 @@ public class AppropriationForm extends CSearchBase implements View.OnClickListen
 
             case 7:
                 if(resultCode==RESULT_OK) {
-                    ProductShopping shopping = (ProductShopping) data.getParcelableExtra("shop_data");
+                    ProductShopping shopping = data.getParcelableExtra("shop_data");
                     for ( CommonAdapterData commonData : commonAdapterDataList)
 
                     {

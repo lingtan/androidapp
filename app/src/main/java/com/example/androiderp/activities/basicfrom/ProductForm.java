@@ -40,10 +40,8 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.androiderp.basic.BasicView;
-import com.example.androiderp.bean.AcivityPostBen;
-import com.example.androiderp.bean.AdapterBean;
+import com.example.androiderp.bean.AcivityPostBean;
 import com.example.androiderp.bean.PostProductData;
-import com.example.androiderp.bean.PostUserData;
 import com.example.androiderp.bean.Product;
 import com.example.androiderp.bean.ReturnUserData;
 import com.example.androiderp.bean.SalesOutEnty;
@@ -51,7 +49,6 @@ import com.example.androiderp.bean.StockIniti;
 import com.example.androiderp.bean.StockInitiData;
 import com.example.androiderp.bean.StockInitiTem;
 import com.example.androiderp.R;
-import com.example.androiderp.bean.DataStructure;
 import com.example.androiderp.bean.PopuMenuDataStructure;
 import com.example.androiderp.activities.warehouseview.StockInitiView;
 import com.example.androiderp.tools.Common;
@@ -109,10 +106,10 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
     private List<String> imagePathData=new ArrayList<String>();
     private List<ImageView> imageViewData=new ArrayList<ImageView>();
     private String categoryReturnVale;
-    private AcivityPostBen acivityPost=new AcivityPostBen();
+    private AcivityPostBean acivityPost=new AcivityPostBean();
     DecimalFormat df = new DecimalFormat("#####0.00");
-    private AcivityPostBen getAcivityPostBen=new AcivityPostBen();
-    private AcivityPostBen postAcivityPostBen=new AcivityPostBen();
+    private AcivityPostBean getAcivityPostBen=new AcivityPostBean();
+    private AcivityPostBean postAcivityPostBen=new AcivityPostBean();
     private PostProductData postUserData = new PostProductData();
     private Product getPostData;
     private Dialog dialog;
@@ -394,11 +391,7 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
             case R.id.customtoobar_right:
                 if (TextUtils.isEmpty(name.getText().toString())) {
                     name.setError("需要输入商品名称",errorIcon);
-                }else if (TextUtils.isEmpty(category.getText().toString()))
-                {
-                    category.setError("请选择分类",errorIcon);
-                }
-                else if (getPostType.equals("edit")) {
+                } else if (getPostType.equals("edit")) {
                     postUserData.setProduct_id(getPostData.getProduct_id());
                     postUserData.setName(name.getText().toString());
                     postUserData.setNumber(number.getText().toString());
@@ -407,7 +400,12 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                     postUserData.setBarcode(barcode.getText().toString());
                     postUserData.setModel(model.getText().toString());
                     postUserData.setNote(note.getText().toString());
-                    postUserData.setCategory_name(category.getText().toString());
+                    if(TextUtils.isEmpty(category.getText().toString().trim()))
+                    {
+                       postUserData.setCategory_name("未分类");
+                    }else {
+                        postUserData.setCategory_name(category.getText().toString());
+                    }
                     postUserData.setBrand_name(brand.getText().toString());
                     postUserData.setUnit_name(unit.getText().toString());
                     categoryReturnVale=category.getText().toString();
@@ -419,8 +417,6 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                     postUserData.setPhotoSecondPath(getPostData.getPhotoSecondPath());
                     postUserData.setPhotoThressPath(getPostData.getPhotoThressPath());
                     postUserData.setPhotoMainPath(getPostData.getPhotoMainPath());
-
-                    showDialog();
                     getHttpData(postUserData);
                     hintKbTwo();
 
@@ -435,7 +431,12 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                     postUserData.setBarcode(barcode.getText().toString());
                     postUserData.setModel(model.getText().toString());
                     postUserData.setNote(note.getText().toString());
-                    postUserData.setCategory_name(category.getText().toString());
+                    if(TextUtils.isEmpty(category.getText().toString().trim()))
+                    {
+                        postUserData.setCategory_name("未分类");
+                    }else {
+                        postUserData.setCategory_name(category.getText().toString());
+                    }
                     postUserData.setBrand_name(brand.getText().toString());
                     postUserData.setUnit_name(unit.getText().toString());
                     postUserData.setImage(R.drawable.listvist_item_delete);
@@ -460,9 +461,8 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
 
                     postUserData.setRequestType(GlobalVariable.cfInsert);
                     postUserData.setServerIp(Common.ip);
-                    postUserData.setServlet("ProductOperate");
-                    postUserData.setClassType(1);
-                    showDialog();
+                    postUserData.setServlet(getAcivityPostBen.getRequestServlet());
+                    postUserData.setClassType(getAcivityPostBen.getSetClassType());
                     getHttpData(postUserData);
 
                     for(int i = 0; i < stockInitiTemList.size(); i++) {
@@ -493,21 +493,11 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
 
             break;
             case R.id.customtoobar_left:
-                if(getPostType.equals("edit"))
-                {Intent intent = new Intent();
-                    intent.putExtra("category",categoryid);
-                    intent.putExtra("returncategory",categoryReturnVale);
-                    setResult(RESULT_OK,intent);
+                   Intent intent = new Intent();
+                   setResult(RESULT_OK,intent);
                     ProductForm.this.finish();
                     Glide.get(this).clearMemory();
-                }else {
-                    //不需要直接返回第一页
-                    Intent intent = new Intent();
-                    intent.putExtra("returncategory",categoryReturnVale);
-                    setResult(RESULT_OK,intent);
-                    ProductForm.this.finish();
-                    Glide.get(this).clearMemory();
-                }
+
              break;
             case R.id.documentmaker_layout:
                 postAcivityPostBen.setAcivityName("产品类别");
@@ -554,7 +544,6 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                         postUserData.setServlet(getAcivityPostBen.getRequestServlet());
                         postUserData.setClassType(getAcivityPostBen.getSetClassType());
                         postUserData.setRequestType(GlobalVariable.cfDelete);
-                        showDialog();
                         getHttpData(postUserData);
                         Intent intent = new Intent();
                         setResult(RESULT_OK,intent);
@@ -888,12 +877,7 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
 
         salesOutEntyList =DataSupport.where("number =?",number).find(SalesOutEnty.class);
 
-        if (salesOutEntyList.size()>0)
-        {
-            return true;
-        }else {
-            return false;
-        }
+        return salesOutEntyList.size() > 0;
 
     }
     private View.OnClickListener itemsOnClick = new View.OnClickListener(){
@@ -1127,7 +1111,7 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
 
     private void getHttpData( final PostProductData postPostUserData) {
 
-
+       showDialog();
         HttpUtil.sendProductRequst(postPostUserData, new okhttp3.Callback() {
 
             @Override
@@ -1155,7 +1139,7 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
 
 
                             Gson gson = new Gson();
-                            ReturnUserData returnUserData = (ReturnUserData) gson.fromJson(response.body().string(), ReturnUserData.class);
+                            ReturnUserData returnUserData = gson.fromJson(response.body().string(), ReturnUserData.class);
                             Log.d("lingtana",returnUserData.getError());
 
                             if (returnUserData.getResult() > 0) {
@@ -1169,6 +1153,7 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                                     setResult(RESULT_OK, intent);
 
                                 }
+                                closeDialog();
                                 finish();
                                 Toast.makeText(getApplicationContext(), "操作成功", Toast.LENGTH_SHORT).show();
                             } else {
@@ -1199,6 +1184,7 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
     private void showDialog() {
 
         dialog = new DataLoadingDialog(this);
+        dialog.setCanceledOnTouchOutside(false);
         dialog.show();//显示
 
     }

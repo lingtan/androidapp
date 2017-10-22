@@ -1,46 +1,64 @@
 package com.example.androiderp.activities.basicview;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
+import com.example.androiderp.adaper.BasicAdapter;
+import com.example.androiderp.bean.AcivityPostBean;
+import com.example.androiderp.bean.AdapterBean;
+import com.example.androiderp.bean.PostProductData;
 import com.example.androiderp.bean.Product;
 import com.example.androiderp.R;
 import com.example.androiderp.bean.PopuMenuDataStructure;
 import com.example.androiderp.adaper.ProductAdapter;
 import com.example.androiderp.tools.Common;
+import com.example.androiderp.tools.GlobalVariable;
+import com.example.androiderp.tools.HttpUtil;
 import com.example.androiderp.ui.CHomeSearch;
 import com.example.androiderp.ui.CSearchBase;
 import com.example.androiderp.activities.basicfrom.ProductForm;
 import com.example.androiderp.scanning.CommonScanActivity;
 import com.example.androiderp.scanning.utils.Constant;
+import com.example.androiderp.ui.DataLoadingDialog;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.litepal.crud.DataSupport;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProductSearchView extends CSearchBase implements View.OnClickListener {
-    private List<PopuMenuDataStructure> popuMenuDatas;
+import okhttp3.Call;
+import okhttp3.Response;
+
+public class ProductSearchView extends CSearchBase {
     private ProductAdapter adapter;
     private ListView listView;
     private DisplayMetrics dm;
-    private List<Product> commonDataStructureSearch = new ArrayList<Product>();
-    private List<Product> productList;
     private Common common;
     private CHomeSearch cHomeSearch;
-    private Intent intent, intentScreen;
+    private Intent  intentScreen;
     private ActionBar ab;
     private String scanResult;
+    private AcivityPostBean postAcivityPostBen = new AcivityPostBean();
+    private List<Product> HttpResponseCustom = new ArrayList<>();
+    private Dialog dialog;
 
     @Override
     public void iniView(){
@@ -55,9 +73,6 @@ public class ProductSearchView extends CSearchBase implements View.OnClickListen
         cHomeSearch.setHint("输入名称 | 产品货号");
         intentScreen =getIntent();
         scanResult= intentScreen.getStringExtra("scanResult");
-        productList = DataSupport.findAll(Product.class);
-        intent= new Intent(ProductSearchView.this, ProductForm.class);
-
         //构造函数第一参数是类的对象，第二个是布局文件，第三个是数据源
         listView = (ListView) findViewById(R.id.list);
         listView.setTextFilterEnabled(true);
@@ -68,118 +83,137 @@ public class ProductSearchView extends CSearchBase implements View.OnClickListen
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view,
                                     int position, long id) {
-                intent.removeExtra("action");
-                        if(commonDataStructureSearch.size()!=0) {
 
-                            intent.putExtra("action", "edit");
-                            intent.putExtra("product_item", String.valueOf(commonDataStructureSearch.get(position).getProduct_id()));
-
-
-                        }else {
-
-                            intent.putExtra("action", "edit");
-                            intent.putExtra("product_item", String.valueOf(productList.get(position).getProduct_id()));
-
-                        }
-                startActivityForResult(intent,1);
+                postAcivityPostBen.setRequestServlet("ProductOperate");
+                postAcivityPostBen.setSetClassType(1);
+                Intent intent = new Intent(getApplicationContext(), ProductForm.class);
+                intent.putExtra("type", "edit");
+                intent.putExtra("postdata", HttpResponseCustom.get(position));
+                intent.putExtra("acivityPostBen", postAcivityPostBen);
+                startActivityForResult(intent, 1);
 
 
             }
         });
-        if(productList.size()!=0) {
 
-            adapter = new ProductAdapter(ProductSearchView.this, R.layout.product_item, productList);
-            listView.setAdapter(adapter);
-
-        }
         cHomeSearch.addTextChangedListener(textWatcher);
         if(scanResult!=null) {
 
             cHomeSearch.requestFocusFromTouch();
             cHomeSearch.setText(scanResult);
 
+        }else {
+            PostProductData postDate = new PostProductData();
+            postDate.setName("");
+            postDate.setCategory_name("");
+            postDate.setServerIp(Common.ip);
+            postDate.setRequestType(GlobalVariable.cfCatetorySelect);
+            postDate.setClassType(1);
+            postDate.setServlet("ProductOperate");
+            getHttpData(postDate);
         }
 
-        popuMenuDatas = new ArrayList<PopuMenuDataStructure>();
-        PopuMenuDataStructure popuMenua = new PopuMenuDataStructure(android.R.drawable.ic_menu_edit, "美的");
-        popuMenuDatas.add(popuMenua);
-        PopuMenuDataStructure popuMenub = new PopuMenuDataStructure(android.R.drawable.ic_menu_edit, "松下");
-        popuMenuDatas.add(popuMenub);
-        showPopupWindow(popuMenuDatas);
+
 
     }
 
 
 
-    //筛选条件
-    public Object[] search(String name) {
-        if(commonDataStructureSearch !=null) {
-            commonDataStructureSearch.clear();
-        }
-        for (int i = 0; i < productList.size(); i++) {
-            int index = productList.get(i).getName().indexOf(name);
-            int indey = productList.get(i).getNumber().indexOf(name);
+    public void searchItem(String name) {
+        PostProductData postDate = new PostProductData();
+        postDate.setName(name);
+        postDate.setCategory_name("");
 
-            // 存在匹配的数据
-            if (index != -1||indey!=-1) {
-                commonDataStructureSearch.add(productList.get(i));
-            }
-        }
-        return commonDataStructureSearch.toArray();
+        postDate.setServerIp(Common.ip);
+        postDate.setRequestType(GlobalVariable.cfCatetorySelect);
+        postDate.setClassType(1);
+        postDate.setServlet("ProductOperate");
+        getHttpData(postDate);
     }
+    private void getHttpData(final PostProductData postPostUserData) {
+        showDialog();
 
 
-//adapter刷新,重写Filter方式会出现BUG.
-    public void updateLayout(Object[] obj) {
-        if(commonDataStructureSearch !=null) {
-            adapter = new ProductAdapter(ProductSearchView.this, R.layout.product_item, commonDataStructureSearch);
-            listView.setAdapter(adapter);
-        }
-    }
-
-    private void showPopupWindow(final List<PopuMenuDataStructure> popuMenuData) {
-        common = new Common();
-
-        common.PopupWindow(ProductSearchView.this, dm, popuMenuData);
-        common.listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        HttpUtil.sendProductRequst(postPostUserData, new okhttp3.Callback() {
 
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view,
-                                    int position, long id) {
+            public void onFailure(Call call, IOException e) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
 
-                if(popuMenuDatas.get(position).getName().equals("客户新增"))
-                {
-                    intent.removeExtra("product_item");
-                    intent.putExtra("action","add");
-                    startActivityForResult(intent,1);
-                }
-                else {
+                        closeDialog();
+                        Toast.makeText(getApplicationContext(), "网络连接失败", Toast.LENGTH_SHORT).show();
 
-                }
-                common.mPopWindow.dismiss();
+                    }
+                });
+
+            }
+
+            @Override
+            public void onResponse(Call call, final Response response) throws IOException {
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+
+
+
+                                Gson gson = new Gson();
+                                HttpResponseCustom = gson.fromJson(response.body().string(), new TypeToken<List<Product>>() {
+                                }.getType());
+                                if (HttpResponseCustom != null) {
+                                    if (HttpResponseCustom.size() != 0) {
+
+
+                                        adapter = new ProductAdapter(getApplicationContext(), R.layout.product_item, HttpResponseCustom);
+                                        listView.setAdapter(adapter);
+
+
+                                    } else {
+
+                                        adapter = new ProductAdapter(getApplicationContext(), R.layout.product_item, HttpResponseCustom);
+                                        listView.setAdapter(adapter);
+                                        Toast.makeText(getApplicationContext(), "没有数据", Toast.LENGTH_SHORT).show();
+
+                                    }
+                                } else {
+                                    HttpResponseCustom.clear();
+                                    adapter.notifyDataSetChanged();
+                                }
+
+
+                            closeDialog();
+
+                        } catch (Exception e) {
+                            Toast.makeText(getApplicationContext(), "网络", Toast.LENGTH_SHORT).show();
+                            Log.d("lingtana", e.toString());
+                            closeDialog();
+                        }
+                    }
+                });
+
+
             }
         });
-    }
 
+
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode){
             case 1:
-                if(commonDataStructureSearch.size()>0)
-                {
-                    adapter = new ProductAdapter(ProductSearchView.this, R.layout.product_item, commonDataStructureSearch);
-                    listView.setAdapter(adapter);
-                }else {
-                if(resultCode==RESULT_OK)
-                {
-                    if(productList.size()!=0) {
-                        productList.clear();
-                    }
-                    productList = DataSupport.findAll(Product.class);
 
-                    adapter = new ProductAdapter(ProductSearchView.this, R.layout.product_item, productList);
-                    listView.setAdapter(adapter);
-                }}
+                PostProductData postDate = new PostProductData();
+                postDate.setName("");
+                postDate.setCategory_name("");
+                postDate.setServerIp(Common.ip);
+                postDate.setRequestType(GlobalVariable.cfCatetorySelect);
+                postDate.setClassType(1);
+                postDate.setServlet("ProductOperate");
+                getHttpData(postDate);
+
                 break;
             case 2:
                 if(resultCode==RESULT_OK) {
@@ -206,31 +240,7 @@ public class ProductSearchView extends CSearchBase implements View.OnClickListen
         return false;
     }
 
-    @Override
-    public void onClick(View v) {
-        switch(v.getId())
-        {
-            case R.id.custom_toobar_right:
-                if( common.mPopWindow==null ||!common.mPopWindow.isShowing())
-                {   popuMenuDatas.clear();
-                    PopuMenuDataStructure popuMenua = new PopuMenuDataStructure(R.drawable.poppu_wrie, "客户修改");
-                    popuMenuDatas.add(popuMenua);
-                    PopuMenuDataStructure popuMenub = new PopuMenuDataStructure(R.drawable.poppu_wrie, "客户新增");
-                    popuMenuDatas.add(popuMenub);
-                    int xPos = dm.widthPixels / 3;
-                    showPopupWindow(popuMenuDatas);
-                    common.mPopWindow.showAsDropDown(v,0,5);
-                    //mPopWindow.showAtLocation(findViewById(R.id.main), Gravity.BOTTOM, 0, 0);//从底部弹出
-                }
-                else {
-                    common.mPopWindow.dismiss();
-                }
-                break;
 
-
-        }
-
-    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -274,10 +284,29 @@ public class ProductSearchView extends CSearchBase implements View.OnClickListen
 
         @Override
         public void afterTextChanged(Editable s) {
+            searchItem(cHomeSearch.getText().toString());
 
-            Object[] obj = search(cHomeSearch.getText().toString());
-            updateLayout(obj);
 
         }
     };
+
+    /**
+     * 显示进度对话框
+     */
+    private void showDialog() {
+
+        dialog = new DataLoadingDialog(this);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();//显示
+
+    }
+
+    /**
+     * 关闭进度对话框
+     */
+    private void closeDialog() {
+        if (dialog != null) {
+            dialog.dismiss();
+        }
+    }
 }

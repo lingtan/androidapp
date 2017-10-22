@@ -18,7 +18,7 @@ import com.example.androiderp.activities.warehouseview.StockTakingView;
 import com.example.androiderp.activities.warehouseform.AppropriationForm;
 import com.example.androiderp.activities.warehouseform.StockTakingForm;
 import com.example.androiderp.basic.BasicView;
-import com.example.androiderp.bean.AcivityPostBen;
+import com.example.androiderp.bean.AcivityPostBean;
 
 /**
  * Created by lingtan on 2017/5/18.
@@ -26,7 +26,7 @@ import com.example.androiderp.bean.AcivityPostBen;
 
 public class FouthFragment extends Fragment implements View.OnClickListener {
     private   Intent intent;
-    private AcivityPostBen acivityPostBen=new AcivityPostBen();
+    private AcivityPostBean acivityPostBen=new AcivityPostBean();
     @Override
     public View onCreateView(LayoutInflater inflater,  ViewGroup container,  Bundle savedInstanceState) {
         View view=inflater.inflate(R.layout.fourthfragment_layout,container,false);

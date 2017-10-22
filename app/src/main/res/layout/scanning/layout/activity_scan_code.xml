@@ -40,7 +40,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
                 android:ellipsize="middle"
-                android:singleLine="true"
+                android:maxLines="1"
                 android:textColor="#ffffff"
                 android:text="二维码扫描"
                 android:textSize="18sp" />

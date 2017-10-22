@@ -23,7 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.androiderp.basic.BasicView;
-import com.example.androiderp.bean.AcivityPostBen;
+import com.example.androiderp.bean.AcivityPostBean;
 import com.example.androiderp.bean.AppropriationEnty;
 import com.example.androiderp.bean.Custom;
 import com.example.androiderp.bean.Employee;
@@ -99,7 +99,7 @@ public class SaleReturnForm extends CSearchBase implements View.OnClickListener,
     private List<AppropriationEnty> appropriationOutList;
     private double quantity;
     private int  stockCheck=1;
-    private AcivityPostBen acivityPostBen=new AcivityPostBen();
+    private AcivityPostBean acivityPostBen=new AcivityPostBean();
     public void iniView() {
         setContentView(R.layout.returnsaleproductform);
         initMenu();
@@ -693,7 +693,7 @@ public class SaleReturnForm extends CSearchBase implements View.OnClickListener,
                 if(resultCode==RESULT_OK) {
                     quantityCount=0;
                     amountCount=0.00;
-                    ProductShopping shopping = (ProductShopping) data.getParcelableExtra("shop_data");
+                    ProductShopping shopping = data.getParcelableExtra("shop_data");
                     for ( CommonAdapterData commonData : listdatas)
 
                     {

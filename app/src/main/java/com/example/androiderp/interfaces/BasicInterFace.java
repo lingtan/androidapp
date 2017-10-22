@@ -7,9 +7,9 @@ import com.example.androiderp.bean.PostUserData;
  */
 
 public interface BasicInterFace {
-  public abstract   void activityViewInit();
-    public abstract   void formInit();
-    public abstract   void getHttpData(PostUserData postPostUserData);
+  void activityViewInit();
+    void formInit();
+    void getHttpData(PostUserData postPostUserData);
 
 
 }

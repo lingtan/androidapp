@@ -148,7 +148,7 @@ public class Utils {
      */
     public static Bitmap rotaingImageView(int angle , Bitmap bitmap) {
         //旋转图片 动作
-        Matrix matrix = new Matrix();;
+        Matrix matrix = new Matrix();
         matrix.postRotate(angle);
         System.out.println("angle2=" + angle);
         // 创建新的图片

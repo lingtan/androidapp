@@ -45,7 +45,7 @@ public class Common extends AppCompatActivity {
     public ListView listView;
     private Context context;
     //public static final String ip="http://eedd.v228.10000net.cn/javaweb/servlet/";
-    public static final String ip="http://192.168.1.101:8080/webdemo/servlet/";
+    public static final String ip="http://192.168.0.103:8080/webdemo/servlet/";
     public void PopupWindow(Context context, DisplayMetrics dm,List<PopuMenuDataStructure>  popuMenuDatas)
     {   this.context=context;
         if(mPopWindow==null) {
@@ -166,7 +166,7 @@ public class Common extends AppCompatActivity {
 
         } else {
             Gson gson = new Gson();
-            ReturnUserData returnUserData = (ReturnUserData) gson.fromJson(returnData, ReturnUserData.class);
+            ReturnUserData returnUserData = gson.fromJson(returnData, ReturnUserData.class);
             if (returnUserData.getResult() > 0) {
 
 

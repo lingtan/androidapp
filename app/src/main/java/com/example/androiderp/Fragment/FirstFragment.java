@@ -19,14 +19,13 @@ import com.example.androiderp.activities.basicview.ProductMoreView;
 import com.example.androiderp.activities.salesview.SaleView;
 import com.example.androiderp.activities.purchaseview.PurchaseView;
 import com.example.androiderp.activities.warehouseview.StockTakingView;
-import com.example.androiderp.activities.basicview.SupplierMoreView;
 import com.example.androiderp.activities.accountsview.TallyExpandableView;
 import com.example.androiderp.activities.warehouseform.AppropriationForm;
 import com.example.androiderp.activities.purchaseform.PurchaseForm;
 import com.example.androiderp.activities.salesfrom.SaleForm;
 import com.example.androiderp.activities.warehouseform.StockTakingForm;
 import com.example.androiderp.basic.BasicView;
-import com.example.androiderp.bean.AcivityPostBen;
+import com.example.androiderp.bean.AcivityPostBean;
 import com.example.androiderp.bean.GridView;
 import com.example.androiderp.tools.GlobalVariable;
 import com.example.androiderp.ui.CGridView;
@@ -43,7 +42,7 @@ import java.util.List;
 public class FirstFragment extends Fragment {
     private List<GridView> gridViewList=new ArrayList<GridView>();
     private List<GridView> gridViewAddList=new ArrayList<GridView>();
-    private AcivityPostBen acivityPostBen=new AcivityPostBen();
+    private AcivityPostBean acivityPostBen=new AcivityPostBean();
     private String[] img_text = {
             "商品管理", "采购新增","销售新增",
             "库存查询","采购流水", "销售流水",
@@ -87,10 +86,8 @@ public class FirstFragment extends Fragment {
 
                 switch (gridViewList.get(position).getName().toString()) {
                     case "商品管理":
-
                         acivityPostBen.setAcivityName("产品");
                         acivityPostBen.setRequestServlet("ProductOperate");
-                        acivityPostBen.setName("");
                         acivityPostBen.setSetClassType(GlobalVariable.customMoreViewType);
                         Intent intentProduct = new Intent(context, ProductMoreView.class);
                         intentProduct.putExtra("acivityPostBen",acivityPostBen);

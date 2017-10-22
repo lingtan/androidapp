@@ -15,11 +15,11 @@ public interface ScanListener {
 	 * @param rawResult  结果对象
 	 * @param bundle  存放了截图，或者是空的
 	 */
-	public void scanResult(Result rawResult, Bundle bundle);
+    void scanResult(Result rawResult, Bundle bundle);
 	/**
 	 * 扫描抛出的异常
 	 * @param e
 	 */
-	public void scanError(Exception e);
+    void scanError(Exception e);
 	
 }

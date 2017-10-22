@@ -24,7 +24,7 @@ import android.widget.Toast;
 
 import com.example.androiderp.activities.salesfrom.ShoppingScrennForm;
 import com.example.androiderp.basic.BasicView;
-import com.example.androiderp.bean.AcivityPostBen;
+import com.example.androiderp.bean.AcivityPostBean;
 import com.example.androiderp.bean.AppropriationEnty;
 import com.example.androiderp.bean.Employee;
 import com.example.androiderp.bean.Product;
@@ -99,7 +99,7 @@ public class PurchaseReturnForm extends CSearchBase implements View.OnClickListe
     private double quantity;
     private int  stockCheck=1;
     private List<Integer> stockCheckList=new ArrayList<Integer>();
-    private AcivityPostBen acivityPostBen=new AcivityPostBen();
+    private AcivityPostBean acivityPostBen=new AcivityPostBean();
     public void iniView() {
         setContentView(R.layout.returnpurchaseproductform);
         initMenu();
@@ -648,7 +648,7 @@ public class PurchaseReturnForm extends CSearchBase implements View.OnClickListe
                 if(resultCode==RESULT_OK) {
                     countall=0;
                     amountCount =0.00;
-                    ProductShopping shopping = (ProductShopping) data.getParcelableExtra("shop_data");
+                    ProductShopping shopping = data.getParcelableExtra("shop_data");
                     for ( CommonAdapterData commonData : listdatas)
 
                     {

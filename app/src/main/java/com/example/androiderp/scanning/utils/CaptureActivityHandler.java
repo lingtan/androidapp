@@ -112,9 +112,6 @@ public class CaptureActivityHandler extends Handler {
 	 * @return 返回当前扫描状态，是否可扫描,State.PREVIEW 是可扫描状态
 	 */
 	public boolean  isScanning() {
-		if(state == State.PREVIEW){
-			return true;
-		}
-		return false;
-	}
+        return state == State.PREVIEW;
+    }
 }

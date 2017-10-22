@@ -32,7 +32,7 @@ public class AppropriationBadgeAdapter extends ArrayAdapter<Product> implements 
     //这个数据是会改变的，所以要有个变量来备份一下原始数据
     public interface Callback {
 
-        public void click(View v);
+        void click(View v);
    }
 
     //构造函数，context是一个抽象类，可以理解为类的类型！

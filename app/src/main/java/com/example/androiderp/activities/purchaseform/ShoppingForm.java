@@ -35,8 +35,8 @@ public class ShoppingForm extends AppCompatActivity implements View.OnClickListe
     private TextView toobarSave, toobarTile, toobarBack, toobarAdd;
     private ProductShopping productShopping;
     private DisplayMetrics dm;
-    private Product product;
-    private String customid,edit;
+    private String edit;
+    private Product getAcivityPostBean=new Product();
     private Drawable errorIcon;
     private String amountString;
     private Button saveButton;
@@ -48,7 +48,7 @@ public class ShoppingForm extends AppCompatActivity implements View.OnClickListe
         dm=new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         final Intent intent=getIntent();
-        customid=intent.getStringExtra("product_item");
+        getAcivityPostBean = intent.getParcelableExtra("acivityPostBen");
         edit=intent.getStringExtra("action");
         manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         name=(EditText)findViewById(R.id.name);
@@ -145,13 +145,13 @@ public class ShoppingForm extends AppCompatActivity implements View.OnClickListe
     private void  formInit()
     {
 
-        if(customid!=null) {
+        if(getAcivityPostBean!=null) {
 
-            product = DataSupport.find(Product.class, Long.parseLong(customid));
-            name.setText(product.getName());
-            number.setText(product.getNumber());
-            price.setText(df.format(product.getSalesPrice()));
-            category.setText(product.getCategory_name());
+
+            name.setText(getAcivityPostBean.getName());
+            number.setText(getAcivityPostBean.getNumber());
+            price.setText(df.format(getAcivityPostBean.getSalesPrice()));
+            category.setText(getAcivityPostBean.getCategory_name());
             if(edit.equals("edit")) {
                 toobarAdd.setVisibility(View.VISIBLE);
             }else {
@@ -178,7 +178,7 @@ public class ShoppingForm extends AppCompatActivity implements View.OnClickListe
                     quantity.setError("销售数量不能为0",errorIcon);
                 }else {
                     productShopping = new ProductShopping();
-                    productShopping.setId(product.getProduct_id());
+                    productShopping.setId(getAcivityPostBean.getProduct_id());
                     productShopping.setName(name.getText().toString());
                     productShopping.setNumber(number.getText().toString());
                     productShopping.setCategory(category.getText().toString());

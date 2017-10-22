@@ -1,5 +1,6 @@
 package com.example.androiderp.basic;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,15 +13,16 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.androiderp.bean.AcivityPostBen;
+import com.example.androiderp.R;
+import com.example.androiderp.bean.AcivityPostBean;
 import com.example.androiderp.bean.AdapterBean;
+import com.example.androiderp.bean.DataStructure;
 import com.example.androiderp.bean.PostUserData;
 import com.example.androiderp.bean.ReturnUserData;
 import com.example.androiderp.bean.Unit;
-import com.example.androiderp.R;
-import com.example.androiderp.bean.DataStructure;
 import com.example.androiderp.tools.Common;
 import com.example.androiderp.tools.HttpUtil;
+import com.example.androiderp.ui.DataLoadingDialog;
 import com.google.gson.Gson;
 
 import java.io.IOException;
@@ -35,65 +37,64 @@ import okhttp3.Response;
 
 public class BasicForm extends AppCompatActivity implements View.OnClickListener {
     private InputMethodManager manager;
-    private EditText name,note;
+    private EditText name, note;
     private TextView toobarSave, toobarTile, toobarBack;
     private String getPostName;
-    private String  getPostType;
+    private String getPostType;
     private AdapterBean getPostData;
-    private boolean isSave=false;
+    private boolean isSave = false;
     private List<Unit> unitList;
     private PostUserData postUserData = new PostUserData();
-    private AcivityPostBen acivityPostBen;
+    private AcivityPostBean acivityPostBen;
+    private Dialog dialog;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.customcategory);
         manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        name =(EditText)findViewById(R.id.customcategory_name);
-        note =(EditText)findViewById(R.id.customcategory_note);
-        final Intent intent=getIntent();
-        getPostData =intent.getParcelableExtra("postdata");
+        name = (EditText) findViewById(R.id.customcategory_name);
+        note = (EditText) findViewById(R.id.customcategory_note);
+        final Intent intent = getIntent();
+        getPostData = intent.getParcelableExtra("postdata");
         getPostType = intent.getStringExtra("type");
-        acivityPostBen=intent.getParcelableExtra("acivityPostBen");
-        toobarSave =(TextView)findViewById(R.id.custom_toobar_right);
-        toobarTile =(TextView)findViewById(R.id.custom_toobar_midd);
-        toobarBack =(TextView)findViewById(R.id.custom_toobar_left);
-        toobarSave.setCompoundDrawables(null,null,null,null);
-        toobarTile.setCompoundDrawables(null,null,null,null);
+        acivityPostBen = intent.getParcelableExtra("acivityPostBen");
+        toobarSave = (TextView) findViewById(R.id.custom_toobar_right);
+        toobarTile = (TextView) findViewById(R.id.custom_toobar_midd);
+        toobarBack = (TextView) findViewById(R.id.custom_toobar_left);
+        toobarSave.setCompoundDrawables(null, null, null, null);
+        toobarTile.setCompoundDrawables(null, null, null, null);
         toobarSave.setText("保存");
         toobarSave.setOnClickListener(this);
         toobarBack.setOnClickListener(this);
-       formInit();
+        formInit();
 
     }
-private  void formInit()
-{ if (getPostData != null) {
-    getPostName = getPostData.getName();
-    name.setText(getPostData.getName());
-    note.setText(getPostData.getNote());
 
-}
-    if(getPostType.equals("edit"))
-    {
-        toobarTile.setText(acivityPostBen.getAcivityName()+"修改");
-    }else {
-        toobarTile.setText(acivityPostBen.getAcivityName()+"新增");
+    private void formInit() {
+        if (getPostData != null) {
+            getPostName = getPostData.getName();
+            name.setText(getPostData.getName());
+            note.setText(getPostData.getNote());
+
+        }
+        if (getPostType.equals("edit")) {
+            toobarTile.setText(acivityPostBen.getAcivityName() + "修改");
+        } else {
+            toobarTile.setText(acivityPostBen.getAcivityName() + "新增");
+        }
+
     }
 
-}
     @Override
     public void onClick(View v) {
-        switch (v.getId())
-        {
+        switch (v.getId()) {
             case R.id.custom_toobar_right:
-                 unitList= DataStructure.where("name = ?", name.getText().toString()).find(Unit.class);
+                unitList = DataStructure.where("name = ?", name.getText().toString()).find(Unit.class);
                 if (TextUtils.isEmpty(name.getText().toString())) {
-                    name.setError("需要输入"+acivityPostBen.getAcivityName());
-                }else if (unitList.size()>0)
-                {
-                    Toast.makeText(BasicForm.this,acivityPostBen.getAcivityName()+"已经存在",Toast.LENGTH_SHORT).show();
-                } else if  (getPostType.equals("edit"))
-                {
+                    name.setError("需要输入" + acivityPostBen.getAcivityName());
+                } else if (unitList.size() > 0) {
+                    Toast.makeText(BasicForm.this, acivityPostBen.getAcivityName() + "已经存在", Toast.LENGTH_SHORT).show();
+                } else if (getPostType.equals("edit")) {
                     postUserData.setUnitId(getPostData.getUnitId());
                     postUserData.setName(name.getText().toString().trim());
                     postUserData.setNote(note.getText().toString().trim());
@@ -104,8 +105,7 @@ private  void formInit()
                     getHttpData(postUserData);
                     isSave = true;
 
-                    }
-                    else {
+                } else {
                     try {
                         postUserData.setName(name.getText().toString().trim());
                         postUserData.setNote(note.getText().toString().trim());
@@ -116,34 +116,32 @@ private  void formInit()
                         getHttpData(postUserData);
 
 
-                    }catch (Exception e)
-                    {
+                    } catch (Exception e) {
 
                     }
-                    }
+                }
 
                 break;
             case R.id.custom_toobar_left:
-                if(getPostType.equals("edit"))
-                {
+                if (getPostType.equals("edit")) {
                     Intent intent = new Intent();
                     if (isSave) {
                         intent.putExtra("returnName", name.getText().toString());
                     } else {
                         intent.putExtra("returnName", getPostName);
                     }
-                    setResult(RESULT_OK,intent);
+                    setResult(RESULT_OK, intent);
                     finish();
-                }else {
+                } else {
                     finish();
                 }
 
 
-
         }
     }
-    private void getHttpData( final PostUserData postPostUserData) {
 
+    private void getHttpData(final PostUserData postPostUserData) {
+        showDialog();
 
         HttpUtil.sendOkHttpRequst(postPostUserData, new okhttp3.Callback() {
 
@@ -172,37 +170,37 @@ private  void formInit()
 
 
                             Gson gson = new Gson();
-                            ReturnUserData returnUserData = (ReturnUserData) gson.fromJson(response.body().string(), ReturnUserData.class);
+                            ReturnUserData returnUserData = gson.fromJson(response.body().string(), ReturnUserData.class);
 
 
                             if (returnUserData.getResult() > 0) {
                                 Intent intent = new Intent();
                                 setResult(RESULT_OK, intent);
-                                if(getPostData !=null) {
+                                if (getPostData != null) {
                                     getPostData.setUnitId(getPostData.getUnitId());
                                     getPostData.setName(name.getText().toString().trim());
                                     getPostData.setNote(note.getText().toString().trim());
                                     intent.putExtra("getPostData", getPostData);
-                                }else
-                                {
+                                } else {
                                     AdapterBean user = new AdapterBean();
                                     user.setName(name.getText().toString().trim());
                                     user.setUnitId(returnUserData.getResult());
                                     user.setNote(note.getText().toString().trim());
                                     intent.putExtra("getPostData", user);
                                 }
+                                closeDialog();
                                 BasicForm.this.finish();
 
 
                             } else {
 
                                 Toast.makeText(BasicForm.this, "操作失败", Toast.LENGTH_SHORT).show();
+                                closeDialog();
                             }
-                        }catch (Exception e)
-                        {
+                        } catch (Exception e) {
                             Toast.makeText(BasicForm.this, "网络连接失败", Toast.LENGTH_SHORT).show();
+                            closeDialog();
                         }
-
 
 
                     }
@@ -214,15 +212,36 @@ private  void formInit()
 
 
     }
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         // TODO Auto-generated method stub
-        if(event.getAction() == MotionEvent.ACTION_DOWN){
-            if(getCurrentFocus()!=null && getCurrentFocus().getWindowToken()!=null){
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            if (getCurrentFocus() != null && getCurrentFocus().getWindowToken() != null) {
                 manager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
             }
         }
         return super.onTouchEvent(event);
+    }
+
+    /**
+     * 显示进度对话框
+     */
+    private void showDialog() {
+
+        dialog = new DataLoadingDialog(this);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();//显示
+
+    }
+
+    /**
+     * 关闭进度对话框
+     */
+    private void closeDialog() {
+        if (dialog != null) {
+            dialog.dismiss();
+        }
     }
 
 }

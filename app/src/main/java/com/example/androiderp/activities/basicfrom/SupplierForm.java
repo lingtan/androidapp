@@ -20,10 +20,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.androiderp.basic.BasicView;
-import com.example.androiderp.bean.AcivityPostBen;
+import com.example.androiderp.bean.AcivityPostBean;
 import com.example.androiderp.bean.SalesOut;
 import com.example.androiderp.bean.Supplier;
-import com.example.androiderp.bean.SupplierCategory;
 import com.example.androiderp.R;
 import com.example.androiderp.bean.DataStructure;
 
@@ -47,7 +46,7 @@ public class SupplierForm extends AppCompatActivity implements View.OnClickListe
     private Button deleteButton;
     private Drawable errorIcon;
     private List<SalesOut> salesOutList =new ArrayList<SalesOut>();
-    private AcivityPostBen acivityPostBen=new AcivityPostBen();
+    private AcivityPostBean acivityPostBen=new AcivityPostBean();
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
@@ -262,12 +261,7 @@ public class SupplierForm extends AppCompatActivity implements View.OnClickListe
 
         salesOutList =DataSupport.where("customer=?",name).find(SalesOut.class);
 
-        if (salesOutList.size()>0)
-        {
-            return true;
-        }else {
-            return false;
-        }
+        return salesOutList.size() > 0;
 
     }
 

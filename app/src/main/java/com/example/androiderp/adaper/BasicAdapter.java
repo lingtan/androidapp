@@ -58,6 +58,7 @@ public class BasicAdapter extends ArrayAdapter<AdapterBean>   {
         if (convertView == null) {
             view = LayoutInflater.from(getContext()).inflate(resourceId, parent, false);
             viewHolder = new ViewHolder();
+            viewHolder.badge = (TextView) view.findViewById (R.id.custom_badge_item_show);
             viewHolder.name = (TextView) view.findViewById (R.id.custom_item_layout_one_name);
             viewHolder.image=(ImageView) view.findViewById(R.id.custom_item_layout_one_image);
 
@@ -87,6 +88,7 @@ public class BasicAdapter extends ArrayAdapter<AdapterBean>   {
 
                 viewHolder.name.setText(data.get(position).getName());
                 viewHolder.image.setImageResource(data.get(position).getSelectImage());
+        viewHolder.badge.setText(data.get(position).getBadge());
 
 
 
@@ -111,6 +113,7 @@ public void setSeclection(int position)
 
         ImageView image;
         TextView  name;
+        TextView  badge;
 
 
     }

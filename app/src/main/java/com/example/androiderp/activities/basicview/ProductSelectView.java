@@ -1,9 +1,12 @@
 package com.example.androiderp.activities.basicview;
 
+import android.app.Dialog;
 import android.content.Intent;
+import android.os.Parcelable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
@@ -11,6 +14,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.example.androiderp.adaper.BasicAdapter;
+import com.example.androiderp.adaper.ProductAdapter;
+import com.example.androiderp.bean.AcivityPostBean;
+import com.example.androiderp.bean.AdapterBean;
+import com.example.androiderp.bean.PostProductData;
 import com.example.androiderp.bean.Product;
 import com.example.androiderp.bean.ProductCategory;
 import com.example.androiderp.bean.ProductShopping;
@@ -19,6 +29,9 @@ import com.example.androiderp.R;
 import com.example.androiderp.adaper.CommonAdapter;
 import com.example.androiderp.adaper.CommonAdapterData;
 import com.example.androiderp.adaper.ProductBadgeAdapter;
+import com.example.androiderp.tools.Common;
+import com.example.androiderp.tools.GlobalVariable;
+import com.example.androiderp.tools.HttpUtil;
 import com.example.androiderp.ui.CBadgeView;
 import com.example.androiderp.ui.CSearch;
 import com.example.androiderp.ui.CSearchBase;
@@ -27,25 +40,34 @@ import com.example.androiderp.activities.purchaseform.ShoppingForm;
 import com.example.androiderp.activities.salesfrom.SaleForm;
 import com.example.androiderp.scanning.CommonScanActivity;
 import com.example.androiderp.scanning.utils.Constant;
+import com.example.androiderp.ui.DataLoadingDialog;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.litepal.crud.DataSupport;
+
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+
+import okhttp3.Call;
+import okhttp3.Response;
+
 public class ProductSelectView extends CSearchBase implements View.OnClickListener, ProductBadgeAdapter.Callback{
     private ProductBadgeAdapter rightAdapter;
-    private CommonAdapter leftAdapter;
+    private BasicAdapter leftAdapter;
     private ListView rightListView;
     private ListView leftListView;
     private DisplayMetrics dm;
     private List<Product> productSearch = new ArrayList<Product>();
-    private List<Product> productList;
     private TextView toobarBack, toobarAdd, toobarTile, countShow, toobarScreen;
     private CSearch search;
     private Intent intent;
-    private List<ProductCategory> productCategoryList;
-    private List<CommonAdapterData> categorylist = new ArrayList<CommonAdapterData>();
+    private List<AdapterBean> categorylist = new ArrayList<AdapterBean>();
     private double quantityCount;
     private double categorycount;
     private double amountCount;
@@ -56,6 +78,14 @@ public class ProductSelectView extends CSearchBase implements View.OnClickListen
     private  int leftListSelecte;
     private  String leftListSelecteText;
     private LinearLayout accountLayout;
+    private AcivityPostBean getAcivityPostBean = new AcivityPostBean();
+    private AcivityPostBean postAcivityPostBen = new AcivityPostBean();
+    private List<AdapterBean> HttpResponseCategory = new ArrayList<>();
+    private List<Product> HttpResponseCustom = new ArrayList<>();
+    private List<Product> HttpResponseCustomTemp = new ArrayList<>();
+    private Dialog dialog;
+    private int selectPositon = 0;
+    private String selectCategory = "全部";
 
     @Override
     public void iniView(){
@@ -73,35 +103,35 @@ public class ProductSelectView extends CSearchBase implements View.OnClickListen
         search = (CSearch) findViewById(R.id.search);
         countShow =(TextView)findViewById(R.id.product_item_layout_count) ;
         accountLayout =(LinearLayout)findViewById(R.id.product_item_layout_bottom);
-        productList = DataSupport.findAll(Product.class);
         intent= new Intent(ProductSelectView.this, ShoppingForm.class);
-        productCategoryList = DataSupport.findAll(ProductCategory.class);
-        CommonAdapterData commonDataAll=new CommonAdapterData();
-        commonDataAll.setName("全部产品");
-        categorylist.add(commonDataAll);
-        CommonAdapterData commonDataN=new CommonAdapterData();
-        commonDataN.setName("未分类");
-        categorylist.add(commonDataN);
+
         countShow.setText("¥0.00");
         CBadgeView = new CBadgeView(this);
         badgeImage =(ImageView)findViewById(R.id.product_shopping_badge);
         CBadgeView.setTargetView(badgeImage);
         CBadgeView.setBadgeMargin(25,0,0,0);
         CBadgeView.setBadgeGravity(Gravity.RIGHT & Gravity.TOP);
-        for(ProductCategory productCategory: productCategoryList)
 
-        {
-            CommonAdapterData commonData=new CommonAdapterData();
-            commonData.setName(productCategory.getName());
-            commonData.setUnitId(productCategory.getId());
-            categorylist.add(commonData);
-
-        }
         //构造函数第一参数是类的对象，第二个是布局文件，第三个是数据源
         leftListView=(ListView) findViewById(R.id.left_list);
         leftListView.setTextFilterEnabled(true);
         rightListView = (ListView) findViewById(R.id.right_list);
         rightListView.setTextFilterEnabled(true);
+
+        leftAdapter = new BasicAdapter(ProductSelectView.this, R.layout.custom_item, categorylist);
+        leftAdapter.setSeclection(0);
+        leftListView.setAdapter(leftAdapter);
+        rightAdapter = new ProductBadgeAdapter(ProductSelectView.this, R.layout.product_badge_item, HttpResponseCustom,this);
+        rightListView.setAdapter(rightAdapter);
+
+        PostProductData postDate = new PostProductData();
+        postDate.setName("");
+        postDate.setRequestType(GlobalVariable.cmvCusmtAndCategory);
+        getAcivityPostBean.setOperationType(GlobalVariable.cmvCusmtAndCategory);
+        postDate.setServerIp(Common.ip);
+        postDate.setClassType(1);
+        postDate.setServlet("ProductOperate");
+        getHttpData(postDate);
         leftListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -130,29 +160,17 @@ public class ProductSelectView extends CSearchBase implements View.OnClickListen
                 selectedItems =rightAdapter.selectedItems;
 
 
-                intent.removeExtra("action");
-                if(productSearch.size()!=0) {
-
-                    intent.putExtra("action", "edit");
-                    intent.putExtra("product_item", String.valueOf(productSearch.get(position).getProduct_id()));
 
 
-                }else {
+                    intent.putExtra("type", "edit");
+                    intent.putExtra("acivityPostBen", HttpResponseCustom.get(position));
 
-                    intent.putExtra("action", "edit");
-                    intent.putExtra("product_item", String.valueOf(productList.get(position).getProduct_id()));
 
-                }
                 startActivityForResult(intent,1);
 
             }
         });
 
-            leftAdapter = new CommonAdapter(ProductSelectView.this, R.layout.custom_item, categorylist);
-            leftAdapter.setSeclection(0);
-            leftListView.setAdapter(leftAdapter);
-            Object[] obj = categorySearch(categorylist.get(0).getName().toString());
-            updateLayout(obj);
 
 
 
@@ -186,11 +204,11 @@ public class ProductSelectView extends CSearchBase implements View.OnClickListen
         }
         if(leftListSelecteText.equals("未分类"))
         {
-            for (int i = 0; i < productList.size(); i++) {
-                if(productList.get(i).getCategory_name()==null)
-                { int index = productList.get(i).getNumber().indexOf(name);
+            for (int i = 0; i < HttpResponseCustom.size(); i++) {
+                if(HttpResponseCustom.get(i).getCategory_name().equals("未分类"))
+                { int index = HttpResponseCustom.get(i).getNumber().indexOf(name);
                     if (index != -1) {
-                        productSearch.add(productList.get(i));
+                        productSearch.add(HttpResponseCustom.get(i));
                     }
 
                 }
@@ -198,10 +216,10 @@ public class ProductSelectView extends CSearchBase implements View.OnClickListen
 
         }else if (leftListSelecteText.equals("全部产品"))
         {
-            for (int i = 0; i < productList.size(); i++) {
-                int index = productList.get(i).getNumber().indexOf(name);
+            for (int i = 0; i < HttpResponseCustom.size(); i++) {
+                int index = HttpResponseCustom.get(i).getNumber().indexOf(name);
                 if (index != -1) {
-                    productSearch.add(productList.get(i));
+                    productSearch.add(HttpResponseCustom.get(i));
                 }
 
             }
@@ -209,12 +227,12 @@ public class ProductSelectView extends CSearchBase implements View.OnClickListen
         }
 
         else {
-            for (int i = 0; i < productList.size(); i++) {
-                int index = productList.get(i).getNumber().indexOf(name);
-                int indey = productList.get(i).getCategory_name().indexOf(leftListSelecteText);
+            for (int i = 0; i < HttpResponseCustom.size(); i++) {
+                int index = HttpResponseCustom.get(i).getNumber().indexOf(name);
+                int indey = HttpResponseCustom.get(i).getCategory_name().indexOf(leftListSelecteText);
                 // 存在匹配的数据
                 if (index != -1 & indey != -1) {
-                    productSearch.add(productList.get(i));
+                    productSearch.add(HttpResponseCustom.get(i));
                 }
             }
         }
@@ -228,30 +246,30 @@ public class ProductSelectView extends CSearchBase implements View.OnClickListen
         }
         if(name.equals("未分类"))
         {
-            for (int i = 0; i < productList.size(); i++) {
-               if(productList.get(i).getCategory_name()==null)
+            for (int i = 0; i < HttpResponseCustom.size(); i++) {
+               if(HttpResponseCustom.get(i).getCategory_name().equals("未分类"))
                {
-                    productSearch.add(productList.get(i));
+                    productSearch.add(HttpResponseCustom.get(i));
                }
             }
 
         }else if (name.equals("全部产品"))
         {
-            for (int i = 0; i < productList.size(); i++) {
+            for (int i = 0; i < HttpResponseCustom.size(); i++) {
 
-                    productSearch.add(productList.get(i));
+                    productSearch.add(HttpResponseCustom.get(i));
 
             }
 
         }
 
         else {
-        for (int i = 0; i < productList.size(); i++) {
-              if(productList.get(i).getCategory_id()!=null){
-                int index = productList.get(i).getCategory_name().indexOf(name);
+        for (int i = 0; i < HttpResponseCustom.size(); i++) {
+              if(HttpResponseCustom.get(i).getCategory_id()!=null){
+                int index = HttpResponseCustom.get(i).getCategory_name().indexOf(name);
                 // 存在匹配的数据
                 if (index != -1) {
-                    productSearch.add(productList.get(i));
+                    productSearch.add(HttpResponseCustom.get(i));
                 }
             }
         }}
@@ -267,6 +285,106 @@ public class ProductSelectView extends CSearchBase implements View.OnClickListen
         }
     }
 
+    private void getHttpData(final PostProductData postPostUserData) {
+        showDialog();
+
+
+        HttpUtil.sendProductRequst(postPostUserData, new okhttp3.Callback() {
+
+            @Override
+            public void onFailure(Call call, IOException e) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        closeDialog();
+                        Toast.makeText(getApplicationContext(), "网络连接失败", Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+
+            }
+
+            @Override
+            public void onResponse(Call call, final Response response) throws IOException {
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+
+                            if (getAcivityPostBean.getOperationType().equals(GlobalVariable.cmvCusmtAndCategory)) {
+                                JSONObject jsonObject = new JSONObject(response.body().string());
+                                JSONArray jsonArray = jsonObject.getJSONArray("custom");
+                                JSONArray jsonArray1 = jsonObject.getJSONArray("customcategory");
+                                Gson gson = new Gson();
+                                categorylist.clear();
+                                HttpResponseCustom.clear();
+                                HttpResponseCategory= gson.fromJson(jsonArray1.toString(), new TypeToken<List<AdapterBean>>() {
+                                }.getType());
+
+                                AdapterBean commonDataAll=new AdapterBean();
+                                commonDataAll.setName("全部产品");
+                                categorylist.add(commonDataAll);
+                                AdapterBean commonDataN=new AdapterBean();
+                                commonDataN.setName("未分类");
+                                categorylist.add(commonDataN);
+                                categorylist.addAll(HttpResponseCategory);
+                                HttpResponseCustomTemp = gson.fromJson(jsonArray.toString(), new TypeToken<List<Product>>() {
+                                }.getType());
+                                HttpResponseCustom.addAll(HttpResponseCustomTemp);
+
+                                if (HttpResponseCategory != null && HttpResponseCustom != null) {
+                                    leftAdapter.setSeclection(selectPositon);
+                                    selectCategory = HttpResponseCategory.get(0).getName();
+                                    leftAdapter.notifyDataSetChanged();
+                                    rightAdapter.notifyDataSetChanged();
+                                }
+
+
+                            } else {
+
+                                Gson gson = new Gson();
+                                HttpResponseCustom= gson.fromJson(response.body().string(), new TypeToken<List<Product>>() {
+                                }.getType());
+                                HttpResponseCustom.clear();
+                                HttpResponseCustom.addAll(HttpResponseCustomTemp);
+                                if (HttpResponseCustom != null) {
+                                    if (HttpResponseCustom.size() != 0) {
+
+
+                                        rightAdapter.notifyDataSetChanged();
+
+
+                                    } else {
+
+                                       rightAdapter.notifyDataSetChanged();
+                                        Toast.makeText(getApplicationContext(), "没有数据", Toast.LENGTH_SHORT).show();
+
+                                    }
+                                } else {
+                                    HttpResponseCustom.clear();
+                                    rightAdapter.notifyDataSetChanged();
+                                }
+
+                            }
+                            closeDialog();
+
+                        } catch (Exception e) {
+                            Toast.makeText(getApplicationContext(), "网络", Toast.LENGTH_SHORT).show();
+                            Log.d("lingtana", e.toString());
+                            closeDialog();
+                        }
+                    }
+                });
+
+
+            }
+        });
+
+
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode){
@@ -274,7 +392,7 @@ public class ProductSelectView extends CSearchBase implements View.OnClickListen
                 if(resultCode==RESULT_OK)
                 {
                     DecimalFormat df = new DecimalFormat("#####0.##");
-                    ProductShopping shopping=(ProductShopping) data.getParcelableExtra("shop_data");
+                    ProductShopping shopping= data.getParcelableExtra("shop_data");
                     for(ProductShopping shop: productShoppingList)
                     {
 
@@ -294,7 +412,9 @@ public class ProductSelectView extends CSearchBase implements View.OnClickListen
 
                     badgeImage.setVisibility(View.VISIBLE);
                     CBadgeView.setBadgeCount(Double.valueOf(df.format(quantityCount)));
-                    for(Product product: productSearch)
+
+
+                    for(Product product: HttpResponseCustom)
 
                     {
                         if(product.getNumber().equals(shopping.getNumber()))
@@ -312,15 +432,15 @@ public class ProductSelectView extends CSearchBase implements View.OnClickListen
                     {
                         categorylist.clear();
                     }
-                    productCategoryList = DataSupport.findAll(ProductCategory.class);
-                    CommonAdapterData commonDataAll=new CommonAdapterData();
+
+                    AdapterBean commonDataAll=new AdapterBean();
                     commonDataAll.setName("全部产品");
                     commonDataAll.setBadge(String.valueOf(df.format(quantityCount)));
                     categorylist.add(commonDataAll);
-                    CommonAdapterData commonDataN=new CommonAdapterData();
+                    AdapterBean commonDataN=new AdapterBean();
                     commonDataN.setName("未分类");
                     categorylist.add(commonDataN);
-                    for(ProductCategory productCategory: productCategoryList)
+                    for(AdapterBean productCategory: HttpResponseCategory)
                     {
                         categorycount=0;
                         for(ProductShopping shop: productShoppingList)
@@ -334,9 +454,9 @@ public class ProductSelectView extends CSearchBase implements View.OnClickListen
 
                     }
 
-                        CommonAdapterData commonData=new CommonAdapterData();
+                        AdapterBean commonData=new AdapterBean();
                         commonData.setName(productCategory.getName());
-                        commonData.setUnitId(productCategory.getId());
+                        commonData.setUnitId(productCategory.getUnitId());
                         if(categorycount>0) {
                             commonData.setBadge(String.valueOf(df.format(categorycount)));
                         }
@@ -344,10 +464,12 @@ public class ProductSelectView extends CSearchBase implements View.OnClickListen
 
                     }
 
-                    leftAdapter = new CommonAdapter(ProductSelectView.this, R.layout.custom_item, categorylist);
+                    leftAdapter = new BasicAdapter(ProductSelectView.this, R.layout.custom_item, categorylist);
                     leftAdapter.setSeclection(leftListSelecte);
                     leftListView.setAdapter(leftAdapter);
                     countShow.setText("¥"+df.format(amountCount));
+
+
                 }
 
                 if(resultCode==RESULT_FIRST_USER){
@@ -357,9 +479,14 @@ public class ProductSelectView extends CSearchBase implements View.OnClickListen
             case 2:
                 if(resultCode==RESULT_OK) {
 
-                    Product lastProduct = DataSupport.findLast(Product.class);
-                    productSearch.add(lastProduct);
-                    rightAdapter.notifyDataSetChanged();
+                    PostProductData postDate = new PostProductData();
+                    postDate.setName("");
+                    postDate.setRequestType(GlobalVariable.cmvCusmtAndCategory);
+                    getAcivityPostBean.setOperationType(GlobalVariable.cmvCusmtAndCategory);
+                    postDate.setServerIp(Common.ip);
+                    postDate.setClassType(1);
+                    postDate.setServlet("ProductOperate");
+                    getHttpData(postDate);
 
                 }
                 if(resultCode==RESULT_FIRST_USER){
@@ -371,14 +498,14 @@ public class ProductSelectView extends CSearchBase implements View.OnClickListen
             case 3:
                 if(resultCode==RESULT_OK) {
 
-                    for(Product product: productSearch)
+                    for(Product product: HttpResponseCustom)
 
                     {
                         if(product.getNumber().equals(data.getStringExtra("scanResult")))
                         {
-                            intent.removeExtra("action");
-                            intent.putExtra("action", "edit");
-                            intent.putExtra("product_item", String.valueOf(product.getProduct_id()));
+                            intent.removeExtra("type");
+                            intent.putExtra("type", "edit");
+                            intent.putExtra("acivityPostBen", product);
                             startActivityForResult(intent,1);
                         }
 
@@ -404,7 +531,7 @@ public class ProductSelectView extends CSearchBase implements View.OnClickListen
             case R.id.custom_toobar_right:
                 Intent intentnew= new Intent(ProductSelectView.this, ProductForm.class);
                 intentnew.removeExtra("product_item");
-                intentnew.putExtra("action","add");
+                intentnew.putExtra("type","add");
                 startActivityForResult(intentnew,2);
                 break;
             case R.id.customtoobar_screen:
@@ -447,17 +574,19 @@ public class ProductSelectView extends CSearchBase implements View.OnClickListen
 
     @Override
     public void click(View v) {
-        DecimalFormat df = new DecimalFormat("#####0.00");
-        productSearch.get((Integer) v.getTag()).setBadgeShow("");
-        productSearch.get((Integer) v.getTag()).setImage(0);
+        DecimalFormat df = new DecimalFormat("#####0.##");
+        HttpResponseCustom.get((Integer) v.getTag()).setBadgeShow("");
+        HttpResponseCustom.get((Integer) v.getTag()).setImage(0);
         quantityCount =0;
         amountCount =0.00;
         for (int i = 0; i < productShoppingList.size(); i++) {
 
-            if(productShoppingList.get(i).getNumber().equals(productSearch.get((Integer) v.getTag()).getNumber()))
+            if(productShoppingList.get(i).getNumber().equals(HttpResponseCustom.get((Integer) v.getTag()).getNumber()))
             {
                 productShoppingList.remove(i);
+
             }
+
         }
 
         for(int i = 0; i < productShoppingList.size(); i++)
@@ -470,14 +599,16 @@ public class ProductSelectView extends CSearchBase implements View.OnClickListen
         {
             categorylist.clear();
         }
-        productCategoryList = DataSupport.findAll(ProductCategory.class);
-        CommonAdapterData commonDataAll=new CommonAdapterData();
+        AdapterBean commonDataAll=new AdapterBean();
         commonDataAll.setName("全部产品");
+        if(quantityCount>0) {
+            commonDataAll.setBadge(String.valueOf(df.format(quantityCount)));
+        }
         categorylist.add(commonDataAll);
-        CommonAdapterData commonDataN=new CommonAdapterData();
+        AdapterBean commonDataN=new AdapterBean();
         commonDataN.setName("未分类");
         categorylist.add(commonDataN);
-        for(ProductCategory productCategory: productCategoryList)
+        for(AdapterBean productCategory: HttpResponseCategory)
         {
             categorycount=0;
             for(ProductShopping shop: productShoppingList)
@@ -490,11 +621,11 @@ public class ProductSelectView extends CSearchBase implements View.OnClickListen
 
 
             }
-            CommonAdapterData commonData=new CommonAdapterData();
+            AdapterBean commonData=new AdapterBean();
             commonData.setName(productCategory.getName());
-            commonData.setUnitId(productCategory.getId());
+            commonData.setUnitId(productCategory.getUnitId());
             if(categorycount>0) {
-                commonData.setCategory(String.valueOf(categorycount));
+                commonData.setBadge(String.valueOf(df.format(quantityCount)));
             }
             categorylist.add(commonData);
 
@@ -509,4 +640,27 @@ public class ProductSelectView extends CSearchBase implements View.OnClickListen
             badgeImage.setVisibility(View.INVISIBLE);
         }
     }
+
+    /**
+     * 显示进度对话框
+     */
+    private void showDialog() {
+
+        dialog = new DataLoadingDialog(this);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();//显示
+
+    }
+
+    /**
+     * 关闭进度对话框
+     */
+    private void closeDialog() {
+        if (dialog != null) {
+            dialog.dismiss();
+        }
+    }
+
+
+
 }

@@ -337,7 +337,7 @@ public class ProductAppropriationView extends CSearchBase implements View.OnClic
                 if(resultCode==RESULT_OK)
                 {
                     DecimalFormat df = new DecimalFormat("#####0.##");
-                    ProductShopping shopping=(ProductShopping) data.getParcelableExtra("shop_data");
+                    ProductShopping shopping= data.getParcelableExtra("shop_data");
                     for(ProductShopping shop: productShoppingList)
                     {
 

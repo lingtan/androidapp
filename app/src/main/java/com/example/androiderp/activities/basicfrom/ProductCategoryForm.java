@@ -172,7 +172,7 @@ private  void formInit()
 
 
                             Gson gson = new Gson();
-                            ReturnUserData returnUserData = (ReturnUserData) gson.fromJson(response.body().string(), ReturnUserData.class);
+                            ReturnUserData returnUserData = gson.fromJson(response.body().string(), ReturnUserData.class);
 
 
                             if (returnUserData.getResult() > 0) {

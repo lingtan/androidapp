@@ -37,7 +37,7 @@ import android.widget.TabWidget;
 import android.widget.TextView;
 
 
-public class CBadgeView extends TextView {
+public class CBadgeView extends android.support.v7.widget.AppCompatTextView {
 
     private boolean mHideOnNull = true;
 

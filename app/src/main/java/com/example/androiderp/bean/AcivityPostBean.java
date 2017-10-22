@@ -3,13 +3,14 @@ package com.example.androiderp.bean;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class AcivityPostBen implements Parcelable{
+public class AcivityPostBean implements Parcelable{
 
     private int setClassType;
     private String name;
     private String requestServlet;
     private  String acivityName;
     private String isSelect="";
+    private  String operationType;
     public int getSetClassType() {
         return setClassType;
     }
@@ -50,6 +51,14 @@ public class AcivityPostBen implements Parcelable{
         this.isSelect = isSelect;
     }
 
+    public String getOperationType() {
+        return operationType;
+    }
+
+    public void setOperationType(String operationType) {
+        this.operationType = operationType;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -63,28 +72,30 @@ public class AcivityPostBen implements Parcelable{
         dest.writeString(acivityName);
         dest.writeString(name);
         dest.writeString(isSelect);
+        dest.writeString(operationType);
 
 
 
 
 
     }
-    public static final Creator<AcivityPostBen> CREATOR=new Creator<AcivityPostBen>(){
+    public static final Creator<AcivityPostBean> CREATOR=new Creator<AcivityPostBean>(){
         @Override
-        public AcivityPostBen createFromParcel(Parcel source) {
-            AcivityPostBen acivityPostBen=new AcivityPostBen();
+        public AcivityPostBean createFromParcel(Parcel source) {
+            AcivityPostBean acivityPostBen=new AcivityPostBean();
             acivityPostBen.setClassType =source.readInt();
             acivityPostBen.requestServlet=source.readString();
            acivityPostBen.acivityName=source.readString();
             acivityPostBen.name=source.readString();
             acivityPostBen.isSelect=source.readString();
+            acivityPostBen.operationType=source.readString();
 
             return acivityPostBen;
         }
 
         @Override
-        public AcivityPostBen[] newArray(int size) {
-            return new AcivityPostBen[size];
+        public AcivityPostBean[] newArray(int size) {
+            return new AcivityPostBean[size];
         }
     };
 }

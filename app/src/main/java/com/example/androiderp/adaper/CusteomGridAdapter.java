@@ -58,7 +58,7 @@ public class CusteomGridAdapter extends BaseAdapter {
         {
             viewTag = (ItemViewTag) convertView.getTag();
         }
-        viewTag.mName.setText(data.get(position).getName());;
+        viewTag.mName.setText(data.get(position).getName());
         viewTag.mIcon.setBackgroundResource(data.get(position).getImage());
 
         return convertView;

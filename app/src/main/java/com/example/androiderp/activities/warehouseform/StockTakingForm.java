@@ -469,7 +469,7 @@ public class StockTakingForm extends CSearchBase implements View.OnClickListener
 
             case 7:
                 if(resultCode==RESULT_OK) {
-                    ProductShopping shopping = (ProductShopping) data.getParcelableExtra("shop_data");
+                    ProductShopping shopping = data.getParcelableExtra("shop_data");
                     for ( CommonAdapterData commonData : commonAdapterDataList)
 
                     {
