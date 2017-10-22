@@ -14,7 +14,7 @@ import android.widget.ListView;
 
 import com.example.androiderp.bean.SalesOut;
 import com.example.androiderp.R;
-import com.example.androiderp.bean.PopuMenuDataStructure;
+import com.example.androiderp.bean.PopBean;
 import com.example.androiderp.adaper.SaleOutAdapter;
 import com.example.androiderp.tools.Common;
 import com.example.androiderp.ui.CHomeSearch;
@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PurchaseSearchView extends CSearchBase implements View.OnClickListener {
-    private List<PopuMenuDataStructure> popuMenuDatas;
+    private List<PopBean> popuMenuDatas;
     private SaleOutAdapter adapter;
     private ListView listView;
     private DisplayMetrics dm;
@@ -84,10 +84,10 @@ public class PurchaseSearchView extends CSearchBase implements View.OnClickListe
 
         cHomeSearch.addTextChangedListener(textWatcher);
 
-        popuMenuDatas = new ArrayList<PopuMenuDataStructure>();
-        PopuMenuDataStructure popuMenua = new PopuMenuDataStructure(android.R.drawable.ic_menu_edit, "美的");
+        popuMenuDatas = new ArrayList<PopBean>();
+        PopBean popuMenua = new PopBean(android.R.drawable.ic_menu_edit, "美的");
         popuMenuDatas.add(popuMenua);
-        PopuMenuDataStructure popuMenub = new PopuMenuDataStructure(android.R.drawable.ic_menu_edit, "松下");
+        PopBean popuMenub = new PopBean(android.R.drawable.ic_menu_edit, "松下");
         popuMenuDatas.add(popuMenub);
         showPopupWindow(popuMenuDatas);
 
@@ -119,7 +119,7 @@ public class PurchaseSearchView extends CSearchBase implements View.OnClickListe
         }
     }
 
-    private void showPopupWindow(final List<PopuMenuDataStructure> popuMenuData) {
+    private void showPopupWindow(final List<PopBean> popuMenuData) {
         common = new Common();
 
         common.PopupWindow(PurchaseSearchView.this, dm, popuMenuData);
@@ -184,9 +184,9 @@ public class PurchaseSearchView extends CSearchBase implements View.OnClickListe
             case R.id.custom_toobar_right:
                 if( common.mPopWindow==null ||!common.mPopWindow.isShowing())
                 {   popuMenuDatas.clear();
-                    PopuMenuDataStructure popuMenua = new PopuMenuDataStructure(R.drawable.poppu_wrie, "客户修改");
+                    PopBean popuMenua = new PopBean(R.drawable.poppu_wrie, "客户修改");
                     popuMenuDatas.add(popuMenua);
-                    PopuMenuDataStructure popuMenub = new PopuMenuDataStructure(R.drawable.poppu_wrie, "客户新增");
+                    PopBean popuMenub = new PopBean(R.drawable.poppu_wrie, "客户新增");
                     popuMenuDatas.add(popuMenub);
                     int xPos = dm.widthPixels / 3;
                     showPopupWindow(popuMenuDatas);

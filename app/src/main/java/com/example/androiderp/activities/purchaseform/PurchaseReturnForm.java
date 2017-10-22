@@ -41,7 +41,7 @@ import com.example.androiderp.R;
 import com.example.androiderp.activities.basicfrom.SupplierForm;
 import com.example.androiderp.adaper.CommonAdapterData;
 import com.example.androiderp.bean.DataStructure;
-import com.example.androiderp.bean.PopuMenuDataStructure;
+import com.example.androiderp.bean.PopBean;
 import com.example.androiderp.adaper.SaleProductListViewAdapter;
 import com.example.androiderp.activities.basicview.ProductSelectView;
 import com.example.androiderp.activities.basicview.SupplierSelectView;
@@ -81,7 +81,7 @@ public class PurchaseReturnForm extends CSearchBase implements View.OnClickListe
     private String customid;
     private Drawable errorIcon;
     private Common common;
-    private List<PopuMenuDataStructure> popuMenuDatas;
+    private List<PopBean> popuMenuDatas;
     private List<Product> productList;
     private List<SalesOutEnty> salesOutEntyList=new ArrayList<SalesOutEnty>();
     private List<ProductShopping> productShoppingList = new ArrayList<ProductShopping>();
@@ -455,9 +455,9 @@ public class PurchaseReturnForm extends CSearchBase implements View.OnClickListe
                 if( common.mPopWindow==null ||!common.mPopWindow.isShowing())
                 {   popuMenuDatas.clear();
 
-                    PopuMenuDataStructure popuMenub = new PopuMenuDataStructure(R.drawable.poppu_wrie, "采购单新增");
+                    PopBean popuMenub = new PopBean(R.drawable.poppu_wrie, "采购单新增");
                     popuMenuDatas.add(popuMenub);
-                    PopuMenuDataStructure popuMenua = new PopuMenuDataStructure(R.drawable.poppu_wrie, "采购单复制");
+                    PopBean popuMenua = new PopBean(R.drawable.poppu_wrie, "采购单复制");
                     popuMenuDatas.add(popuMenua);
                     int xPos = dm.widthPixels / 3;
                     showPopupWindow(popuMenuDatas);
@@ -475,7 +475,7 @@ public class PurchaseReturnForm extends CSearchBase implements View.OnClickListe
 
         }
     }
-    private void showPopupWindow(final List<PopuMenuDataStructure> popuMenuData) {
+    private void showPopupWindow(final List<PopBean> popuMenuData) {
         common = new Common();
 
         common.PopupWindow(PurchaseReturnForm.this, dm, popuMenuData);
@@ -696,12 +696,12 @@ public class PurchaseReturnForm extends CSearchBase implements View.OnClickListe
     }
     private void showStockWindow() {
         common = new Common();
-        popuMenuDatas = new ArrayList<PopuMenuDataStructure>();
+        popuMenuDatas = new ArrayList<PopBean>();
         stockList = DataSupport.findAll(Stock.class);
         for(Stock stock: stockList)
 
         {
-            PopuMenuDataStructure popuMenua = new PopuMenuDataStructure(R.drawable.poppu_wrie, stock.getName());
+            PopBean popuMenua = new PopBean(R.drawable.poppu_wrie, stock.getName());
             popuMenuDatas.add(popuMenua);
 
         }
@@ -719,12 +719,12 @@ public class PurchaseReturnForm extends CSearchBase implements View.OnClickListe
     }
     private void showEmployeeWindow() {
         common = new Common();
-        popuMenuDatas = new ArrayList<PopuMenuDataStructure>();
+        popuMenuDatas = new ArrayList<PopBean>();
         employeeList = DataSupport.findAll(Employee.class);
         for(Employee employee: employeeList)
 
         {
-            PopuMenuDataStructure popuMenua = new PopuMenuDataStructure(R.drawable.poppu_wrie, employee.getName());
+            PopBean popuMenua = new PopBean(R.drawable.poppu_wrie, employee.getName());
             popuMenuDatas.add(popuMenua);
 
         }

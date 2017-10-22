@@ -41,7 +41,7 @@ public class CustomMoreView extends CSearchBase implements View.OnClickListener 
     private ListView rightListView;
     private ListView leftListView;
     private DisplayMetrics dm;
-    private TextView toobarBack, toobarAdd, toobarTile;
+    private TextView back, add, tile;
     private CSearch search;
     private  int selectPositon=0;
     private String selectCategory;
@@ -65,14 +65,14 @@ public class CustomMoreView extends CSearchBase implements View.OnClickListener 
         showDialog();
         getHttpData(postDate);
         setContentView(R.layout.custom_listview_layout);
-        toobarBack =(TextView)findViewById(R.id.custom_toobar_left) ;
-        toobarTile =(TextView)findViewById(R.id.custom_toobar_midd);
-        toobarAdd =(TextView)findViewById(R.id.custom_toobar_right);
-        toobarBack.setOnClickListener(this);
-        toobarAdd.setOnClickListener(this);
-        toobarTile.setOnClickListener(this);
+        back =(TextView)findViewById(R.id.custom_toobar_left) ;
+        tile =(TextView)findViewById(R.id.custom_toobar_midd);
+        add =(TextView)findViewById(R.id.custom_toobar_right);
+        back.setOnClickListener(this);
+        add.setOnClickListener(this);
+        tile.setOnClickListener(this);
         search = (CSearch) findViewById(R.id.search);
-        toobarTile.setText(acivityPostBen.getAcivityName());
+        tile.setText(acivityPostBen.getAcivityName());
         selectCategory="全部";
         //构造函数第一参数是类的对象，第二个是布局文件，第三个是数据源
         leftListView=(ListView) findViewById(R.id.left_list);

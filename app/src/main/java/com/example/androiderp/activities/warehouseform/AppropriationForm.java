@@ -36,7 +36,7 @@ import com.example.androiderp.R;
 import com.example.androiderp.adaper.AppropriationListViewAdapter;
 import com.example.androiderp.adaper.CommonAdapterData;
 import com.example.androiderp.bean.DataStructure;
-import com.example.androiderp.bean.PopuMenuDataStructure;
+import com.example.androiderp.bean.PopBean;
 import com.example.androiderp.activities.basicview.ProductAppropriationView;
 import com.example.androiderp.tools.Common;
 import com.example.androiderp.ui.CSearchBase;
@@ -70,7 +70,7 @@ public class AppropriationForm extends CSearchBase implements View.OnClickListen
     private Stock  stock;
     private Drawable errorIcon;
     private Common common;
-    private List<PopuMenuDataStructure> popuMenuList;
+    private List<PopBean> popuMenuList;
     private List<Product> productList;
     private List<AppropriationEnty> appropriationEntyList=new ArrayList<AppropriationEnty>();
     private List<ProductShopping> productShoppinglist = new ArrayList<ProductShopping>();
@@ -373,9 +373,9 @@ public class AppropriationForm extends CSearchBase implements View.OnClickListen
                 if( common.mPopWindow==null ||!common.mPopWindow.isShowing())
                 {   popuMenuList.clear();
 
-                    PopuMenuDataStructure popuMenub = new PopuMenuDataStructure(R.drawable.poppu_wrie, "销售单新增");
+                    PopBean popuMenub = new PopBean(R.drawable.poppu_wrie, "销售单新增");
                     popuMenuList.add(popuMenub);
-                    PopuMenuDataStructure popuMenua = new PopuMenuDataStructure(R.drawable.poppu_wrie, "销售单复制");
+                    PopBean popuMenua = new PopBean(R.drawable.poppu_wrie, "销售单复制");
                     popuMenuList.add(popuMenua);
                     int xPos = dm.widthPixels / 3;
                     showPopupWindow(popuMenuList);
@@ -394,7 +394,7 @@ public class AppropriationForm extends CSearchBase implements View.OnClickListen
 
         }
     }
-    private void showPopupWindow(final List<PopuMenuDataStructure> popuMenuData) {
+    private void showPopupWindow(final List<PopBean> popuMenuData) {
         common = new Common();
 
         common.PopupWindow(AppropriationForm.this, dm, popuMenuData);
@@ -556,12 +556,12 @@ public class AppropriationForm extends CSearchBase implements View.OnClickListen
     }
     private void showStockWindow() {
         common = new Common();
-        popuMenuList = new ArrayList<PopuMenuDataStructure>();
+        popuMenuList = new ArrayList<PopBean>();
         stockList= DataSupport.findAll(Stock.class);
         for(Stock stock:stockList)
 
         {
-            PopuMenuDataStructure popuMenua = new PopuMenuDataStructure(R.drawable.poppu_wrie, stock.getName());
+            PopBean popuMenua = new PopBean(R.drawable.poppu_wrie, stock.getName());
             popuMenuList.add(popuMenua);
 
         }
@@ -580,12 +580,12 @@ public class AppropriationForm extends CSearchBase implements View.OnClickListen
 
     private void showEmployeeWindow() {
         common = new Common();
-        popuMenuList = new ArrayList<PopuMenuDataStructure>();
+        popuMenuList = new ArrayList<PopBean>();
         stockList= DataSupport.findAll(Stock.class);
         for(Stock stock:stockList)
 
         {
-            PopuMenuDataStructure popuMenua = new PopuMenuDataStructure(R.drawable.poppu_wrie, stock.getName());
+            PopBean popuMenua = new PopBean(R.drawable.poppu_wrie, stock.getName());
             popuMenuList.add(popuMenua);
 
         }

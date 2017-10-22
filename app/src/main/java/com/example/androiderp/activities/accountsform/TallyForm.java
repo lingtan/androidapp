@@ -22,7 +22,7 @@ import com.example.androiderp.bean.Stock;
 import com.example.androiderp.bean.Tally;
 import com.example.androiderp.R;
 import com.example.androiderp.adaper.CommonAdapterData;
-import com.example.androiderp.bean.PopuMenuDataStructure;
+import com.example.androiderp.bean.PopBean;
 import com.example.androiderp.activities.accountsview.AccountsView;
 import com.example.androiderp.activities.accountsview.BalanceAccountView;
 import com.example.androiderp.tools.Common;
@@ -42,13 +42,13 @@ import java.util.List;
 public class TallyForm extends CSearchBase implements View.OnClickListener{
     private InputMethodManager manager;
     private EditText note,amount;
-    private TextView save,toobarTile,toobarBack,toobarAdd, accounts, balanceAccount,businessdata;
+    private TextView save, tile, back, add, accounts, balanceAccount, business;
     private DisplayMetrics dm;
     private LinearLayout balanceaccountLayout, accountsLayout,businessdataLayout;
     private Stock  stock;
     private Drawable errorIcon;
     private Common common;
-    private List<PopuMenuDataStructure> popuMenuList;
+    private List<PopBean> popuMenuList;
     private List<CommonAdapterData> commonAdapterDataList = new ArrayList<CommonAdapterData>();
     private Calendar calendar;
     private int year,month,day;
@@ -66,11 +66,11 @@ public class TallyForm extends CSearchBase implements View.OnClickListener{
         accounts =(TextView)findViewById(R.id.accounts);
         note=(EditText)findViewById(R.id.note);
         amount=(EditText)findViewById(R.id.amount);
-        businessdata=(TextView) findViewById(R.id.businessdata);
+        business =(TextView) findViewById(R.id.businessdata);
         save=(TextView)findViewById(R.id.customtoobar_right);
-        toobarTile=(TextView)findViewById(R.id.customtoobar_midd);
-        toobarBack=(TextView)findViewById(R.id.customtoobar_left);
-        toobarAdd=(TextView)findViewById(R.id.customtoobar_r) ;
+        tile =(TextView)findViewById(R.id.customtoobar_midd);
+        back =(TextView)findViewById(R.id.customtoobar_left);
+        add =(TextView)findViewById(R.id.customtoobar_r) ;
         accountsLayout =(LinearLayout)findViewById(R.id.accounts_layout);
         balanceaccountLayout =(LinearLayout)findViewById(R.id.balanceaccount_layout);
         businessdataLayout=(LinearLayout)findViewById(R.id.businessdata_layout);
@@ -78,16 +78,16 @@ public class TallyForm extends CSearchBase implements View.OnClickListener{
         businessdataLayout.setOnClickListener(this);
         balanceaccountLayout.setOnClickListener(this);
         save.setOnClickListener(this);
-        toobarBack.setOnClickListener(this);
-        toobarAdd.setOnClickListener(this);
+        back.setOnClickListener(this);
+        add.setOnClickListener(this);
         save.setCompoundDrawables(null,null,null,null);
-        toobarTile.setCompoundDrawables(null,null,null,null);
+        tile.setCompoundDrawables(null,null,null,null);
         errorIcon = getResources().getDrawable(R.drawable.icon_error);
 // 设置图片大小
         errorIcon.setBounds(new Rect(0, 0, errorIcon.getIntrinsicWidth(), errorIcon.getIntrinsicHeight()));
         save.setText("保存");
         getDate();
-        toobarTile.setText("记账");
+        tile.setText("记账");
 
     }
 
@@ -98,7 +98,7 @@ public class TallyForm extends CSearchBase implements View.OnClickListener{
         year=calendar.get(Calendar.YEAR);       //获取年月日时分秒
         month=calendar.get(Calendar.MONTH);   //获取到的月份是从0开始计数
         day=calendar.get(Calendar.DAY_OF_MONTH);
-        businessdata.setText(year+"-"+(++month)+"-"+day);
+        business.setText(year+"-"+(++month)+"-"+day);
     }
     private void hintKbTwo() {
         InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -133,13 +133,13 @@ public class TallyForm extends CSearchBase implements View.OnClickListener{
                     tally.setNumber("JZLS" + fdate);
                     tally.setBalanceAccount(balanceAccount.getText().toString());
                     tally.setAccounts(accounts.getText().toString());
-                    tally.setDate(businessdata.getText().toString());
+                    tally.setDate(business.getText().toString());
                     tally.setAmount(Double.parseDouble(amount.getText().toString()));
                     tally.setNote(note.getText().toString());
                     tally.save();
                         Toast.makeText(TallyForm.this, "新增成功", Toast.LENGTH_SHORT).show();
                         save.setVisibility(View.GONE);
-                        toobarAdd.setVisibility(View.VISIBLE);
+                        add.setVisibility(View.VISIBLE);
 
 
                 }
@@ -167,7 +167,7 @@ public class TallyForm extends CSearchBase implements View.OnClickListener{
                 DatePickerDialog.OnDateSetListener listener=new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        businessdata.setText(year+"-"+(++month)+"-"+dayOfMonth);
+                        business.setText(year+"-"+(++month)+"-"+dayOfMonth);
                     }
                 };
                 DatePickerDialog dialogData=new DatePickerDialog(TallyForm.this, 0,listener,year,month,day);//后边三个参数为显示dialog时默认的日期，月份从0开始，0-11对应1-12个月
@@ -216,9 +216,9 @@ public class TallyForm extends CSearchBase implements View.OnClickListener{
                 if( common.mPopWindow==null ||!common.mPopWindow.isShowing())
                 {   popuMenuList.clear();
 
-                    PopuMenuDataStructure popuMenub = new PopuMenuDataStructure(R.drawable.poppu_wrie, "销售单新增");
+                    PopBean popuMenub = new PopBean(R.drawable.poppu_wrie, "销售单新增");
                     popuMenuList.add(popuMenub);
-                    PopuMenuDataStructure popuMenua = new PopuMenuDataStructure(R.drawable.poppu_wrie, "销售单复制");
+                    PopBean popuMenua = new PopBean(R.drawable.poppu_wrie, "销售单复制");
                     popuMenuList.add(popuMenua);
                     int xPos = dm.widthPixels / 3;
                     showPopupWindow(popuMenuList);
@@ -233,7 +233,7 @@ public class TallyForm extends CSearchBase implements View.OnClickListener{
 
         }
     }
-    private void showPopupWindow(final List<PopuMenuDataStructure> popuMenuData) {
+    private void showPopupWindow(final List<PopBean> popuMenuData) {
         common = new Common();
 
         common.PopupWindow(TallyForm.this, dm, popuMenuData);

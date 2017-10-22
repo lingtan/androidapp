@@ -33,17 +33,17 @@ import java.util.List;
 public class BalanceAccountView extends CSearchBase implements View.OnClickListener,
         AdapterView.OnItemClickListener,
         SlideAndDragListView.OnMenuItemClickListener, SlideAndDragListView.OnItemDeleteListener {
-    private List<CommonAdapterData> listdatas = new ArrayList<CommonAdapterData>();
+    private List<CommonAdapterData> commonAdapterDataList = new ArrayList<CommonAdapterData>();
     private CommonListViewAdapter adapter;
     private SlideAndDragListView<CommonAdapterData>  listView;
     private DisplayMetrics dm;
     private List<CommonAdapterData> commonAdapterDataSearch = new ArrayList<CommonAdapterData>();
     private List<BalanceAccount> balanceAccountList;
-    private TextView toobarBack, toobarAdd,toobarTile;
+    private TextView back, add, tile;
     private CSearch search;
     private ImageView lastCheckedOption;
-    private int indexPositon=-1;
-    private String indexName;
+    private int iPositon =-1;
+    private String iName;
     private Menu menu;
     private String returnName;
     private String searchVale;
@@ -53,29 +53,29 @@ public class BalanceAccountView extends CSearchBase implements View.OnClickListe
         initMenu();
         initUiAndListener();
 
-        toobarBack=(TextView)findViewById(R.id.custom_toobar_left) ;
-        toobarTile=(TextView)findViewById(R.id.custom_toobar_midd);
-        toobarAdd =(TextView)findViewById(R.id.custom_toobar_right);
-        toobarBack.setOnClickListener(this);
-        toobarAdd.setOnClickListener(this);
-        toobarTile.setOnClickListener(this);
+        back =(TextView)findViewById(R.id.custom_toobar_left) ;
+        tile =(TextView)findViewById(R.id.custom_toobar_midd);
+        add =(TextView)findViewById(R.id.custom_toobar_right);
+        back.setOnClickListener(this);
+        add.setOnClickListener(this);
+        tile.setOnClickListener(this);
         search = (CSearch) findViewById(R.id.search);
         Intent intent=getIntent();
-        indexName =intent.getStringExtra("index");
+        iName =intent.getStringExtra("index");
         balanceAccountList = DataSupport.findAll(BalanceAccount.class);
-        toobarTile.setCompoundDrawables(null,null,null,null);
-        toobarTile.setText("选择结算账户");
+        tile.setCompoundDrawables(null,null,null,null);
+        tile.setText("选择结算账户");
         for(BalanceAccount balanceAccount: balanceAccountList)
 
-        {   if(balanceAccount.getName().equals(indexName))
+        {   if(balanceAccount.getName().equals(iName))
         {
-            indexPositon = balanceAccountList.indexOf(balanceAccount);
+            iPositon = balanceAccountList.indexOf(balanceAccount);
         }
             CommonAdapterData commonData=new CommonAdapterData();
             commonData.setName(balanceAccount.getName());
             commonData.setUnitId(balanceAccount.getId());
             commonData.setImage(R.drawable.seclec_arrow);
-            listdatas.add(commonData);
+            commonAdapterDataList.add(commonData);
 
 
 
@@ -86,9 +86,9 @@ public class BalanceAccountView extends CSearchBase implements View.OnClickListe
         getWindowManager().getDefaultDisplay().getMetrics(dm);
 
 
-        if(listdatas.size()!=0) {
-                 adapter = new CommonListViewAdapter(BalanceAccountView.this, R.layout.custom_item, listdatas);
-                 adapter.setSeclection(indexPositon);
+        if(commonAdapterDataList.size()!=0) {
+                 adapter = new CommonListViewAdapter(BalanceAccountView.this, R.layout.custom_item, commonAdapterDataList);
+                 adapter.setSeclection(iPositon);
                  listView.setAdapter(adapter);
 
 
@@ -133,7 +133,7 @@ public class BalanceAccountView extends CSearchBase implements View.OnClickListe
                         Intent intent=new Intent(BalanceAccountView.this,BalanceAccountForm.class);
 
                             intent.putExtra("action", "edit");
-                            intent.putExtra("customid", String.valueOf(listdatas.get(itemPosition).getUnitId()));
+                            intent.putExtra("customid", String.valueOf(commonAdapterDataList.get(itemPosition).getUnitId()));
                         startActivityForResult(intent,1);
 
                         return Menu.ITEM_NOTHING;
@@ -145,14 +145,14 @@ public class BalanceAccountView extends CSearchBase implements View.OnClickListe
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
 
-                                    DataStructure.deleteAll(BalanceAccount.class, "name = ?", listdatas.get(itemPosition - listView.getHeaderViewsCount()).getName().toString());
-                                    listdatas.remove(itemPosition - listView.getHeaderViewsCount());
+                                    DataStructure.deleteAll(BalanceAccount.class, "name = ?", commonAdapterDataList.get(itemPosition - listView.getHeaderViewsCount()).getName().toString());
+                                    commonAdapterDataList.remove(itemPosition - listView.getHeaderViewsCount());
                                     if (search.getText().toString().isEmpty()) {
-                                        if (indexPositon == itemPosition) {
-                                            indexPositon = -1;
+                                        if (iPositon == itemPosition) {
+                                            iPositon = -1;
                                         }
 
-                                        adapter.setSeclection(indexPositon);
+                                        adapter.setSeclection(iPositon);
                                         adapter.notifyDataSetChanged();
                                     } else {
                                         search.setText("");
@@ -186,8 +186,8 @@ public class BalanceAccountView extends CSearchBase implements View.OnClickListe
 
 
         Intent intent=getIntent();
-            intent.putExtra("data_return", String.valueOf(listdatas.get(position).getName()));
-            indexName =listdatas.get(position).getName();
+            intent.putExtra("data_return", String.valueOf(commonAdapterDataList.get(position).getName()));
+            iName = commonAdapterDataList.get(position).getName();
 
         setResult(RESULT_OK,intent);
 
@@ -196,13 +196,13 @@ public class BalanceAccountView extends CSearchBase implements View.OnClickListe
         }
         lastCheckedOption = (ImageView)view.findViewById(R.id.custom_item_layout_one_image);
         lastCheckedOption.setVisibility(View.VISIBLE);
-        indexPositon =position;
+        iPositon =position;
         this.finish();
     }
     //筛选条件
     public void  searchItem(String name) {
-        if(listdatas.size()>0) {
-            listdatas.clear();
+        if(commonAdapterDataList.size()>0) {
+            commonAdapterDataList.clear();
         }
         balanceAccountList =DataStructure.where("name like ?","%" + name + "%").find(BalanceAccount.class);
         for(BalanceAccount balanceAccount: balanceAccountList)
@@ -212,24 +212,24 @@ public class BalanceAccountView extends CSearchBase implements View.OnClickListe
             commonData.setName(balanceAccount.getName());
             commonData.setUnitId(balanceAccount.getId());
             commonData.setImage(R.drawable.seclec_arrow);
-            listdatas.add(commonData);
+            commonAdapterDataList.add(commonData);
 
         }
 
-        if(listdatas!=null) {
+        if(commonAdapterDataList !=null) {
             int index=-1;
             if(!name.isEmpty())
             {
-                for(int i=0;i<listdatas.size();i++)
+                for(int i = 0; i< commonAdapterDataList.size(); i++)
                 {
-                    if(listdatas.get(i).getName().equals(indexName))
+                    if(commonAdapterDataList.get(i).getName().equals(iName))
                     {
                         index=i;
                     }
                 }
             }else
             {
-                index= indexPositon;
+                index= iPositon;
             }
 
             adapter.setSeclection(index);
@@ -246,8 +246,8 @@ public class BalanceAccountView extends CSearchBase implements View.OnClickListe
         {
             case R.id.custom_toobar_left:
                 Intent intent=getIntent();
-                if(indexPositon!=-1) {
-                    intent.putExtra("data_return", listdatas.get(indexPositon).getName());
+                if(iPositon !=-1) {
+                    intent.putExtra("data_return", commonAdapterDataList.get(iPositon).getName());
                 }
                 setResult(RESULT_OK,intent);
                 BalanceAccountView.this.finish();
@@ -274,9 +274,9 @@ public class BalanceAccountView extends CSearchBase implements View.OnClickListe
             case 1:
                 if(resultCode==RESULT_OK)
                 {   returnName=data.getStringExtra("returnName");
-                    indexName=returnName;
-                    if(listdatas.size()>0) {
-                        listdatas.clear();
+                    iName =returnName;
+                    if(commonAdapterDataList.size()>0) {
+                        commonAdapterDataList.clear();
                     }
                     if(search.getText().toString().isEmpty()) {
 
@@ -298,8 +298,8 @@ public class BalanceAccountView extends CSearchBase implements View.OnClickListe
             case 2:
                 if(resultCode==RESULT_OK)
                 {
-                    if(listdatas.size()!=0) {
-                        listdatas.clear();
+                    if(commonAdapterDataList.size()!=0) {
+                        commonAdapterDataList.clear();
                     }
                     balanceAccountList = DataSupport.findAll(BalanceAccount.class);
                     for(BalanceAccount balanceAccount: balanceAccountList)
@@ -309,13 +309,13 @@ public class BalanceAccountView extends CSearchBase implements View.OnClickListe
                         commonData.setName(balanceAccount.getName());
                         commonData.setUnitId(balanceAccount.getId());
                         commonData.setImage(R.drawable.seclec_arrow);
-                        listdatas.add(commonData);
+                        commonAdapterDataList.add(commonData);
 
 
 
                     }
-                    adapter = new CommonListViewAdapter(BalanceAccountView.this, R.layout.custom_item, listdatas);
-                    adapter.setSeclection(indexPositon);
+                    adapter = new CommonListViewAdapter(BalanceAccountView.this, R.layout.custom_item, commonAdapterDataList);
+                    adapter.setSeclection(iPositon);
                     listView.setAdapter(adapter);
 
 

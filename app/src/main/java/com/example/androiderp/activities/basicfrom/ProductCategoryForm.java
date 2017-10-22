@@ -35,8 +35,8 @@ import okhttp3.Response;
 
 public class ProductCategoryForm extends AppCompatActivity implements View.OnClickListener {
     private InputMethodManager manager;
-    private EditText userName,note;
-    private TextView toobarSave, toobarTile, toobarBack;
+    private EditText name,note;
+    private TextView save, tile, back;
     private String  getPostType;
     private boolean isSave=false;
     private List<ProductCategory> productCategoryList;
@@ -48,32 +48,32 @@ public class ProductCategoryForm extends AppCompatActivity implements View.OnCli
         super.onCreate(savedInstanceState);
         setContentView(R.layout.basic);
         manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        userName =(EditText)findViewById(R.id.basiclayout_name);
+        name =(EditText)findViewById(R.id.basiclayout_name);
         note =(EditText)findViewById(R.id.basiclayout_name);
         final Intent intent=getIntent();
         getPostData =intent.getParcelableExtra("postdata");
         getPostType=intent.getStringExtra("type");
-        toobarSave =(TextView)findViewById(R.id.custom_toobar_right);
-        toobarTile =(TextView)findViewById(R.id.custom_toobar_midd);
-        toobarBack =(TextView)findViewById(R.id.custom_toobar_left);
-        toobarSave.setCompoundDrawables(null,null,null,null);
-        toobarTile.setCompoundDrawables(null,null,null,null);
-        toobarSave.setText("保存");
-        toobarSave.setOnClickListener(this);
-        toobarBack.setOnClickListener(this);
+        save =(TextView)findViewById(R.id.custom_toobar_right);
+        tile =(TextView)findViewById(R.id.custom_toobar_midd);
+        back =(TextView)findViewById(R.id.custom_toobar_left);
+        save.setCompoundDrawables(null,null,null,null);
+        tile.setCompoundDrawables(null,null,null,null);
+        save.setText("保存");
+        save.setOnClickListener(this);
+        back.setOnClickListener(this);
        formInit();
 
     }
 private  void formInit()
 {if(getPostData !=null) {
     getPostName = getPostData.getName();
-    userName.setText(getPostData.getName());
+    name.setText(getPostData.getName());
 }
     if(getPostType.equals("edit"))
     {
-        toobarTile.setText("商品分类修改");
+        tile.setText("商品分类修改");
     }else {
-        toobarTile.setText("商品分类新增");
+        tile.setText("商品分类新增");
     }
 
 }
@@ -82,17 +82,17 @@ private  void formInit()
         switch (v.getId())
         {
             case R.id.custom_toobar_right:
-                productCategoryList= DataStructure.where("name = ?",userName.getText().toString()).find(ProductCategory.class);
+                productCategoryList= DataStructure.where("name = ?", name.getText().toString()).find(ProductCategory.class);
 
-                if (TextUtils.isEmpty(userName.getText().toString())) {
-                    userName.setError("需要输入商品分类");
+                if (TextUtils.isEmpty(name.getText().toString())) {
+                    name.setError("需要输入商品分类");
                 } else if (productCategoryList.size()>0)
                 {
                     Toast.makeText(ProductCategoryForm.this,"分类已经存在",Toast.LENGTH_SHORT).show();
                 }else {
                     if (getPostType.equals("edit")) {
                         postUserData.setUnitId(getPostData.getUnitId());
-                        postUserData.setName(userName.getText().toString().trim());
+                        postUserData.setName(name.getText().toString().trim());
                         postUserData.setNote(note.getText().toString().trim());
                         postUserData.setRequestType("update");
                         postUserData.setServerIp(Common.ip);
@@ -105,7 +105,7 @@ private  void formInit()
                     } else {
                         try {
                             String md5= HttpMd5.getMD5("888");
-                            postUserData.setName(userName.getText().toString().trim());
+                            postUserData.setName(name.getText().toString().trim());
                             postUserData.setNote(note.getText().toString().trim());
                             postUserData.setNote(md5);
                             postUserData.setRequestType("insert");
@@ -128,7 +128,7 @@ private  void formInit()
                 {
                     Intent intent = new Intent();
                     if (isSave) {
-                        intent.putExtra("returnName", userName.getText().toString());
+                        intent.putExtra("returnName", name.getText().toString());
                     } else {
                         intent.putExtra("returnName", getPostName);
                     }
@@ -181,13 +181,13 @@ private  void formInit()
                                 if(getPostData !=null) {
                                     CommonAdapterData user = new CommonAdapterData();
                                     user.setUnitId(getPostData.getUnitId());
-                                    user.setName(userName.getText().toString().trim());
+                                    user.setName(name.getText().toString().trim());
 
                                     intent.putExtra("customid", user);
                                 }else
                                 {
                                     CommonAdapterData user = new CommonAdapterData();
-                                    user.setName(userName.getText().toString().trim());
+                                    user.setName(name.getText().toString().trim());
                                     user.setUnitId(returnUserData.getResult());
                                     intent.putExtra("customid", user);
                                 }

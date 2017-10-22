@@ -9,21 +9,21 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.androiderp.R;
-import com.example.androiderp.bean.PopuMenuDataStructure;
+import com.example.androiderp.bean.PopBean;
 
 import java.util.List;
 
 //继承ArrayAdapter<DataStructure>
-public class PopuMenuAdapter extends ArrayAdapter<PopuMenuDataStructure>   {
+public class PopuMenuAdapter extends ArrayAdapter<PopBean>   {
 //类成员变量
     private int resourceId;
     Context context;
-    List<PopuMenuDataStructure> data; //这个数据是会改变的，所以要有个变量来备份一下原始数据
+    List<PopBean> data; //这个数据是会改变的，所以要有个变量来备份一下原始数据
 
 
     //构造函数，context是一个抽象类，可以理解为类的类型！
     public PopuMenuAdapter(Context context, int textViewResourceId,
-                           List<PopuMenuDataStructure> data) {
+                           List<PopBean> data) {
         
         super(context, textViewResourceId, data);
         this.context=context;

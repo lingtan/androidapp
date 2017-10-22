@@ -36,30 +36,30 @@ public class TallyAccountsEntyView extends CSearchBase implements View.OnClickLi
     private DisplayMetrics dm;
     private List<Tally> appropriationSearch= new ArrayList<Tally>();
     private List<Tally> tallyList;
-    private TextView toobarBack,toobarAdd,toobarTile;
+    private TextView back, add, tile;
     private CSearch search;
     private Intent intentEdit;
-    private Intent intentAdd;
+    private Intent iAdd;
     private String tallybalanceAccount,accounts;
 
     @Override
     public void iniView(){
         setContentView(R.layout.tallyaccounts_layout);
-        toobarBack=(TextView)findViewById(R.id.custom_toobar_left) ;
-        toobarTile=(TextView)findViewById(R.id.custom_toobar_midd);
-        toobarAdd=(TextView)findViewById(R.id.custom_toobar_right);
-        toobarAdd.setCompoundDrawables(null,null,null,null);
-        toobarBack.setOnClickListener(this);
+        back =(TextView)findViewById(R.id.custom_toobar_left) ;
+        tile =(TextView)findViewById(R.id.custom_toobar_midd);
+        add =(TextView)findViewById(R.id.custom_toobar_right);
+        add.setCompoundDrawables(null,null,null,null);
+        back.setOnClickListener(this);
         Intent intent=getIntent();
         accounts=intent.getStringExtra("accounts_name");
         tallybalanceAccount =intent.getStringExtra("balanceAccount_name");
-        toobarAdd.setOnClickListener(this);
-        toobarTile.setOnClickListener(this);
+        add.setOnClickListener(this);
+        tile.setOnClickListener(this);
         search = (CSearch) findViewById(R.id.search);
         tallyList =DataSupport.where("balanceAccount = ? and accounts=?", tallybalanceAccount,accounts).find(Tally.class);
         intentEdit= new Intent(TallyAccountsEntyView.this, RequisitionEntyView.class);
-        toobarTile.setText("交易流水");
-        toobarBack.setText("返回");
+        tile.setText("交易流水");
+        back.setText("返回");
 
         //构造函数第一参数是类的对象，第二个是布局文件，第三个是数据源
         listView = (ListView) findViewById(R.id.list);
@@ -130,8 +130,8 @@ public class TallyAccountsEntyView extends CSearchBase implements View.OnClickLi
                 break;
 
             case R.id.custom_toobar_right:
-                intentAdd = new Intent(TallyAccountsEntyView.this, TallyForm.class);
-                startActivityForResult(intentAdd,1);
+                iAdd = new Intent(TallyAccountsEntyView.this, TallyForm.class);
+                startActivityForResult(iAdd,1);
                 break;
 
 

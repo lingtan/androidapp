@@ -23,9 +23,8 @@ import com.example.androiderp.adaper.BasicAdapter;
 import com.example.androiderp.bean.AdapterBean;
 import com.example.androiderp.bean.ReturnUserData;
 import com.example.androiderp.R;
-import com.example.androiderp.adaper.CommonAdapterData;
 import com.example.androiderp.adaper.PopuMenuAdapter;
-import com.example.androiderp.bean.PopuMenuDataStructure;
+import com.example.androiderp.bean.PopBean;
 import com.example.androiderp.listview.SlideAndDragListView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -46,7 +45,7 @@ public class Common extends AppCompatActivity {
     private Context context;
     //public static final String ip="http://eedd.v228.10000net.cn/javaweb/servlet/";
     public static final String ip="http://192.168.0.103:8080/webdemo/servlet/";
-    public void PopupWindow(Context context, DisplayMetrics dm,List<PopuMenuDataStructure>  popuMenuDatas)
+    public void PopupWindow(Context context, DisplayMetrics dm,List<PopBean>  popuMenuDatas)
     {   this.context=context;
         if(mPopWindow==null) {
             View contentView = LayoutInflater.from(context).inflate(R.layout.popu_main, null);

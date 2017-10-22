@@ -16,7 +16,7 @@ import com.example.androiderp.bean.Custom;
 import com.example.androiderp.R;
 import com.example.androiderp.adaper.CommonAdapter;
 import com.example.androiderp.adaper.CommonAdapterData;
-import com.example.androiderp.bean.PopuMenuDataStructure;
+import com.example.androiderp.bean.PopBean;
 import com.example.androiderp.tools.Common;
 import com.example.androiderp.ui.CHomeSearch;
 import com.example.androiderp.ui.CSearchBase;
@@ -29,7 +29,7 @@ import java.util.List;
 
 public class CustomSearchView extends CSearchBase implements View.OnClickListener {
     private List<CommonAdapterData> commonAdapterDataList = new ArrayList<CommonAdapterData>();
-    private List<PopuMenuDataStructure> popuMenuDatas;
+    private List<PopBean> popList;
     private CommonAdapter adapter;
     private ListView listView;
     private DisplayMetrics dm;
@@ -98,12 +98,12 @@ public class CustomSearchView extends CSearchBase implements View.OnClickListene
 
         cHomeSearch.addTextChangedListener(textWatcher);
 
-        popuMenuDatas = new ArrayList<PopuMenuDataStructure>();
-        PopuMenuDataStructure popuMenua = new PopuMenuDataStructure(android.R.drawable.ic_menu_edit, "美的");
-        popuMenuDatas.add(popuMenua);
-        PopuMenuDataStructure popuMenub = new PopuMenuDataStructure(android.R.drawable.ic_menu_edit, "松下");
-        popuMenuDatas.add(popuMenub);
-        showPopupWindow(popuMenuDatas);
+        popList = new ArrayList<PopBean>();
+        PopBean popuMenua = new PopBean(android.R.drawable.ic_menu_edit, "美的");
+        popList.add(popuMenua);
+        PopBean popuMenub = new PopBean(android.R.drawable.ic_menu_edit, "松下");
+        popList.add(popuMenub);
+        showPopupWindow(popList);
 
     }
 
@@ -157,7 +157,7 @@ public class CustomSearchView extends CSearchBase implements View.OnClickListene
         }
     }
 
-    private void showPopupWindow(final List<PopuMenuDataStructure> popuMenuData) {
+    private void showPopupWindow(final List<PopBean> popuMenuData) {
         common = new Common();
 
         common.PopupWindow(CustomSearchView.this, dm, popuMenuData);
@@ -167,7 +167,7 @@ public class CustomSearchView extends CSearchBase implements View.OnClickListene
             public void onItemClick(AdapterView<?> adapterView, View view,
                                     int position, long id) {
 
-                if(popuMenuDatas.get(position).getName().equals("客户新增"))
+                if(popList.get(position).getName().equals("客户新增"))
                 {
                     intent.removeExtra("custom_item");
                     intent.putExtra("action","add");
@@ -231,13 +231,13 @@ public class CustomSearchView extends CSearchBase implements View.OnClickListene
 
             case R.id.custom_toobar_right:
                 if( common.mPopWindow==null ||!common.mPopWindow.isShowing())
-                {   popuMenuDatas.clear();
-                    PopuMenuDataStructure popuMenua = new PopuMenuDataStructure(R.drawable.poppu_wrie, "客户修改");
-                    popuMenuDatas.add(popuMenua);
-                    PopuMenuDataStructure popuMenub = new PopuMenuDataStructure(R.drawable.poppu_wrie, "客户新增");
-                    popuMenuDatas.add(popuMenub);
+                {   popList.clear();
+                    PopBean popuMenua = new PopBean(R.drawable.poppu_wrie, "客户修改");
+                    popList.add(popuMenua);
+                    PopBean popuMenub = new PopBean(R.drawable.poppu_wrie, "客户新增");
+                    popList.add(popuMenub);
                     int xPos = dm.widthPixels / 3;
-                    showPopupWindow(popuMenuDatas);
+                    showPopupWindow(popList);
                     common.mPopWindow.showAsDropDown(v,0,5);
                     //mPopWindow.showAtLocation(findViewById(R.id.main), Gravity.BOTTOM, 0, 0);//从底部弹出
                 }

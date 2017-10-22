@@ -20,7 +20,7 @@ import com.example.androiderp.bean.Stock;
 import com.example.androiderp.R;
 import com.example.androiderp.adaper.AppropriationListViewAdapter;
 import com.example.androiderp.adaper.CommonAdapterData;
-import com.example.androiderp.bean.PopuMenuDataStructure;
+import com.example.androiderp.bean.PopBean;
 import com.example.androiderp.tools.Common;
 import com.example.androiderp.ui.CSearchBase;
 import com.example.androiderp.listview.Menu;
@@ -40,17 +40,17 @@ import java.util.List;
 public class RequisitionEntyView extends CSearchBase implements View.OnClickListener, AdapterView.OnItemClickListener,
         SlideAndDragListView.OnMenuItemClickListener, SlideAndDragListView.OnItemDeleteListener {
     private InputMethodManager manager;
-    private TextView note,save,toobarTile,toobarBack,toobarAdd, documentmaker,stockout, stockin, businessdata, billnumber,totalQuantity;
+    private TextView note,save,tile,back,add, documentmaker,out, in, businessdata, billnumber,totalQuantity;
     private DisplayMetrics dm;
     private Appropriation appropriation;
-    private String appropriatinId;
+    private String id;
     private Drawable errorIcon;
     private Common common;
     private double quantityCount;
-    private Intent  intentBack;
-    private List<PopuMenuDataStructure> popuMenuDatas;
+    private Intent  iBack;
+    private List<PopBean> popList;
     private List<AppropriationEnty> appropriationEntyList=new ArrayList<AppropriationEnty>();
-    private List<CommonAdapterData> listdatas = new ArrayList<CommonAdapterData>();
+    private List<CommonAdapterData> commonAdapterDataList = new ArrayList<CommonAdapterData>();
     private SlideAndDragListView<CommonAdapterData> listView;
     private AppropriationListViewAdapter adapter;
     private Menu menu;
@@ -62,45 +62,45 @@ public class RequisitionEntyView extends CSearchBase implements View.OnClickList
         dm=new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         showStockWindow();
-        intentBack= new Intent(RequisitionEntyView.this, RequisitionEntyView.class);
+        iBack= new Intent(RequisitionEntyView.this, RequisitionEntyView.class);
         final Intent intent=getIntent();
-        appropriatinId=intent.getStringExtra("custom_item");
+        id=intent.getStringExtra("custom_item");
         manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        stockout =(TextView)findViewById(R.id.stockout);
-        stockin =(TextView)findViewById(R.id.stockin);
-        businessdata =(TextView)findViewById(R.id.businessdata);
-        billnumber =(TextView)findViewById(R.id.billnumber);
+        out =(TextView)findViewById(R.id.requisition_enty_out);
+        in =(TextView)findViewById(R.id.requisition_enty_in);
+        businessdata =(TextView)findViewById(R.id.requisition_enty_businessdata);
+        billnumber =(TextView)findViewById(R.id.requisition_enty_billnumber);
         note=(TextView)findViewById(R.id.note);
-        documentmaker =(TextView)findViewById(R.id.documentmaker);
+        documentmaker =(TextView)findViewById(R.id.requisition_enty_documentmaker);
         save=(TextView)findViewById(R.id.customtoobar_right);
-        toobarTile=(TextView)findViewById(R.id.customtoobar_midd);
-        toobarBack=(TextView)findViewById(R.id.customtoobar_left);
-        toobarAdd=(TextView)findViewById(R.id.customtoobar_r) ;
-        totalQuantity=(TextView)findViewById(R.id.totalquantity);
+        tile=(TextView)findViewById(R.id.customtoobar_midd);
+        back=(TextView)findViewById(R.id.customtoobar_left);
+        add=(TextView)findViewById(R.id.customtoobar_r) ;
+        totalQuantity=(TextView)findViewById(R.id.requisition_enty_totalquantity);
         save.setOnClickListener(this);
-        toobarBack.setOnClickListener(this);
-        toobarAdd.setOnClickListener(this);
+        back.setOnClickListener(this);
+        add.setOnClickListener(this);
         Drawable more= getResources().getDrawable(R.drawable.toobar_more);
         more.setBounds(0, 0, more.getMinimumWidth(), more.getMinimumHeight());
         save.setCompoundDrawables(more,null,null,null);
-        toobarTile.setCompoundDrawables(null,null,null,null);
+        tile.setCompoundDrawables(null,null,null,null);
         errorIcon = getResources().getDrawable(R.drawable.icon_error);
 // 设置图片大小
         errorIcon.setBounds(new Rect(0, 0, errorIcon.getIntrinsicWidth(),
                 errorIcon.getIntrinsicHeight()));
         save.setText("");
-        stockout.setText("调出仓库");
-        stockin.setText("调入仓库");
+        out.setText("调出仓库");
+        in.setText("调入仓库");
         formInit();
 
 
-        toobarTile.setText("调拨明细");
+        tile.setText("调拨明细");
 
     }
     private void  formInit()
     {  quantityCount=0;
         DecimalFormat df = new DecimalFormat("#####0.00");
-        if(appropriatinId!=null) {
+        if(id!=null) {
             Employee  employeelist = DataSupport.find(Employee.class, 1);
             if(employeelist==null)
             {
@@ -108,10 +108,10 @@ public class RequisitionEntyView extends CSearchBase implements View.OnClickList
             }else {
                 documentmaker.setText(employeelist.getName());
             }
-            appropriation = DataSupport.find(Appropriation.class, Long.parseLong(appropriatinId),true);
+            appropriation = DataSupport.find(Appropriation.class, Long.parseLong(id),true);
             appropriationEntyList=appropriation.getSalesOutEntyList();
-            stockout.setText(appropriation.getStockOut());
-            stockin.setText(appropriation.getStockIn());
+            out.setText(appropriation.getStockOut());
+            in.setText(appropriation.getStockIn());
             businessdata.setText(appropriation.getDate().toString().trim());
             billnumber.setText(appropriation.getNuber());
             note.setText(appropriation.getNote());
@@ -122,11 +122,11 @@ public class RequisitionEntyView extends CSearchBase implements View.OnClickList
               commonData.setName(appropriationEnty.getName());
               commonData.setFqty(appropriationEnty.getQuantity());
               quantityCount+=appropriationEnty.getQuantity();
-              listdatas.add(commonData);
+              commonAdapterDataList.add(commonData);
           }
 
             totalQuantity.setText(df.format(quantityCount));
-            adapter = new AppropriationListViewAdapter(RequisitionEntyView.this, R.layout.saleproduct_item, listdatas);
+            adapter = new AppropriationListViewAdapter(RequisitionEntyView.this, R.layout.saleproduct_item, commonAdapterDataList);
             listView.setAdapter(adapter);
             setListViewHeightBasedOnChildren(listView);
 
@@ -196,14 +196,14 @@ public class RequisitionEntyView extends CSearchBase implements View.OnClickList
              break;
             case R.id.customtoobar_r:
                 if( common.mPopWindow==null ||!common.mPopWindow.isShowing())
-                {   popuMenuDatas.clear();
+                {   popList.clear();
 
-                    PopuMenuDataStructure popuMenub = new PopuMenuDataStructure(R.drawable.poppu_wrie, "商品新增");
-                    popuMenuDatas.add(popuMenub);
-                    PopuMenuDataStructure popuMenua = new PopuMenuDataStructure(R.drawable.poppu_wrie, "商品复制");
-                    popuMenuDatas.add(popuMenua);
+                    PopBean popuMenuN = new PopBean(R.drawable.poppu_wrie, "商品新增");
+                    popList.add(popuMenuN);
+                    PopBean popuMenuC = new PopBean(R.drawable.poppu_wrie, "商品复制");
+                    popList.add(popuMenuC);
                     int xPos = dm.widthPixels / 3;
-                    showPopupWindow(popuMenuDatas);
+                    showPopupWindow(popList);
                     common.mPopWindow.showAsDropDown(v,0,5);
                     //mPopWindow.showAtLocation(findViewById(R.id.main), Gravity.BOTTOM, 0, 0);//从底部弹出
                 }
@@ -215,7 +215,7 @@ public class RequisitionEntyView extends CSearchBase implements View.OnClickList
 
         }
     }
-    private void showPopupWindow(final List<PopuMenuDataStructure> popuMenuData) {
+    private void showPopupWindow(final List<PopBean> popuMenuData) {
         common = new Common();
 
         common.PopupWindow(RequisitionEntyView.this, dm, popuMenuData);
@@ -225,20 +225,20 @@ public class RequisitionEntyView extends CSearchBase implements View.OnClickList
             public void onItemClick(AdapterView<?> adapterView, View view,
                                     int position, long id) {
 
-                if(popuMenuDatas.get(position).getName().equals("商品新增"))
+                if(popList.get(position).getName().equals("商品新增"))
                 {
 
-                    intentBack.removeExtra("product_item");
-                    intentBack.putExtra("action","add");
-                    startActivityForResult(intentBack,4);
+                    iBack.removeExtra("product_item");
+                    iBack.putExtra("action","add");
+                    startActivityForResult(iBack,4);
                 }
-                else if(popuMenuDatas.get(position).getName().equals("商品复制"))
+                else if(popList.get(position).getName().equals("商品复制"))
 
                 {
-                    intentBack.removeExtra("product_item");
-                    intentBack.putExtra("action","add");
-                    intentBack.putExtra("product_item", quantityCount);
-                    startActivityForResult(intentBack,4);
+                    iBack.removeExtra("product_item");
+                    iBack.putExtra("action","add");
+                    iBack.putExtra("product_item", quantityCount);
+                    startActivityForResult(iBack,4);
 
                 }else
                 {
@@ -264,23 +264,23 @@ public class RequisitionEntyView extends CSearchBase implements View.OnClickList
     }
     private void showStockWindow() {
         common = new Common();
-        popuMenuDatas = new ArrayList<PopuMenuDataStructure>();
+        popList = new ArrayList<PopBean>();
         stockList= DataSupport.findAll(Stock.class);
         for(Stock stock:stockList)
 
         {
-            PopuMenuDataStructure popuMenua = new PopuMenuDataStructure(R.drawable.poppu_wrie, stock.getName());
-            popuMenuDatas.add(popuMenua);
+            PopBean popuMenua = new PopBean(R.drawable.poppu_wrie, stock.getName());
+            popList.add(popuMenua);
 
         }
-        common.PopupWindow(RequisitionEntyView.this, dm, popuMenuDatas);
+        common.PopupWindow(RequisitionEntyView.this, dm, popList);
         common.listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view,
                                     int position, long id) {
 
-                stockin.setText(popuMenuDatas.get(position).getName());
+                in.setText(popList.get(position).getName());
                 common.mPopWindow.dismiss();
             }
         });

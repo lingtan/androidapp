@@ -16,13 +16,10 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.example.androiderp.adaper.BasicAdapter;
 import com.example.androiderp.bean.AcivityPostBean;
-import com.example.androiderp.bean.AdapterBean;
 import com.example.androiderp.bean.PostProductData;
 import com.example.androiderp.bean.Product;
 import com.example.androiderp.R;
-import com.example.androiderp.bean.PopuMenuDataStructure;
 import com.example.androiderp.adaper.ProductAdapter;
 import com.example.androiderp.tools.Common;
 import com.example.androiderp.tools.GlobalVariable;
@@ -35,10 +32,6 @@ import com.example.androiderp.scanning.utils.Constant;
 import com.example.androiderp.ui.DataLoadingDialog;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.litepal.crud.DataSupport;
 
 import java.io.IOException;
 import java.util.ArrayList;

@@ -22,7 +22,7 @@ import com.example.androiderp.bean.StockTakingEnty;
 import com.example.androiderp.R;
 import com.example.androiderp.adaper.AppropriationListViewAdapter;
 import com.example.androiderp.adaper.CommonAdapterData;
-import com.example.androiderp.bean.PopuMenuDataStructure;
+import com.example.androiderp.bean.PopBean;
 import com.example.androiderp.tools.Common;
 import com.example.androiderp.ui.CSearchBase;
 import com.example.androiderp.listview.Menu;
@@ -50,7 +50,7 @@ public class InventoryEntyView extends CSearchBase implements View.OnClickListen
     private Common common;
     private double quantityCount;
     private Intent  intentBack;
-    private List<PopuMenuDataStructure> popuMenuDatas;
+    private List<PopBean> popuMenuDatas;
     private List<CommonAdapterData> listdatas = new ArrayList<CommonAdapterData>();
     private SlideAndDragListView<CommonAdapterData> listView;
     private AppropriationListViewAdapter adapter;
@@ -58,7 +58,7 @@ public class InventoryEntyView extends CSearchBase implements View.OnClickListen
     private List<Stock> stockList;
     private double quantity;
     public void iniView() {
-        setContentView(R.layout.inventoryentyform);
+        setContentView(R.layout.inventory_enty);
         initMenu();
         initUiAndListener();
         dm=new DisplayMetrics();
@@ -191,9 +191,9 @@ public class InventoryEntyView extends CSearchBase implements View.OnClickListen
                 if( common.mPopWindow==null ||!common.mPopWindow.isShowing())
                 {   popuMenuDatas.clear();
 
-                    PopuMenuDataStructure popuMenub = new PopuMenuDataStructure(R.drawable.poppu_wrie, "商品新增");
+                    PopBean popuMenub = new PopBean(R.drawable.poppu_wrie, "商品新增");
                     popuMenuDatas.add(popuMenub);
-                    PopuMenuDataStructure popuMenua = new PopuMenuDataStructure(R.drawable.poppu_wrie, "商品复制");
+                    PopBean popuMenua = new PopBean(R.drawable.poppu_wrie, "商品复制");
                     popuMenuDatas.add(popuMenua);
                     int xPos = dm.widthPixels / 3;
                     showPopupWindow(popuMenuDatas);
@@ -208,7 +208,7 @@ public class InventoryEntyView extends CSearchBase implements View.OnClickListen
 
         }
     }
-    private void showPopupWindow(final List<PopuMenuDataStructure> popuMenuData) {
+    private void showPopupWindow(final List<PopBean> popuMenuData) {
         common = new Common();
 
         common.PopupWindow(InventoryEntyView.this, dm, popuMenuData);

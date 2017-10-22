@@ -49,7 +49,7 @@ import com.example.androiderp.bean.StockIniti;
 import com.example.androiderp.bean.StockInitiData;
 import com.example.androiderp.bean.StockInitiTem;
 import com.example.androiderp.R;
-import com.example.androiderp.bean.PopuMenuDataStructure;
+import com.example.androiderp.bean.PopBean;
 import com.example.androiderp.activities.warehouseview.StockInitiView;
 import com.example.androiderp.tools.Common;
 import com.example.androiderp.tools.GlobalVariable;
@@ -79,30 +79,31 @@ import okhttp3.Response;
 
 public class ProductForm extends AppCompatActivity implements View.OnClickListener {
     private InputMethodManager manager;
-    private EditText name,number, purchasePrice, salesPrice,barcode,model,note;
+    private EditText name,number, pPrice, sPrice,barcode,model,note;
     private ImageView numberScreen;
     private ImageButton camera;
-    private TextView toobarSave, toobarTile, toobarBack, toobarAdd,category,brand,unit, stockIniti;
+    private TextView save, tile, back, add,category,brand,unit, stockIniti;
     private DisplayMetrics dm;
-    private LinearLayout categoryLayout,brandLayout,unitLayout,hideLayoutOne,hideLayoutTow,hideLayoutthree;
-    private RelativeLayout pictureThressLayout,pictureSecondLayout,pictureFisrtLayout;
+    private LinearLayout categoryLayout,brandLayout,unitLayout, fisrtHideLayout, SecondHideLayout, ThressHideLayout;
+    private RelativeLayout thressPictureLayout, secondPictureLayout, fisrtPictureLayout;
     private RelativeLayout moreLayout;
     private String categoryid,customid;
-    private Button deleteButton;
+    private Button delete;
     private Drawable errorIcon;
     private Common common;
-    private Intent intentBack;
-    private List<PopuMenuDataStructure> popuMenuDatas;
+    private Intent iBack;
+    private List<PopBean> popList;
     private List<SalesOutEnty> salesOutEntyList =new ArrayList<SalesOutEnty>();
     List<StockInitiTem> stockInitiTemList = new ArrayList<StockInitiTem>();
     private CPopupWindow cPopupWindow;
     private CPictureFullPopupWindow pictureFullPopupWindow;
     public static final int TAKE_PHOTO = 11;
     public static final int CHOOSE_PHOTO = 12;
-    private ImageView pictureFisrt,pictureSecond,pictureThress,pictureFisrtDelete,pictureSecondDelete,pictureThressDelete;
-    private Uri imageUri;
+    private ImageView fisrtPicture, secondPicture, thressPicture, deleteFisrtPicture, deleteSecondPicture,deleteThressPicture;
+    private Uri uri;
     private String photoUri,pictureFisrtSrc,pictureSecondSrc,pictureThressSrc,pictureMainSrc;
     private List<String> imageUirData=new ArrayList<String>();
+
     private List<String> imagePathData=new ArrayList<String>();
     private List<ImageView> imageViewData=new ArrayList<ImageView>();
     private String categoryReturnVale;
@@ -120,7 +121,7 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
         setContentView(R.layout.productform);
         dm=new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
-        intentBack = new Intent(ProductForm.this, ProductForm.class);
+        iBack = new Intent(ProductForm.this, ProductForm.class);
         final Intent intent=getIntent();
         getPostData =intent.getParcelableExtra("postdata");
         getPostType = intent.getStringExtra("type");
@@ -128,8 +129,8 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
         manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         name=(EditText)findViewById(R.id.name);
         number=(EditText)findViewById(R.id.number);
-        purchasePrice =(EditText)findViewById(R.id.product_purchaseprice);
-        salesPrice =(EditText)findViewById(R.id.product_salesprice);
+        pPrice =(EditText)findViewById(R.id.product_purchaseprice);
+        sPrice =(EditText)findViewById(R.id.product_salesprice);
         barcode=(EditText)findViewById(R.id.product_barcode);
         model=(EditText)findViewById(R.id.product_model);
         note=(EditText)findViewById(R.id.note);
@@ -138,56 +139,56 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
         brand=(TextView)findViewById(R.id.product_brand);
         unit=(TextView)findViewById(R.id.product_unit);
         stockIniti =(TextView)findViewById(R.id.product_stock_initi);
-        toobarSave =(TextView)findViewById(R.id.customtoobar_right);
-        toobarTile =(TextView)findViewById(R.id.customtoobar_midd);
-        toobarBack =(TextView)findViewById(R.id.customtoobar_left);
+        save =(TextView)findViewById(R.id.customtoobar_right);
+        tile =(TextView)findViewById(R.id.customtoobar_midd);
+        back =(TextView)findViewById(R.id.customtoobar_left);
         categoryLayout=(LinearLayout)findViewById(R.id.documentmaker_layout);
         brandLayout=(LinearLayout)findViewById(R.id.product_brand_layout);
         unitLayout=(LinearLayout)findViewById(R.id.product_unit_layout);
-        toobarAdd =(TextView)findViewById(R.id.customtoobar_r) ;
-        deleteButton =(Button)findViewById(R.id.loginbutton);
+        add =(TextView)findViewById(R.id.customtoobar_r) ;
+        delete =(Button)findViewById(R.id.loginbutton);
         moreLayout=(RelativeLayout)findViewById(R.id.productform_layout_more);
-        hideLayoutOne=(LinearLayout)findViewById(R.id.productform_layout_hide_one);
-        hideLayoutTow=(LinearLayout)findViewById(R.id.productform_layout_hide_tow);
-        hideLayoutthree=(LinearLayout)findViewById(R.id.productform_layout_hide_three);
+        fisrtHideLayout =(LinearLayout)findViewById(R.id.productform_layout_hide_one);
+        SecondHideLayout =(LinearLayout)findViewById(R.id.productform_layout_hide_tow);
+        ThressHideLayout =(LinearLayout)findViewById(R.id.productform_layout_hide_three);
         camera=(ImageButton)findViewById(R.id.camera);
-        pictureFisrt = (ImageView) findViewById(R.id.picture_fisrt);
-        pictureSecond = (ImageView) findViewById(R.id.picture_second);
-        pictureThress = (ImageView) findViewById(R.id.picture_thress);
-        pictureFisrtDelete = (ImageView) findViewById(R.id.picture_fisrt_delete);
-        pictureSecondDelete = (ImageView) findViewById(R.id.picture_second_delete);
-        pictureThressDelete = (ImageView) findViewById(R.id.picture_thress_delete);
-        pictureFisrtLayout=(RelativeLayout)findViewById(R.id.picture_fisrt_layout);
-        pictureSecondLayout=(RelativeLayout)findViewById(R.id.picture_second_layout);
-        pictureThressLayout=(RelativeLayout)findViewById(R.id.picture_thress_layout);
-        imageViewData.add(pictureFisrt);
-        imageViewData.add(pictureSecond);
-        imageViewData.add(pictureThress);
-        toobarSave.setOnClickListener(this);
-        toobarBack.setOnClickListener(this);
+        fisrtPicture = (ImageView) findViewById(R.id.picture_fisrt);
+        secondPicture = (ImageView) findViewById(R.id.picture_second);
+        thressPicture = (ImageView) findViewById(R.id.picture_thress);
+        deleteFisrtPicture = (ImageView) findViewById(R.id.picture_fisrt_delete);
+        deleteSecondPicture = (ImageView) findViewById(R.id.picture_second_delete);
+        deleteThressPicture = (ImageView) findViewById(R.id.picture_thress_delete);
+        fisrtPictureLayout =(RelativeLayout)findViewById(R.id.picture_fisrt_layout);
+        secondPictureLayout =(RelativeLayout)findViewById(R.id.picture_second_layout);
+        thressPictureLayout =(RelativeLayout)findViewById(R.id.picture_thress_layout);
+        imageViewData.add(fisrtPicture);
+        imageViewData.add(secondPicture);
+        imageViewData.add(thressPicture);
+        save.setOnClickListener(this);
+        back.setOnClickListener(this);
         categoryLayout.setOnClickListener(this);
         brandLayout.setOnClickListener(this);
         unitLayout.setOnClickListener(this);
-        toobarAdd.setOnClickListener(this);
-        deleteButton.setOnClickListener(this);
+        add.setOnClickListener(this);
+        delete.setOnClickListener(this);
         moreLayout.setOnClickListener(this);
         stockIniti.setOnClickListener(this);
         camera.setOnClickListener(this);
-        toobarSave.setCompoundDrawables(null,null,null,null);
-        toobarTile.setCompoundDrawables(null,null,null,null);
+        save.setCompoundDrawables(null,null,null,null);
+        tile.setCompoundDrawables(null,null,null,null);
         errorIcon = getResources().getDrawable(R.drawable.icon_error);
 // 设置图片大小
         errorIcon.setBounds(new Rect(0, 0, errorIcon.getIntrinsicWidth(),
                 errorIcon.getIntrinsicHeight()));
-        toobarSave.setText("保存");
+        save.setText("保存");
         formInit();
 
-        popuMenuDatas = new ArrayList<PopuMenuDataStructure>();
-        PopuMenuDataStructure popuMenua = new PopuMenuDataStructure(android.R.drawable.ic_menu_edit, "美的");
-        popuMenuDatas.add(popuMenua);
-        PopuMenuDataStructure popuMenub = new PopuMenuDataStructure(android.R.drawable.ic_menu_edit, "松下");
-        popuMenuDatas.add(popuMenub);
-        showPopupWindow(popuMenuDatas);
+        popList = new ArrayList<PopBean>();
+        PopBean popuMenua = new PopBean(android.R.drawable.ic_menu_edit, "美的");
+        popList.add(popuMenua);
+        PopBean popuMenub = new PopBean(android.R.drawable.ic_menu_edit, "松下");
+        popList.add(popuMenub);
+        showPopupWindow(popList);
         numberScreen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -206,8 +207,8 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
         if(getPostData!=null) {
             name.setText(getPostData.getName());
             number.setText(getPostData.getNumber());
-            purchasePrice.setText(df.format(getPostData.getPurchasePrice()));
-            salesPrice.setText(df.format(getPostData.getSalesPrice()));
+            pPrice.setText(df.format(getPostData.getPurchasePrice()));
+            sPrice.setText(df.format(getPostData.getSalesPrice()));
             barcode.setText(getPostData.getBarcode());
             model.setText(getPostData.getModel());
             note.setText(getPostData.getNote());
@@ -217,17 +218,17 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
             unit.setText(getPostData.getUnit_name());
             if(getPostType.equals("edit")) {
                 number.setKeyListener(null);
-                toobarAdd.setVisibility(View.VISIBLE);
-                deleteButton.setVisibility(View.VISIBLE);
+                add.setVisibility(View.VISIBLE);
+                delete.setVisibility(View.VISIBLE);
             }else {
-                toobarAdd.setVisibility(View.GONE);
-                deleteButton.setVisibility(View.GONE);
+                add.setVisibility(View.GONE);
+                delete.setVisibility(View.GONE);
             }
             if(getPostData.getPhotoFirstPath()!=null&&!getPostData.getPhotoFirstPath().isEmpty())
-            {   pictureFisrtLayout.setVisibility(View.VISIBLE);
-                Glide.with(this).load(getPostData.getPhotoFirstPath()).override(100,100).into(pictureFisrt);
+            {   fisrtPictureLayout.setVisibility(View.VISIBLE);
+                Glide.with(this).load(getPostData.getPhotoFirstPath()).override(100,100).into(fisrtPicture);
                 imagePathData.add(getPostData.getPhotoFirstPath());
-                pictureFisrt.setOnClickListener(new View.OnClickListener() {
+                fisrtPicture.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 
@@ -239,10 +240,10 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
 
 
                 });
-                pictureFisrtDelete.setOnClickListener(new View.OnClickListener() {
+                deleteFisrtPicture.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        pictureFisrt.setImageDrawable(null);
+                        fisrtPicture.setImageDrawable(null);
                         Product      product = new Product();
                         product.setPhotoFirstPath("");
                         if(getPostData.getPhotoMainPath().equals(getPostData.getPhotoFirstPath())) {
@@ -251,7 +252,7 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
 
                         File file=new File(getPostData.getPhotoFirstPath());
                         file.delete();
-                        pictureFisrtLayout.setVisibility(View.GONE);
+                        fisrtPictureLayout.setVisibility(View.GONE);
 
 
 
@@ -260,7 +261,7 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                     }
                 });
 
-               pictureFisrt.setOnLongClickListener(new View.OnLongClickListener() {
+               fisrtPicture.setOnLongClickListener(new View.OnLongClickListener() {
                    @Override
                    public boolean onLongClick(View v) {
                        Product      product = new Product();
@@ -273,10 +274,10 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
             }
 
             if(getPostData.getPhotoSecondPath()!=null&&!getPostData.getPhotoSecondPath().isEmpty())
-            {   pictureSecondLayout.setVisibility(View.VISIBLE);
-                Glide.with(this).load(getPostData.getPhotoSecondPath()).override(100,100).into(pictureSecond);
+            {   secondPictureLayout.setVisibility(View.VISIBLE);
+                Glide.with(this).load(getPostData.getPhotoSecondPath()).override(100,100).into(secondPicture);
                 imagePathData.add(getPostData.getPhotoSecondPath());
-                pictureSecond.setOnClickListener(new View.OnClickListener() {
+                secondPicture.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 
@@ -286,10 +287,10 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
 
                     }
                 });
-                pictureSecondDelete.setOnClickListener(new View.OnClickListener() {
+                deleteSecondPicture.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        pictureSecond.setImageDrawable(null);
+                        secondPicture.setImageDrawable(null);
                         Product      product = new Product();
                         product.setPhotoSecondPath("");
                         if(getPostData.getPhotoMainPath().equals(getPostData.getPhotoSecondPath())) {
@@ -298,13 +299,13 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
 
                         File file=new File(getPostData.getPhotoSecondPath());
                         file.delete();
-                        pictureSecondLayout.setVisibility(View.GONE);
+                        secondPictureLayout.setVisibility(View.GONE);
 
 
                     }
                 });
 
-                pictureSecond.setOnLongClickListener(new View.OnLongClickListener() {
+                secondPicture.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View v) {
                         Product      product = new Product();
@@ -318,10 +319,10 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
             }
 
             if(getPostData.getPhotoThressPath()!=null&&!getPostData.getPhotoThressPath().isEmpty())
-            {   pictureThressLayout.setVisibility(View.VISIBLE);
-                Glide.with(this).load(getPostData.getPhotoThressPath()).override(100,100).into(pictureThress);
+            {   thressPictureLayout.setVisibility(View.VISIBLE);
+                Glide.with(this).load(getPostData.getPhotoThressPath()).override(100,100).into(thressPicture);
                 imagePathData.add(getPostData.getPhotoThressPath());
-                pictureThress.setOnClickListener(new View.OnClickListener() {
+                thressPicture.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 
@@ -332,10 +333,10 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                     }
                 });
 
-                pictureThressDelete.setOnClickListener(new View.OnClickListener() {
+                deleteThressPicture.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        pictureThress.setImageDrawable(null);
+                        thressPicture.setImageDrawable(null);
                         Product      product = new Product();
                         product.setPhotoThressPath("");
                         if(getPostData.getPhotoMainPath().equals(getPostData.getPhotoThressPath())) {
@@ -344,13 +345,13 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
 
                         File file=new File(getPostData.getPhotoThressPath());
                         file.delete();
-                        pictureThressLayout.setVisibility(View.GONE);
+                        thressPictureLayout.setVisibility(View.GONE);
 
 
                     }
                 });
 
-                pictureThress.setOnLongClickListener(new View.OnLongClickListener() {
+                thressPicture.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View v) {
                         Product      product = new Product();
@@ -367,9 +368,9 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
         }
         if(getPostType!=null) {
             if (getPostType.equals("edit")) {
-                toobarTile.setText("商品修改");
+                tile.setText("商品修改");
             } else {
-                toobarTile.setText("商品新增");
+                tile.setText("商品新增");
             }
         }
     }
@@ -395,8 +396,8 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                     postUserData.setProduct_id(getPostData.getProduct_id());
                     postUserData.setName(name.getText().toString());
                     postUserData.setNumber(number.getText().toString());
-                    postUserData.setPurchasePrice( Double.parseDouble(purchasePrice.getText().toString()));
-                    postUserData.setSalesPrice(Double.parseDouble(salesPrice.getText().toString()));
+                    postUserData.setPurchasePrice( Double.parseDouble(pPrice.getText().toString()));
+                    postUserData.setSalesPrice(Double.parseDouble(sPrice.getText().toString()));
                     postUserData.setBarcode(barcode.getText().toString());
                     postUserData.setModel(model.getText().toString());
                     postUserData.setNote(note.getText().toString());
@@ -426,8 +427,8 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
 
                     postUserData.setName(name.getText().toString());
                     postUserData.setNumber(number.getText().toString());
-                    postUserData.setPurchasePrice( Double.parseDouble(purchasePrice.getText().toString()));
-                    postUserData.setSalesPrice( Double.parseDouble(salesPrice.getText().toString()));
+                    postUserData.setPurchasePrice( Double.parseDouble(pPrice.getText().toString()));
+                    postUserData.setSalesPrice( Double.parseDouble(sPrice.getText().toString()));
                     postUserData.setBarcode(barcode.getText().toString());
                     postUserData.setModel(model.getText().toString());
                     postUserData.setNote(note.getText().toString());
@@ -441,15 +442,15 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                     postUserData.setUnit_name(unit.getText().toString());
                     postUserData.setImage(R.drawable.listvist_item_delete);
                     postUserData.setBadgeShow("");
-                    if(pictureFisrt.getDrawable()!=null)
+                    if(fisrtPicture.getDrawable()!=null)
                     {
                         postUserData.setPhotoFirstPath(pictureFisrtSrc);
                     }
-                    if(pictureSecond.getDrawable()!=null)
+                    if(secondPicture.getDrawable()!=null)
                     {
                         postUserData.setPhotoSecondPath(pictureSecondSrc);
                     }
-                    if(pictureThress.getDrawable()!=null) {
+                    if(thressPicture.getDrawable()!=null) {
                         postUserData.setPhotoThressPath(pictureThressSrc);
                     }
                     if(pictureMainSrc==null)
@@ -481,9 +482,9 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                     }
 
                     getPostType="edit";
-                    hideLayoutthree.setVisibility(View.GONE);
-                    toobarAdd.setVisibility(View.VISIBLE);
-                    deleteButton.setVisibility(View.VISIBLE);
+                    ThressHideLayout.setVisibility(View.GONE);
+                    add.setVisibility(View.VISIBLE);
+                    delete.setVisibility(View.VISIBLE);
                     categoryReturnVale=category.getText().toString();
                     Intent intent = new Intent();
                     setResult(RESULT_OK,intent);
@@ -562,14 +563,14 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
 
             case R.id.customtoobar_r:
                 if( common.mPopWindow==null ||!common.mPopWindow.isShowing())
-                {   popuMenuDatas.clear();
+                {   popList.clear();
 
-                    PopuMenuDataStructure popuMenub = new PopuMenuDataStructure(R.drawable.poppu_wrie, "商品新增");
-                    popuMenuDatas.add(popuMenub);
-                    PopuMenuDataStructure popuMenua = new PopuMenuDataStructure(R.drawable.poppu_wrie, "商品复制");
-                    popuMenuDatas.add(popuMenua);
+                    PopBean popuMenub = new PopBean(R.drawable.poppu_wrie, "商品新增");
+                    popList.add(popuMenub);
+                    PopBean popuMenua = new PopBean(R.drawable.poppu_wrie, "商品复制");
+                    popList.add(popuMenua);
                     int xPos = dm.widthPixels / 3;
-                    showPopupWindow(popuMenuDatas);
+                    showPopupWindow(popList);
                     common.mPopWindow.showAsDropDown(v,0,5);
                     //mPopWindow.showAtLocation(findViewById(R.id.main), Gravity.BOTTOM, 0, 0);//从底部弹出
                 }
@@ -588,12 +589,12 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
 
             case R.id.productform_layout_more:
                 moreLayout.setVisibility(View.GONE);
-                hideLayoutOne.setVisibility(View.VISIBLE);
-                hideLayoutTow.setVisibility(View.VISIBLE);
+                fisrtHideLayout.setVisibility(View.VISIBLE);
+                SecondHideLayout.setVisibility(View.VISIBLE);
                 if (getPostType.equals("edit")) {
-                   hideLayoutthree.setVisibility(View.GONE);
+                   ThressHideLayout.setVisibility(View.GONE);
                 }else {
-                    hideLayoutthree.setVisibility(View.VISIBLE);
+                    ThressHideLayout.setVisibility(View.VISIBLE);
                 }
                 break;
             case R.id.product_stock_initi:
@@ -606,7 +607,7 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
 
         }
     }
-    private void showPopupWindow(final List<PopuMenuDataStructure> popuMenuData) {
+    private void showPopupWindow(final List<PopBean> popuMenuData) {
         common = new Common();
 
         common.PopupWindow(ProductForm.this, dm, popuMenuData);
@@ -616,21 +617,21 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
             public void onItemClick(AdapterView<?> adapterView, View view,
                                     int position, long id) {
 
-                if(popuMenuDatas.get(position).getName().equals("商品新增"))
+                if(popList.get(position).getName().equals("商品新增"))
                 {
 
-                    intentBack.removeExtra("product_item");
-                    intentBack.putExtra("action","add");
-                    startActivityForResult(intentBack,4);
+                    iBack.removeExtra("product_item");
+                    iBack.putExtra("action","add");
+                    startActivityForResult(iBack,4);
                     finish();
                 }
-                else if(popuMenuDatas.get(position).getName().equals("商品复制"))
+                else if(popList.get(position).getName().equals("商品复制"))
 
                 {
-                    intentBack.removeExtra("product_item");
-                    intentBack.putExtra("action","add");
-                    intentBack.putExtra("product_item", customid);
-                    startActivityForResult(intentBack,4);
+                    iBack.removeExtra("product_item");
+                    iBack.putExtra("action","add");
+                    iBack.putExtra("product_item", customid);
+                    startActivityForResult(iBack,4);
                     finish();
 
                 }else
@@ -721,118 +722,118 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                 if (resultCode == RESULT_OK) {
                     try {
 
-                        if(pictureFisrt.getDrawable()==null)
+                        if(fisrtPicture.getDrawable()==null)
                         {
-                            pictureFisrtLayout.setVisibility(View.VISIBLE);
-                            Glide.with(this).load(imageUri).override(100,100).into(pictureFisrt);
+                            fisrtPictureLayout.setVisibility(View.VISIBLE);
+                            Glide.with(this).load(uri).override(100,100).into(fisrtPicture);
                             if(customid!=null) {
                                 Product product = new Product();
-                                product.setPhotoFirstPath(imageUri.toString());
+                                product.setPhotoFirstPath(uri.toString());
                                 if(pictureMainSrc==null&&(getPostData.getPhotoMainPath()==null|| getPostData.getPhotoMainPath().isEmpty()))
                                 {
-                                    product.setPhotoMainPath(imageUri.toString());
+                                    product.setPhotoMainPath(uri.toString());
                                 }
 
                             }
-                            pictureFisrtSrc=imageUri.toString();
+                            pictureFisrtSrc= uri.toString();
 
 
-                            pictureFisrt.setOnLongClickListener(new View.OnLongClickListener() {
+                            fisrtPicture.setOnLongClickListener(new View.OnLongClickListener() {
                                 @Override
                                 public boolean onLongClick(View v) {
                                     if(customid!=null) {
                                         Product product = new Product();
-                                        product.setPhotoMainPath(imageUri.toString());
+                                        product.setPhotoMainPath(uri.toString());
 
                                     }else {
-                                        pictureMainSrc=imageUri.toString();
+                                        pictureMainSrc= uri.toString();
                                     }
                                     Toast.makeText(ProductForm.this,"次图片已经设置为封面",Toast.LENGTH_SHORT).show();
                                     return true;
                                 }
                             });
 
-                            pictureFisrtDelete.setOnClickListener(new View.OnClickListener() {
+                            deleteFisrtPicture.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    pictureFisrt.setImageDrawable(null);
+                                    fisrtPicture.setImageDrawable(null);
                                     pictureMainSrc="";
-                                    File file=new File(imageUri.toString());
+                                    File file=new File(uri.toString());
                                     file.delete();
-                                    pictureFisrtLayout.setVisibility(View.GONE);
+                                    fisrtPictureLayout.setVisibility(View.GONE);
 
 
                                 }
                             });
-                        }else if(pictureSecond.getDrawable()==null)
+                        }else if(secondPicture.getDrawable()==null)
                         {
-                            pictureSecondLayout.setVisibility(View.VISIBLE);
-                            Glide.with(this).load(imageUri).override(100,100).into(pictureSecond);
-                            pictureSecondSrc=imageUri.toString();
+                            secondPictureLayout.setVisibility(View.VISIBLE);
+                            Glide.with(this).load(uri).override(100,100).into(secondPicture);
+                            pictureSecondSrc= uri.toString();
                             if(customid!=null) {
                                 Product product = new Product();
-                                product.setPhotoSecondPath(imageUri.toString());
+                                product.setPhotoSecondPath(uri.toString());
 
                             }
-                            pictureSecond.setOnLongClickListener(new View.OnLongClickListener() {
+                            secondPicture.setOnLongClickListener(new View.OnLongClickListener() {
                                 @Override
                                 public boolean onLongClick(View v) {
                                     if(customid!=null) {
                                         Product product = new Product();
-                                        product.setPhotoMainPath(imageUri.toString());
+                                        product.setPhotoMainPath(uri.toString());
 
                                     }else  {
-                                        pictureMainSrc=imageUri.toString();
+                                        pictureMainSrc= uri.toString();
                                     }
                                     Toast.makeText(ProductForm.this,"次图片已经设置为封面",Toast.LENGTH_SHORT).show();
                                     return true;
                                 }
                             });
-                            pictureSecondDelete.setOnClickListener(new View.OnClickListener() {
+                            deleteSecondPicture.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    pictureSecond.setImageDrawable(null);
+                                    secondPicture.setImageDrawable(null);
                                     pictureMainSrc="";
-                                    File file=new File(imageUri.toString());
+                                    File file=new File(uri.toString());
                                     file.delete();
-                                    pictureSecondLayout.setVisibility(View.GONE);
+                                    secondPictureLayout.setVisibility(View.GONE);
 
 
                                 }
                             });
-                        }else if(pictureThress.getDrawable()==null)
+                        }else if(thressPicture.getDrawable()==null)
                         {
-                            pictureThressLayout.setVisibility(View.VISIBLE);
-                            Glide.with(this).load(imageUri).override(100,100).into(pictureThress);
-                            pictureThressSrc=imageUri.toString();
+                            thressPictureLayout.setVisibility(View.VISIBLE);
+                            Glide.with(this).load(uri).override(100,100).into(thressPicture);
+                            pictureThressSrc= uri.toString();
                             if(customid!=null) {
                                 Product product = new Product();
-                                product.setPhotoThressPath(imageUri.toString());
+                                product.setPhotoThressPath(uri.toString());
 
                             }
-                            pictureThress.setOnLongClickListener(new View.OnLongClickListener() {
+                            thressPicture.setOnLongClickListener(new View.OnLongClickListener() {
                                 @Override
                                 public boolean onLongClick(View v) {
                                     if(customid!=null) {
                                         Product product = new Product();
-                                        product.setPhotoMainPath(imageUri.toString());
+                                        product.setPhotoMainPath(uri.toString());
 
                                     }else  {
-                                        pictureMainSrc=imageUri.toString();
+                                        pictureMainSrc= uri.toString();
                                     }
                                     Toast.makeText(ProductForm.this,"次图片已经设置为封面",Toast.LENGTH_SHORT).show();
                                     return true;
                                 }
                             });
 
-                            pictureThressDelete.setOnClickListener(new View.OnClickListener() {
+                            deleteThressPicture.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    pictureThress.setImageDrawable(null);
+                                    thressPicture.setImageDrawable(null);
                                     pictureMainSrc="";
-                                    File file=new File(imageUri.toString());
+                                    File file=new File(uri.toString());
                                     file.delete();
-                                    pictureThressLayout.setVisibility(View.GONE);
+                                    thressPictureLayout.setVisibility(View.GONE);
 
 
                                 }
@@ -887,7 +888,7 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
             switch (v.getId()) {
                 case R.id.takephoto_layout:
                     // 创建File对象，用于存储拍照后的图片
-                    if(pictureThress.getDrawable()==null||pictureSecond.getDrawable()==null||pictureFisrt.getDrawable()==null) {
+                    if(thressPicture.getDrawable()==null|| secondPicture.getDrawable()==null|| fisrtPicture.getDrawable()==null) {
                         SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
                         Date date = new Date(System.currentTimeMillis());
                         String filename = format.format(date);
@@ -901,25 +902,25 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                             e.printStackTrace();
                         }
                         if (Build.VERSION.SDK_INT < 24) {
-                            imageUri = Uri.fromFile(outputImage);
-                            photoUri = imageUri.toString();
+                            uri = uri.fromFile(outputImage);
+                            photoUri = uri.toString();
                             imageUirData.add(photoUri);
                             imagePathData.add("");
                         } else {
-                            imageUri = FileProvider.getUriForFile(ProductForm.this, "com.example.cameraalbumtest.fileprovider", outputImage);
-                            photoUri = imageUri.toString();
+                            uri = FileProvider.getUriForFile(ProductForm.this, "com.example.cameraalbumtest.fileprovider", outputImage);
+                            photoUri = uri.toString();
                             imageUirData.add(photoUri);
                             imagePathData.add("");
                         }
                         // 启动相机程序
                         Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-                        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+                        intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
                         startActivityForResult(intent, TAKE_PHOTO);
                     }else {
                         Toast.makeText(ProductForm.this, "只能上传三张", Toast.LENGTH_SHORT).show();
                     }
                 case R.id.pickphoto_layout:
-                    if(pictureThress.getDrawable()==null||pictureSecond.getDrawable()==null||pictureFisrt.getDrawable()==null)
+                    if(thressPicture.getDrawable()==null|| secondPicture.getDrawable()==null|| fisrtPicture.getDrawable()==null)
                     {
                     if (ContextCompat.checkSelfPermission(ProductForm.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                         ActivityCompat.requestPermissions(ProductForm.this, new String[]{ Manifest.permission. WRITE_EXTERNAL_STORAGE }, 1);
@@ -951,7 +952,7 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                 String selection = MediaStore.Images.Media._ID + "=" + id;
                 imagePath = getImagePath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, selection);
             } else if ("com.android.providers.downloads.documents".equals(uri.getAuthority())) {
-                Uri contentUri = ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"), Long.valueOf(docId));
+                Uri contentUri = ContentUris.withAppendedId(this.uri.parse("content://downloads/public_downloads"), Long.valueOf(docId));
                 imagePath = getImagePath(contentUri, null);
             }
         } else if ("content".equalsIgnoreCase(uri.getScheme())) {
@@ -985,10 +986,10 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
 
     private void displayImage(final String imagePath) {
         if (imagePath != null) {
-            if(pictureFisrt.getDrawable()==null)
+            if(fisrtPicture.getDrawable()==null)
             {
-                pictureFisrtLayout.setVisibility(View.VISIBLE);
-                Glide.with(this).load(imagePath).override(100,100).into(pictureFisrt);
+                fisrtPictureLayout.setVisibility(View.VISIBLE);
+                Glide.with(this).load(imagePath).override(100,100).into(fisrtPicture);
                 pictureFisrtSrc=imagePath;
                 if(customid!=null) {
                     Product product = new Product();
@@ -1000,7 +1001,7 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
 
                 }
 
-                pictureFisrt.setOnLongClickListener(new View.OnLongClickListener() {
+                fisrtPicture.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View v) {
                         if(customid!=null) {
@@ -1015,30 +1016,30 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                         return true;
                     }
                 });
-                pictureFisrtDelete.setOnClickListener(new View.OnClickListener() {
+                deleteFisrtPicture.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        pictureFisrt.setImageDrawable(null);
+                        fisrtPicture.setImageDrawable(null);
                         pictureMainSrc="";
                         File file=new File(imagePath);
                         file.delete();
-                        pictureFisrtLayout.setVisibility(View.GONE);
+                        fisrtPictureLayout.setVisibility(View.GONE);
 
 
                     }
                 });
 
-            }else if(pictureSecond.getDrawable()==null)
+            }else if(secondPicture.getDrawable()==null)
             {
-                pictureSecondLayout.setVisibility(View.VISIBLE);
-                Glide.with(this).load(imagePath).override(100,100).into(pictureSecond);
+                secondPictureLayout.setVisibility(View.VISIBLE);
+                Glide.with(this).load(imagePath).override(100,100).into(secondPicture);
                 pictureSecondSrc=imagePath;
                 if(customid!=null) {
                     Product product = new Product();
                     product.setPhotoSecondPath(imagePath);
 
                 }
-                pictureSecond.setOnLongClickListener(new View.OnLongClickListener() {
+                secondPicture.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View v) {
                         if(customid!=null) {
@@ -1053,29 +1054,29 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                         return true;
                     }
                 });
-                pictureSecondDelete.setOnClickListener(new View.OnClickListener() {
+                deleteSecondPicture.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        pictureSecond.setImageDrawable(null);
+                        secondPicture.setImageDrawable(null);
                         pictureMainSrc="";
                         File file=new File(imagePath);
                         file.delete();
-                        pictureSecondLayout.setVisibility(View.GONE);
+                        secondPictureLayout.setVisibility(View.GONE);
 
 
                     }
                 });
-            }else if(pictureThress.getDrawable()==null)
+            }else if(thressPicture.getDrawable()==null)
             {
-                pictureThressLayout.setVisibility(View.VISIBLE);
-                Glide.with(this).load(imagePath).override(100,100).into(pictureThress);
+                thressPictureLayout.setVisibility(View.VISIBLE);
+                Glide.with(this).load(imagePath).override(100,100).into(thressPicture);
                 pictureThressSrc=imagePath;
                 if(customid!=null) {
                     Product product = new Product();
                     product.setPhotoThressPath(imagePath);
 
                 }
-                pictureThress.setOnLongClickListener(new View.OnLongClickListener() {
+                thressPicture.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View v) {
                         if(customid!=null) {
@@ -1090,14 +1091,14 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                         return true;
                     }
                 });
-                pictureThressDelete.setOnClickListener(new View.OnClickListener() {
+                deleteThressPicture.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        pictureThress.setImageDrawable(null);
+                        thressPicture.setImageDrawable(null);
                         pictureMainSrc="";
                         File file=new File(imagePath);
                         file.delete();
-                        pictureThressLayout.setVisibility(View.GONE);
+                        thressPictureLayout.setVisibility(View.GONE);
 
 
                     }

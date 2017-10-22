@@ -26,41 +26,41 @@ import java.util.List;
 
 public class BalanceAccountForm extends AppCompatActivity implements View.OnClickListener {
     private InputMethodManager manager;
-    private EditText userName;
-    private TextView toobarSave, toobarTile, toobarBack;
-    private BalanceAccount brandName;
-    private String customid,edit;
+    private EditText name;
+    private TextView save, tile, back;
+    private BalanceAccount balanceAccount;
+    private String id,cType;
     private List<BalanceAccount> balanceAccountList;
     private boolean isSave=false;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.basic);
         manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        userName =(EditText)findViewById(R.id.basiclayout_name);
+        name =(EditText)findViewById(R.id.basiclayout_name);
         final Intent intent=getIntent();
-        customid=intent.getStringExtra("customid");
-        edit=intent.getStringExtra("action");
-        toobarSave =(TextView)findViewById(R.id.custom_toobar_right);
-        toobarTile =(TextView)findViewById(R.id.custom_toobar_midd);
-        toobarBack =(TextView)findViewById(R.id.custom_toobar_left);
-        toobarSave.setCompoundDrawables(null,null,null,null);
-        toobarTile.setCompoundDrawables(null,null,null,null);
-        toobarSave.setText("保存");
-        toobarSave.setOnClickListener(this);
-        toobarBack.setOnClickListener(this);
+        id=intent.getStringExtra("customid");
+        cType=intent.getStringExtra("action");
+        save =(TextView)findViewById(R.id.custom_toobar_right);
+        tile =(TextView)findViewById(R.id.custom_toobar_midd);
+        back =(TextView)findViewById(R.id.custom_toobar_left);
+        save.setCompoundDrawables(null,null,null,null);
+        tile.setCompoundDrawables(null,null,null,null);
+        save.setText("保存");
+        save.setOnClickListener(this);
+        back.setOnClickListener(this);
        formInit();
 
     }
 private  void formInit()
-{if(customid!=null) {
-    brandName = DataSupport.find(BalanceAccount.class, Long.parseLong(customid));
-    userName.setText(brandName.getName());
+{if(id!=null) {
+    balanceAccount = DataSupport.find(BalanceAccount.class, Long.parseLong(id));
+    name.setText(balanceAccount.getName());
 }
-    if(edit.equals("edit"))
+    if(cType.equals("edit"))
     {
-        toobarTile.setText("结算账户修改");
+        tile.setText("结算账户修改");
     }else {
-        toobarTile.setText("结算账户新增");
+        tile.setText("结算账户新增");
     }
 
 }
@@ -70,25 +70,25 @@ private  void formInit()
         {
             case R.id.custom_toobar_right:
 
-                balanceAccountList = DataStructure.where("name = ?",userName.getText().toString()).find(BalanceAccount.class);
-                if (TextUtils.isEmpty(userName.getText().toString())) {
-                    userName.setError("需要输入账目类型");
+                balanceAccountList = DataStructure.where("name = ?", name.getText().toString()).find(BalanceAccount.class);
+                if (TextUtils.isEmpty(name.getText().toString())) {
+                    name.setError("需要输入账目类型");
                 }else if (balanceAccountList.size()>0)
                 {
                     Toast.makeText(BalanceAccountForm.this,"账目类型已经存在",Toast.LENGTH_SHORT).show();
                 } else {
-                    if (edit.equals("edit")) {
+                    if (cType.equals("edit")) {
                       BalanceAccount  balanceAccount = new BalanceAccount();
-                        balanceAccount.setName(userName.getText().toString());
-                        balanceAccount.update(Long.parseLong(customid));
+                        balanceAccount.setName(name.getText().toString());
+                        balanceAccount.update(Long.parseLong(id));
                         Intent intent = new Intent();
-                        intent.putExtra("returnName",userName.getText().toString());
+                        intent.putExtra("returnName", name.getText().toString());
                         setResult(RESULT_OK,intent);
                         isSave=true;
                         BalanceAccountForm.this.finish();
                     } else {
                         BalanceAccount  balanceAccount = new BalanceAccount();
-                        balanceAccount.setName(userName.getText().toString());
+                        balanceAccount.setName(name.getText().toString());
                         balanceAccount.save();
                         Intent intent = new Intent();
                         setResult(RESULT_OK,intent);
@@ -97,13 +97,13 @@ private  void formInit()
                 }
                 break;
             case R.id.custom_toobar_left:
-                if(edit.equals("edit"))
+                if(cType.equals("edit"))
                 {
                     Intent intent = new Intent();
                     if(isSave) {
-                        intent.putExtra("returnName", userName.getText().toString());
+                        intent.putExtra("returnName", name.getText().toString());
                     }else {
-                        intent.putExtra("returnName",brandName.getName());
+                        intent.putExtra("returnName", balanceAccount.getName());
                     }
                     setResult(RESULT_OK,intent);
                     finish();

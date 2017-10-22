@@ -22,39 +22,39 @@ import org.litepal.crud.DataSupport;
 
 public class AccountForm extends AppCompatActivity implements View.OnClickListener {
     private InputMethodManager manager;
-    private EditText userName;
-    private TextView toobarSave, toobarTile, toobarBack;
+    private EditText name;
+    private TextView save, tile, back;
     private Account account;
-    private String customid,edit;
+    private String id,cType;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.basic);
         manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        userName =(EditText)findViewById(R.id.basiclayout_name);
+        name =(EditText)findViewById(R.id.basiclayout_name);
         final Intent intent=getIntent();
-        customid=intent.getStringExtra("customid");
-        edit=intent.getStringExtra("action");
-        toobarSave =(TextView)findViewById(R.id.custom_toobar_right);
-        toobarTile =(TextView)findViewById(R.id.custom_toobar_midd);
-        toobarBack =(TextView)findViewById(R.id.custom_toobar_left);
-        toobarSave.setCompoundDrawables(null,null,null,null);
-        toobarTile.setCompoundDrawables(null,null,null,null);
-        toobarSave.setText("保存");
-        toobarSave.setOnClickListener(this);
-        toobarBack.setOnClickListener(this);
+        id=intent.getStringExtra("customid");
+        cType=intent.getStringExtra("action");
+        save =(TextView)findViewById(R.id.custom_toobar_right);
+        tile =(TextView)findViewById(R.id.custom_toobar_midd);
+        back =(TextView)findViewById(R.id.custom_toobar_left);
+        save.setCompoundDrawables(null,null,null,null);
+        tile.setCompoundDrawables(null,null,null,null);
+        save.setText("保存");
+        save.setOnClickListener(this);
+        back.setOnClickListener(this);
        formInit();
 
     }
 private  void formInit()
-{if(customid!=null) {
-    account = DataSupport.find(Account.class, Long.parseLong(customid));
-    userName.setText(account.getName());
+{if(id!=null) {
+    account = DataSupport.find(Account.class, Long.parseLong(id));
+    name.setText(account.getName());
 }
-    if(edit.equals("edit"))
+    if(cType.equals("edit"))
     {
-        toobarTile.setText("账户修改");
+        tile.setText("账户修改");
     }else {
-        toobarTile.setText("账户新增");
+        tile.setText("账户新增");
     }
 
 }
@@ -63,19 +63,19 @@ private  void formInit()
         switch (v.getId())
         {
             case R.id.custom_toobar_right:
-                if (TextUtils.isEmpty(userName.getText().toString())) {
-                    userName.setError("需要输入账户");
+                if (TextUtils.isEmpty(name.getText().toString())) {
+                    name.setError("需要输入账户");
                 } else {
-                    if (edit.equals("edit")) {
+                    if (cType.equals("edit")) {
                   Account account = new Account();
-                        account.setName(userName.getText().toString());
-                        account.update(Long.parseLong(customid));
+                        account.setName(name.getText().toString());
+                        account.update(Long.parseLong(id));
                         Intent intent = new Intent();
                         setResult(RESULT_OK,intent);
                         AccountForm.this.finish();
                     } else {
                    Account     account = new Account();
-                        account.setName(userName.getText().toString());
+                        account.setName(name.getText().toString());
                         account.save();
                         Intent intent = new Intent();
                         setResult(RESULT_OK,intent);
@@ -84,7 +84,7 @@ private  void formInit()
                 }
                 break;
             case R.id.custom_toobar_left:
-                if(edit.equals("edit"))
+                if(cType.equals("edit"))
                 {
                     Intent intent = new Intent();
                     setResult(RESULT_OK,intent);

@@ -38,12 +38,12 @@ import java.util.List;
 public class SupplierForm extends AppCompatActivity implements View.OnClickListener {
     private InputMethodManager manager;
     private EditText name,address,phone,fax;
-    private TextView toobarSave, toobarTile, toobarBack, toobarAdd,category;
+    private TextView save, tile, back, add,category;
     private DisplayMetrics dm;
     private LinearLayout linearLayout;
     private Supplier supplier;
     private String categoryid,customid,edit;
-    private Button deleteButton;
+    private Button delete;
     private Drawable errorIcon;
     private List<SalesOut> salesOutList =new ArrayList<SalesOut>();
     private AcivityPostBean acivityPostBen=new AcivityPostBean();
@@ -62,24 +62,24 @@ public class SupplierForm extends AppCompatActivity implements View.OnClickListe
         phone=(EditText)findViewById(R.id.supplierform_phone);
         fax=(EditText)findViewById(R.id.supplierform_fax);
         category=(TextView)findViewById(R.id.supplierform_category);
-        toobarSave =(TextView)findViewById(R.id.customtoobar_right);
-        toobarTile =(TextView)findViewById(R.id.customtoobar_midd);
-        toobarBack =(TextView)findViewById(R.id.customtoobar_left);
+        save =(TextView)findViewById(R.id.customtoobar_right);
+        tile =(TextView)findViewById(R.id.customtoobar_midd);
+        back =(TextView)findViewById(R.id.customtoobar_left);
         linearLayout=(LinearLayout)findViewById(R.id.supplierform_category_layout);
-        toobarAdd =(TextView)findViewById(R.id.customtoobar_r) ;
-        deleteButton =(Button)findViewById(R.id.loginbutton);
-        toobarSave.setOnClickListener(this);
-        toobarBack.setOnClickListener(this);
+        add =(TextView)findViewById(R.id.customtoobar_r) ;
+        delete =(Button)findViewById(R.id.loginbutton);
+        save.setOnClickListener(this);
+        back.setOnClickListener(this);
         linearLayout.setOnClickListener(this);
-        toobarAdd.setOnClickListener(this);
-        deleteButton.setOnClickListener(this);
-        toobarSave.setCompoundDrawables(null,null,null,null);
-        toobarTile.setCompoundDrawables(null,null,null,null);
+        add.setOnClickListener(this);
+        delete.setOnClickListener(this);
+        save.setCompoundDrawables(null,null,null,null);
+        tile.setCompoundDrawables(null,null,null,null);
         errorIcon = getResources().getDrawable(R.drawable.icon_error);
 // 设置图片大小
         errorIcon.setBounds(new Rect(0, 0, errorIcon.getIntrinsicWidth(),
                 errorIcon.getIntrinsicHeight()));
-        toobarSave.setText("保存");
+        save.setText("保存");
         formInit();
 
     }
@@ -94,17 +94,17 @@ public class SupplierForm extends AppCompatActivity implements View.OnClickListe
             phone.setText(supplier.getPhone());
             fax.setText(supplier.getFax());
             category.setText(supplier.getCategory());
-            toobarAdd.setVisibility(View.VISIBLE);
-            deleteButton.setVisibility(View.VISIBLE);
+            add.setVisibility(View.VISIBLE);
+            delete.setVisibility(View.VISIBLE);
         }else {
 
 
         }
         if(edit!=null) {
             if (edit.equals("edit")) {
-                toobarTile.setText("供应商修改");
+                tile.setText("供应商修改");
             } else {
-                toobarTile.setText("供应商新增");
+                tile.setText("供应商新增");
             }
         }
     }
@@ -148,8 +148,8 @@ public class SupplierForm extends AppCompatActivity implements View.OnClickListe
                     supplier.save();
                     Toast.makeText(SupplierForm.this,"新增成功",Toast.LENGTH_SHORT).show();
                     edit="edit";
-                    toobarAdd.setVisibility(View.VISIBLE);
-                    deleteButton.setVisibility(View.VISIBLE);
+                    add.setVisibility(View.VISIBLE);
+                    delete.setVisibility(View.VISIBLE);
                     Intent intent = new Intent();
                     setResult(RESULT_OK,intent);
                     hintKbTwo();
@@ -225,9 +225,9 @@ public class SupplierForm extends AppCompatActivity implements View.OnClickListe
                 phone.setText("");
                 fax.setText("");
                 category.setText("");
-                toobarAdd.setVisibility(View.INVISIBLE);
-                toobarTile.setText("供应商新增");
-                deleteButton.setVisibility(View.INVISIBLE);
+                add.setVisibility(View.INVISIBLE);
+                tile.setText("供应商新增");
+                delete.setVisibility(View.INVISIBLE);
                 edit="";
                 hintKbTwo();
                 break;

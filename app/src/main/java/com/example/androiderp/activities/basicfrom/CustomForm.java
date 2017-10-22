@@ -44,7 +44,7 @@ import okhttp3.Response;
 public class CustomForm extends AppCompatActivity implements View.OnClickListener {
     private InputMethodManager manager;
     private EditText name,address,phone,fax;
-    private TextView toobarSave, toobarTile, toobarBack, toobarAdd,category;
+    private TextView save, tile, back, add,category;
     private DisplayMetrics dm;
     private LinearLayout linearLayout;
     private List<Custom> customList;
@@ -69,15 +69,15 @@ public class CustomForm extends AppCompatActivity implements View.OnClickListene
         phone=(EditText)findViewById(R.id.userphone);
         fax=(EditText)findViewById(R.id.userfax);
         category=(TextView)findViewById(R.id.usercategory);
-        toobarSave =(TextView)findViewById(R.id.customtoobar_right);
-        toobarTile =(TextView)findViewById(R.id.customtoobar_midd);
-        toobarBack =(TextView)findViewById(R.id.customtoobar_left);
-        toobarAdd =(TextView)findViewById(R.id.customtoobar_r) ;
+        save =(TextView)findViewById(R.id.customtoobar_right);
+        tile =(TextView)findViewById(R.id.customtoobar_midd);
+        back =(TextView)findViewById(R.id.customtoobar_left);
+        add =(TextView)findViewById(R.id.customtoobar_r) ;
         deleteButton =(Button)findViewById(R.id.loginbutton);
         linearLayout=(LinearLayout)findViewById(R.id.usercategory_layout);
-        toobarSave.setOnClickListener(this);
-        toobarAdd.setOnClickListener(this);
-        toobarBack.setOnClickListener(this);
+        save.setOnClickListener(this);
+        add.setOnClickListener(this);
+        back.setOnClickListener(this);
         deleteButton.setOnClickListener(this);
         linearLayout.setOnClickListener(this);
         formInit();
@@ -92,7 +92,7 @@ public class CustomForm extends AppCompatActivity implements View.OnClickListene
             phone.setText(getPostData.getPhone());
             fax.setText(getPostData.getFax());
 
-                toobarAdd.setVisibility(View.VISIBLE);
+                add.setVisibility(View.VISIBLE);
                 deleteButton.setVisibility(View.VISIBLE);
 
         }else {
@@ -100,9 +100,9 @@ public class CustomForm extends AppCompatActivity implements View.OnClickListene
         }
         if(getPostType.equals("edit"))
         {
-            toobarTile.setText(acivityPostBen.getAcivityName());
+            tile.setText(acivityPostBen.getAcivityName());
         }else {
-            toobarTile.setText(acivityPostBen.getAcivityName()+"新增");
+            tile.setText(acivityPostBen.getAcivityName()+"新增");
         }
 
 
@@ -146,7 +146,7 @@ public class CustomForm extends AppCompatActivity implements View.OnClickListene
                         showDialog();
                         getHttpData(postUserData);
                         getPostType="edit";
-                        toobarAdd.setVisibility(View.VISIBLE);
+                        add.setVisibility(View.VISIBLE);
                         deleteButton.setVisibility(View.VISIBLE);
                         hintKbTwo();
 
@@ -214,8 +214,8 @@ public class CustomForm extends AppCompatActivity implements View.OnClickListene
                 phone.setText("");
                 fax.setText("");
                 category.setText("");
-                toobarAdd.setVisibility(View.INVISIBLE);
-                toobarTile.setText("客户新增");
+                add.setVisibility(View.INVISIBLE);
+                tile.setText("客户新增");
                 deleteButton.setVisibility(View.INVISIBLE);
                 getPostType="";
                 break;

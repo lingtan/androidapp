@@ -33,17 +33,17 @@ import java.util.List;
 public class AccountsView extends CSearchBase implements View.OnClickListener,
         AdapterView.OnItemClickListener,
         SlideAndDragListView.OnMenuItemClickListener, SlideAndDragListView.OnItemDeleteListener {
-    private List<CommonAdapterData> listdatas = new ArrayList<CommonAdapterData>();
+    private List<CommonAdapterData> commonAdapterDataList = new ArrayList<CommonAdapterData>();
     private CommonListViewAdapter adapter;
     private SlideAndDragListView<CommonAdapterData>  listView;
     private DisplayMetrics dm;
     private List<CommonAdapterData> commonAdapterDataSearch = new ArrayList<CommonAdapterData>();
     private List<Accounts> accountsList;
-    private TextView toobarBack, toobarAdd,toobarTile;
+    private TextView back, add, tile;
     private CSearch search;
     private ImageView lastCheckedOption;
-    private int indexPositon=-1;
-    private String indexName;
+    private int iPositon =-1;
+    private String iName;
     private Menu menu;
     private String returnName;
     private String searchVale;
@@ -53,29 +53,29 @@ public class AccountsView extends CSearchBase implements View.OnClickListener,
         initMenu();
         initUiAndListener();
 
-        toobarBack=(TextView)findViewById(R.id.custom_toobar_left) ;
-        toobarTile=(TextView)findViewById(R.id.custom_toobar_midd);
-        toobarAdd =(TextView)findViewById(R.id.custom_toobar_right);
-        toobarBack.setOnClickListener(this);
-        toobarAdd.setOnClickListener(this);
-        toobarTile.setOnClickListener(this);
+        back =(TextView)findViewById(R.id.custom_toobar_left) ;
+        tile =(TextView)findViewById(R.id.custom_toobar_midd);
+        add =(TextView)findViewById(R.id.custom_toobar_right);
+        back.setOnClickListener(this);
+        add.setOnClickListener(this);
+        tile.setOnClickListener(this);
         search = (CSearch) findViewById(R.id.search);
         Intent intent=getIntent();
-        indexName =intent.getStringExtra("index");
+        iName =intent.getStringExtra("index");
         accountsList = DataSupport.findAll(Accounts.class);
-        toobarTile.setCompoundDrawables(null,null,null,null);
-        toobarTile.setText("选择账目类型");
+        tile.setCompoundDrawables(null,null,null,null);
+        tile.setText("选择账目类型");
         for(Accounts accounts: accountsList)
 
-        {   if(accounts.getName().equals(indexName))
+        {   if(accounts.getName().equals(iName))
         {
-            indexPositon = accountsList.indexOf(accounts);
+            iPositon = accountsList.indexOf(accounts);
         }
             CommonAdapterData commonData=new CommonAdapterData();
             commonData.setName(accounts.getName());
             commonData.setUnitId(accounts.getId());
             commonData.setImage(R.drawable.seclec_arrow);
-            listdatas.add(commonData);
+            commonAdapterDataList.add(commonData);
 
 
 
@@ -86,9 +86,9 @@ public class AccountsView extends CSearchBase implements View.OnClickListener,
         getWindowManager().getDefaultDisplay().getMetrics(dm);
 
 
-        if(listdatas.size()!=0) {
-                 adapter = new CommonListViewAdapter(AccountsView.this, R.layout.custom_item, listdatas);
-                 adapter.setSeclection(indexPositon);
+        if(commonAdapterDataList.size()!=0) {
+                 adapter = new CommonListViewAdapter(AccountsView.this, R.layout.custom_item, commonAdapterDataList);
+                 adapter.setSeclection(iPositon);
                  listView.setAdapter(adapter);
 
 
@@ -133,7 +133,7 @@ public class AccountsView extends CSearchBase implements View.OnClickListener,
                         Intent intent=new Intent(AccountsView.this,AccountsForm.class);
 
                             intent.putExtra("action", "edit");
-                            intent.putExtra("customid", String.valueOf(listdatas.get(itemPosition).getUnitId()));
+                            intent.putExtra("customid", String.valueOf(commonAdapterDataList.get(itemPosition).getUnitId()));
                         startActivityForResult(intent,1);
 
                         return Menu.ITEM_NOTHING;
@@ -145,14 +145,14 @@ public class AccountsView extends CSearchBase implements View.OnClickListener,
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
 
-                                    DataStructure.deleteAll(Accounts.class, "name = ?", listdatas.get(itemPosition - listView.getHeaderViewsCount()).getName().toString());
-                                    listdatas.remove(itemPosition - listView.getHeaderViewsCount());
+                                    DataStructure.deleteAll(Accounts.class, "name = ?", commonAdapterDataList.get(itemPosition - listView.getHeaderViewsCount()).getName().toString());
+                                    commonAdapterDataList.remove(itemPosition - listView.getHeaderViewsCount());
                                     if (search.getText().toString().isEmpty()) {
-                                        if (indexPositon == itemPosition) {
-                                            indexPositon = -1;
+                                        if (iPositon == itemPosition) {
+                                            iPositon = -1;
                                         }
 
-                                        adapter.setSeclection(indexPositon);
+                                        adapter.setSeclection(iPositon);
                                         adapter.notifyDataSetChanged();
                                     } else {
                                         search.setText("");
@@ -186,8 +186,8 @@ public class AccountsView extends CSearchBase implements View.OnClickListener,
 
 
         Intent intent=getIntent();
-            intent.putExtra("data_return", String.valueOf(listdatas.get(position).getName()));
-            indexName =listdatas.get(position).getName();
+            intent.putExtra("data_return", String.valueOf(commonAdapterDataList.get(position).getName()));
+            iName = commonAdapterDataList.get(position).getName();
 
         setResult(RESULT_OK,intent);
 
@@ -196,13 +196,13 @@ public class AccountsView extends CSearchBase implements View.OnClickListener,
         }
         lastCheckedOption = (ImageView)view.findViewById(R.id.custom_item_layout_one_image);
         lastCheckedOption.setVisibility(View.VISIBLE);
-        indexPositon =position;
+        iPositon =position;
         this.finish();
     }
     //筛选条件
     public void  searchItem(String name) {
-        if(listdatas.size()>0) {
-            listdatas.clear();
+        if(commonAdapterDataList.size()>0) {
+            commonAdapterDataList.clear();
         }
         accountsList =DataStructure.where("name like ?","%" + name + "%").find(Accounts.class);
         for(Accounts accounts: accountsList)
@@ -212,24 +212,24 @@ public class AccountsView extends CSearchBase implements View.OnClickListener,
             commonData.setName(accounts.getName());
             commonData.setUnitId(accounts.getId());
             commonData.setImage(R.drawable.seclec_arrow);
-            listdatas.add(commonData);
+            commonAdapterDataList.add(commonData);
 
         }
 
-        if(listdatas!=null) {
+        if(commonAdapterDataList !=null) {
             int index=-1;
             if(!name.isEmpty())
             {
-                for(int i=0;i<listdatas.size();i++)
+                for(int i = 0; i< commonAdapterDataList.size(); i++)
                 {
-                    if(listdatas.get(i).getName().equals(indexName))
+                    if(commonAdapterDataList.get(i).getName().equals(iName))
                     {
                         index=i;
                     }
                 }
             }else
             {
-                index= indexPositon;
+                index= iPositon;
             }
 
             adapter.setSeclection(index);
@@ -246,8 +246,8 @@ public class AccountsView extends CSearchBase implements View.OnClickListener,
         {
             case R.id.custom_toobar_left:
                 Intent intent=getIntent();
-                if(indexPositon!=-1) {
-                    intent.putExtra("data_return", listdatas.get(indexPositon).getName());
+                if(iPositon !=-1) {
+                    intent.putExtra("data_return", commonAdapterDataList.get(iPositon).getName());
                 }
                 setResult(RESULT_OK,intent);
                 AccountsView.this.finish();
@@ -274,9 +274,9 @@ public class AccountsView extends CSearchBase implements View.OnClickListener,
             case 1:
                 if(resultCode==RESULT_OK)
                 {   returnName=data.getStringExtra("returnName");
-                    indexName=returnName;
-                    if(listdatas.size()>0) {
-                        listdatas.clear();
+                    iName =returnName;
+                    if(commonAdapterDataList.size()>0) {
+                        commonAdapterDataList.clear();
                     }
                     if(search.getText().toString().isEmpty()) {
 
@@ -298,8 +298,8 @@ public class AccountsView extends CSearchBase implements View.OnClickListener,
             case 2:
                 if(resultCode==RESULT_OK)
                 {
-                    if(listdatas.size()!=0) {
-                        listdatas.clear();
+                    if(commonAdapterDataList.size()!=0) {
+                        commonAdapterDataList.clear();
                     }
                     accountsList = DataSupport.findAll(Accounts.class);
                     for(Accounts accounts: accountsList)
@@ -309,13 +309,13 @@ public class AccountsView extends CSearchBase implements View.OnClickListener,
                         commonData.setName(accounts.getName());
                         commonData.setUnitId(accounts.getId());
                         commonData.setImage(R.drawable.seclec_arrow);
-                        listdatas.add(commonData);
+                        commonAdapterDataList.add(commonData);
 
 
 
                     }
-                    adapter = new CommonListViewAdapter(AccountsView.this, R.layout.custom_item, listdatas);
-                    adapter.setSeclection(indexPositon);
+                    adapter = new CommonListViewAdapter(AccountsView.this, R.layout.custom_item, commonAdapterDataList);
+                    adapter.setSeclection(iPositon);
                     listView.setAdapter(adapter);
 
 

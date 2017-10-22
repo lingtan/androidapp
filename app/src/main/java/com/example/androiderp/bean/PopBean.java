@@ -1,6 +1,6 @@
 package com.example.androiderp.bean;
 
-public class PopuMenuDataStructure {
+public class PopBean {
 
 
     private int image;
@@ -8,7 +8,7 @@ public class PopuMenuDataStructure {
 
 
 
-    public PopuMenuDataStructure(int image,String name) {
+    public PopBean(int image, String name) {
         this.name = name;
         this.image=image;
 

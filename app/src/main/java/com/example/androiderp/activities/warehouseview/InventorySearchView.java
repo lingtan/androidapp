@@ -19,7 +19,7 @@ import com.example.androiderp.bean.StockIniti;
 import com.example.androiderp.bean.StockTakingEnty;
 import com.example.androiderp.R;
 import com.example.androiderp.adaper.AppropriationBadgeAdapter;
-import com.example.androiderp.bean.PopuMenuDataStructure;
+import com.example.androiderp.bean.PopBean;
 import com.example.androiderp.tools.Common;
 import com.example.androiderp.ui.CHomeSearch;
 import com.example.androiderp.ui.CSearchBase;
@@ -32,7 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class InventorySearchView extends CSearchBase implements View.OnClickListener, AppropriationBadgeAdapter.Callback{
-    private List<PopuMenuDataStructure> popuMenuDatas;
+    private List<PopBean> popuMenuDatas;
     private AppropriationBadgeAdapter adapter;
     private ListView listView;
     private DisplayMetrics dm;
@@ -143,10 +143,10 @@ public class InventorySearchView extends CSearchBase implements View.OnClickList
 
         cHomeSearch.addTextChangedListener(textWatcher);
 
-        popuMenuDatas = new ArrayList<PopuMenuDataStructure>();
-        PopuMenuDataStructure popuMenua = new PopuMenuDataStructure(android.R.drawable.ic_menu_edit, "美的");
+        popuMenuDatas = new ArrayList<PopBean>();
+        PopBean popuMenua = new PopBean(android.R.drawable.ic_menu_edit, "美的");
         popuMenuDatas.add(popuMenua);
-        PopuMenuDataStructure popuMenub = new PopuMenuDataStructure(android.R.drawable.ic_menu_edit, "松下");
+        PopBean popuMenub = new PopBean(android.R.drawable.ic_menu_edit, "松下");
         popuMenuDatas.add(popuMenub);
         showPopupWindow(popuMenuDatas);
 
@@ -180,7 +180,7 @@ public class InventorySearchView extends CSearchBase implements View.OnClickList
         }
     }
 
-    private void showPopupWindow(final List<PopuMenuDataStructure> popuMenuData) {
+    private void showPopupWindow(final List<PopBean> popuMenuData) {
         common = new Common();
 
         common.PopupWindow(InventorySearchView.this, dm, popuMenuData);
@@ -251,9 +251,9 @@ public class InventorySearchView extends CSearchBase implements View.OnClickList
             case R.id.custom_toobar_right:
                 if( common.mPopWindow==null ||!common.mPopWindow.isShowing())
                 {   popuMenuDatas.clear();
-                    PopuMenuDataStructure popuMenua = new PopuMenuDataStructure(R.drawable.poppu_wrie, "客户修改");
+                    PopBean popuMenua = new PopBean(R.drawable.poppu_wrie, "客户修改");
                     popuMenuDatas.add(popuMenua);
-                    PopuMenuDataStructure popuMenub = new PopuMenuDataStructure(R.drawable.poppu_wrie, "客户新增");
+                    PopBean popuMenub = new PopBean(R.drawable.poppu_wrie, "客户新增");
                     popuMenuDatas.add(popuMenub);
                     int xPos = dm.widthPixels / 3;
                     showPopupWindow(popuMenuDatas);

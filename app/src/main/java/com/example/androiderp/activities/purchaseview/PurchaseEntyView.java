@@ -18,7 +18,7 @@ import com.example.androiderp.bean.SalesOutEnty;
 import com.example.androiderp.bean.Stock;
 import com.example.androiderp.R;
 import com.example.androiderp.adaper.CommonAdapterData;
-import com.example.androiderp.bean.PopuMenuDataStructure;
+import com.example.androiderp.bean.PopBean;
 import com.example.androiderp.adaper.SaleProductListViewAdapter;
 import com.example.androiderp.tools.Common;
 import com.example.androiderp.ui.CSearchBase;
@@ -46,7 +46,7 @@ public class PurchaseEntyView extends CSearchBase implements View.OnClickListene
     private Drawable errorIcon;
     private Common common;
     private Intent intentBack;
-    private List<PopuMenuDataStructure> popuMenuDatas;
+    private List<PopBean> popuMenuDatas;
     private List<SalesOutEnty> salesOutEntyList=new ArrayList<SalesOutEnty>();
     private List<CommonAdapterData> listdatas = new ArrayList<CommonAdapterData>();
     private SlideAndDragListView<CommonAdapterData> listView;
@@ -192,9 +192,9 @@ public class PurchaseEntyView extends CSearchBase implements View.OnClickListene
                 if( common.mPopWindow==null ||!common.mPopWindow.isShowing())
                 {   popuMenuDatas.clear();
 
-                    PopuMenuDataStructure popuMenub = new PopuMenuDataStructure(R.drawable.poppu_wrie, "商品新增");
+                    PopBean popuMenub = new PopBean(R.drawable.poppu_wrie, "商品新增");
                     popuMenuDatas.add(popuMenub);
-                    PopuMenuDataStructure popuMenua = new PopuMenuDataStructure(R.drawable.poppu_wrie, "商品复制");
+                    PopBean popuMenua = new PopBean(R.drawable.poppu_wrie, "商品复制");
                     popuMenuDatas.add(popuMenua);
                     int xPos = dm.widthPixels / 3;
                     showPopupWindow(popuMenuDatas);
@@ -209,7 +209,7 @@ public class PurchaseEntyView extends CSearchBase implements View.OnClickListene
 
         }
     }
-    private void showPopupWindow(final List<PopuMenuDataStructure> popuMenuData) {
+    private void showPopupWindow(final List<PopBean> popuMenuData) {
         common = new Common();
 
         common.PopupWindow(PurchaseEntyView.this, dm, popuMenuData);
@@ -258,12 +258,12 @@ public class PurchaseEntyView extends CSearchBase implements View.OnClickListene
     }
     private void showStockWindow() {
         common = new Common();
-        popuMenuDatas = new ArrayList<PopuMenuDataStructure>();
+        popuMenuDatas = new ArrayList<PopBean>();
         stockList = DataSupport.findAll(Stock.class);
         for(Stock stock: stockList)
 
         {
-            PopuMenuDataStructure popuMenua = new PopuMenuDataStructure(R.drawable.poppu_wrie, stock.getName());
+            PopBean popuMenua = new PopBean(R.drawable.poppu_wrie, stock.getName());
             popuMenuDatas.add(popuMenua);
 
         }
