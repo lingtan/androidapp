@@ -64,13 +64,13 @@ public class StockTakingForm extends CSearchBase implements View.OnClickListener
         SlideAndDragListView.OnMenuItemClickListener, SlideAndDragListView.OnItemDeleteListener {
     private InputMethodManager manager;
     private EditText note;
-    private TextView save,toobarTile,toobarBack,toobarAdd,stockname;
+    private TextView save, tile, back, add,stockname;
     private DisplayMetrics dm;
-    private LinearLayout appropriOutLayout,appropriInLayout,productScreenLayout,productAddLayout;
+    private LinearLayout outLayout, inLayout,productScreenLayout,productAddLayout;
     private Stock  stock;
     private Drawable errorIcon;
     private Common common;
-    private List<PopBean> popuMenuList;
+    private List<PopBean> popBeanList;
     private List<StockTakingEnty> stockTakingEntyList=new ArrayList<StockTakingEnty>();
     private List<Product> productList;
     private List<ProductShopping> productShoppinglist = new ArrayList<ProductShopping>();
@@ -99,19 +99,19 @@ public class StockTakingForm extends CSearchBase implements View.OnClickListener
         note=(EditText)findViewById(R.id.note);
         productScreenLayout=(LinearLayout) findViewById(R.id.screen_layout);
         save=(TextView)findViewById(R.id.customtoobar_right);
-        toobarTile=(TextView)findViewById(R.id.customtoobar_midd);
-        toobarBack=(TextView)findViewById(R.id.customtoobar_left);
-        toobarAdd=(TextView)findViewById(R.id.customtoobar_r) ;
-        appropriInLayout=(LinearLayout)findViewById(R.id.stockin_layout);
-        appropriOutLayout=(LinearLayout)findViewById(R.id.stockout_layout);
-        appropriInLayout.setOnClickListener(this);
-        appropriOutLayout.setOnClickListener(this);
+        tile =(TextView)findViewById(R.id.customtoobar_midd);
+        back =(TextView)findViewById(R.id.customtoobar_left);
+        add =(TextView)findViewById(R.id.customtoobar_r) ;
+        inLayout =(LinearLayout)findViewById(R.id.stockin_layout);
+        outLayout =(LinearLayout)findViewById(R.id.stockout_layout);
+        inLayout.setOnClickListener(this);
+        outLayout.setOnClickListener(this);
         save.setOnClickListener(this);
-        toobarBack.setOnClickListener(this);
-        toobarAdd.setOnClickListener(this);
+        back.setOnClickListener(this);
+        add.setOnClickListener(this);
         productAddLayout.setOnClickListener(this);
         save.setCompoundDrawables(null,null,null,null);
-        toobarTile.setCompoundDrawables(null,null,null,null);
+        tile.setCompoundDrawables(null,null,null,null);
         errorIcon = getResources().getDrawable(R.drawable.icon_error);
 // 设置图片大小
         errorIcon.setBounds(new Rect(0, 0, errorIcon.getIntrinsicWidth(),
@@ -130,7 +130,7 @@ public class StockTakingForm extends CSearchBase implements View.OnClickListener
                 startActivityForResult(openCameraIntent, 5);
             }
         });
-        toobarTile.setText("盘点作业");
+        tile.setText("盘点作业");
 
     }
     private void  formInit()
@@ -271,7 +271,7 @@ public class StockTakingForm extends CSearchBase implements View.OnClickListener
 
                         Toast.makeText(StockTakingForm.this, "新增成功", Toast.LENGTH_SHORT).show();
                         save.setVisibility(View.GONE);
-                        toobarAdd.setVisibility(View.VISIBLE);
+                        add.setVisibility(View.VISIBLE);
 
 
                 }
@@ -328,14 +328,14 @@ public class StockTakingForm extends CSearchBase implements View.OnClickListener
 
             case R.id.customtoobar_r:
                 if( common.mPopWindow==null ||!common.mPopWindow.isShowing())
-                {   popuMenuList.clear();
+                {   popBeanList.clear();
 
                     PopBean popuMenub = new PopBean(R.drawable.poppu_wrie, "销售单新增");
-                    popuMenuList.add(popuMenub);
+                    popBeanList.add(popuMenub);
                     PopBean popuMenua = new PopBean(R.drawable.poppu_wrie, "销售单复制");
-                    popuMenuList.add(popuMenua);
+                    popBeanList.add(popuMenua);
                     int xPos = dm.widthPixels / 3;
-                    showPopupWindow(popuMenuList);
+                    showPopupWindow(popBeanList);
                     common.mPopWindow.showAsDropDown(v,0,5);
                     //mPopWindow.showAtLocation(findViewById(R.id.main), Gravity.BOTTOM, 0, 0);//从底部弹出
                 }
@@ -361,7 +361,7 @@ public class StockTakingForm extends CSearchBase implements View.OnClickListener
             public void onItemClick(AdapterView<?> adapterView, View view,
                                     int position, long id) {
 
-                if(popuMenuList.get(position).getName().equals("销售单新增"))
+                if(popBeanList.get(position).getName().equals("销售单新增"))
                 {
                     intent = new Intent(StockTakingForm.this, StockTakingForm.class);
                     startActivity(intent);
@@ -503,23 +503,23 @@ public class StockTakingForm extends CSearchBase implements View.OnClickListener
 
     private void showEmployeeWindow() {
         common = new Common();
-        popuMenuList = new ArrayList<PopBean>();
+        popBeanList = new ArrayList<PopBean>();
         stockList= DataSupport.findAll(Stock.class);
         for(Stock stock:stockList)
 
         {
             PopBean popuMenua = new PopBean(R.drawable.poppu_wrie, stock.getName());
-            popuMenuList.add(popuMenua);
+            popBeanList.add(popuMenua);
 
         }
-        common.PopupWindow(StockTakingForm.this, dm, popuMenuList);
+        common.PopupWindow(StockTakingForm.this, dm, popBeanList);
         common.listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view,
                                     int position, long id) {
 
-                stockname.setText(popuMenuList.get(position).getName());
+                stockname.setText(popBeanList.get(position).getName());
                 common.mPopWindow.dismiss();
             }
         });

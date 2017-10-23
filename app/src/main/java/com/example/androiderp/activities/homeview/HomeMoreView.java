@@ -23,12 +23,12 @@ public class HomeMoreView extends CSearchBase implements View.OnClickListener {
     private DisplayMetrics dm;
     private List<GridView> gridViewList=new ArrayList<GridView>();
     private List<GridView> gridViewaddList=new ArrayList<GridView>();
-    private TextView toobarBack, toobarAdd, toobarTile;
+    private TextView back, add, tile;
     private String[] home_name = {
             "供应商管理","客户管理","仓库管理",
             "库存调拨","调拨流水", "盘点作业","盘点流水","仓库预警",
             "职员管理","账户管理","经营分析",};
-    private int[] imgs = {
+    private int[] home_image = {
             R.drawable.home_fisrtfragment_gy, R.drawable.home_firstfragment_kh,R.drawable.home_fisrtfragment_kc,
             R.drawable.home_fistfragment_db, R.drawable.home_dbls,R.drawable.home_fisrfragment_pd,R.drawable.fourthfragmnet_pdls,R.drawable.fourthfragment_kcyj,
             R.drawable.home_firstfragment_zy,R.drawable.home_fisrtfragment_zh,R.drawable.hoem_fisrtfragment_jy,
@@ -36,23 +36,23 @@ public class HomeMoreView extends CSearchBase implements View.OnClickListener {
     @Override
     public void iniView(){
         setContentView(R.layout.home_morelayout);
-        toobarBack =(TextView)findViewById(R.id.custom_toobar_left) ;
-        toobarTile =(TextView)findViewById(R.id.custom_toobar_midd);
-        toobarAdd =(TextView)findViewById(R.id.custom_toobar_right);
+        back =(TextView)findViewById(R.id.custom_toobar_left) ;
+        tile =(TextView)findViewById(R.id.custom_toobar_midd);
+        add =(TextView)findViewById(R.id.custom_toobar_right);
         Drawable more= getResources().getDrawable(R.drawable.toobar_more);
         more.setBounds(0, 0, more.getMinimumWidth(), more.getMinimumHeight());
-        toobarAdd.setCompoundDrawables(more,null,null,null);
-        toobarBack.setOnClickListener(this);
-        toobarAdd.setOnClickListener(this);
+        add.setCompoundDrawables(more,null,null,null);
+        back.setOnClickListener(this);
+        add.setOnClickListener(this);
 
-        toobarTile.setText("快捷菜单");
+        tile.setText("快捷菜单");
 
         for(int i=0;i<11;i++)
         {
             GridView gridView=new GridView();
             gridView.setName(home_name[i]);
             gridView.setChoiceImage(R.drawable.nochoice);
-            gridView.setImage(imgs[i]);
+            gridView.setImage(home_image[i]);
             gridView.setChoice(false);
             gridViewList.add(gridView);
         }

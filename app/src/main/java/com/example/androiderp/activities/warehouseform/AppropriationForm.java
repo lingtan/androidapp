@@ -64,13 +64,13 @@ public class AppropriationForm extends CSearchBase implements View.OnClickListen
         SlideAndDragListView.OnMenuItemClickListener, SlideAndDragListView.OnItemDeleteListener {
     private InputMethodManager manager;
     private EditText note;
-    private TextView save,toobarTile,toobarBack,toobarAdd,appropriIn,appropriOut;
+    private TextView save, tile, back, add, in, out;
     private DisplayMetrics dm;
-    private LinearLayout appropriOutLayout,appropriInLayout,productScreenLayout,productAddLayout;
+    private LinearLayout outLayout, inLayout,productScreenLayout,productAddLayout;
     private Stock  stock;
     private Drawable errorIcon;
     private Common common;
-    private List<PopBean> popuMenuList;
+    private List<PopBean> popBeanList;
     private List<Product> productList;
     private List<AppropriationEnty> appropriationEntyList=new ArrayList<AppropriationEnty>();
     private List<ProductShopping> productShoppinglist = new ArrayList<ProductShopping>();
@@ -96,25 +96,25 @@ public class AppropriationForm extends CSearchBase implements View.OnClickListen
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         final Intent intent=getIntent();
         manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        appropriOut=(TextView)findViewById(R.id.requisition_out);
+        out =(TextView)findViewById(R.id.requisition_out);
         productAddLayout=(LinearLayout) findViewById(R.id.requisition_add_layout);
-        appropriIn=(TextView)findViewById(R.id.requisition_in);
+        in =(TextView)findViewById(R.id.requisition_in);
         note=(EditText)findViewById(R.id.requisition_note);
         productScreenLayout=(LinearLayout) findViewById(R.id.requisition_screen_layout);
         save=(TextView)findViewById(R.id.customtoobar_right);
-        toobarTile=(TextView)findViewById(R.id.customtoobar_midd);
-        toobarBack=(TextView)findViewById(R.id.customtoobar_left);
-        toobarAdd=(TextView)findViewById(R.id.customtoobar_r) ;
-        appropriInLayout=(LinearLayout)findViewById(R.id.requisition_in_layout);
-        appropriOutLayout=(LinearLayout)findViewById(R.id.requisition_out_layout);
-        appropriInLayout.setOnClickListener(this);
-        appropriOutLayout.setOnClickListener(this);
+        tile =(TextView)findViewById(R.id.customtoobar_midd);
+        back =(TextView)findViewById(R.id.customtoobar_left);
+        add =(TextView)findViewById(R.id.customtoobar_r) ;
+        inLayout =(LinearLayout)findViewById(R.id.requisition_in_layout);
+        outLayout =(LinearLayout)findViewById(R.id.requisition_out_layout);
+        inLayout.setOnClickListener(this);
+        outLayout.setOnClickListener(this);
         save.setOnClickListener(this);
-        toobarBack.setOnClickListener(this);
-        toobarAdd.setOnClickListener(this);
+        back.setOnClickListener(this);
+        add.setOnClickListener(this);
         productAddLayout.setOnClickListener(this);
         save.setCompoundDrawables(null,null,null,null);
-        toobarTile.setCompoundDrawables(null,null,null,null);
+        tile.setCompoundDrawables(null,null,null,null);
         errorIcon = getResources().getDrawable(R.drawable.icon_error);
 // 设置图片大小
         errorIcon.setBounds(new Rect(0, 0, errorIcon.getIntrinsicWidth(),
@@ -132,7 +132,7 @@ public class AppropriationForm extends CSearchBase implements View.OnClickListen
                 startActivityForResult(openCameraIntent, 5);
             }
         });
-        toobarTile.setText("调拨单");
+        tile.setText("调拨单");
 
     }
     private void  formInit()
@@ -146,7 +146,7 @@ public class AppropriationForm extends CSearchBase implements View.OnClickListen
         {
 
         }else {
-            appropriOut.setText(stock.getName());
+            out.setText(stock.getName());
         }
 
 
@@ -245,16 +245,16 @@ public class AppropriationForm extends CSearchBase implements View.OnClickListen
 
         {
             case R.id.customtoobar_right:
-                if (TextUtils.isEmpty(appropriOut.getText().toString())) {
+                if (TextUtils.isEmpty(out.getText().toString())) {
                     Toast.makeText(AppropriationForm.this,"请选择调出仓库",Toast.LENGTH_SHORT).show();
 
-                }else if (TextUtils.isEmpty(appropriIn.getText().toString()))
+                }else if (TextUtils.isEmpty(in.getText().toString()))
                 {
                     Toast.makeText(AppropriationForm.this,"请选择调入仓库",Toast.LENGTH_SHORT).show();
                 }
                 else if (commonAdapterDataList.size()==0) {
                     Toast.makeText(AppropriationForm.this, "请选择产品", Toast.LENGTH_SHORT).show();
-                }else if (appropriIn.getText().equals(appropriOut.getText())) {
+                }else if (in.getText().equals(out.getText())) {
                     Toast.makeText(AppropriationForm.this,"调出仓库与调入仓库，不能相同", Toast.LENGTH_SHORT).show();
                 }else
 
@@ -263,7 +263,7 @@ public class AppropriationForm extends CSearchBase implements View.OnClickListen
 
                     for(int i = 0; i < commonAdapterDataList.size(); i++)
                     {
-                        stockCheck(appropriOut.getText().toString(), commonAdapterDataList.get(i).getNumber(), commonAdapterDataList.get(i).getFqty());
+                        stockCheck(out.getText().toString(), commonAdapterDataList.get(i).getNumber(), commonAdapterDataList.get(i).getFqty());
 
                     }
                     if(stockCheckList.size()>0)
@@ -281,22 +281,22 @@ public class AppropriationForm extends CSearchBase implements View.OnClickListen
                             appropriationEnty.setName(commonAdapterDataList.get(i).getName());
                             appropriationEnty.setNumber(commonAdapterDataList.get(i).getNumber());
                             appropriationEnty.setQuantity(commonAdapterDataList.get(i).getFqty());
-                            appropriationEnty.setStockIn(appropriIn.getText().toString());
-                            appropriationEnty.setStockOut(appropriOut.getText().toString());
+                            appropriationEnty.setStockIn(in.getText().toString());
+                            appropriationEnty.setStockOut(out.getText().toString());
                             appropriationEntyList.add(appropriationEnty);
                         }
                         DataSupport.saveAll(appropriationEntyList);
                         Appropriation appropriation = new Appropriation();
                         appropriation.setSalesOutEntyList(appropriationEntyList);
-                        appropriation.setStockIn(appropriIn.getText().toString());
+                        appropriation.setStockIn(in.getText().toString());
                         appropriation.setNuber("DBD" + fdate);
-                        appropriation.setStockOut(appropriOut.getText().toString());
+                        appropriation.setStockOut(out.getText().toString());
                         appropriation.setDate(String.valueOf(year + "-" + (++month) + "-" + day));
                         appropriation.setNote(note.getText().toString());
                         appropriation.save();
                         Toast.makeText(AppropriationForm.this, "新增成功", Toast.LENGTH_SHORT).show();
                         save.setVisibility(View.GONE);
-                        toobarAdd.setVisibility(View.VISIBLE);
+                        add.setVisibility(View.VISIBLE);
 
                     }
                 }
@@ -307,14 +307,14 @@ public class AppropriationForm extends CSearchBase implements View.OnClickListen
                 if(stockList.size()>1) {
                     if (common.mPopWindow == null || !common.mPopWindow.isShowing()) {
                         int xPos = dm.widthPixels / 3;
-                        common.mPopWindow.showAsDropDown(appropriIn, xPos, 5);
+                        common.mPopWindow.showAsDropDown(in, xPos, 5);
                         //mPopWindow.showAtLocation(findViewById(R.id.main), Gravity.BOTTOM, 0, 0);//从底部弹出
                     } else {
                         common.mPopWindow.dismiss();
                     }
                 }else {
                     Intent intentstock=new Intent(AppropriationForm.this, BasicView.class);
-                    intentstock.putExtra("index",appropriIn.getText().toString());
+                    intentstock.putExtra("index", in.getText().toString());
                     startActivityForResult(intentstock,11);
                 }
                 break;
@@ -326,14 +326,14 @@ public class AppropriationForm extends CSearchBase implements View.OnClickListen
                 if(stockList.size()>1) {
                     if (common.mPopWindow == null || !common.mPopWindow.isShowing()) {
                         int xPos = dm.widthPixels / 3;
-                        common.mPopWindow.showAsDropDown(appropriOut, xPos, 5);
+                        common.mPopWindow.showAsDropDown(out, xPos, 5);
                         //mPopWindow.showAtLocation(findViewById(R.id.main), Gravity.BOTTOM, 0, 0);//从底部弹出
                     } else {
                         common.mPopWindow.dismiss();
                     }
                 }else {
                     Intent intentstock=new Intent(AppropriationForm.this, BasicView.class);
-                    intentstock.putExtra("index",appropriOut.getText().toString());
+                    intentstock.putExtra("index", out.getText().toString());
                     startActivityForResult(intentstock,12);
                 }
                 break;
@@ -371,14 +371,14 @@ public class AppropriationForm extends CSearchBase implements View.OnClickListen
 
             case R.id.customtoobar_r:
                 if( common.mPopWindow==null ||!common.mPopWindow.isShowing())
-                {   popuMenuList.clear();
+                {   popBeanList.clear();
 
                     PopBean popuMenub = new PopBean(R.drawable.poppu_wrie, "销售单新增");
-                    popuMenuList.add(popuMenub);
+                    popBeanList.add(popuMenub);
                     PopBean popuMenua = new PopBean(R.drawable.poppu_wrie, "销售单复制");
-                    popuMenuList.add(popuMenua);
+                    popBeanList.add(popuMenua);
                     int xPos = dm.widthPixels / 3;
-                    showPopupWindow(popuMenuList);
+                    showPopupWindow(popBeanList);
                     common.mPopWindow.showAsDropDown(v,0,5);
                     //mPopWindow.showAtLocation(findViewById(R.id.main), Gravity.BOTTOM, 0, 0);//从底部弹出
                 }
@@ -388,7 +388,7 @@ public class AppropriationForm extends CSearchBase implements View.OnClickListen
                 break;
             case R.id.requisition_add_layout:
                 Intent intentbadge=new Intent(AppropriationForm.this, ProductAppropriationView.class);
-                intentbadge.putExtra("appropriout",appropriOut.getText().toString());
+                intentbadge.putExtra("appropriout", out.getText().toString());
                 startActivityForResult(intentbadge,6);
                 default:
 
@@ -404,7 +404,7 @@ public class AppropriationForm extends CSearchBase implements View.OnClickListen
             public void onItemClick(AdapterView<?> adapterView, View view,
                                     int position, long id) {
 
-                if(popuMenuList.get(position).getName().equals("销售单新增"))
+                if(popBeanList.get(position).getName().equals("销售单新增"))
                 {
                     intent = new Intent(AppropriationForm.this, AppropriationForm.class);
                     startActivity(intent);
@@ -466,7 +466,7 @@ public class AppropriationForm extends CSearchBase implements View.OnClickListen
                            }
 
 
-                           if(stockCheck(appropriOut.getText().toString(),product.getNumber(),temQty)==0)
+                           if(stockCheck(out.getText().toString(),product.getNumber(),temQty)==0)
                            {
                                Toast.makeText(AppropriationForm.this,"调出仓库数量不足，实际库存为："+df.format(quantity),Toast.LENGTH_SHORT).show();
                            }
@@ -527,7 +527,7 @@ public class AppropriationForm extends CSearchBase implements View.OnClickListen
                         }
 
 
-                        if(stockCheck(appropriOut.getText().toString(),commonData.getNumber(),commonData.getFqty())==0)
+                        if(stockCheck(out.getText().toString(),commonData.getNumber(),commonData.getFqty())==0)
                         {
                             Toast.makeText(AppropriationForm.this,"调出仓库数量不足，实际库存为："+df.format(quantity),Toast.LENGTH_SHORT).show();
                         }
@@ -543,12 +543,12 @@ public class AppropriationForm extends CSearchBase implements View.OnClickListen
 
             case 11:
                 if(resultCode==RESULT_OK){
-                    appropriIn.setText(data.getStringExtra("data_return"));
+                    in.setText(data.getStringExtra("data_return"));
                 }
                 break;
             case 12:
                 if(resultCode==RESULT_OK){
-                    appropriOut.setText(data.getStringExtra("data_return"));
+                    out.setText(data.getStringExtra("data_return"));
                 }
                 break;
             default:
@@ -556,23 +556,23 @@ public class AppropriationForm extends CSearchBase implements View.OnClickListen
     }
     private void showStockWindow() {
         common = new Common();
-        popuMenuList = new ArrayList<PopBean>();
+        popBeanList = new ArrayList<PopBean>();
         stockList= DataSupport.findAll(Stock.class);
         for(Stock stock:stockList)
 
         {
             PopBean popuMenua = new PopBean(R.drawable.poppu_wrie, stock.getName());
-            popuMenuList.add(popuMenua);
+            popBeanList.add(popuMenua);
 
         }
-        common.PopupWindow(AppropriationForm.this, dm, popuMenuList);
+        common.PopupWindow(AppropriationForm.this, dm, popBeanList);
         common.listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view,
                                     int position, long id) {
 
-                appropriIn.setText(popuMenuList.get(position).getName());
+                in.setText(popBeanList.get(position).getName());
                 common.mPopWindow.dismiss();
             }
         });
@@ -580,23 +580,23 @@ public class AppropriationForm extends CSearchBase implements View.OnClickListen
 
     private void showEmployeeWindow() {
         common = new Common();
-        popuMenuList = new ArrayList<PopBean>();
+        popBeanList = new ArrayList<PopBean>();
         stockList= DataSupport.findAll(Stock.class);
         for(Stock stock:stockList)
 
         {
             PopBean popuMenua = new PopBean(R.drawable.poppu_wrie, stock.getName());
-            popuMenuList.add(popuMenua);
+            popBeanList.add(popuMenua);
 
         }
-        common.PopupWindow(AppropriationForm.this, dm, popuMenuList);
+        common.PopupWindow(AppropriationForm.this, dm, popBeanList);
         common.listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view,
                                     int position, long id) {
 
-                appropriOut.setText(popuMenuList.get(position).getName());
+                out.setText(popBeanList.get(position).getName());
                 common.mPopWindow.dismiss();
             }
         });

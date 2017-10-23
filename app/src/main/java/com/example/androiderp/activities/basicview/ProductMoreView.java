@@ -59,9 +59,9 @@ public class ProductMoreView extends CSearchBase implements View.OnClickListener
     private ListView rightListView;
     private ListView leftListView;
     private DisplayMetrics dm;
-    private TextView toobarBack, toobarAdd, toobarTile, countShow, toobarScreen;
+    private TextView back, add, tile, countShow, screen;
     private CSearch search;
-    private Intent intentScreen;
+    private Intent iScreen;
     private String scanResult;
     private IntentFilter intentFilter;
     private NetworkChangeReceiver networkChangeReceiver;
@@ -119,10 +119,10 @@ public class ProductMoreView extends CSearchBase implements View.OnClickListener
 
     //控件初始化
     private void widgetInit() {
-        toobarBack = (TextView) findViewById(R.id.custom_toobar_left);
-        toobarTile = (TextView) findViewById(R.id.custom_toobar_midd);
-        toobarAdd = (TextView) findViewById(R.id.custom_toobar_right);
-        toobarScreen = (TextView) findViewById(R.id.customtoobar_screen);
+        back = (TextView) findViewById(R.id.custom_toobar_left);
+        tile = (TextView) findViewById(R.id.custom_toobar_midd);
+        add = (TextView) findViewById(R.id.custom_toobar_right);
+        screen = (TextView) findViewById(R.id.customtoobar_screen);
         search = (CSearch) findViewById(R.id.search);
         countShow = (TextView) findViewById(R.id.product_item_layout_count);
         leftListView = (ListView) findViewById(R.id.left_list);
@@ -132,17 +132,17 @@ public class ProductMoreView extends CSearchBase implements View.OnClickListener
     //控件设置
     private void widgetSet() {
 
-        toobarTile.setText("商品信息");
+        tile.setText("商品信息");
         countShow.setText(String.valueOf(HttpResponseCustom.size()));//统计商品数量并显示
         dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
-        intentScreen = getIntent();
-        scanResult = intentScreen.getStringExtra("scanResult");//获取扫描返回结果
-        toobarTile.setCompoundDrawables(null, null, null, null);//取消标题图片
-        toobarScreen.setOnClickListener(this);
-        toobarBack.setOnClickListener(this);
-        toobarAdd.setOnClickListener(this);
-        toobarTile.setOnClickListener(this);
+        iScreen = getIntent();
+        scanResult = iScreen.getStringExtra("scanResult");//获取扫描返回结果
+        tile.setCompoundDrawables(null, null, null, null);//取消标题图片
+        screen.setOnClickListener(this);
+        back.setOnClickListener(this);
+        add.setOnClickListener(this);
+        tile.setOnClickListener(this);
         leftListView.setTextFilterEnabled(true);
         rightListView.setTextFilterEnabled(true);
         search.addTextChangedListener(textWatcher);
@@ -157,7 +157,7 @@ public class ProductMoreView extends CSearchBase implements View.OnClickListener
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 PostProductData postDate = new PostProductData();
                 selectPositon = position;
-                toobarTile.setText(HttpResponseCategory.get(position).getName().toString());
+                tile.setText(HttpResponseCategory.get(position).getName().toString());
                 leftAdapter.setSeclection(selectPositon);
                 leftAdapter.notifyDataSetChanged();
                 selectCategory = HttpResponseCategory.get(position).getName();

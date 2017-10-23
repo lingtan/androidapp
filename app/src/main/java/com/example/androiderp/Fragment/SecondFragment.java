@@ -11,10 +11,10 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.example.androiderp.R;
+import com.example.androiderp.activities.basicview.CustomSelectView;
 import com.example.androiderp.activities.warehouseview.RequisitionView;
 import com.example.androiderp.activities.warehouseview.InventoryView;
 import com.example.androiderp.activities.purchaseview.PurchaseView;
-import com.example.androiderp.activities.basicview.SupplierMoreView;
 import com.example.androiderp.activities.warehouseform.AppropriationForm;
 import com.example.androiderp.activities.purchaseform.PurchaseForm;
 import com.example.androiderp.activities.purchaseform.PurchaseReturnForm;
@@ -57,7 +57,7 @@ public class SecondFragment extends Fragment implements View.OnClickListener {
             startActivity(intent);
             break;
             case R.id.secondfragment_layout_gyslayout:
-                intent = new Intent(context, SupplierMoreView.class);
+                intent = new Intent(context, CustomSelectView.class);
                 startActivity(intent);
                 break;
             case R.id.secondfragmnet_cgthlayout:

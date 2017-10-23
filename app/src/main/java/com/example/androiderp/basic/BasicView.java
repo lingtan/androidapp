@@ -47,11 +47,11 @@ public class BasicView extends CSearchBase implements View.OnClickListener,
     private SlideAndDragListView<AdapterBean> listView;
     private DisplayMetrics dm;
     private List<Unit> unitList;
-    private TextView toobarBack, toobarAdd, toobarTile;
+    private TextView back, add, tile;
     private CSearch search;
     private ImageView lastCheckedOption;
-    private int indexPositon = -1, getEditPositon = -1;
-    private String indexName, searchVale;
+    private int iPositon = -1, getEditPositon = -1;
+    private String iName, searchVale;
     private Menu menu;
     private PostUserData postDate = new PostUserData();
     private AdapterBean editDate = new AdapterBean();
@@ -64,7 +64,7 @@ public class BasicView extends CSearchBase implements View.OnClickListener,
     public void iniView() {
         Intent intent = getIntent();
         acivityPostBen = intent.getParcelableExtra("acivityPostBen");
-        indexName = acivityPostBen.getName();
+        iName = acivityPostBen.getName();
         postDate.setName("");
         postDate.setRequestType("select");
         postDate.setServerIp(Common.ip);
@@ -75,16 +75,16 @@ public class BasicView extends CSearchBase implements View.OnClickListener,
         setContentView(R.layout.customlistview_category_layout);
         initMenu();
         initUiAndListener();
-        toobarBack = (TextView) findViewById(R.id.custom_toobar_left);
-        toobarTile = (TextView) findViewById(R.id.custom_toobar_midd);
-        toobarTile.setText("选择" + acivityPostBen.getAcivityName());
-        toobarAdd = (TextView) findViewById(R.id.custom_toobar_right);
-        toobarBack.setOnClickListener(this);
-        toobarAdd.setOnClickListener(this);
-        toobarTile.setOnClickListener(this);
+        back = (TextView) findViewById(R.id.custom_toobar_left);
+        tile = (TextView) findViewById(R.id.custom_toobar_midd);
+        tile.setText("选择" + acivityPostBen.getAcivityName());
+        add = (TextView) findViewById(R.id.custom_toobar_right);
+        back.setOnClickListener(this);
+        add.setOnClickListener(this);
+        tile.setOnClickListener(this);
         search = (CSearch) findViewById(R.id.search);
 
-        toobarTile.setCompoundDrawables(null, null, null, null);
+        tile.setCompoundDrawables(null, null, null, null);
 
 
         //构造函数第一参数是类的对象，第二个是布局文件，第三个是数据源
@@ -124,10 +124,10 @@ public class BasicView extends CSearchBase implements View.OnClickListener,
                     @Override
                     public void run() {
                         try {
-                            indexPositon = -1;
-                            common.JsonUpdateUi(response.body().string(), indexName, postPostUserData.getRequestType(), getApplicationContext(), adapter, R.layout.custom_item, listView);
+                            iPositon = -1;
+                            common.JsonUpdateUi(response.body().string(), iName, postPostUserData.getRequestType(), getApplicationContext(), adapter, R.layout.custom_item, listView);
                             HttpResponseList = common.HttpResponseList;
-                            indexPositon = common.indexPositon;
+                            iPositon = common.indexPositon;
                             closeDialog();
 
                         } catch (Exception e) {
@@ -209,11 +209,11 @@ public class BasicView extends CSearchBase implements View.OnClickListener,
                                     adapter = new BasicAdapter(getApplicationContext(), R.layout.custom_item, HttpResponseList);
                                     listView.setAdapter(adapter);
                                     if (search.getText().toString().isEmpty()) {
-                                        if (indexPositon == itemPosition) {
-                                            indexPositon = -1;
+                                        if (iPositon == itemPosition) {
+                                            iPositon = -1;
                                         }
 
-                                        adapter.setSeclection(indexPositon);
+                                        adapter.setSeclection(iPositon);
                                         adapter.notifyDataSetChanged();
                                     } else {
                                         search.setText("");
@@ -246,7 +246,7 @@ public class BasicView extends CSearchBase implements View.OnClickListener,
         if (acivityPostBen.getIsSelect().equals("YES")) {
             Intent intent = new Intent();
             intent.putExtra("data_return", HttpResponseList.get(position).getName());
-            indexName = HttpResponseList.get(position).getName();
+            iName = HttpResponseList.get(position).getName();
             setResult(RESULT_OK, intent);
 
             if (lastCheckedOption != null) {
@@ -254,7 +254,7 @@ public class BasicView extends CSearchBase implements View.OnClickListener,
             }
             lastCheckedOption = (ImageView) view.findViewById(R.id.custom_item_layout_one_image);
             lastCheckedOption.setVisibility(View.VISIBLE);
-            indexPositon = position;
+            iPositon = position;
             this.finish();
         }
     }
@@ -273,8 +273,8 @@ public class BasicView extends CSearchBase implements View.OnClickListener,
         switch (v.getId()) {
             case R.id.custom_toobar_left:
                 Intent intent = getIntent();
-                if (indexPositon != -1) {
-                    intent.putExtra("data_return", HttpResponseList.get(indexPositon).getName());
+                if (iPositon != -1) {
+                    intent.putExtra("data_return", HttpResponseList.get(iPositon).getName());
                 }
                 setResult(RESULT_OK, intent);
                 BasicView.this.finish();
@@ -309,12 +309,12 @@ public class BasicView extends CSearchBase implements View.OnClickListener,
                         HttpResponseList.get(getEditPositon).setName(editDate.getName());
                         HttpResponseList.get(getEditPositon).setNote(editDate.getNote());
                         adapter = new BasicAdapter(BasicView.this, R.layout.custom_item, HttpResponseList);
-                        adapter.setSeclection(indexPositon);
+                        adapter.setSeclection(iPositon);
                         listView.setAdapter(adapter);
                         Toast.makeText(BasicView.this, "操作成功", Toast.LENGTH_SHORT).show();
                     } else {
                         adapter = new BasicAdapter(BasicView.this, R.layout.custom_item, HttpResponseList);
-                        adapter.setSeclection(indexPositon);
+                        adapter.setSeclection(iPositon);
                         listView.setAdapter(adapter);
                     }
 
@@ -328,12 +328,12 @@ public class BasicView extends CSearchBase implements View.OnClickListener,
                     if (editDate != null) {
                         HttpResponseList.add(editDate);
                         adapter = new BasicAdapter(BasicView.this, R.layout.custom_item, HttpResponseList);
-                        adapter.setSeclection(indexPositon);
+                        adapter.setSeclection(iPositon);
                         listView.setAdapter(adapter);
                         Toast.makeText(BasicView.this, "操作成功", Toast.LENGTH_SHORT).show();
                     } else {
                         adapter = new BasicAdapter(BasicView.this, R.layout.custom_item, HttpResponseList);
-                        adapter.setSeclection(indexPositon);
+                        adapter.setSeclection(iPositon);
                         listView.setAdapter(adapter);
                     }
 

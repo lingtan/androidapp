@@ -25,23 +25,23 @@ public class StockInitiView extends CSearchBase implements View.OnClickListener 
     private ListView listView;
     private DisplayMetrics dm;
     private List<Stock> stockList;
-    private TextView toobarBack, toobarAdd, toobarTile;
+    private TextView back, add, tile;
 
     @Override
     public void iniView(){
         setContentView(R.layout.stockiniti_layout);
-        toobarBack =(TextView)findViewById(R.id.custom_toobar_left) ;
-        toobarTile =(TextView)findViewById(R.id.custom_toobar_midd);
-        toobarAdd =(TextView)findViewById(R.id.custom_toobar_right);
-        toobarBack.setOnClickListener(this);
-        toobarAdd.setOnClickListener(this);
-        toobarTile.setText("初始库存数量");
-        toobarAdd.setText("确认");
+        back =(TextView)findViewById(R.id.custom_toobar_left) ;
+        tile =(TextView)findViewById(R.id.custom_toobar_midd);
+        add =(TextView)findViewById(R.id.custom_toobar_right);
+        back.setOnClickListener(this);
+        add.setOnClickListener(this);
+        tile.setText("初始库存数量");
+        add.setText("确认");
         Intent intent=getIntent();
         StockInitiData stockInitiData=intent.getParcelableExtra("stockinitidata");
         stockInitiTemList =stockInitiData.getShoppingdata();
 
-        toobarAdd.setCompoundDrawables(null,null,null,null);
+        add.setCompoundDrawables(null,null,null,null);
         stockList = DataSupport.findAll(Stock.class);
         if(stockInitiTemList.size()==0) {
             for (Stock stock : stockList)

@@ -32,11 +32,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class InventorySearchView extends CSearchBase implements View.OnClickListener, AppropriationBadgeAdapter.Callback{
-    private List<PopBean> popuMenuDatas;
+    private List<PopBean> popBeanList;
     private AppropriationBadgeAdapter adapter;
     private ListView listView;
     private DisplayMetrics dm;
-    private List<Product> commonDataStructureSearch = new ArrayList<Product>();
+    private List<Product> productSearch = new ArrayList<Product>();
     private List<Product> productList;
     private Common common;
     private CHomeSearch cHomeSearch;
@@ -117,10 +117,10 @@ public class InventorySearchView extends CSearchBase implements View.OnClickList
             public void onItemClick(AdapterView<?> adapterView, View view,
                                     int position, long id) {
                 intent.removeExtra("action");
-                        if(commonDataStructureSearch.size()!=0) {
+                        if(productSearch.size()!=0) {
 
                             intent.putExtra("action", "edit");
-                            intent.putExtra("product_item", String.valueOf(commonDataStructureSearch.get(position).getProduct_id()));
+                            intent.putExtra("product_item", String.valueOf(productSearch.get(position).getProduct_id()));
 
 
                         }else {
@@ -143,12 +143,12 @@ public class InventorySearchView extends CSearchBase implements View.OnClickList
 
         cHomeSearch.addTextChangedListener(textWatcher);
 
-        popuMenuDatas = new ArrayList<PopBean>();
+        popBeanList = new ArrayList<PopBean>();
         PopBean popuMenua = new PopBean(android.R.drawable.ic_menu_edit, "美的");
-        popuMenuDatas.add(popuMenua);
+        popBeanList.add(popuMenua);
         PopBean popuMenub = new PopBean(android.R.drawable.ic_menu_edit, "松下");
-        popuMenuDatas.add(popuMenub);
-        showPopupWindow(popuMenuDatas);
+        popBeanList.add(popuMenub);
+        showPopupWindow(popBeanList);
 
     }
 
@@ -156,8 +156,8 @@ public class InventorySearchView extends CSearchBase implements View.OnClickList
 
     //筛选条件
     public Object[] search(String name) {
-        if(commonDataStructureSearch !=null) {
-            commonDataStructureSearch.clear();
+        if(productSearch !=null) {
+            productSearch.clear();
         }
         for (int i = 0; i < productList.size(); i++) {
             int index = productList.get(i).getName().indexOf(name);
@@ -165,17 +165,17 @@ public class InventorySearchView extends CSearchBase implements View.OnClickList
 
             // 存在匹配的数据
             if (index != -1||indey!=-1) {
-                commonDataStructureSearch.add(productList.get(i));
+                productSearch.add(productList.get(i));
             }
         }
-        return commonDataStructureSearch.toArray();
+        return productSearch.toArray();
     }
 
 
 //adapter刷新,重写Filter方式会出现BUG.
     public void updateLayout(Object[] obj) {
-        if(commonDataStructureSearch !=null) {
-            adapter = new AppropriationBadgeAdapter(InventorySearchView.this, R.layout.appropriation_badge_item, commonDataStructureSearch,this);
+        if(productSearch !=null) {
+            adapter = new AppropriationBadgeAdapter(InventorySearchView.this, R.layout.appropriation_badge_item, productSearch,this);
             listView.setAdapter(adapter);
         }
     }
@@ -190,7 +190,7 @@ public class InventorySearchView extends CSearchBase implements View.OnClickList
             public void onItemClick(AdapterView<?> adapterView, View view,
                                     int position, long id) {
 
-                if(popuMenuDatas.get(position).getName().equals("客户新增"))
+                if(popBeanList.get(position).getName().equals("客户新增"))
                 {
                     intent.removeExtra("product_item");
                     intent.putExtra("action","add");
@@ -250,13 +250,13 @@ public class InventorySearchView extends CSearchBase implements View.OnClickList
         {
             case R.id.custom_toobar_right:
                 if( common.mPopWindow==null ||!common.mPopWindow.isShowing())
-                {   popuMenuDatas.clear();
+                {   popBeanList.clear();
                     PopBean popuMenua = new PopBean(R.drawable.poppu_wrie, "客户修改");
-                    popuMenuDatas.add(popuMenua);
+                    popBeanList.add(popuMenua);
                     PopBean popuMenub = new PopBean(R.drawable.poppu_wrie, "客户新增");
-                    popuMenuDatas.add(popuMenub);
+                    popBeanList.add(popuMenub);
                     int xPos = dm.widthPixels / 3;
-                    showPopupWindow(popuMenuDatas);
+                    showPopupWindow(popBeanList);
                     common.mPopWindow.showAsDropDown(v,0,5);
                     //mPopWindow.showAtLocation(findViewById(R.id.main), Gravity.BOTTOM, 0, 0);//从底部弹出
                 }

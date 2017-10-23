@@ -81,7 +81,7 @@ public class SaleForm extends CSearchBase implements View.OnClickListener, Adapt
     private InputMethodManager manager;
     private EditText note;
     private LinearLayout productAddLayout;
-    private TextView toobarSave, toobarTile, toobarBack, toobarAdd, balanceAccount, category,popwin, name, number, data, consign, totalAmout, totalQuantity;
+    private TextView save, tile, back, add, balanceAccount, category,popwin, name, number, data, consign, totalAmout, totalQuantity;
     private DisplayMetrics dm;
     private LinearLayout categoryLayout, customLayout, stockLayout, dataLayout, balanceAccountLayout, consignmentLayout, screenLayout, totalLayout;
     private Custom custom;
@@ -89,7 +89,7 @@ public class SaleForm extends CSearchBase implements View.OnClickListener, Adapt
     private Employee employee;
     private Drawable errorIcon;
     private Common common;
-    private List<PopBean> popuMenuDatas;
+    private List<PopBean> popBeanList;
     private List<Product> productList;
     private List<SalesOutEnty> salesOutEntyList = new ArrayList<SalesOutEnty>();
     private List<ProductShopping> productShoppingList = new ArrayList<ProductShopping>();
@@ -126,11 +126,11 @@ public class SaleForm extends CSearchBase implements View.OnClickListener, Adapt
         note = (EditText) findViewById(R.id.note);
         screenLayout = (LinearLayout) findViewById(R.id.number_screen);
         category = (TextView) findViewById(R.id.documentmaker);
-        toobarSave = (TextView) findViewById(R.id.customtoobar_right);
-        toobarTile = (TextView) findViewById(R.id.customtoobar_midd);
-        toobarBack = (TextView) findViewById(R.id.customtoobar_left);
+        save = (TextView) findViewById(R.id.customtoobar_right);
+        tile = (TextView) findViewById(R.id.customtoobar_midd);
+        back = (TextView) findViewById(R.id.customtoobar_left);
         categoryLayout = (LinearLayout) findViewById(R.id.documentmaker_layout);
-        toobarAdd = (TextView) findViewById(R.id.customtoobar_r);
+        add = (TextView) findViewById(R.id.customtoobar_r);
         stockLayout = (LinearLayout) findViewById(R.id.stockin_layout);
         customLayout = (LinearLayout) findViewById(R.id.stockout_layout);
         dataLayout = (LinearLayout) findViewById(R.id.businessdata_layout);
@@ -144,25 +144,25 @@ public class SaleForm extends CSearchBase implements View.OnClickListener, Adapt
         customLayout.setOnClickListener(this);
         dataLayout.setOnClickListener(this);
         consignmentLayout.setOnClickListener(this);
-        toobarSave.setOnClickListener(this);
-        toobarBack.setOnClickListener(this);
+        save.setOnClickListener(this);
+        back.setOnClickListener(this);
         categoryLayout.setOnClickListener(this);
-        toobarAdd.setOnClickListener(this);
+        add.setOnClickListener(this);
         productAddLayout.setOnClickListener(this);
-        toobarSave.setCompoundDrawables(null, null, null, null);
-        toobarTile.setCompoundDrawables(null, null, null, null);
+        save.setCompoundDrawables(null, null, null, null);
+        tile.setCompoundDrawables(null, null, null, null);
         errorIcon = getResources().getDrawable(R.drawable.icon_error);
 // 设置图片大小
         errorIcon.setBounds(new Rect(0, 0, errorIcon.getIntrinsicWidth(),
                 errorIcon.getIntrinsicHeight()));
-        toobarSave.setText("保存");
+        save.setText("保存");
         formInit();
-        popuMenuDatas = new ArrayList<PopBean>();
+        popBeanList = new ArrayList<PopBean>();
         PopBean popuMenua = new PopBean(android.R.drawable.ic_menu_edit, "美的");
-        popuMenuDatas.add(popuMenua);
+        popBeanList.add(popuMenua);
         PopBean popuMenub = new PopBean(android.R.drawable.ic_menu_edit, "松下");
-        popuMenuDatas.add(popuMenub);
-        showPopupWindow(popuMenuDatas);
+        popBeanList.add(popuMenub);
+        showPopupWindow(popBeanList);
         getDate();
 
         screenLayout.setOnClickListener(new View.OnClickListener() {
@@ -174,7 +174,7 @@ public class SaleForm extends CSearchBase implements View.OnClickListener, Adapt
                 startActivityForResult(openCameraIntent, 5);
             }
         });
-        toobarTile.setText("销售单");
+        tile.setText("销售单");
 
     }
 
@@ -378,8 +378,8 @@ public class SaleForm extends CSearchBase implements View.OnClickListener, Adapt
                         tally.setNote(note.getText().toString());
                         tally.save();
                         Toast.makeText(SaleForm.this, "新增成功", Toast.LENGTH_SHORT).show();
-                        toobarSave.setVisibility(View.GONE);
-                        toobarAdd.setVisibility(View.VISIBLE);
+                        save.setVisibility(View.GONE);
+                        add.setVisibility(View.VISIBLE);
 
                     }
                 }
@@ -473,14 +473,14 @@ public class SaleForm extends CSearchBase implements View.OnClickListener, Adapt
                 break;
             case R.id.customtoobar_r:
                 if (common.mPopWindow == null || !common.mPopWindow.isShowing()) {
-                    popuMenuDatas.clear();
+                    popBeanList.clear();
 
                     PopBean popuMenub = new PopBean(R.drawable.poppu_wrie, "销售单新增");
-                    popuMenuDatas.add(popuMenub);
+                    popBeanList.add(popuMenub);
                     PopBean popuMenua = new PopBean(R.drawable.poppu_wrie, "销售单复制");
-                    popuMenuDatas.add(popuMenua);
+                    popBeanList.add(popuMenua);
                     int xPos = dm.widthPixels / 3;
-                    showPopupWindow(popuMenuDatas);
+                    showPopupWindow(popBeanList);
                     common.mPopWindow.showAsDropDown(v, 0, 5);
                     //mPopWindow.showAtLocation(findViewById(R.id.main), Gravity.BOTTOM, 0, 0);//从底部弹出
                 } else {
@@ -505,7 +505,7 @@ public class SaleForm extends CSearchBase implements View.OnClickListener, Adapt
             public void onItemClick(AdapterView<?> adapterView, View view,
                                     int position, long id) {
 
-                if (popuMenuDatas.get(position).getName().equals("销售单新增")) {
+                if (popBeanList.get(position).getName().equals("销售单新增")) {
                     intent = new Intent(SaleForm.this, SaleForm.class);
                     startActivity(intent);
                     SaleForm.this.finish();
@@ -755,23 +755,23 @@ public class SaleForm extends CSearchBase implements View.OnClickListener, Adapt
 
                                 if (postUserDataList.size() >0) {
                                     common = new Common();
-                                    popuMenuDatas = new ArrayList<PopBean>();
+                                    popBeanList = new ArrayList<PopBean>();
 
                                     for (PostUserData postUserData : postUserDataList)
 
                                     {
                                         PopBean popuMenua = new PopBean(R.drawable.poppu_wrie, postUserData.getName());
-                                        popuMenuDatas.add(popuMenua);
+                                        popBeanList.add(popuMenua);
 
                                     }
-                                    common.PopupWindow(SaleForm.this, dm, popuMenuDatas);
+                                    common.PopupWindow(SaleForm.this, dm, popBeanList);
                                     common.listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
                                         @Override
                                         public void onItemClick(AdapterView<?> adapterView, View view,
                                                                 int position, long id) {
 
-                                            popwin.setText(popuMenuDatas.get(position).getName());
+                                            popwin.setText(popBeanList.get(position).getName());
                                             common.mPopWindow.dismiss();
                                         }
                                     });

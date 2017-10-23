@@ -22,12 +22,12 @@ android {
         main {
             res.srcDirs =
                     [       'src/main/res/layout/scanning',
-                            'src/main/res/layout/popu',
-                            'src/main/res/layout/login',
                             'src/main/res/layout/home',
+                            'src/main/res/layout/popu',
+                            'src/main/res/layout/fragment',
                             'src/main/res/layout/form',
-                            'src/main/res/layout/basicdata',
-                            'src/main/res/layout/custom',
+                            'src/main/res/layout/activities',
+                            'src/main/res/layout/ui',
                             'src/main/res'
                     ]
         }

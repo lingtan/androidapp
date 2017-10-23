@@ -31,25 +31,25 @@ public class RequisitionView extends CSearchBase implements View.OnClickListener
     private DisplayMetrics dm;
     private List<Appropriation> appropriationSearch= new ArrayList<Appropriation>();
     private List<Appropriation> appropriationList;
-    private TextView toobarBack,toobarAdd,toobarTile;
+    private TextView back, add, tile;
     private CSearch search;
-    private Intent intentEdit;
-    private Intent intentAdd;
+    private Intent iEdit;
+    private Intent iAdd;
 
     @Override
     public void iniView(){
         setContentView(R.layout.custom_layout);
-        toobarBack=(TextView)findViewById(R.id.custom_toobar_left) ;
-        toobarTile=(TextView)findViewById(R.id.custom_toobar_midd);
-        toobarAdd=(TextView)findViewById(R.id.custom_toobar_right);
-        toobarBack.setOnClickListener(this);
-        toobarAdd.setOnClickListener(this);
-        toobarTile.setOnClickListener(this);
+        back =(TextView)findViewById(R.id.custom_toobar_left) ;
+        tile =(TextView)findViewById(R.id.custom_toobar_midd);
+        add =(TextView)findViewById(R.id.custom_toobar_right);
+        back.setOnClickListener(this);
+        add.setOnClickListener(this);
+        tile.setOnClickListener(this);
         search = (CSearch) findViewById(R.id.search);
         appropriationList=DataSupport.findAll(Appropriation.class);
-        intentEdit= new Intent(RequisitionView.this, RequisitionEntyView.class);
-        toobarTile.setText("调拨流水");
-        toobarBack.setText("返回");
+        iEdit = new Intent(RequisitionView.this, RequisitionEntyView.class);
+        tile.setText("调拨流水");
+        back.setText("返回");
 
         //构造函数第一参数是类的对象，第二个是布局文件，第三个是数据源
         listView = (ListView) findViewById(R.id.list);
@@ -61,20 +61,20 @@ public class RequisitionView extends CSearchBase implements View.OnClickListener
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view,
                                     int position, long id) {
-                intentEdit.removeExtra("action");
+                iEdit.removeExtra("action");
                         if(appropriationSearch.size()!=0) {
 
-                            intentEdit.putExtra("action", "edit");
-                            intentEdit.putExtra("custom_item", String.valueOf(appropriationSearch.get(position).getId()));
+                            iEdit.putExtra("action", "edit");
+                            iEdit.putExtra("custom_item", String.valueOf(appropriationSearch.get(position).getId()));
 
 
                         }else {
 
-                            intentEdit.putExtra("action", "edit");
-                            intentEdit.putExtra("custom_item", String.valueOf(appropriationList.get(position).getId()));
+                            iEdit.putExtra("action", "edit");
+                            iEdit.putExtra("custom_item", String.valueOf(appropriationList.get(position).getId()));
 
                         }
-                startActivityForResult(intentEdit,1);
+                startActivityForResult(iEdit,1);
 
 
             }
@@ -155,8 +155,8 @@ public class RequisitionView extends CSearchBase implements View.OnClickListener
                 break;
 
             case R.id.custom_toobar_right:
-                intentAdd = new Intent(RequisitionView.this, AppropriationForm.class);
-                startActivity(intentAdd);
+                iAdd = new Intent(RequisitionView.this, AppropriationForm.class);
+                startActivity(iAdd);
                 break;
 
 

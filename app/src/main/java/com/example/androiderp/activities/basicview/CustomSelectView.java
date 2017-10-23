@@ -35,37 +35,37 @@ public class CustomSelectView extends CSearchBase implements View.OnClickListene
     private User user;
     private List<CommonAdapterData> commonAdapterDataSearch = new ArrayList<CommonAdapterData>();
     private List<Custom> customList;
-    private TextView toobarBack, toobarAdd, toobarTile;
+    private TextView back, add, tile;
     private CSearch search;
     private List<CustomCategory> customCategoryList;
     private List<CommonAdapterData> categorylist = new ArrayList<CommonAdapterData>();
     private String selectCategory;
     private ImageView lastCheckedOption;
     private int positionTemp;
-    private int indexPositon;
-    private String indexName;
+    private int iPositon;
+    private String iName;
 
     @Override
     public void iniView(){
         setContentView(R.layout.custom_listview_layout);
-        toobarBack =(TextView)findViewById(R.id.custom_toobar_left) ;
-        toobarTile =(TextView)findViewById(R.id.custom_toobar_midd);
-        toobarAdd =(TextView)findViewById(R.id.custom_toobar_right);
-        toobarBack.setOnClickListener(this);
-        toobarAdd.setOnClickListener(this);
-        toobarTile.setOnClickListener(this);
+        back =(TextView)findViewById(R.id.custom_toobar_left) ;
+        tile =(TextView)findViewById(R.id.custom_toobar_midd);
+        add =(TextView)findViewById(R.id.custom_toobar_right);
+        back.setOnClickListener(this);
+        add.setOnClickListener(this);
+        tile.setOnClickListener(this);
         Intent intent=getIntent();
-        indexName =intent.getStringExtra("index");
+        iName =intent.getStringExtra("index");
         search = (CSearch) findViewById(R.id.search);
         customList = DataSupport.findAll(Custom.class);
-        toobarTile.setText("客户");
+        tile.setText("客户");
         selectCategory="全部";
         for(Custom custom: customList)
 
         {
-            if(custom.getName().equals(indexName))
+            if(custom.getName().equals(iName))
             {
-                indexPositon = customList.indexOf(custom);
+                iPositon = customList.indexOf(custom);
             }
             CommonAdapterData commonData=new CommonAdapterData();
             commonData.setName(custom.getName());
@@ -112,11 +112,11 @@ public class CustomSelectView extends CSearchBase implements View.OnClickListene
         dm=new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         user= getIntent().getParcelableExtra("user_data");
-        if(indexName.isEmpty())
+        if(iName.isEmpty())
         {
-            indexPositon =-1;
+            iPositon =-1;
         }else {
-            positionTemp = indexPositon;
+            positionTemp = iPositon;
         }
         rightListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -127,12 +127,12 @@ public class CustomSelectView extends CSearchBase implements View.OnClickListene
                         if(commonAdapterDataSearch.size()!=0) {
 
                             intent.putExtra("data_return", String.valueOf(commonAdapterDataSearch.get(position).getName()));
-                            indexName = commonAdapterDataSearch.get(position).getName();
+                            iName = commonAdapterDataSearch.get(position).getName();
 
                         }else {
 
                             intent.putExtra("data_return", String.valueOf(commonAdapterDataList.get(position).getName()));
-                            indexName = commonAdapterDataList.get(position).getName();
+                            iName = commonAdapterDataList.get(position).getName();
                         }
                 if(lastCheckedOption != null){
                     lastCheckedOption.setVisibility(View.INVISIBLE);
@@ -151,7 +151,7 @@ public class CustomSelectView extends CSearchBase implements View.OnClickListene
             leftAdapter.setSeclection(0);
             leftListView.setAdapter(leftAdapter);
             rightAdapter = new CommonAdapter(CustomSelectView.this, R.layout.custom_item, commonAdapterDataList);
-             rightAdapter.setSeclection(indexPositon);
+             rightAdapter.setSeclection(iPositon);
             rightListView.setAdapter(rightAdapter);
             
 
@@ -227,7 +227,7 @@ public class CustomSelectView extends CSearchBase implements View.OnClickListene
             {
                 for(int i = 0; i< commonAdapterDataSearch.size(); i++)
                 {
-                    if(commonAdapterDataSearch.get(i).getName().equals(indexName))
+                    if(commonAdapterDataSearch.get(i).getName().equals(iName))
                     {
                         index=i;
                     }

@@ -38,7 +38,7 @@ import okhttp3.Response;
 public class BasicForm extends AppCompatActivity implements View.OnClickListener {
     private InputMethodManager manager;
     private EditText name, note;
-    private TextView toobarSave, toobarTile, toobarBack;
+    private TextView save, tile, back;
     private String getPostName;
     private String getPostType;
     private AdapterBean getPostData;
@@ -58,14 +58,14 @@ public class BasicForm extends AppCompatActivity implements View.OnClickListener
         getPostData = intent.getParcelableExtra("postdata");
         getPostType = intent.getStringExtra("type");
         acivityPostBen = intent.getParcelableExtra("acivityPostBen");
-        toobarSave = (TextView) findViewById(R.id.custom_toobar_right);
-        toobarTile = (TextView) findViewById(R.id.custom_toobar_midd);
-        toobarBack = (TextView) findViewById(R.id.custom_toobar_left);
-        toobarSave.setCompoundDrawables(null, null, null, null);
-        toobarTile.setCompoundDrawables(null, null, null, null);
-        toobarSave.setText("保存");
-        toobarSave.setOnClickListener(this);
-        toobarBack.setOnClickListener(this);
+        save = (TextView) findViewById(R.id.custom_toobar_right);
+        tile = (TextView) findViewById(R.id.custom_toobar_midd);
+        back = (TextView) findViewById(R.id.custom_toobar_left);
+        save.setCompoundDrawables(null, null, null, null);
+        tile.setCompoundDrawables(null, null, null, null);
+        save.setText("保存");
+        save.setOnClickListener(this);
+        back.setOnClickListener(this);
         formInit();
 
     }
@@ -78,9 +78,9 @@ public class BasicForm extends AppCompatActivity implements View.OnClickListener
 
         }
         if (getPostType.equals("edit")) {
-            toobarTile.setText(acivityPostBen.getAcivityName() + "修改");
+            tile.setText(acivityPostBen.getAcivityName() + "修改");
         } else {
-            toobarTile.setText(acivityPostBen.getAcivityName() + "新增");
+            tile.setText(acivityPostBen.getAcivityName() + "新增");
         }
 
     }

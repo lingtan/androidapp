@@ -49,7 +49,7 @@ public class ProductAppropriationView extends CSearchBase implements View.OnClic
     private DisplayMetrics dm;
     private List<Product> productSearch = new ArrayList<Product>();
     private List<Product> productList;
-    private TextView toobarBack, toobarAdd, toobarTile, toobarScreen;
+    private TextView back, add, tile, screen;
     private CSearch search;
     private Intent intent;
     private List<ProductCategory> productCategoryList;
@@ -78,16 +78,16 @@ public class ProductAppropriationView extends CSearchBase implements View.OnClic
     @Override
     public void iniView(){
         setContentView(R.layout.appropriation_listview_layout);
-        toobarBack =(TextView)findViewById(R.id.custom_toobar_left) ;
-        toobarTile =(TextView)findViewById(R.id.custom_toobar_midd);
-        toobarAdd =(TextView)findViewById(R.id.custom_toobar_right);
-        toobarScreen =(TextView)findViewById(R.id.customtoobar_screen);
-        toobarScreen.setOnClickListener(this);
-        toobarTile.setText("商品信息");
-        toobarTile.setCompoundDrawables(null,null,null,null);
-        toobarBack.setOnClickListener(this);
-        toobarAdd.setOnClickListener(this);
-        toobarTile.setOnClickListener(this);
+        back =(TextView)findViewById(R.id.custom_toobar_left) ;
+        tile =(TextView)findViewById(R.id.custom_toobar_midd);
+        add =(TextView)findViewById(R.id.custom_toobar_right);
+        screen =(TextView)findViewById(R.id.customtoobar_screen);
+        screen.setOnClickListener(this);
+        tile.setText("商品信息");
+        tile.setCompoundDrawables(null,null,null,null);
+        back.setOnClickListener(this);
+        add.setOnClickListener(this);
+        tile.setOnClickListener(this);
         Intent intentValue=getIntent();
         appropriOutValue=intentValue.getStringExtra("appropriout");
         search = (CSearch) findViewById(R.id.search);
@@ -173,7 +173,7 @@ public class ProductAppropriationView extends CSearchBase implements View.OnClic
                 leftAdapter.notifyDataSetInvalidated();
                 Object[] obj = categorySearch(categorylist.get(position).getName().toString());
                 updateLayout(obj);
-                toobarTile.setText(categorylist.get(position).getName().toString());
+                tile.setText(categorylist.get(position).getName().toString());
                 leftListSelecteText = categorylist.get(position).getName().toString();
             }
         });

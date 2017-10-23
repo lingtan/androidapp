@@ -23,7 +23,6 @@ import android.widget.Toast;
 
 import com.example.androiderp.bean.User;
 import com.example.androiderp.R;
-import com.example.androiderp.tools.Common;
 import com.example.androiderp.ui.DataLoadingDialog;
 
 /**
@@ -34,8 +33,8 @@ public class LoginView extends AppCompatActivity implements View.OnClickListener
 
     private EditText name, password;
     private CheckBox checked;
-    private TextInputLayout layoutName, layoutPassword;
-    private Button loginButton;
+    private TextInputLayout nameLayout, passwordLayout;
+    private Button login;
     private InputMethodManager manager;
     private SharedPreferences preferences;
     private SharedPreferences.Editor editor;
@@ -89,10 +88,10 @@ public class LoginView extends AppCompatActivity implements View.OnClickListener
         password = (EditText) findViewById(R.id.login_layout_one_tow_password);
         checked =(CheckBox)findViewById(R.id.login_layout_one_four_remenberpaw);
         password.setTransformationMethod(PasswordTransformationMethod.getInstance());
-        layoutName = (TextInputLayout) findViewById(R.id.login_layout_one_one);
-        layoutPassword = (TextInputLayout) findViewById(R.id.login_layout_one_tow);
-        loginButton = (Button) findViewById(R.id.login_layout_one_login);
-        loginButton.setOnClickListener(this);
+        nameLayout = (TextInputLayout) findViewById(R.id.login_layout_one_one);
+        passwordLayout = (TextInputLayout) findViewById(R.id.login_layout_one_tow);
+        login = (Button) findViewById(R.id.login_layout_one_login);
+        login.setOnClickListener(this);
 
         //添加监听
         name.addTextChangedListener(new MyTextWatcher(name));
@@ -163,22 +162,22 @@ public class LoginView extends AppCompatActivity implements View.OnClickListener
     public boolean isNameValid() {
 
         if (!name.getText().toString().trim().equals("lingtan") || name.getText().toString().trim().isEmpty()) {
-            layoutName.setError(getString(R.string.error_name));
+            nameLayout.setError(getString(R.string.error_name));
             name.requestFocus();
             return false;
         }
-        layoutName.setErrorEnabled(false);
+        nameLayout.setErrorEnabled(false);
         return true;
     }
 
     public boolean isPasswordValid() {
         if (!password.getText().toString().trim().equals("123") || password.getText().toString().trim().isEmpty()) {
-            layoutPassword.setErrorEnabled(true);
-            layoutPassword.setError(getResources().getString(R.string.error_password));
+            passwordLayout.setErrorEnabled(true);
+            passwordLayout.setError(getResources().getString(R.string.error_password));
             password.requestFocus();
             return false;
         }
-        layoutPassword.setErrorEnabled(false);
+        passwordLayout.setErrorEnabled(false);
         return true;
     }
 

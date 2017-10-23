@@ -27,25 +27,25 @@ public class StockTakingView extends CSearchBase implements View.OnClickListener
     private DisplayMetrics dm;
     private List<StockTaking> stockInitiSearch= new ArrayList<StockTaking>();
     private List<StockTaking> stockInitiList;
-    private TextView toobarBack,toobarAdd,toobarTile;
+    private TextView back, add, tile;
     private CSearch search;
-    private Intent intentEdit;
-    private Intent intentAdd;
+    private Intent iEdit;
+    private Intent iAdd;
 
     @Override
     public void iniView(){
         setContentView(R.layout.custom_layout);
-        toobarBack=(TextView)findViewById(R.id.custom_toobar_left) ;
-        toobarTile=(TextView)findViewById(R.id.custom_toobar_midd);
-        toobarAdd=(TextView)findViewById(R.id.custom_toobar_right);
-        toobarBack.setOnClickListener(this);
-        toobarAdd.setOnClickListener(this);
-        toobarTile.setOnClickListener(this);
+        back =(TextView)findViewById(R.id.custom_toobar_left) ;
+        tile =(TextView)findViewById(R.id.custom_toobar_midd);
+        add =(TextView)findViewById(R.id.custom_toobar_right);
+        back.setOnClickListener(this);
+        add.setOnClickListener(this);
+        tile.setOnClickListener(this);
         search = (CSearch) findViewById(R.id.search);
         stockInitiList=DataSupport.findAll(StockTaking.class);
-        intentEdit= new Intent(StockTakingView.this, StockTakingEntyView.class);
-        toobarTile.setText("盘点流水");
-        toobarBack.setText("返回");
+        iEdit = new Intent(StockTakingView.this, StockTakingEntyView.class);
+        tile.setText("盘点流水");
+        back.setText("返回");
 
         //构造函数第一参数是类的对象，第二个是布局文件，第三个是数据源
         listView = (ListView) findViewById(R.id.list);
@@ -57,20 +57,20 @@ public class StockTakingView extends CSearchBase implements View.OnClickListener
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view,
                                     int position, long id) {
-                intentEdit.removeExtra("action");
+                iEdit.removeExtra("action");
                         if(stockInitiSearch.size()!=0) {
 
-                            intentEdit.putExtra("action", "edit");
-                            intentEdit.putExtra("custom_item", String.valueOf(stockInitiSearch.get(position).getId()));
+                            iEdit.putExtra("action", "edit");
+                            iEdit.putExtra("custom_item", String.valueOf(stockInitiSearch.get(position).getId()));
 
 
                         }else {
 
-                            intentEdit.putExtra("action", "edit");
-                            intentEdit.putExtra("custom_item", String.valueOf(stockInitiList.get(position).getId()));
+                            iEdit.putExtra("action", "edit");
+                            iEdit.putExtra("custom_item", String.valueOf(stockInitiList.get(position).getId()));
 
                         }
-                startActivityForResult(intentEdit,1);
+                startActivityForResult(iEdit,1);
 
 
             }
@@ -151,8 +151,8 @@ public class StockTakingView extends CSearchBase implements View.OnClickListener
                 break;
 
             case R.id.custom_toobar_right:
-                intentAdd = new Intent(StockTakingView.this, AppropriationForm.class);
-                startActivity(intentAdd);
+                iAdd = new Intent(StockTakingView.this, AppropriationForm.class);
+                startActivity(iAdd);
                 break;
 
 

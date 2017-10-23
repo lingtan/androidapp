@@ -42,14 +42,14 @@ import java.util.List;
 public class InventoryEntyView extends CSearchBase implements View.OnClickListener, AdapterView.OnItemClickListener,
         SlideAndDragListView.OnMenuItemClickListener, SlideAndDragListView.OnItemDeleteListener {
     private InputMethodManager manager;
-    private TextView note,save,toobarTile,toobarBack,toobarAdd,name,number,data,consignment,totalQuantity;
+    private TextView note,save, tile, back, add,name,number,data,consignment,totalQuantity;
     private DisplayMetrics dm;
     private Product product;
-    private String productId;
+    private String id;
     private Drawable errorIcon;
     private Common common;
     private double quantityCount;
-    private Intent  intentBack;
+    private Intent iBack;
     private List<PopBean> popuMenuDatas;
     private List<CommonAdapterData> listdatas = new ArrayList<CommonAdapterData>();
     private SlideAndDragListView<CommonAdapterData> listView;
@@ -63,9 +63,9 @@ public class InventoryEntyView extends CSearchBase implements View.OnClickListen
         initUiAndListener();
         dm=new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
-        intentBack= new Intent(InventoryEntyView.this, InventoryEntyView.class);
+        iBack = new Intent(InventoryEntyView.this, InventoryEntyView.class);
         final Intent intent=getIntent();
-        productId =intent.getStringExtra("product_item");
+        id =intent.getStringExtra("product_item");
         manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         name=(TextView)findViewById(R.id.stockout);
         number=(TextView)findViewById(R.id.stockin);
@@ -73,17 +73,17 @@ public class InventoryEntyView extends CSearchBase implements View.OnClickListen
         consignment=(TextView)findViewById(R.id.billnumber);
         note=(TextView)findViewById(R.id.note);
         save=(TextView)findViewById(R.id.customtoobar_right);
-        toobarTile=(TextView)findViewById(R.id.customtoobar_midd);
-        toobarBack=(TextView)findViewById(R.id.customtoobar_left);
-        toobarAdd=(TextView)findViewById(R.id.customtoobar_r) ;
+        tile =(TextView)findViewById(R.id.customtoobar_midd);
+        back =(TextView)findViewById(R.id.customtoobar_left);
+        add =(TextView)findViewById(R.id.customtoobar_r) ;
         totalQuantity=(TextView)findViewById(R.id.totalquantity);
         save.setOnClickListener(this);
-        toobarBack.setOnClickListener(this);
-        toobarAdd.setOnClickListener(this);
+        back.setOnClickListener(this);
+        add.setOnClickListener(this);
         Drawable more= getResources().getDrawable(R.drawable.toobar_more);
         more.setBounds(0, 0, more.getMinimumWidth(), more.getMinimumHeight());
         save.setCompoundDrawables(more,null,null,null);
-        toobarTile.setCompoundDrawables(null,null,null,null);
+        tile.setCompoundDrawables(null,null,null,null);
         errorIcon = getResources().getDrawable(R.drawable.icon_error);
 // 设置图片大小
         errorIcon.setBounds(new Rect(0, 0, errorIcon.getIntrinsicWidth(),
@@ -94,14 +94,14 @@ public class InventoryEntyView extends CSearchBase implements View.OnClickListen
         formInit();
 
 
-        toobarTile.setText("库存状况");
+        tile.setText("库存状况");
 
     }
     private void  formInit()
     {  quantityCount=0;
         DecimalFormat df = new DecimalFormat("#####0.00");
-        if(productId !=null) {
-            product = DataSupport.find(Product.class, Long.parseLong(productId),true);
+        if(id !=null) {
+            product = DataSupport.find(Product.class, Long.parseLong(id),true);
             stockList=DataSupport.findAll(Stock.class);
             name.setText(product.getName());
             number.setText(product.getNumber());
@@ -221,17 +221,17 @@ public class InventoryEntyView extends CSearchBase implements View.OnClickListen
                 if(popuMenuDatas.get(position).getName().equals("商品新增"))
                 {
 
-                    intentBack.removeExtra("product_item");
-                    intentBack.putExtra("action","add");
-                    startActivityForResult(intentBack,4);
+                    iBack.removeExtra("product_item");
+                    iBack.putExtra("action","add");
+                    startActivityForResult(iBack,4);
                 }
                 else if(popuMenuDatas.get(position).getName().equals("商品复制"))
 
                 {
-                    intentBack.removeExtra("product_item");
-                    intentBack.putExtra("action","add");
-                    intentBack.putExtra("product_item", quantityCount);
-                    startActivityForResult(intentBack,4);
+                    iBack.removeExtra("product_item");
+                    iBack.putExtra("action","add");
+                    iBack.putExtra("product_item", quantityCount);
+                    startActivityForResult(iBack,4);
 
                 }else
                 {

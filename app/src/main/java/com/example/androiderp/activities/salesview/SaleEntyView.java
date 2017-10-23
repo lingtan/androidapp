@@ -35,14 +35,14 @@ import java.util.List;
 public class SaleEntyView extends CSearchBase implements View.OnClickListener, AdapterView.OnItemClickListener,
         SlideAndDragListView.OnMenuItemClickListener, SlideAndDragListView.OnItemDeleteListener {
     private InputMethodManager manager;
-    private TextView note,save, toobarTile, toobarBack, toobarAdd,category,name,number,data,consignment, totalAmout, totalQuantity;
+    private TextView note,save, tile, back, add,category,name,number,data,consignment, totalAmout, totalQuantity;
     private DisplayMetrics dm;
     private SalesOut salesOutlist;
     private String customid;
     private Drawable errorIcon;
     private Common common;
     private Intent  intentback;
-    private List<PopBean> popuMenuDatas;
+    private List<PopBean> popBeanList;
     private List<SalesOutEnty> salesOutEntyList=new ArrayList<SalesOutEnty>();
     private List<CommonAdapterData> commonAdapterDataList = new ArrayList<CommonAdapterData>();
     private SlideAndDragListView<CommonAdapterData> listView;
@@ -67,18 +67,18 @@ public class SaleEntyView extends CSearchBase implements View.OnClickListener, A
         note=(TextView)findViewById(R.id.note);
         category=(TextView)findViewById(R.id.documentmaker);
         save=(TextView)findViewById(R.id.customtoobar_right);
-        toobarTile =(TextView)findViewById(R.id.customtoobar_midd);
-        toobarBack =(TextView)findViewById(R.id.customtoobar_left);
-        toobarAdd =(TextView)findViewById(R.id.customtoobar_r) ;
+        tile =(TextView)findViewById(R.id.customtoobar_midd);
+        back =(TextView)findViewById(R.id.customtoobar_left);
+        add =(TextView)findViewById(R.id.customtoobar_r) ;
         totalQuantity =(TextView)findViewById(R.id.totalquantity);
         totalAmout =(TextView)findViewById(R.id.saleoutenty_amount);
         save.setOnClickListener(this);
-        toobarBack.setOnClickListener(this);
-        toobarAdd.setOnClickListener(this);
+        back.setOnClickListener(this);
+        add.setOnClickListener(this);
         Drawable more= getResources().getDrawable(R.drawable.toobar_more);
         more.setBounds(0, 0, more.getMinimumWidth(), more.getMinimumHeight());
         save.setCompoundDrawables(more,null,null,null);
-        toobarTile.setCompoundDrawables(null,null,null,null);
+        tile.setCompoundDrawables(null,null,null,null);
         errorIcon = getResources().getDrawable(R.drawable.icon_error);
 // 设置图片大小
         errorIcon.setBounds(new Rect(0, 0, errorIcon.getIntrinsicWidth(),
@@ -87,7 +87,7 @@ public class SaleEntyView extends CSearchBase implements View.OnClickListener, A
         formInit();
 
 
-        toobarTile.setText("销售明细");
+        tile.setText("销售明细");
 
     }
     private void  formInit()
@@ -186,14 +186,14 @@ public class SaleEntyView extends CSearchBase implements View.OnClickListener, A
              break;
             case R.id.customtoobar_r:
                 if( common.mPopWindow==null ||!common.mPopWindow.isShowing())
-                {   popuMenuDatas.clear();
+                {   popBeanList.clear();
 
                     PopBean popuMenub = new PopBean(R.drawable.poppu_wrie, "商品新增");
-                    popuMenuDatas.add(popuMenub);
+                    popBeanList.add(popuMenub);
                     PopBean popuMenua = new PopBean(R.drawable.poppu_wrie, "商品复制");
-                    popuMenuDatas.add(popuMenua);
+                    popBeanList.add(popuMenua);
                     int xPos = dm.widthPixels / 3;
-                    showPopupWindow(popuMenuDatas);
+                    showPopupWindow(popBeanList);
                     common.mPopWindow.showAsDropDown(v,0,5);
                     //mPopWindow.showAtLocation(findViewById(R.id.main), Gravity.BOTTOM, 0, 0);//从底部弹出
                 }
@@ -215,14 +215,14 @@ public class SaleEntyView extends CSearchBase implements View.OnClickListener, A
             public void onItemClick(AdapterView<?> adapterView, View view,
                                     int position, long id) {
 
-                if(popuMenuDatas.get(position).getName().equals("商品新增"))
+                if(popBeanList.get(position).getName().equals("商品新增"))
                 {
 
                     intentback.removeExtra("product_item");
                     intentback.putExtra("action","add");
                     startActivityForResult(intentback,4);
                 }
-                else if(popuMenuDatas.get(position).getName().equals("商品复制"))
+                else if(popBeanList.get(position).getName().equals("商品复制"))
 
                 {
                     intentback.removeExtra("product_item");
@@ -254,23 +254,23 @@ public class SaleEntyView extends CSearchBase implements View.OnClickListener, A
     }
     private void showStockWindow() {
         common = new Common();
-        popuMenuDatas = new ArrayList<PopBean>();
+        popBeanList = new ArrayList<PopBean>();
         stockList = DataSupport.findAll(Stock.class);
         for(Stock stock: stockList)
 
         {
             PopBean popuMenua = new PopBean(R.drawable.poppu_wrie, stock.getName());
-            popuMenuDatas.add(popuMenua);
+            popBeanList.add(popuMenua);
 
         }
-        common.PopupWindow(SaleEntyView.this, dm, popuMenuDatas);
+        common.PopupWindow(SaleEntyView.this, dm, popBeanList);
         common.listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view,
                                     int position, long id) {
 
-                number.setText(popuMenuDatas.get(position).getName());
+                number.setText(popBeanList.get(position).getName());
                 common.mPopWindow.dismiss();
             }
         });

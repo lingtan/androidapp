@@ -2,7 +2,6 @@ package com.example.androiderp.activities.basicview;
 
 import android.app.Dialog;
 import android.content.Intent;
-import android.os.Parcelable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
@@ -17,17 +16,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.androiderp.adaper.BasicAdapter;
-import com.example.androiderp.adaper.ProductAdapter;
 import com.example.androiderp.bean.AcivityPostBean;
 import com.example.androiderp.bean.AdapterBean;
 import com.example.androiderp.bean.PostProductData;
 import com.example.androiderp.bean.Product;
-import com.example.androiderp.bean.ProductCategory;
 import com.example.androiderp.bean.ProductShopping;
 import com.example.androiderp.bean.ShoppingData;
 import com.example.androiderp.R;
-import com.example.androiderp.adaper.CommonAdapter;
-import com.example.androiderp.adaper.CommonAdapterData;
 import com.example.androiderp.adaper.ProductBadgeAdapter;
 import com.example.androiderp.tools.Common;
 import com.example.androiderp.tools.GlobalVariable;
@@ -46,7 +41,6 @@ import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.litepal.crud.DataSupport;
 
 import java.io.IOException;
 import java.text.DecimalFormat;
@@ -64,7 +58,7 @@ public class ProductSelectView extends CSearchBase implements View.OnClickListen
     private ListView leftListView;
     private DisplayMetrics dm;
     private List<Product> productSearch = new ArrayList<Product>();
-    private TextView toobarBack, toobarAdd, toobarTile, countShow, toobarScreen;
+    private TextView back, add, tile, countShow, screen;
     private CSearch search;
     private Intent intent;
     private List<AdapterBean> categorylist = new ArrayList<AdapterBean>();
@@ -90,16 +84,16 @@ public class ProductSelectView extends CSearchBase implements View.OnClickListen
     @Override
     public void iniView(){
         setContentView(R.layout.custom_badge_listview_layout);
-        toobarBack =(TextView)findViewById(R.id.custom_toobar_left) ;
-        toobarTile =(TextView)findViewById(R.id.custom_toobar_midd);
-        toobarAdd =(TextView)findViewById(R.id.custom_toobar_right);
-        toobarScreen =(TextView)findViewById(R.id.customtoobar_screen);
-        toobarScreen.setOnClickListener(this);
-        toobarTile.setText("商品信息");
-        toobarTile.setCompoundDrawables(null,null,null,null);
-        toobarBack.setOnClickListener(this);
-        toobarAdd.setOnClickListener(this);
-        toobarTile.setOnClickListener(this);
+        back =(TextView)findViewById(R.id.custom_toobar_left) ;
+        tile =(TextView)findViewById(R.id.custom_toobar_midd);
+        add =(TextView)findViewById(R.id.custom_toobar_right);
+        screen =(TextView)findViewById(R.id.customtoobar_screen);
+        screen.setOnClickListener(this);
+        tile.setText("商品信息");
+        tile.setCompoundDrawables(null,null,null,null);
+        back.setOnClickListener(this);
+        add.setOnClickListener(this);
+        tile.setOnClickListener(this);
         search = (CSearch) findViewById(R.id.search);
         countShow =(TextView)findViewById(R.id.product_item_layout_count) ;
         accountLayout =(LinearLayout)findViewById(R.id.product_item_layout_bottom);
@@ -140,7 +134,7 @@ public class ProductSelectView extends CSearchBase implements View.OnClickListen
                 leftAdapter.notifyDataSetInvalidated();
                 Object[] obj = categorySearch(categorylist.get(position).getName().toString());
                 updateLayout(obj);
-                toobarTile.setText(categorylist.get(position).getName().toString());
+                tile.setText(categorylist.get(position).getName().toString());
                 leftListSelecteText = categorylist.get(position).getName().toString();
             }
         });

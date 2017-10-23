@@ -14,23 +14,18 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.androiderp.activities.basicview.ProductSelectView;
 import com.example.androiderp.adaper.BasicAdapter;
-import com.example.androiderp.adaper.ProductBadgeAdapter;
 import com.example.androiderp.bean.AcivityPostBean;
 import com.example.androiderp.bean.AdapterBean;
 import com.example.androiderp.bean.AppropriationEnty;
 import com.example.androiderp.bean.PostProductData;
 import com.example.androiderp.bean.Product;
-import com.example.androiderp.bean.ProductCategory;
 import com.example.androiderp.bean.ProductShopping;
 import com.example.androiderp.bean.SalesOutEnty;
 import com.example.androiderp.bean.StockIniti;
 import com.example.androiderp.bean.StockTakingEnty;
 import com.example.androiderp.R;
 import com.example.androiderp.adaper.AppropriationBadgeAdapter;
-import com.example.androiderp.adaper.CommonAdapter;
-import com.example.androiderp.adaper.CommonAdapterData;
 import com.example.androiderp.tools.Common;
 import com.example.androiderp.tools.GlobalVariable;
 import com.example.androiderp.tools.HttpUtil;
@@ -64,7 +59,7 @@ public class InventoryView extends CSearchBase implements View.OnClickListener, 
     private ListView leftListView;
     private DisplayMetrics dm;
     private List<Product> productSearch = new ArrayList<>();
-    private TextView toobarBack, toobarAdd, toobarTile, toobarScreen;
+    private TextView back, add, tile, screen;
     private CSearch search;
     private Intent intent;
     private List<AdapterBean> categorylist = new ArrayList<>();
@@ -99,16 +94,16 @@ public class InventoryView extends CSearchBase implements View.OnClickListener, 
     @Override
     public void iniView(){
         setContentView(R.layout.inventory_listview_layout);
-        toobarBack =(TextView)findViewById(R.id.custom_toobar_left) ;
-        toobarTile =(TextView)findViewById(R.id.custom_toobar_midd);
-        toobarAdd =(TextView)findViewById(R.id.custom_toobar_right);
-        toobarScreen =(TextView)findViewById(R.id.customtoobar_screen);
-        toobarScreen.setOnClickListener(this);
-        toobarTile.setText("库存查询");
-        toobarTile.setCompoundDrawables(null,null,null,null);
-        toobarBack.setOnClickListener(this);
-        toobarAdd.setOnClickListener(this);
-        toobarTile.setOnClickListener(this);
+        back =(TextView)findViewById(R.id.custom_toobar_left) ;
+        tile =(TextView)findViewById(R.id.custom_toobar_midd);
+        add =(TextView)findViewById(R.id.custom_toobar_right);
+        screen =(TextView)findViewById(R.id.customtoobar_screen);
+        screen.setOnClickListener(this);
+        tile.setText("库存查询");
+        tile.setCompoundDrawables(null,null,null,null);
+        back.setOnClickListener(this);
+        add.setOnClickListener(this);
+        tile.setOnClickListener(this);
         Intent intentValue=getIntent();
         appropriOutValue=intentValue.getStringExtra("appropriout");
         search = (CSearch) findViewById(R.id.search);
@@ -151,7 +146,7 @@ public class InventoryView extends CSearchBase implements View.OnClickListener, 
                 leftAdapter.notifyDataSetInvalidated();
                 Object[] obj = categorySearch(categorylist.get(position).getName());
                 updateLayout(obj);
-                toobarTile.setText(categorylist.get(position).getName());
+                tile.setText(categorylist.get(position).getName());
                 leftListSelecteText = categorylist.get(position).getName();
             }
         });

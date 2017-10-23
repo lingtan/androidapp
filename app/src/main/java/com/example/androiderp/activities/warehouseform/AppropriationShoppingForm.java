@@ -30,7 +30,7 @@ import org.litepal.crud.DataSupport;
 public class AppropriationShoppingForm extends AppCompatActivity implements View.OnClickListener {
     private InputMethodManager manager;
     private EditText name,number, quantity,category;
-    private TextView save, toobarTile, toobarBack, toobarAdd;
+    private TextView save, tile, back, add;
     private ProductShopping productShopping;
     private DisplayMetrics dm;
     private Product product;
@@ -55,27 +55,27 @@ public class AppropriationShoppingForm extends AppCompatActivity implements View
         category.setKeyListener(null);
         quantity =(EditText)findViewById(R.id.product_fqty);
         save=(TextView)findViewById(R.id.customtoobar_right);
-        toobarTile =(TextView)findViewById(R.id.customtoobar_midd);
-        toobarBack =(TextView)findViewById(R.id.customtoobar_left);
-        toobarAdd =(TextView)findViewById(R.id.customtoobar_r) ;
+        tile =(TextView)findViewById(R.id.customtoobar_midd);
+        back =(TextView)findViewById(R.id.customtoobar_left);
+        add =(TextView)findViewById(R.id.customtoobar_r) ;
         saveButton =(Button)findViewById(R.id.shopping_button);
         saveButton.setOnClickListener(this);
         save.setOnClickListener(this);
-        toobarBack.setOnClickListener(this);
-        toobarAdd.setCompoundDrawables(null,null,null,null);
-        toobarTile.setCompoundDrawables(null,null,null,null);
+        back.setOnClickListener(this);
+        add.setCompoundDrawables(null,null,null,null);
+        tile.setCompoundDrawables(null,null,null,null);
         errorIcon = getResources().getDrawable(R.drawable.icon_error);
 // 设置图片大小
         errorIcon.setBounds(new Rect(0, 0, errorIcon.getIntrinsicWidth(),
                 errorIcon.getIntrinsicHeight()));
-        toobarTile.setText("调拨数量");
+        tile.setText("调拨数量");
         Drawable del= getResources().getDrawable(R.drawable.suppliercategory_delete);
         del.setBounds(0, 0, del.getMinimumWidth(), del.getMinimumHeight());
         Drawable more= getResources().getDrawable(R.drawable.toobar_more);
         more.setBounds(0, 0, more.getMinimumWidth(), more.getMinimumHeight());
-        toobarBack.setCompoundDrawables(del,null,null,null);
+        back.setCompoundDrawables(del,null,null,null);
         save.setCompoundDrawables(more,null,null,null);
-        toobarBack.setText("");
+        back.setText("");
         save.setText("");
         formInit();
 
@@ -111,9 +111,9 @@ public class AppropriationShoppingForm extends AppCompatActivity implements View
             number.setText(product.getNumber());
             category.setText(product.getCategory_name());
             if(edit.equals("edit")) {
-                toobarAdd.setVisibility(View.VISIBLE);
+                add.setVisibility(View.VISIBLE);
             }else {
-                toobarAdd.setVisibility(View.INVISIBLE);
+                add.setVisibility(View.INVISIBLE);
             }
         }
     }
@@ -140,7 +140,7 @@ public class AppropriationShoppingForm extends AppCompatActivity implements View
                     productShopping.setNumber(number.getText().toString());
                     productShopping.setCategory(category.getText().toString());
                     productShopping.setQuantity(Double.valueOf(quantity.getText().toString().trim()));
-                    toobarAdd.setVisibility(View.VISIBLE);
+                    add.setVisibility(View.VISIBLE);
                     Intent intentsave = new Intent();
                     intentsave.putExtra("shop_data", productShopping);
                     setResult(RESULT_OK,intentsave);

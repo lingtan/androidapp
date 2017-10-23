@@ -43,12 +43,12 @@ public class FirstFragment extends Fragment {
     private List<GridView> gridViewList=new ArrayList<GridView>();
     private List<GridView> gridViewAddList=new ArrayList<GridView>();
     private AcivityPostBean acivityPostBen=new AcivityPostBean();
-    private String[] img_text = {
+    private String[] image_texts = {
             "商品管理", "采购新增","销售新增",
             "库存查询","采购流水", "销售流水",
             ""};
 
-    private int[] imgs = {
+    private int[] image = {
             R.drawable.home_firstfragment_sp, R.drawable.hoem_firstfragmnet_cg,R.drawable.firstfragment_xs,
             R.drawable.hoem_fistfragment_search,R.drawable.home_fisrtfragment_cgcx, R.drawable.home_fisrtfragment_xscx,
             R.drawable.home_firstfragmnet_more};
@@ -61,8 +61,8 @@ public class FirstFragment extends Fragment {
         for(int i=0;i<6;i++)
         {
             GridView gridView=new GridView();
-            gridView.setName(img_text[i]);
-            gridView.setImage(imgs[i]);
+            gridView.setName(image_texts[i]);
+            gridView.setImage(image[i]);
             gridViewList.add(gridView);
         }
 
@@ -73,8 +73,8 @@ public class FirstFragment extends Fragment {
             }
 
         GridView gridView2=new GridView();
-        gridView2.setName(img_text[6]);
-        gridView2.setImage(imgs[6]);
+        gridView2.setName(image_texts[6]);
+        gridView2.setImage(image[6]);
         gridViewList.add(gridView2);
      View view=inflater.inflate(R.layout.customgridview_layout,container,false);
         gridView=(CGridView)view.findViewById(R.id.customgridview_gridview);
@@ -200,8 +200,8 @@ public class FirstFragment extends Fragment {
                 for(int i=0;i<6;i++)
                 {
                     GridView gridView=new GridView();
-                    gridView.setName(img_text[i]);
-                    gridView.setImage(imgs[i]);
+                    gridView.setName(image_texts[i]);
+                    gridView.setImage(image[i]);
                     gridViewList.add(gridView);
                 }
                 gridViewAddList = DataSupport.findAll(GridView.class);
@@ -211,8 +211,8 @@ public class FirstFragment extends Fragment {
                 }
 
                 GridView gridView2=new GridView();
-                gridView2.setName(img_text[6]);
-                gridView2.setImage(imgs[6]);
+                gridView2.setName(image_texts[6]);
+                gridView2.setImage(image[6]);
                 gridViewList.add(gridView2);
                 gridView.setAdapter(new CusteomGridAdapter(getActivity(),gridViewList));
 

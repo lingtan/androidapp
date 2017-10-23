@@ -32,7 +32,7 @@ import java.text.DecimalFormat;
 public class ShoppingScrennForm extends AppCompatActivity implements View.OnClickListener {
     private InputMethodManager manager;
     private EditText name,number, quantity, price,category;
-    private TextView toobarSave, toobarTile, toobarBack, toobarAdd;
+    private TextView save, tile, back, add;
     private ProductShopping productShopping;
     private DisplayMetrics dm;
     private Product product;
@@ -59,29 +59,29 @@ public class ShoppingScrennForm extends AppCompatActivity implements View.OnClic
         category.setKeyListener(null);
         quantity =(EditText)findViewById(R.id.product_fqty);
         price =(EditText)findViewById(R.id.product_salesprice);
-        toobarSave =(TextView)findViewById(R.id.customtoobar_right);
+        save =(TextView)findViewById(R.id.customtoobar_right);
         saveButton =(Button)findViewById(R.id.shopping_button);
-        toobarTile =(TextView)findViewById(R.id.customtoobar_midd);
-        toobarBack =(TextView)findViewById(R.id.customtoobar_left);
-        toobarAdd =(TextView)findViewById(R.id.customtoobar_r) ;
-        toobarSave.setOnClickListener(this);
-        toobarBack.setOnClickListener(this);
+        tile =(TextView)findViewById(R.id.customtoobar_midd);
+        back =(TextView)findViewById(R.id.customtoobar_left);
+        add =(TextView)findViewById(R.id.customtoobar_r) ;
+        save.setOnClickListener(this);
+        back.setOnClickListener(this);
         saveButton.setOnClickListener(this);
-        toobarAdd.setCompoundDrawables(null,null,null,null);
-        toobarTile.setCompoundDrawables(null,null,null,null);
+        add.setCompoundDrawables(null,null,null,null);
+        tile.setCompoundDrawables(null,null,null,null);
         errorIcon = getResources().getDrawable(R.drawable.icon_error);
 // 设置图片大小
         errorIcon.setBounds(new Rect(0, 0, errorIcon.getIntrinsicWidth(),
                 errorIcon.getIntrinsicHeight()));
-        toobarSave.setText("");
-        toobarTile.setText("商品销售");
+        save.setText("");
+        tile.setText("商品销售");
         Drawable del= getResources().getDrawable(R.drawable.suppliercategory_delete);
         del.setBounds(0, 0, del.getMinimumWidth(), del.getMinimumHeight());
         Drawable more= getResources().getDrawable(R.drawable.toobar_more);
         more.setBounds(0, 0, more.getMinimumWidth(), more.getMinimumHeight());
-        toobarSave.setCompoundDrawables(more,null,null,null);
-        toobarBack.setCompoundDrawables(del,null,null,null);
-        toobarBack.setText("");
+        save.setCompoundDrawables(more,null,null,null);
+        back.setCompoundDrawables(del,null,null,null);
+        back.setText("");
         formInit();
         price.addTextChangedListener(new TextWatcher() {
             @Override
@@ -99,13 +99,13 @@ public class ShoppingScrennForm extends AppCompatActivity implements View.OnClic
 
                 if(s.toString().trim().length()==0| quantity.getText().toString().trim().length()==0)
                 {
-                    toobarTile.setText("商品销售");
+                    tile.setText("商品销售");
                 }else {
 
 
                     amountString=df.format(Double.valueOf(price.getText().toString().trim()) * Integer.parseInt(quantity.getText().toString().trim()));
 
-                    toobarTile.setText("金额：¥"+amountString);
+                    tile.setText("金额：¥"+amountString);
                 }
 
 
@@ -127,13 +127,13 @@ public class ShoppingScrennForm extends AppCompatActivity implements View.OnClic
 
                 if(s.toString().trim().length()==0| price.getText().toString().trim().length()==0)
                 {
-                    toobarTile.setText("商品销售");
+                    tile.setText("商品销售");
                 }else {
 
                     DecimalFormat df = new DecimalFormat("#####0.00");
                     amountString=df.format(Double.valueOf(price.getText().toString().trim()) * Double.valueOf(quantity.getText().toString().trim()));
 
-                    toobarTile.setText("金额：¥"+amountString);
+                    tile.setText("金额：¥"+amountString);
                 }
                 }
 
@@ -153,9 +153,9 @@ public class ShoppingScrennForm extends AppCompatActivity implements View.OnClic
             price.setText(df.format(product.getSalesPrice()));
             category.setText(product.getCategory_name());
             if(edit.equals("edit")) {
-                toobarAdd.setVisibility(View.VISIBLE);
+                add.setVisibility(View.VISIBLE);
             }else {
-                toobarAdd.setVisibility(View.INVISIBLE);
+                add.setVisibility(View.INVISIBLE);
             }
         }
     }
@@ -178,7 +178,7 @@ public class ShoppingScrennForm extends AppCompatActivity implements View.OnClic
                     productShopping.setPrice(Double.valueOf(price.getText().toString().trim()));
                     productShopping.setQuantity(Integer.parseInt(quantity.getText().toString().trim()));
                     productShopping.setAmount(Double.valueOf(price.getText().toString().trim())*Integer.parseInt(quantity.getText().toString().trim()));
-                    toobarAdd.setVisibility(View.VISIBLE);
+                    add.setVisibility(View.VISIBLE);
                     Intent intent = new Intent();
                     intent.putExtra("shop_data", productShopping);
                     setResult(RESULT_OK,intent);

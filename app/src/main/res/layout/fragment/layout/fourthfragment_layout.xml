@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/thressfragmnet_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#F0F3F6"
+     >
+
+    <LinearLayout style="@style/bottom_layout"
+        android:id="@+id/fourthfragment_kccxlayout">
+        <ImageView
+            android:id="@+id/thressfragmnet_xslsimag"
+            android:layout_height="30.dp"
+            android:layout_width="30.dp"
+            android:layout_alignParentTop="true"
+            android:src="@drawable/hoem_fistfragment_search"
+            android:layout_marginRight="20dp"
+            />
+        <TextView style="@style/usertext"
+            android:id="@+id/thressfragmnet_xslsname"
+            android:textSize="14dp"
+            android:text="库存查询" />
+        <ImageView style="@style/img_arrow"/>
+    </LinearLayout>
+    <LinearLayout style="@style/wrap_layout"
+        android:orientation="horizontal"
+        android:weightSum="1">
+        <RelativeLayout
+            android:id="@+id/fourthfragment_pdzylayout"
+            style="@style/secondfragment_layout"
+            android:layout_weight="0.5">
+            <ImageView
+                android:id="@+id/thressfragmnet_khglimag"
+                android:layout_height="30.dp"
+                android:layout_width="30.dp"
+                android:layout_alignParentTop="true"
+                android:src="@drawable/home_fisrfragment_pd"
+                android:layout_marginRight="20dp"
+                />
+
+            <TextView
+                android:id="@+id/thressfragmnet_khglname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14dp"
+                android:text="盘点作业"
+                android:layout_alignTop="@id/thressfragmnet_khglimag"
+                android:layout_toRightOf="@+id/thressfragmnet_khglimag"
+                />
+            <TextView
+                android:id="@+id/thressfragmnet_khgltis"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12dp"
+                android:text="核准库存"
+                android:layout_below="@+id/thressfragmnet_khglimag"
+                android:layout_toRightOf="@+id/thressfragmnet_khglimag"
+                />
+        </RelativeLayout>
+        <LinearLayout
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:layout_marginTop="5dp">
+            <View
+                android:layout_width="1px"
+                android:layout_height="match_parent"
+                android:background="#C2C2C2"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="5dp"/>
+        </LinearLayout>
+
+        <RelativeLayout style="@style/secondfragment_layout"
+            android:id="@+id/fourthfragment_pdlslayout"
+            android:layout_weight="0.5">
+            <ImageView
+                android:id="@+id/thressfragmnet_xsckmag"
+                android:layout_height="30.dp"
+                android:layout_width="30.dp"
+                android:layout_alignParentTop="true"
+                android:src="@drawable/fourthfragmnet_pdls"
+                android:layout_marginRight="20dp"
+                />
+
+            <TextView
+                android:id="@+id/thressfragmnet_xsckname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14dp"
+                android:text="盘点流水"
+                android:layout_alignTop="@id/thressfragmnet_xsckmag"
+                android:layout_toRightOf="@+id/thressfragmnet_xsckmag"
+                />
+            <TextView
+                android:id="@+id/thressfragmnet_xscktis"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12dp"
+                android:text="盘点明细"
+                android:layout_below="@+id/thressfragmnet_xsckmag"
+                android:layout_toRightOf="@+id/thressfragmnet_xsckmag"/>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <!-- 全圆角-->
+    <LinearLayout style="@style/wrap_layout"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+        <RelativeLayout
+            style="@style/secondfragment_layout"
+            android:id="@+id/fourthfragment_dblayout"
+            android:layout_weight="0.5">
+            <ImageView
+                android:id="@+id/thressfragmnet_kccximage"
+                android:layout_height="30.dp"
+                android:layout_width="30.dp"
+                android:layout_alignParentTop="true"
+                android:src="@drawable/home_fistfragment_db"
+                android:layout_marginRight="20dp"
+                />
+
+            <TextView
+                android:id="@+id/thressfragmnet_kccxname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14dp"
+                android:text="库存调拨"
+                android:layout_alignTop="@id/thressfragmnet_kccximage"
+                android:layout_toRightOf="@+id/thressfragmnet_kccximage"
+                />
+            <TextView
+                android:id="@+id/thressfragmnet_kccxtis"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12dp"
+                android:text="仓库之间调拨"
+                android:layout_below="@+id/thressfragmnet_kccximage"
+                android:layout_toRightOf="@+id/thressfragmnet_kccximage"
+                />
+
+
+        </RelativeLayout>
+        <LinearLayout
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:layout_marginTop="5dp">
+            <View
+                android:layout_width="1px"
+                android:layout_height="match_parent"
+                android:background="#C2C2C2"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="5dp"/>
+        </LinearLayout>
+        <RelativeLayout style="@style/secondfragment_layout"
+            android:id="@+id/fourthfragment_dblslayout"
+            android:layout_weight="0.5">
+
+            <ImageView
+                android:id="@+id/thressfragmnet_kcpdimag"
+                android:layout_height="30.dp"
+                android:layout_width="30.dp"
+                android:layout_alignParentTop="true"
+                android:src="@drawable/home_dbls"
+                android:layout_marginRight="20dp"
+                />
+
+            <TextView
+                android:id="@+id/thressfragmnet_ckpdtis"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14dp"
+                android:text="调拨流水"
+                android:layout_alignTop="@id/thressfragmnet_kcpdimag"
+                android:layout_toRightOf="@+id/thressfragmnet_kcpdimag"
+                android:layout_marginBottom="22dp"
+                />
+
+
+        </RelativeLayout>
+    </LinearLayout>
+
+
+
+    <!-- 全圆角-->
+    <LinearLayout style="@style/wrap_layout_to"
+        android:orientation="horizontal"
+        android:weightSum="1">
+        <RelativeLayout
+            android:id="@+id/fourthfragment_kcyjlayout"
+            style="@style/secondfragment_layout"
+            android:layout_weight="0.5">
+            <ImageView
+                android:id="@+id/thressfragmnet_kcdbimag"
+                android:layout_height="30.dp"
+                android:layout_width="30.dp"
+                android:layout_alignParentTop="true"
+                android:src="@drawable/fourthfragment_kcyj"
+                android:layout_marginRight="20dp"
+                />
+
+            <TextView
+                android:id="@+id/thressfragmnet_ckdbname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14dp"
+                android:text="库存预警"
+                android:layout_alignTop="@id/thressfragmnet_kcdbimag"
+                android:layout_toRightOf="@+id/thressfragmnet_kcdbimag"
+                />
+            <TextView
+                android:id="@+id/secondfragmnet_kcdbtis"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12dp"
+                android:text="提高管理"
+                android:layout_below="@+id/thressfragmnet_kcdbimag"
+                android:layout_toRightOf="@+id/thressfragmnet_kcdbimag"
+                />
+        </RelativeLayout>
+        <LinearLayout
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:layout_marginTop="5dp">
+            <View
+                android:layout_width="1px"
+                android:layout_height="match_parent"
+                android:background="#C2C2C2"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="5dp"/>
+        </LinearLayout>
+        <RelativeLayout style="@style/secondfragment_layout"
+            android:layout_weight="0.5"
+            android:id="@+id/thressfragmnet_khlayout">
+
+            <ImageView
+                android:id="@+id/thressfragmnet_xsthimag"
+                android:layout_height="30.dp"
+                android:layout_width="30.dp"
+                android:layout_alignParentTop="true"
+                android:src="@drawable/home_fisrtfragment_kc"
+                android:layout_marginRight="20dp"
+                />
+
+            <TextView
+                android:id="@+id/thressfragmnet_xkthname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14dp"
+                android:text="仓库管理"
+                android:layout_alignTop="@id/thressfragmnet_xsthimag"
+                android:layout_toRightOf="@+id/thressfragmnet_xsthimag"
+                android:layout_marginBottom="22dp"
+                />
+
+
+        </RelativeLayout>
+    </LinearLayout>
+
+</LinearLayout>

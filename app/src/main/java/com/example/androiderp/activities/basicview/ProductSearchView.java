@@ -46,7 +46,7 @@ public class ProductSearchView extends CSearchBase {
     private DisplayMetrics dm;
     private Common common;
     private CHomeSearch cHomeSearch;
-    private Intent  intentScreen;
+    private Intent iScreen;
     private ActionBar ab;
     private String scanResult;
     private AcivityPostBean postAcivityPostBen = new AcivityPostBean();
@@ -64,8 +64,8 @@ public class ProductSearchView extends CSearchBase {
         cHomeSearch = (CHomeSearch) findViewById(R.id.home_custom_search);
         cHomeSearch.setVisibility(View.VISIBLE);
         cHomeSearch.setHint("输入名称 | 产品货号");
-        intentScreen =getIntent();
-        scanResult= intentScreen.getStringExtra("scanResult");
+        iScreen =getIntent();
+        scanResult= iScreen.getStringExtra("scanResult");
         //构造函数第一参数是类的对象，第二个是布局文件，第三个是数据源
         listView = (ListView) findViewById(R.id.list);
         listView.setTextFilterEnabled(true);

@@ -22,6 +22,8 @@ import android.widget.ListAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.androiderp.activities.basicfrom.CustomForm;
+import com.example.androiderp.activities.basicview.CustomSelectView;
 import com.example.androiderp.activities.salesfrom.ShoppingScrennForm;
 import com.example.androiderp.basic.BasicView;
 import com.example.androiderp.bean.AcivityPostBean;
@@ -38,13 +40,11 @@ import com.example.androiderp.bean.StockIniti;
 import com.example.androiderp.bean.StockTakingEnty;
 import com.example.androiderp.bean.Supplier;
 import com.example.androiderp.R;
-import com.example.androiderp.activities.basicfrom.SupplierForm;
 import com.example.androiderp.adaper.CommonAdapterData;
 import com.example.androiderp.bean.DataStructure;
 import com.example.androiderp.bean.PopBean;
 import com.example.androiderp.adaper.SaleProductListViewAdapter;
 import com.example.androiderp.activities.basicview.ProductSelectView;
-import com.example.androiderp.activities.basicview.SupplierSelectView;
 import com.example.androiderp.tools.Common;
 import com.example.androiderp.ui.CSearchBase;
 import com.example.androiderp.listview.Menu;
@@ -371,7 +371,7 @@ public class PurchaseReturnForm extends CSearchBase implements View.OnClickListe
                 break;
 
             case R.id.stockout_layout:
-                Intent intentcustom=new Intent(PurchaseReturnForm.this, SupplierSelectView.class);
+                Intent intentcustom=new Intent(PurchaseReturnForm.this, CustomSelectView.class);
                 intentcustom.putExtra("index",name.getText().toString());
                 startActivityForResult(intentcustom,8);
 
@@ -487,7 +487,7 @@ public class PurchaseReturnForm extends CSearchBase implements View.OnClickListe
 
                 if(popuMenuDatas.get(position).getName().equals("采购单新增"))
                 {
-                    intent = new Intent(PurchaseReturnForm.this, SupplierForm.class);
+                    intent = new Intent(PurchaseReturnForm.this, CustomForm.class);
                     startActivity(intent);
                 }
                 else

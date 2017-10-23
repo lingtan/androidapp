@@ -27,26 +27,26 @@ public class PurchaseView extends CSearchBase implements View.OnClickListener {
     private DisplayMetrics dm;
     private List<SalesOut> salesOutSearch = new ArrayList<SalesOut>();
     private List<SalesOut> salesOutList;
-    private TextView toobarBack, toobarAdd, toobarTile;
+    private TextView back, add, tile;
     private CSearch search;
-    private Intent intentEdit;
-    private Intent intentadd;
+    private Intent iEdit;
+    private Intent iadd;
 
     @Override
     public void iniView(){
         setContentView(R.layout.custom_layout);
-        toobarBack =(TextView)findViewById(R.id.custom_toobar_left) ;
-        toobarTile =(TextView)findViewById(R.id.custom_toobar_midd);
-        toobarAdd =(TextView)findViewById(R.id.custom_toobar_right);
-        toobarBack.setOnClickListener(this);
-        toobarAdd.setOnClickListener(this);
-        toobarTile.setOnClickListener(this);
+        back =(TextView)findViewById(R.id.custom_toobar_left) ;
+        tile =(TextView)findViewById(R.id.custom_toobar_midd);
+        add =(TextView)findViewById(R.id.custom_toobar_right);
+        back.setOnClickListener(this);
+        add.setOnClickListener(this);
+        tile.setOnClickListener(this);
         search = (CSearch) findViewById(R.id.search);
         search.setHint("采购流水 | 输入供应商");
         salesOutList =DataSupport.where("billtype =?","1").find(SalesOut.class);
-        intentEdit = new Intent(PurchaseView.this, PurchaseEntyView.class);
-        toobarTile.setText("采购流水");
-        toobarBack.setText("返回");
+        iEdit = new Intent(PurchaseView.this, PurchaseEntyView.class);
+        tile.setText("采购流水");
+        back.setText("返回");
 
         //构造函数第一参数是类的对象，第二个是布局文件，第三个是数据源
         listView = (ListView) findViewById(R.id.list);
@@ -58,20 +58,20 @@ public class PurchaseView extends CSearchBase implements View.OnClickListener {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view,
                                     int position, long id) {
-                intentEdit.removeExtra("action");
+                iEdit.removeExtra("action");
                         if(salesOutSearch.size()!=0) {
 
-                            intentEdit.putExtra("action", "edit");
-                            intentEdit.putExtra("custom_item", String.valueOf(salesOutSearch.get(position).getId()));
+                            iEdit.putExtra("action", "edit");
+                            iEdit.putExtra("custom_item", String.valueOf(salesOutSearch.get(position).getId()));
 
 
                         }else {
 
-                            intentEdit.putExtra("action", "edit");
-                            intentEdit.putExtra("custom_item", String.valueOf(salesOutList.get(position).getId()));
+                            iEdit.putExtra("action", "edit");
+                            iEdit.putExtra("custom_item", String.valueOf(salesOutList.get(position).getId()));
 
                         }
-                startActivityForResult(intentEdit,1);
+                startActivityForResult(iEdit,1);
 
 
             }
@@ -152,8 +152,8 @@ public class PurchaseView extends CSearchBase implements View.OnClickListener {
                 break;
 
             case R.id.custom_toobar_right:
-                intentadd = new Intent(PurchaseView.this, PurchaseForm.class);
-                startActivity(intentadd);
+                iadd = new Intent(PurchaseView.this, PurchaseForm.class);
+                startActivity(iadd);
                 break;
 
 

@@ -22,6 +22,7 @@ import android.widget.ListAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.androiderp.activities.basicview.CustomSelectView;
 import com.example.androiderp.activities.salesfrom.ShoppingScrennForm;
 import com.example.androiderp.basic.BasicView;
 import com.example.androiderp.bean.AcivityPostBean;
@@ -43,7 +44,6 @@ import com.example.androiderp.bean.PopBean;
 import com.example.androiderp.adaper.SaleProductListViewAdapter;
 import com.example.androiderp.activities.accountsview.BalanceAccountView;
 import com.example.androiderp.activities.basicview.ProductSelectView;
-import com.example.androiderp.activities.basicview.SupplierSelectView;
 import com.example.androiderp.tools.Common;
 import com.example.androiderp.ui.CSearchBase;
 import com.example.androiderp.listview.Menu;
@@ -71,7 +71,7 @@ public class PurchaseForm extends CSearchBase implements View.OnClickListener, A
     private InputMethodManager manager;
     private EditText note;
     private LinearLayout productAddLayout;
-    private TextView toobarSave,balanceAccount, toobarTile, toobarBack, toobarAdd,category,name,number,data, consign, totalAmout, totalQuantity;
+    private TextView save,balanceAccount, tile, back, add,category,name,number,data, consign, totalAmout, totalQuantity;
     private DisplayMetrics dm;
     private LinearLayout categoryLayout,customLayout,stockLayout,balanceAccountLayout,dataLayout,consignmentLayout,screenLayout,totalLayout;
     private Supplier supplier;
@@ -80,7 +80,7 @@ public class PurchaseForm extends CSearchBase implements View.OnClickListener, A
     private String customid;
     private Drawable errorIcon;
     private Common common;
-    private List<PopBean> popuMenuDatas;
+    private List<PopBean> popBeen;
     private List<Product> productList;
     private List<SalesOutEnty> salesOutEntyList=new ArrayList<SalesOutEnty>();
     private List<ProductShopping> productShoppingList = new ArrayList<ProductShopping>();
@@ -116,11 +116,11 @@ public class PurchaseForm extends CSearchBase implements View.OnClickListener, A
         balanceAccount=(TextView)findViewById(R.id.balanceaccount);
         screenLayout=(LinearLayout) findViewById(R.id.number_screen);
         category=(TextView)findViewById(R.id.documentmaker);
-        toobarSave =(TextView)findViewById(R.id.customtoobar_right);
-        toobarTile =(TextView)findViewById(R.id.customtoobar_midd);
-        toobarBack =(TextView)findViewById(R.id.customtoobar_left);
+        save =(TextView)findViewById(R.id.customtoobar_right);
+        tile =(TextView)findViewById(R.id.customtoobar_midd);
+        back =(TextView)findViewById(R.id.customtoobar_left);
         categoryLayout=(LinearLayout)findViewById(R.id.documentmaker_layout);
-        toobarAdd =(TextView)findViewById(R.id.customtoobar_r) ;
+        add =(TextView)findViewById(R.id.customtoobar_r) ;
         stockLayout=(LinearLayout)findViewById(R.id.stockin_layout);
         customLayout=(LinearLayout)findViewById(R.id.stockout_layout);
         dataLayout=(LinearLayout)findViewById(R.id.businessdata_layout);
@@ -134,26 +134,26 @@ public class PurchaseForm extends CSearchBase implements View.OnClickListener, A
         customLayout.setOnClickListener(this);
         dataLayout.setOnClickListener(this);
         consignmentLayout.setOnClickListener(this);
-        toobarSave.setOnClickListener(this);
-        toobarBack.setOnClickListener(this);
+        save.setOnClickListener(this);
+        back.setOnClickListener(this);
         categoryLayout.setOnClickListener(this);
-        toobarAdd.setOnClickListener(this);
+        add.setOnClickListener(this);
         productAddLayout.setOnClickListener(this);
-        toobarSave.setCompoundDrawables(null,null,null,null);
-        toobarTile.setCompoundDrawables(null,null,null,null);
+        save.setCompoundDrawables(null,null,null,null);
+        tile.setCompoundDrawables(null,null,null,null);
         errorIcon = getResources().getDrawable(R.drawable.icon_error);
 // 设置图片大小
         errorIcon.setBounds(new Rect(0, 0, errorIcon.getIntrinsicWidth(),
                 errorIcon.getIntrinsicHeight()));
-        toobarSave.setText("保存");
+        save.setText("保存");
         formInit();
         getDate();
-        popuMenuDatas = new ArrayList<PopBean>();
+        popBeen = new ArrayList<PopBean>();
         PopBean popuMenua = new PopBean(android.R.drawable.ic_menu_edit, "美的");
-        popuMenuDatas.add(popuMenua);
+        popBeen.add(popuMenua);
         PopBean popuMenub = new PopBean(android.R.drawable.ic_menu_edit, "松下");
-        popuMenuDatas.add(popuMenub);
-        showPopupWindow(popuMenuDatas);
+        popBeen.add(popuMenub);
+        showPopupWindow(popBeen);
         screenLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -163,7 +163,7 @@ public class PurchaseForm extends CSearchBase implements View.OnClickListener, A
                 startActivityForResult(openCameraIntent, 5);
             }
         });
-        toobarTile.setText("采购单");
+        tile.setText("采购单");
 
     }
     private void  formInit()
@@ -356,8 +356,8 @@ public class PurchaseForm extends CSearchBase implements View.OnClickListener, A
                     tally.setNote(note.getText().toString());
                     tally.save();
                     Toast.makeText(PurchaseForm.this,"新增成功",Toast.LENGTH_SHORT).show();
-                    toobarSave.setVisibility(View.GONE);
-                    toobarAdd.setVisibility(View.VISIBLE);
+                    save.setVisibility(View.GONE);
+                    add.setVisibility(View.VISIBLE);
 
 
                 }
@@ -381,7 +381,7 @@ public class PurchaseForm extends CSearchBase implements View.OnClickListener, A
                 break;
 
             case R.id.stockout_layout:
-                Intent intentcustom=new Intent(PurchaseForm.this, SupplierSelectView.class);
+                Intent intentcustom=new Intent(PurchaseForm.this, CustomSelectView.class);
                 intentcustom.putExtra("index",name.getText().toString());
                 startActivityForResult(intentcustom,8);
 
@@ -468,14 +468,14 @@ public class PurchaseForm extends CSearchBase implements View.OnClickListener, A
                 break;
             case R.id.customtoobar_r:
                 if( common.mPopWindow==null ||!common.mPopWindow.isShowing())
-                {   popuMenuDatas.clear();
+                {   popBeen.clear();
 
                     PopBean popuMenub = new PopBean(R.drawable.poppu_wrie, "采购单新增");
-                    popuMenuDatas.add(popuMenub);
+                    popBeen.add(popuMenub);
                     PopBean popuMenua = new PopBean(R.drawable.poppu_wrie, "采购单复制");
-                    popuMenuDatas.add(popuMenua);
+                    popBeen.add(popuMenua);
                     int xPos = dm.widthPixels / 3;
-                    showPopupWindow(popuMenuDatas);
+                    showPopupWindow(popBeen);
                     common.mPopWindow.showAsDropDown(v,0,5);
                     //mPopWindow.showAtLocation(findViewById(R.id.main), Gravity.BOTTOM, 0, 0);//从底部弹出
                 }
@@ -500,7 +500,7 @@ public class PurchaseForm extends CSearchBase implements View.OnClickListener, A
             public void onItemClick(AdapterView<?> adapterView, View view,
                                     int position, long id) {
 
-                if(popuMenuDatas.get(position).getName().equals("采购单新增"))
+                if(popBeen.get(position).getName().equals("采购单新增"))
                 {
                     intent = new Intent(PurchaseForm.this, PurchaseForm.class);
                     startActivity(intent);
@@ -709,46 +709,46 @@ public class PurchaseForm extends CSearchBase implements View.OnClickListener, A
     }
     private void showStockWindow() {
         common = new Common();
-        popuMenuDatas = new ArrayList<PopBean>();
+        popBeen = new ArrayList<PopBean>();
         stockList = DataSupport.findAll(Stock.class);
         for(Stock stock: stockList)
 
         {
             PopBean popuMenua = new PopBean(R.drawable.poppu_wrie, stock.getName());
-            popuMenuDatas.add(popuMenua);
+            popBeen.add(popuMenua);
 
         }
-        common.PopupWindow(PurchaseForm.this, dm, popuMenuDatas);
+        common.PopupWindow(PurchaseForm.this, dm, popBeen);
         common.listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view,
                                     int position, long id) {
 
-                number.setText(popuMenuDatas.get(position).getName());
+                number.setText(popBeen.get(position).getName());
                 common.mPopWindow.dismiss();
             }
         });
     }
     private void showEmployeeWindow() {
         common = new Common();
-        popuMenuDatas = new ArrayList<PopBean>();
+        popBeen = new ArrayList<PopBean>();
         employeeList = DataSupport.findAll(Employee.class);
         for(Employee employee: employeeList)
 
         {
             PopBean popuMenua = new PopBean(R.drawable.poppu_wrie, employee.getName());
-            popuMenuDatas.add(popuMenua);
+            popBeen.add(popuMenua);
 
         }
-        common.PopupWindow(PurchaseForm.this, dm, popuMenuDatas);
+        common.PopupWindow(PurchaseForm.this, dm, popBeen);
         common.listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view,
                                     int position, long id) {
 
-                category.setText(popuMenuDatas.get(position).getName());
+                category.setText(popBeen.get(position).getName());
                 common.mPopWindow.dismiss();
             }
         });

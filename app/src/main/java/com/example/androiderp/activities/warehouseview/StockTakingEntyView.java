@@ -40,15 +40,15 @@ import java.util.List;
 public class StockTakingEntyView extends CSearchBase implements View.OnClickListener, AdapterView.OnItemClickListener,
         SlideAndDragListView.OnMenuItemClickListener, SlideAndDragListView.OnItemDeleteListener {
     private InputMethodManager manager;
-    private TextView note,save,toobarTile,toobarBack,toobarAdd,category,number,data,consignment,totalQuantity;
+    private TextView note,save, tile, back, add,category,number,data,consignment,totalQuantity;
     private DisplayMetrics dm;
     private StockTaking stockTaking;
-    private String appropriatinId;
+    private String id;
     private Drawable errorIcon;
     private Common common;
     private double quantityCount;
     private Intent  intentBack;
-    private List<PopBean> popuMenuDatas;
+    private List<PopBean> popBeanList;
     private List<StockTakingEnty> stockTakingEntyList =new ArrayList<StockTakingEnty>();
     private List<CommonAdapterData> listdatas = new ArrayList<CommonAdapterData>();
     private SlideAndDragListView<CommonAdapterData> listView;
@@ -64,7 +64,7 @@ public class StockTakingEntyView extends CSearchBase implements View.OnClickList
         showStockWindow();
         intentBack= new Intent(StockTakingEntyView.this, StockTakingEntyView.class);
         final Intent intent=getIntent();
-        appropriatinId=intent.getStringExtra("custom_item");
+        id =intent.getStringExtra("custom_item");
         manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         number=(TextView)findViewById(R.id.stockin);
         data=(TextView)findViewById(R.id.businessdata);
@@ -72,17 +72,17 @@ public class StockTakingEntyView extends CSearchBase implements View.OnClickList
         note=(TextView)findViewById(R.id.note);
         category=(TextView)findViewById(R.id.documentmaker);
         save=(TextView)findViewById(R.id.customtoobar_right);
-        toobarTile=(TextView)findViewById(R.id.customtoobar_midd);
-        toobarBack=(TextView)findViewById(R.id.customtoobar_left);
-        toobarAdd=(TextView)findViewById(R.id.customtoobar_r) ;
+        tile =(TextView)findViewById(R.id.customtoobar_midd);
+        back =(TextView)findViewById(R.id.customtoobar_left);
+        add =(TextView)findViewById(R.id.customtoobar_r) ;
         totalQuantity=(TextView)findViewById(R.id.totalquantity);
         save.setOnClickListener(this);
-        toobarBack.setOnClickListener(this);
-        toobarAdd.setOnClickListener(this);
+        back.setOnClickListener(this);
+        add.setOnClickListener(this);
         Drawable more= getResources().getDrawable(R.drawable.toobar_more);
         more.setBounds(0, 0, more.getMinimumWidth(), more.getMinimumHeight());
         save.setCompoundDrawables(more,null,null,null);
-        toobarTile.setCompoundDrawables(null,null,null,null);
+        tile.setCompoundDrawables(null,null,null,null);
         errorIcon = getResources().getDrawable(R.drawable.icon_error);
 // 设置图片大小
         errorIcon.setBounds(new Rect(0, 0, errorIcon.getIntrinsicWidth(),
@@ -92,13 +92,13 @@ public class StockTakingEntyView extends CSearchBase implements View.OnClickList
         formInit();
 
 
-        toobarTile.setText("盘点明细");
+        tile.setText("盘点明细");
 
     }
     private void  formInit()
     {  quantityCount=0;
         DecimalFormat df = new DecimalFormat("#####0.00");
-        if(appropriatinId!=null) {
+        if(id !=null) {
             Employee  employeelist = DataSupport.find(Employee.class, 1);
             if(employeelist==null)
             {
@@ -106,7 +106,7 @@ public class StockTakingEntyView extends CSearchBase implements View.OnClickList
             }else {
                 category.setText(employeelist.getName());
             }
-            stockTaking = DataSupport.find(StockTaking.class, Long.parseLong(appropriatinId),true);
+            stockTaking = DataSupport.find(StockTaking.class, Long.parseLong(id),true);
             stockTakingEntyList = stockTaking.getStockTakingEntyList();
             number.setText(stockTaking.getStock());
             data.setText(stockTaking.getDate().toString().trim());
@@ -193,14 +193,14 @@ public class StockTakingEntyView extends CSearchBase implements View.OnClickList
              break;
             case R.id.customtoobar_r:
                 if( common.mPopWindow==null ||!common.mPopWindow.isShowing())
-                {   popuMenuDatas.clear();
+                {   popBeanList.clear();
 
                     PopBean popuMenub = new PopBean(R.drawable.poppu_wrie, "商品新增");
-                    popuMenuDatas.add(popuMenub);
+                    popBeanList.add(popuMenub);
                     PopBean popuMenua = new PopBean(R.drawable.poppu_wrie, "商品复制");
-                    popuMenuDatas.add(popuMenua);
+                    popBeanList.add(popuMenua);
                     int xPos = dm.widthPixels / 3;
-                    showPopupWindow(popuMenuDatas);
+                    showPopupWindow(popBeanList);
                     common.mPopWindow.showAsDropDown(v,0,5);
                     //mPopWindow.showAtLocation(findViewById(R.id.main), Gravity.BOTTOM, 0, 0);//从底部弹出
                 }
@@ -222,14 +222,14 @@ public class StockTakingEntyView extends CSearchBase implements View.OnClickList
             public void onItemClick(AdapterView<?> adapterView, View view,
                                     int position, long id) {
 
-                if(popuMenuDatas.get(position).getName().equals("商品新增"))
+                if(popBeanList.get(position).getName().equals("商品新增"))
                 {
 
                     intentBack.removeExtra("product_item");
                     intentBack.putExtra("action","add");
                     startActivityForResult(intentBack,4);
                 }
-                else if(popuMenuDatas.get(position).getName().equals("商品复制"))
+                else if(popBeanList.get(position).getName().equals("商品复制"))
 
                 {
                     intentBack.removeExtra("product_item");
@@ -261,23 +261,23 @@ public class StockTakingEntyView extends CSearchBase implements View.OnClickList
     }
     private void showStockWindow() {
         common = new Common();
-        popuMenuDatas = new ArrayList<PopBean>();
+        popBeanList = new ArrayList<PopBean>();
         stockList= DataSupport.findAll(Stock.class);
         for(Stock stock:stockList)
 
         {
             PopBean popuMenua = new PopBean(R.drawable.poppu_wrie, stock.getName());
-            popuMenuDatas.add(popuMenua);
+            popBeanList.add(popuMenua);
 
         }
-        common.PopupWindow(StockTakingEntyView.this, dm, popuMenuDatas);
+        common.PopupWindow(StockTakingEntyView.this, dm, popBeanList);
         common.listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view,
                                     int position, long id) {
 
-                number.setText(popuMenuDatas.get(position).getName());
+                number.setText(popBeanList.get(position).getName());
                 common.mPopWindow.dismiss();
             }
         });
