@@ -52,11 +52,6 @@
             android:screenOrientation="portrait"
             ></activity>
 
-        <activity android:name=".activities.basicview.SupplierView"
-
-            android:screenOrientation="portrait">
-        </activity>
-
         <activity android:name=".activities.basicview.CustomMoreView"
 
             android:screenOrientation="portrait">
@@ -77,12 +72,12 @@
             android:screenOrientation="portrait">
         </activity>
 
-        <activity android:name=".activities.warehouseview.AppropriationView"
+        <activity android:name=".activities.warehouseview.RequisitionView"
 
             android:screenOrientation="portrait">
         </activity>
 
-        <activity android:name=".activities.warehouseview.AppropriationEntyView"
+        <activity android:name=".activities.warehouseview.RequisitionEntyView"
 
             android:screenOrientation="portrait">
         </activity>
@@ -176,11 +171,6 @@
             android:screenOrientation="portrait">
         </activity>
 
-        <activity android:name=".activities.basicfrom.SupplierForm"
-
-            android:screenOrientation="portrait">
-        </activity>
-
         <activity android:name=".activities.purchaseform.PurchaseForm"
 
             android:screenOrientation="portrait">
@@ -247,16 +237,6 @@
             android:screenOrientation="portrait">
         </activity>
         <activity android:name=".activities.accountsview.TallyAccountsEntyView"
-
-            android:screenOrientation="portrait">
-        </activity>
-
-        <activity android:name=".activities.basicview.SupplierMoreView"
-
-            android:screenOrientation="portrait">
-        </activity>
-
-        <activity android:name=".activities.basicview.SupplierSelectView"
 
             android:screenOrientation="portrait">
         </activity>
