@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -40,11 +41,13 @@ public class Common extends AppCompatActivity {
     public   PopupWindow mPopWindow;
     private PopuMenuAdapter menuAdapter;
     public List<AdapterBean> HttpResponseList = new ArrayList<AdapterBean>();
+    private List<PopBean> cPopBeanList = new ArrayList<PopBean>();
     public int indexPositon=-1;
     public ListView listView;
+    public String popwinVaule;
     private Context context;
     //public static final String ip="http://eedd.v228.10000net.cn/javaweb/servlet/";
-    public static final String ip="http://192.168.0.103:8080/webdemo/servlet/";
+    public static final String ip="http://192.168.1.102:8080/webdemo/servlet/";
     public void PopupWindow(Context context, DisplayMetrics dm,List<PopBean>  popuMenuDatas)
     {   this.context=context;
         if(mPopWindow==null) {
@@ -129,7 +132,8 @@ public class Common extends AppCompatActivity {
 
     }
 
-    public  void  JsonUpdateUi(String returnData, String indexName, String type, Context context, BasicAdapter adapter, int textViewResourceId, SlideAndDragListView<AdapterBean> listView) {
+    public  void  JsonUpdateUi(String returnData, String indexName, String type, Context context, BasicAdapter adapter, int textViewResourceId, SlideAndDragListView<AdapterBean> listView)
+    {
 
 
         if (type.equals("select")) {
@@ -179,6 +183,52 @@ public class Common extends AppCompatActivity {
             }
 
 
+        }
+
+    }
+
+    public  void  JsonUpdatemPopWindow(String returnData, final TextView popwin, DisplayMetrics dm, Context context)
+    {
+        Gson gson = new Gson();
+        HttpResponseList = gson.fromJson(returnData, new TypeToken<List<AdapterBean>>() {
+        }.getType());
+        cPopBeanList.clear();
+        if (HttpResponseList.size() >0) {
+
+
+
+            for (AdapterBean adapterBean : HttpResponseList)
+
+            {
+                PopBean popuMenua = new PopBean(R.drawable.poppu_wrie, adapterBean.getName());
+                cPopBeanList.add(popuMenua);
+
+            }
+            PopupWindow(context, dm, cPopBeanList);
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view,
+                                        int position, long id) {
+
+                    popwin.setText(cPopBeanList.get(position).getName());
+                    mPopWindow.dismiss();
+                }
+            });
+
+            if (mPopWindow == null || !mPopWindow.isShowing()) {
+                int xPos = dm.widthPixels / 3;
+                mPopWindow.showAsDropDown(popwin, xPos, 5);
+                //mPopWindow.showAtLocation(findViewById(R.id.main), Gravity.BOTTOM, 0, 0);//从底部弹出
+            } else {
+                mPopWindow.dismiss();
+            }
+
+
+
+
+        }else {
+            Toast.makeText(context, "没有数据", Toast.LENGTH_SHORT).show();
         }
 
     }

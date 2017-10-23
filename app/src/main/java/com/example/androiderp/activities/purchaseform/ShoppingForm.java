@@ -47,7 +47,7 @@ public class ShoppingForm extends AppCompatActivity implements View.OnClickListe
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         final Intent intent=getIntent();
         getAcivityPostBean = intent.getParcelableExtra("acivityPostBen");
-        edit=intent.getStringExtra("action");
+        edit=intent.getStringExtra("type");
         manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         name=(EditText)findViewById(R.id.name);
         name.setKeyListener(null);

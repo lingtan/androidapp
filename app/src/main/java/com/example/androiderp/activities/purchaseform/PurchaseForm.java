@@ -10,6 +10,7 @@ import android.graphics.drawable.Drawable;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,11 +24,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.androiderp.activities.basicview.CustomSelectView;
+import com.example.androiderp.activities.salesfrom.SaleForm;
 import com.example.androiderp.activities.salesfrom.ShoppingScrennForm;
 import com.example.androiderp.basic.BasicView;
 import com.example.androiderp.bean.AcivityPostBean;
 import com.example.androiderp.bean.BalanceAccount;
 import com.example.androiderp.bean.Employee;
+import com.example.androiderp.bean.PostUserData;
 import com.example.androiderp.bean.Product;
 import com.example.androiderp.bean.ProductCategory;
 import com.example.androiderp.bean.ProductShopping;
@@ -45,6 +48,7 @@ import com.example.androiderp.adaper.SaleProductListViewAdapter;
 import com.example.androiderp.activities.accountsview.BalanceAccountView;
 import com.example.androiderp.activities.basicview.ProductSelectView;
 import com.example.androiderp.tools.Common;
+import com.example.androiderp.tools.HttpUtil;
 import com.example.androiderp.ui.CSearchBase;
 import com.example.androiderp.listview.Menu;
 import com.example.androiderp.listview.MenuItem;
@@ -55,12 +59,16 @@ import com.example.androiderp.scanning.utils.Constant;
 
 import org.litepal.crud.DataSupport;
 
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
+import okhttp3.Call;
+import okhttp3.Response;
 
 /**
  * Created by lingtan on 2017/5/15.
@@ -71,7 +79,7 @@ public class PurchaseForm extends CSearchBase implements View.OnClickListener, A
     private InputMethodManager manager;
     private EditText note;
     private LinearLayout productAddLayout;
-    private TextView save,balanceAccount, tile, back, add,category,name,number,data, consign, totalAmout, totalQuantity;
+    private TextView save,balanceAccount, tile, back,popwin, add,category,name,number,data, consign, totalAmout, totalQuantity;
     private DisplayMetrics dm;
     private LinearLayout categoryLayout,customLayout,stockLayout,balanceAccountLayout,dataLayout,consignmentLayout,screenLayout,totalLayout;
     private Supplier supplier;
@@ -79,7 +87,8 @@ public class PurchaseForm extends CSearchBase implements View.OnClickListener, A
     private Employee employee;
     private String customid;
     private Drawable errorIcon;
-    private Common common;
+    private Common uiCommon = new Common();
+    private Common common = new Common();
     private List<PopBean> popBeen;
     private List<Product> productList;
     private List<SalesOutEnty> salesOutEntyList=new ArrayList<SalesOutEnty>();
@@ -88,14 +97,13 @@ public class PurchaseForm extends CSearchBase implements View.OnClickListener, A
     private SlideAndDragListView<CommonAdapterData> listView;
     private SaleProductListViewAdapter adapter;
     private Menu menu;
-    private List<Stock> stockList;
-    private List<Employee> employeeList;
     private BalanceAccount balanceAccountList;
     private Calendar calendar;
     private int year,month,day;
     private double countall;
     private double amountCount;
     private Intent intent;
+    private PostUserData postDate = new PostUserData();
     private AcivityPostBean acivityPostBen=new AcivityPostBean();
     public void iniView() {
         setContentView(R.layout.purchaseproductform);
@@ -364,20 +372,14 @@ public class PurchaseForm extends CSearchBase implements View.OnClickListener, A
 
             break;
             case R.id.stockin_layout:
-                showStockWindow();
-                if(stockList.size()>0) {
-                    if (common.mPopWindow == null || !common.mPopWindow.isShowing()) {
-                        int xPos = dm.widthPixels / 3;
-                        common.mPopWindow.showAsDropDown(number, xPos, 5);
-                        //mPopWindow.showAtLocation(findViewById(R.id.main), Gravity.BOTTOM, 0, 0);//从底部弹出
-                    } else {
-                        common.mPopWindow.dismiss();
-                    }
-                }else {
-                    Intent intentstock=new Intent(PurchaseForm.this, BasicView.class);
-                    intentstock.putExtra("index",number.getText().toString());
-                    startActivityForResult(intentstock,11);
-                }
+                postDate.setName("");
+                popwin=number;
+                postDate.setRequestType("select");
+                postDate.setServerIp(Common.ip);
+                postDate.setServlet("BrandOperate");
+                postDate.setClassType(4);
+                getHttpData(postDate);
+
                 break;
 
             case R.id.stockout_layout:
@@ -423,21 +425,13 @@ public class PurchaseForm extends CSearchBase implements View.OnClickListener, A
 
              break;
             case R.id.documentmaker_layout:
-
-                showEmployeeWindow();
-                if(employeeList.size()>0) {
-                    if (common.mPopWindow == null || !common.mPopWindow.isShowing()) {
-                        int xPos = dm.widthPixels / 3;
-                        common.mPopWindow.showAsDropDown(category, xPos, 5);
-                        //mPopWindow.showAtLocation(findViewById(R.id.main), Gravity.BOTTOM, 0, 0);//从底部弹出
-                    } else {
-                        common.mPopWindow.dismiss();
-                    }
-                }else {
-                    Intent intentemployee=new Intent(PurchaseForm.this, BasicView.class);
-                    intentemployee.putExtra("index",category.getText().toString());
-                    startActivityForResult(intentemployee,12);
-                }
+                postDate.setName("");
+                popwin=category;
+                postDate.setRequestType("select");
+                postDate.setServerIp(Common.ip);
+                postDate.setServlet("BrandOperate");
+                postDate.setClassType(5);
+                getHttpData(postDate);
                 break;
             case R.id.businessdata_layout:
 
@@ -707,52 +701,52 @@ public class PurchaseForm extends CSearchBase implements View.OnClickListener, A
             default:
         }
     }
-    private void showStockWindow() {
-        common = new Common();
-        popBeen = new ArrayList<PopBean>();
-        stockList = DataSupport.findAll(Stock.class);
-        for(Stock stock: stockList)
 
-        {
-            PopBean popuMenua = new PopBean(R.drawable.poppu_wrie, stock.getName());
-            popBeen.add(popuMenua);
+    private void getHttpData(final PostUserData postPostUserData) {
 
-        }
-        common.PopupWindow(PurchaseForm.this, dm, popBeen);
-        common.listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+        HttpUtil.sendOkHttpRequst(postPostUserData, new okhttp3.Callback() {
 
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view,
-                                    int position, long id) {
+            public void onFailure(Call call, IOException e) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
 
-                number.setText(popBeen.get(position).getName());
-                common.mPopWindow.dismiss();
+                        Toast.makeText(getApplicationContext(), "网络连接失败", Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+
             }
-        });
-    }
-    private void showEmployeeWindow() {
-        common = new Common();
-        popBeen = new ArrayList<PopBean>();
-        employeeList = DataSupport.findAll(Employee.class);
-        for(Employee employee: employeeList)
-
-        {
-            PopBean popuMenua = new PopBean(R.drawable.poppu_wrie, employee.getName());
-            popBeen.add(popuMenua);
-
-        }
-        common.PopupWindow(PurchaseForm.this, dm, popBeen);
-        common.listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view,
-                                    int position, long id) {
+            public void onResponse(Call call, final Response response) throws IOException {
 
-                category.setText(popBeen.get(position).getName());
-                common.mPopWindow.dismiss();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+
+
+                            uiCommon.JsonUpdatemPopWindow(response.body().string(),popwin,dm, getApplicationContext());
+
+
+                        } catch (Exception e) {
+                            Log.d("lingtanaa", e.toString());
+                            Toast.makeText(getApplicationContext(), "网络", Toast.LENGTH_SHORT).show();
+
+                        }
+                    }
+                });
+
+
             }
         });
+
+
     }
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         // TODO Auto-generated method stub

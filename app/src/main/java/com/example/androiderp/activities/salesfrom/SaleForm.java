@@ -10,6 +10,7 @@ import android.graphics.drawable.Drawable;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,7 @@ import android.widget.Toast;
 
 import com.example.androiderp.basic.BasicView;
 import com.example.androiderp.bean.AcivityPostBean;
+import com.example.androiderp.bean.AdapterBean;
 import com.example.androiderp.bean.AppropriationEnty;
 import com.example.androiderp.bean.BalanceAccount;
 import com.example.androiderp.bean.Custom;
@@ -56,8 +58,6 @@ import com.example.androiderp.listview.SlideAndDragListView;
 import com.example.androiderp.listview.Utils;
 import com.example.androiderp.scanning.CommonScanActivity;
 import com.example.androiderp.scanning.utils.Constant;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import org.litepal.crud.DataSupport;
 
@@ -88,7 +88,6 @@ public class SaleForm extends CSearchBase implements View.OnClickListener, Adapt
     private Stock stock;
     private Employee employee;
     private Drawable errorIcon;
-    private Common common;
     private List<PopBean> popBeanList;
     private List<Product> productList;
     private List<SalesOutEnty> salesOutEntyList = new ArrayList<SalesOutEnty>();
@@ -103,12 +102,14 @@ public class SaleForm extends CSearchBase implements View.OnClickListener, Adapt
     private double quantityCount;
     private double amountCount;
     private Intent intent;
-    private List<PostUserData> postUserDataList = new ArrayList<PostUserData>();
+    private List<AdapterBean> adapterBeanList = new ArrayList<>();
     private PostUserData postDate = new PostUserData();
     private double quantity;
     private int stockCheck = 1;
     private List<Integer> stockCheckList = new ArrayList<Integer>();
     private AcivityPostBean acivityPostBen=new AcivityPostBean();
+    private Common iucCommon = new Common();
+    private Common common = new Common();
 
     public void iniView() {
         setContentView(R.layout.saleproductform);
@@ -157,12 +158,13 @@ public class SaleForm extends CSearchBase implements View.OnClickListener, Adapt
                 errorIcon.getIntrinsicHeight()));
         save.setText("保存");
         formInit();
-        popBeanList = new ArrayList<PopBean>();
+        popBeanList = new ArrayList<>();
         PopBean popuMenua = new PopBean(android.R.drawable.ic_menu_edit, "美的");
         popBeanList.add(popuMenua);
         PopBean popuMenub = new PopBean(android.R.drawable.ic_menu_edit, "松下");
         popBeanList.add(popuMenub);
         showPopupWindow(popBeanList);
+
         getDate();
 
         screenLayout.setOnClickListener(new View.OnClickListener() {
@@ -311,9 +313,7 @@ public class SaleForm extends CSearchBase implements View.OnClickListener, Adapt
 
     @Override
     public void onClick(View v) {
-        postDate.setName("");
-        postDate.setRequestType("select");
-        postDate.setServerIp(Common.ip);
+
         switch (v.getId())
 
         {
@@ -335,9 +335,6 @@ public class SaleForm extends CSearchBase implements View.OnClickListener, Adapt
                         stockCheck(number.getText().toString(), listdatas.get(i).getNumber(), listdatas.get(i).getFqty());
 
                     }
-                    if (stockCheckList.size() > 0) {
-                        Toast.makeText(SaleForm.this, "有产品库存不足,不能保存", Toast.LENGTH_LONG).show();
-                    } else {
                         DecimalFormat df = new DecimalFormat("#####0.00");
                         SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
                         Date curData = new Date(System.currentTimeMillis());
@@ -381,16 +378,18 @@ public class SaleForm extends CSearchBase implements View.OnClickListener, Adapt
                         save.setVisibility(View.GONE);
                         add.setVisibility(View.VISIBLE);
 
-                    }
+
                 }
 
                 break;
             case R.id.stockin_layout:
-
-                postDate.setServlet("StockOperate");
+                postDate.setName("");
                 popwin=number;
+                postDate.setRequestType("select");
+                postDate.setServerIp(Common.ip);
+                postDate.setServlet("BrandOperate");
+                postDate.setClassType(4);
                 getHttpData(postDate);
-
 
                 break;
 
@@ -438,8 +437,12 @@ public class SaleForm extends CSearchBase implements View.OnClickListener, Adapt
                 break;
             case R.id.documentmaker_layout:
 
-                postDate.setServlet("EmployeeOperate");
+                postDate.setName("");
                 popwin=category;
+                postDate.setRequestType("select");
+                postDate.setServerIp(Common.ip);
+                postDate.setServlet("BrandOperate");
+                postDate.setClassType(5);
                 getHttpData(postDate);
 
 
@@ -495,8 +498,7 @@ public class SaleForm extends CSearchBase implements View.OnClickListener, Adapt
         }
     }
 
-    private void showPopupWindow(final List<PopBean> popuMenuData) {
-        common = new Common();
+    private void showPopupWindow( List<PopBean> popuMenuData) {
 
         common.PopupWindow(SaleForm.this, dm, popuMenuData);
         common.listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -730,7 +732,6 @@ public class SaleForm extends CSearchBase implements View.OnClickListener, Adapt
                     @Override
                     public void run() {
 
-
                         Toast.makeText(SaleForm.this, "网络连接失败", Toast.LENGTH_SHORT).show();
 
                     }
@@ -741,60 +742,18 @@ public class SaleForm extends CSearchBase implements View.OnClickListener, Adapt
             @Override
             public void onResponse(Call call, final Response response) throws IOException {
 
-
-
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         try {
 
-                            if (postPostUserData.getRequestType().equals("select")) {
-                                Gson gson = new Gson();
-                                postUserDataList = gson.fromJson(response.body().string(), new TypeToken<List<PostUserData>>() {
-                                }.getType());
 
-                                if (postUserDataList.size() >0) {
-                                    common = new Common();
-                                    popBeanList = new ArrayList<PopBean>();
+                            iucCommon.JsonUpdatemPopWindow(response.body().string(),popwin,dm, getApplicationContext());
 
-                                    for (PostUserData postUserData : postUserDataList)
-
-                                    {
-                                        PopBean popuMenua = new PopBean(R.drawable.poppu_wrie, postUserData.getName());
-                                        popBeanList.add(popuMenua);
-
-                                    }
-                                    common.PopupWindow(SaleForm.this, dm, popBeanList);
-                                    common.listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-                                        @Override
-                                        public void onItemClick(AdapterView<?> adapterView, View view,
-                                                                int position, long id) {
-
-                                            popwin.setText(popBeanList.get(position).getName());
-                                            common.mPopWindow.dismiss();
-                                        }
-                                    });
-
-                                    if (common.mPopWindow == null || !common.mPopWindow.isShowing()) {
-                                        int xPos = dm.widthPixels / 3;
-                                        common.mPopWindow.showAsDropDown(popwin, xPos, 5);
-                                        //mPopWindow.showAtLocation(findViewById(R.id.main), Gravity.BOTTOM, 0, 0);//从底部弹出
-                                    } else {
-                                        common.mPopWindow.dismiss();
-                                    }
-
-
-
-
-                                }else {
-                                    Toast.makeText(SaleForm.this, "没有数据", Toast.LENGTH_SHORT).show();
-                                }
-
-                            }
 
                         } catch (Exception e) {
-                            Toast.makeText(SaleForm.this, "网络连接失败", Toast.LENGTH_SHORT).show();
+                            Log.d("lingtanaa", e.toString());
+                            Toast.makeText(SaleForm.this, "网络", Toast.LENGTH_SHORT).show();
 
                         }
                     }
