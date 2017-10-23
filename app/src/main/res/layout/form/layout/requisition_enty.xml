@@ -5,9 +5,9 @@
     android:orientation="vertical"
     android:background="#F0F3F6"
     >
-    <include layout="@layout/customtoobar_d" android:id="@+id/supplierform_toobar"/>
+    <include layout="@layout/customtoobar_d" android:id="@+id/requisition_enty_toobar"/>
     <ScrollView
-        android:id="@+id/tab"
+        android:id="@+id/requisition_enty_tab"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:fillViewport="true"
@@ -20,12 +20,12 @@
     <LinearLayout style="@style/wrap_layout" >
         <!-- 无圆角-->
         <LinearLayout style="@style/mid_layout"
-            android:id="@+id/stockout_layout">
+            android:id="@+id/requisition_enty_out_layout">
             <TextView style="@style/usertext"
                 android:hint="调出仓库" />
 
             <TextView style="@style/usertext"
-                android:id="@+id/stockout"
+                android:id="@+id/requisition_enty_out"
                 android:hint="请选择仓库"
                 android:layout_gravity="center_vertical"
                 />
@@ -36,14 +36,14 @@
             android:layout_marginRight="10dp"/>
         <!-- 下圆角-->
         <LinearLayout style="@style/bottom_layout"
-            android:id="@+id/stockin_layout">
+            android:id="@+id/requisition_enty_in_layout">
             <TextView style="@style/usertext"
                 android:hint="调入仓库"
                 />
 
 
             <TextView style="@style/usertext"
-                android:id="@+id/stockin"
+                android:id="@+id/requisition_enty_in"
                 android:hint="请选择仓库"
                 android:layout_gravity="center_vertical"/>
         </LinearLayout>
@@ -83,7 +83,7 @@
                     />
                 <TextView android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/totalquantity"
+                    android:id="@+id/requisition_enty_totalquantity"
                     android:textSize="11sp"
                     android:layout_marginRight="10dp"
                     />
@@ -97,7 +97,7 @@
         <LinearLayout android:layout_height="wrap_content"
             android:layout_width="match_parent">
             <com.example.androiderp.listview.SlideAndDragListView
-                android:id="@+id/appropriationentyform_listview"
+                android:id="@+id/requisition_enty_listview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:divider="#c9cabb"
@@ -112,14 +112,14 @@
         android:layout_marginTop="20dp">
         <!-- 上圆角-->
         <LinearLayout style="@style/top_layout"
-            android:id="@+id/documentmaker_layout">
+            android:id="@+id/requisition_enty_documentmaker_layout">
             <TextView style="@style/usertext"
                 android:hint="制单人"
                 android:layout_gravity="center_vertical"
                 />
 
             <TextView style="@style/usertext"
-                android:id="@+id/documentmaker"
+                android:id="@+id/requisition_enty_documentmaker"
                 android:layout_gravity="center_vertical"
                 />
         </LinearLayout>
@@ -127,13 +127,13 @@
         <View style="@style/bg_line"  android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"/>
         <LinearLayout style="@style/top_layout"
-            android:id="@+id/businessdata_layout"
+            android:id="@+id/requisition_enty_businessdata_layout"
             android:gravity="left">
             <TextView style="@style/usertext"
                 android:hint="业务日期"
                 android:layout_gravity="center_vertical"/>
             <TextView style="@style/usertext"
-                android:id="@+id/businessdata"
+                android:id="@+id/requisition_enty_businessdata"
                 android:layout_gravity="center_vertical" />
         </LinearLayout>
 
@@ -142,14 +142,14 @@
             android:layout_marginRight="10dp"/>
         <!-- 下圆角-->
         <LinearLayout style="@style/top_layout"
-            android:id="@+id/billnumber_layout">
+            android:id="@+id/requisition_enty_billnumber_layout">
             <TextView style="@style/usertext"
                 android:hint="单号编号"
                 android:layout_gravity="center_vertical"
                 />
 
             <TextView style="@style/usertext"
-                android:id="@+id/billnumber"
+                android:id="@+id/requisition_enty_billnumber"
                 android:layout_gravity="center_vertical"
                 />
         </LinearLayout>
@@ -163,7 +163,7 @@
                 />
 
             <TextView style="@style/usertext"
-                android:id="@+id/note"
+                android:id="@+id/requisition_enty_note"
                 android:layout_gravity="center_vertical"/>
         </LinearLayout>
 
