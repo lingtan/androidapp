@@ -72,7 +72,7 @@ public class PurchaseReturnForm extends CSearchBase implements View.OnClickListe
     private InputMethodManager manager;
     private EditText note;
     private LinearLayout productAddLayout;
-    private TextView toobarSave, toobarTile, toobarBack, toobarAdd,category,name,number,data, consign, totalAmout, totalQuantity;
+    private TextView save, tile, back, add,category,name,number,data, consign, totalAmout, totalQuantity;
     private DisplayMetrics dm;
     private LinearLayout categoryLayout,customLayout,stockLayout,dataLayout,consignmentLayout,screenLayout,totalLayout;
     private Supplier supplier;
@@ -118,11 +118,11 @@ public class PurchaseReturnForm extends CSearchBase implements View.OnClickListe
         note=(EditText)findViewById(R.id.note);
         screenLayout=(LinearLayout) findViewById(R.id.number_screen);
         category=(TextView)findViewById(R.id.documentmaker);
-        toobarSave =(TextView)findViewById(R.id.customtoobar_right);
-        toobarTile =(TextView)findViewById(R.id.customtoobar_midd);
-        toobarBack =(TextView)findViewById(R.id.customtoobar_left);
+        save =(TextView)findViewById(R.id.customtoobar_right);
+        tile =(TextView)findViewById(R.id.customtoobar_midd);
+        back =(TextView)findViewById(R.id.customtoobar_left);
         categoryLayout=(LinearLayout)findViewById(R.id.documentmaker_layout);
-        toobarAdd =(TextView)findViewById(R.id.customtoobar_r) ;
+        add =(TextView)findViewById(R.id.customtoobar_r) ;
         stockLayout=(LinearLayout)findViewById(R.id.stockin_layout);
         customLayout=(LinearLayout)findViewById(R.id.stockout_layout);
         dataLayout=(LinearLayout)findViewById(R.id.businessdata_layout);
@@ -134,18 +134,18 @@ public class PurchaseReturnForm extends CSearchBase implements View.OnClickListe
         customLayout.setOnClickListener(this);
         dataLayout.setOnClickListener(this);
         consignmentLayout.setOnClickListener(this);
-        toobarSave.setOnClickListener(this);
-        toobarBack.setOnClickListener(this);
+        save.setOnClickListener(this);
+        back.setOnClickListener(this);
         categoryLayout.setOnClickListener(this);
-        toobarAdd.setOnClickListener(this);
+        add.setOnClickListener(this);
         productAddLayout.setOnClickListener(this);
-        toobarSave.setCompoundDrawables(null,null,null,null);
-        toobarTile.setCompoundDrawables(null,null,null,null);
+        save.setCompoundDrawables(null,null,null,null);
+        tile.setCompoundDrawables(null,null,null,null);
         errorIcon = getResources().getDrawable(R.drawable.icon_error);
 // 设置图片大小
         errorIcon.setBounds(new Rect(0, 0, errorIcon.getIntrinsicWidth(),
                 errorIcon.getIntrinsicHeight()));
-        toobarSave.setText("保存");
+        save.setText("保存");
         formInit();
         getDate();
 
@@ -158,7 +158,7 @@ public class PurchaseReturnForm extends CSearchBase implements View.OnClickListe
                 startActivityForResult(openCameraIntent, 5);
             }
         });
-        toobarTile.setText("采购退货单");
+        tile.setText("采购退货单");
 
     }
     private void  formInit()
@@ -346,8 +346,8 @@ public class PurchaseReturnForm extends CSearchBase implements View.OnClickListe
                     salesOut.save();
                     
                     Toast.makeText(PurchaseReturnForm.this, "新增成功", Toast.LENGTH_SHORT).show();
-                    toobarSave.setVisibility(View.GONE);
-                    toobarAdd.setVisibility(View.VISIBLE);
+                    save.setVisibility(View.GONE);
+                    add.setVisibility(View.VISIBLE);
 
                 }
                 }
