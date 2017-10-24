@@ -8,6 +8,7 @@ import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -59,6 +60,7 @@ public class BasicView extends CSearchBase implements View.OnClickListener,
     private Common common = new Common();
     private AcivityPostBean acivityPostBen;
     private Dialog dialog;
+    private int itemPositionTemp;
 
     @Override
     public void iniView() {
@@ -138,6 +140,32 @@ public class BasicView extends CSearchBase implements View.OnClickListener,
                             closeDialog();
 
                         }
+
+                        if(postDate.getRequestType().equals("delete")) {
+                            if(common.returnResult==-2)
+                            {
+
+
+                            }else {
+                                HttpResponseList.remove(itemPositionTemp - listView.getHeaderViewsCount());
+                                adapter = new BasicAdapter(getApplicationContext(), R.layout.custom_item, HttpResponseList);
+                                listView.setAdapter(adapter);
+                                if (search.getText().toString().isEmpty()) {
+                                    if (iPositon == itemPositionTemp) {
+                                        iPositon = -1;
+                                    }
+
+                                    adapter.setSeclection(iPositon);
+                                    adapter.notifyDataSetChanged();
+                                } else {
+                                    search.setText("");
+                                }
+                            }
+
+                        }
+
+                        closeDialog();
+
                     }
                 });
 
@@ -194,32 +222,17 @@ public class BasicView extends CSearchBase implements View.OnClickListener,
                         dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                List<Product> productList = DataSupport.where("unit =?", HttpResponseList.get(itemPosition - listView.getHeaderViewsCount()).getName().toString()).find(Product.class);
-                                if (productList.size() > 0) {
-                                    adapter.notifyDataSetChanged();
-                                    Toast.makeText(BasicView.this, "业务已经发生不能删除", Toast.LENGTH_SHORT).show();
-                                } else {
+
+                                    itemPositionTemp=itemPosition;
                                     postDate.setName(HttpResponseList.get(itemPosition - listView.getHeaderViewsCount()).getName().toString());
                                     postDate.setRequestType("delete");
                                     postDate.setServerIp(Common.ip);
                                     postDate.setServlet(acivityPostBen.getRequestServlet());
                                     postDate.setUnitId(HttpResponseList.get(itemPosition - listView.getHeaderViewsCount()).getUnitId());
                                     getHttpData(postDate);
-                                    HttpResponseList.remove(itemPosition - listView.getHeaderViewsCount());
-                                    adapter = new BasicAdapter(getApplicationContext(), R.layout.custom_item, HttpResponseList);
-                                    listView.setAdapter(adapter);
-                                    if (search.getText().toString().isEmpty()) {
-                                        if (iPositon == itemPosition) {
-                                            iPositon = -1;
-                                        }
 
-                                        adapter.setSeclection(iPositon);
-                                        adapter.notifyDataSetChanged();
-                                    } else {
-                                        search.setText("");
-                                    }
 
-                                }
+
                             }
                         });
                         dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {

@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -46,6 +47,7 @@ public class Common extends AppCompatActivity {
     public ListView listView;
     public String popwinVaule;
     private Context context;
+    public int returnResult;
     //public static final String ip="http://eedd.v228.10000net.cn/javaweb/servlet/";
     public static final String ip="http://192.168.1.102:8080/webdemo/servlet/";
     public void PopupWindow(Context context, DisplayMetrics dm,List<PopBean>  popuMenuDatas)
@@ -170,13 +172,18 @@ public class Common extends AppCompatActivity {
         } else {
             Gson gson = new Gson();
             ReturnUserData returnUserData = gson.fromJson(returnData, ReturnUserData.class);
+            returnResult=returnUserData.getResult();
             if (returnUserData.getResult() > 0) {
 
 
                 Toast.makeText(context, "操作成功", Toast.LENGTH_SHORT).show();
 
 
-            } else {
+            }  else  if(returnUserData.getResult()==-2)
+            {
+                Toast.makeText(context, "已有业务发生不能删除", Toast.LENGTH_SHORT).show();
+
+            }else{
 
                 Toast.makeText(context, "操作失败", Toast.LENGTH_SHORT).show();
 

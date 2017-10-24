@@ -6,69 +6,63 @@
     </shared>
   </component>
   <component name="AndroidLogFilters">
-    <option name="TOOL_WINDOW_CUSTOM_FILTER" value="lingtan" />
-    <option name="TOOL_WINDOW_LOG_LEVEL" value="verbose" />
+    <option name="TOOL_WINDOW_LOG_LEVEL" value="warn" />
     <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="No Filters" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="87a0a66e-ef3a-40f6-9811-d9f9b5ba70f0" name="Default" comment="erp">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/android-profile/profile-2017-10-22-17-46-56-017.rawproto" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/android-profile/profile-2017-10-22-17-48-47-639.rawproto" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/android-profile/profile-2017-10-22-17-59-29-146.rawproto" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/android-profile/profile-2017-10-22-18-02-48-364.rawproto" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/android-profile/profile-2017-10-22-18-04-16-877.rawproto" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/android-profile/profile-2017-10-22-18-06-05-680.rawproto" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/android-profile/profile-2017-10-23-08-54-43-346.rawproto" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/android-profile/profile-2017-10-23-08-54-54-913.rawproto" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/android-profile/profile-2017-10-23-08-58-55-645.rawproto" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/android-profile/profile-2017-10-23-08-58-57-919.rawproto" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/android-profile/profile-2017-10-23-09-00-52-996.rawproto" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/android-profile/profile-2017-10-23-09-00-55-039.rawproto" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/android-profile/profile-2017-10-23-09-03-44-148.rawproto" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/android-profile/profile-2017-10-23-09-03-46-223.rawproto" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/android-profile/profile-2017-10-23-09-14-25-760.rawproto" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/android-profile/profile-2017-10-23-09-17-31-470.rawproto" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/android-profile/profile-2017-10-23-09-18-24-583.rawproto" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/android-profile/profile-2017-10-23-09-19-46-562.rawproto" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/android-profile/profile-2017-10-23-09-51-31-214.rawproto" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/android-profile/profile-2017-10-23-09-56-16-063.rawproto" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/android-profile/profile-2017-10-23-10-09-25-855.rawproto" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/android-profile/profile-2017-10-23-10-09-59-500.rawproto" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/android-profile/profile-2017-10-23-10-10-47-487.rawproto" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/android-profile/profile-2017-10-23-10-15-58-371.rawproto" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/android-profile/profile-2017-10-23-10-18-01-026.rawproto" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/android-profile/profile-2017-10-23-10-20-17-407.rawproto" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/android-profile/profile-2017-10-23-10-23-47-210.rawproto" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/android-profile/profile-2017-10-23-10-26-19-275.rawproto" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/android-profile/profile-2017-10-23-10-27-43-834.rawproto" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/android-profile/profile-2017-10-23-10-28-24-834.rawproto" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/android-profile/profile-2017-10-23-10-31-01-861.rawproto" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/android-profile/profile-2017-10-23-10-31-35-077.rawproto" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/android-profile/profile-2017-10-23-10-33-07-135.rawproto" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/android-profile/profile-2017-10-23-10-34-44-807.rawproto" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/android-profile/profile-2017-10-23-10-36-42-919.rawproto" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/android-profile/profile-2017-10-23-10-43-42-031.rawproto" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/android-profile/profile-2017-10-23-10-46-10-875.rawproto" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/android-profile/profile-2017-10-23-10-47-00-823.rawproto" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/android-profile/profile-2017-10-23-11-09-14-994.rawproto" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/android-profile/profile-2017-10-23-11-10-51-172.rawproto" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/android-profile/profile-2017-10-23-11-19-14-233.rawproto" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/android-profile/profile-2017-10-23-11-22-04-731.rawproto" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/android-profile/profile-2017-10-23-11-23-21-300.rawproto" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/android-profile/profile-2017-10-23-11-24-35-301.rawproto" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/android-profile/profile-2017-10-23-11-25-44-959.rawproto" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/android-profile/profile-2017-10-23-11-27-37-241.rawproto" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/android-profile/profile-2017-10-23-11-28-21-480.rawproto" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/android-profile/profile-2017-10-23-11-29-00-970.rawproto" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/android-profile/profile-2017-10-23-11-29-25-150.rawproto" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/android-profile/profile-2017-10-23-11-32-33-059.rawproto" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/android-profile/profile-2017-10-23-11-33-34-581.rawproto" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/android-profile/profile-2017-10-23-11-35-58-771.rawproto" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/android-profile/profile-2017-10-23-11-39-13-731.rawproto" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/android-profile/profile-2017-10-23-11-46-22-754.rawproto" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/android-profile/profile-2017-10-23-11-49-42-097.rawproto" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/android-profile/profile-2017-10-23-11-50-00-779.rawproto" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/android-profile/profile-2017-10-23-11-54-33-097.rawproto" />
+    <list default="true" id="87a0a66e-ef3a-40f6-9811-d9f9b5ba70f0" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/android-profile/profile-2017-10-24-09-51-38-976.rawproto" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/android-profile/profile-2017-10-24-10-04-45-407.rawproto" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/android-profile/profile-2017-10-24-10-29-38-135.rawproto" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/android-profile/profile-2017-10-24-10-38-40-216.rawproto" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/android-profile/profile-2017-10-24-10-53-18-074.rawproto" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/android-profile/profile-2017-10-24-10-58-03-205.rawproto" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/android-profile/profile-2017-10-24-11-01-54-003.rawproto" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/android-profile/profile-2017-10-24-11-04-26-482.rawproto" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/android-profile/profile-2017-10-24-11-05-39-003.rawproto" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/android-profile/profile-2017-10-24-11-25-58-965.rawproto" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/android-profile/profile-2017-10-24-11-30-32-918.rawproto" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/android-profile/profile-2017-10-24-11-31-48-574.rawproto" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/android-profile/profile-2017-10-24-11-41-27-586.rawproto" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/android-profile/profile-2017-10-24-11-42-14-380.rawproto" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/android-profile/profile-2017-10-24-11-43-25-728.rawproto" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/android-profile/profile-2017-10-24-11-51-05-742.rawproto" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/android-profile/profile-2017-10-24-11-54-16-182.rawproto" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/android-profile/profile-2017-10-24-11-56-19-314.rawproto" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/android-profile/profile-2017-10-24-12-00-32-853.rawproto" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/android-profile/profile-2017-10-24-12-02-09-315.rawproto" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/android-profile/profile-2017-10-24-12-08-50-598.rawproto" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/android-profile/profile-2017-10-24-12-10-01-085.rawproto" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/android-profile/profile-2017-10-24-12-10-33-601.rawproto" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/android-profile/profile-2017-10-24-12-13-53-712.rawproto" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/android-profile/profile-2017-10-24-12-17-21-568.rawproto" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/android-profile/profile-2017-10-24-12-23-49-103.rawproto" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/android-profile/profile-2017-10-24-12-24-13-207.rawproto" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/animated_vector_drawable_24_2_1.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/appcompat_v7_24_2_1.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/bottom_navigation_bar_1_3_1.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/butterknife_7_0_1.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/cardview_v7_24_2_1.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/circleimageview_1_3_0.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/core_1_4_1.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/core_3_3_0.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/design_24_2_1.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/glide_3_5_2.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/gson_2_8_1.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/hamcrest_core_1_3.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/junit_4_12.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/library_2_1_3.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/okhttp_3_4_1.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/okio_1_9_0.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/recyclerview_v7_24_2_1.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/support_annotations_24_2_1.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/support_compat_24_2_1.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/support_core_ui_24_2_1.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/support_core_utils_24_2_1.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/support_fragment_24_2_1.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/support_media_compat_24_2_1.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/support_v4_24_2_1.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/support_vector_drawable_24_2_1.xml" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/3.3/taskArtifacts/fileHashes.bin" afterPath="$PROJECT_DIR$/.gradle/3.3/taskArtifacts/fileHashes.bin" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/3.3/taskArtifacts/fileSnapshots.bin" afterPath="$PROJECT_DIR$/.gradle/3.3/taskArtifacts/fileSnapshots.bin" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/3.3/taskArtifacts/taskArtifacts.bin" afterPath="$PROJECT_DIR$/.gradle/3.3/taskArtifacts/taskArtifacts.bin" />
@@ -76,11 +70,11 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/3.3/tasks/_app_compileDebugJavaWithJavac/localClassSetAnalysis/localClassSetAnalysis.bin" afterPath="$PROJECT_DIR$/.gradle/3.3/tasks/_app_compileDebugJavaWithJavac/localClassSetAnalysis/localClassSetAnalysis.bin" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/3.3/tasks/_app_compileDebugJavaWithJavac/localClassSetAnalysis/localClassSetAnalysis.lock" afterPath="$PROJECT_DIR$/.gradle/3.3/tasks/_app_compileDebugJavaWithJavac/localClassSetAnalysis/localClassSetAnalysis.lock" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/3.3/tasks/_app_compileDebugJavaWithJavac/localJarClasspathSnapshot/localJarClasspathSnapshot.lock" afterPath="$PROJECT_DIR$/.gradle/3.3/tasks/_app_compileDebugJavaWithJavac/localJarClasspathSnapshot/localJarClasspathSnapshot.lock" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/example/androiderp/activities/purchaseform/PurchaseForm.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/androiderp/activities/purchaseform/PurchaseForm.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/example/androiderp/activities/purchaseform/ShoppingForm.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/androiderp/activities/purchaseform/ShoppingForm.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/example/androiderp/activities/salesfrom/SaleForm.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/androiderp/activities/salesfrom/SaleForm.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/app.iml" afterPath="$PROJECT_DIR$/app/app.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/example/androiderp/adaper/BasicAdapter.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/androiderp/adaper/BasicAdapter.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/example/androiderp/basic/BasicForm.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/androiderp/basic/BasicForm.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/example/androiderp/basic/BasicView.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/androiderp/basic/BasicView.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/example/androiderp/tools/Common.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/androiderp/tools/Common.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment/layout/fourthfragment_layout.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment/layout/fourthfragment_layout.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment/layout/secondfragment_layout.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment/layout/secondfragment_layout.xml" />
@@ -120,106 +114,101 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="Common.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/androiderp/tools/Common.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="17">
-              <caret line="50" column="83" selection-start-line="50" selection-start-column="83" selection-end-line="50" selection-end-column="83" />
-              <folding>
-                <element signature="e#1479#1488#0" expanded="true" />
-                <element signature="e#7812#8171#0" expanded="true" />
-                <element signature="e#8170#8171#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="SaleForm.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/androiderp/activities/salesfrom/SaleForm.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="169">
-              <caret line="355" column="71" selection-start-line="355" selection-start-column="23" selection-end-line="355" selection-end-column="71" />
-              <folding>
-                <element signature="e#21480#22043#0" expanded="true" />
-                <element signature="e#22042#22043#0" expanded="true" />
-                <element signature="e#31739#32249#0" expanded="true" />
-                <element signature="e#32248#32249#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="PurchaseForm.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/androiderp/activities/purchaseform/PurchaseForm.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="425">
-              <caret line="98" column="22" selection-start-line="98" selection-start-column="22" selection-end-line="98" selection-end-column="22" />
-              <folding>
-                <element signature="e#30419#30938#0" expanded="true" />
-                <element signature="e#30937#30938#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ShoppingScrennForm.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/androiderp/activities/salesfrom/ShoppingScrennForm.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="150">
-              <caret line="149" column="0" selection-start-line="149" selection-start-column="0" selection-end-line="149" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="saleproductform.xml" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/form/layout/saleproductform.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="204">
-              <caret line="74" column="36" selection-start-line="74" selection-start-column="36" selection-end-line="74" selection-end-column="36" />
-              <folding />
-            </state>
-          </provider>
-          <provider editor-type-id="android-designer2">
-            <state />
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="AdapterBean.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/androiderp/bean/AdapterBean.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="68">
-              <caret line="5" column="13" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="BasicView.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/androiderp/basic/BasicView.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="340">
-              <caret line="58" column="0" selection-start-line="58" selection-start-column="0" selection-end-line="58" selection-end-column="41" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="FirstFragment.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/androiderp/Fragment/FirstFragment.java">
+      <file leaf-file-name="SlideListView.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/androiderp/listview/SlideListView.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="119">
-              <caret line="142" column="30" selection-start-line="142" selection-start-column="30" selection-end-line="142" selection-end-column="30" />
+              <caret line="17" column="6" selection-start-line="17" selection-start-column="6" selection-end-line="17" selection-end-column="6" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="CustomMoreView.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/androiderp/activities/basicview/CustomMoreView.java">
+      <file leaf-file-name="Callback.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/androiderp/listview/Callback.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="357">
-              <caret line="260" column="46" selection-start-line="260" selection-start-column="46" selection-end-line="260" selection-end-column="46" />
+            <state relative-caret-position="119">
+              <caret line="8" column="10" selection-start-line="8" selection-start-column="10" selection-end-line="8" selection-end-column="10" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Compat.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/androiderp/listview/Compat.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="119">
+              <caret line="9" column="6" selection-start-line="9" selection-start-column="6" selection-end-line="9" selection-end-column="6" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="DragListView.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/androiderp/listview/DragListView.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="119">
+              <caret line="12" column="6" selection-start-line="12" selection-start-column="6" selection-end-line="12" selection-end-column="6" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ItemBackGroundLayout.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/androiderp/listview/ItemBackGroundLayout.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="119">
+              <caret line="13" column="6" selection-start-line="13" selection-start-column="6" selection-end-line="13" selection-end-column="6" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ItemMainLayout.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/androiderp/listview/ItemMainLayout.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="119">
+              <caret line="17" column="6" selection-start-line="17" selection-start-column="6" selection-end-line="17" selection-end-column="6" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="listview_line_shap.xml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/res/drawable/listview_line_shap.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="listview_itemcolor_shape.xml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/res/drawable/listview_itemcolor_shape.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="68">
+              <caret line="4" column="44" selection-start-line="4" selection-start-column="35" selection-end-line="4" selection-end-column="44" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="BasicAdapter.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/androiderp/adaper/BasicAdapter.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="177">
+              <caret line="30" column="49" selection-start-line="30" selection-start-column="49" selection-end-line="30" selection-end-column="49" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ProductMoreView.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/androiderp/activities/basicview/ProductMoreView.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="4641">
+              <caret line="322" column="0" selection-start-line="322" selection-start-column="0" selection-end-line="322" selection-end-column="30" />
               <folding />
             </state>
           </provider>
@@ -2229,8 +2218,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/app/src/main/res/layout/form/layout/requisition_enty.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/example/androiderp/activities/warehouseview/RequisitionEntyView.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/androiderp/activities/accountsform/AccountForm.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/androiderp/activities/accountsform/BalanceAccountForm.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/androiderp/activities/accountsform/TallyForm.java" />
@@ -2272,14 +2259,16 @@
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/androiderp/activities/warehouseview/StockInitiView.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/androiderp/activities/warehouseview/StockTakingEntyView.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/androiderp/activities/warehouseview/StockTakingView.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/example/androiderp/basic/BasicForm.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/example/androiderp/basic/BasicView.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/androiderp/Fragment/FirstFragment.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/androiderp/activities/purchaseform/PurchaseReturnForm.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/androiderp/activities/purchaseform/ShoppingForm.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/example/androiderp/tools/Common.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/androiderp/activities/purchaseform/PurchaseForm.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/androiderp/activities/salesfrom/SaleForm.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/androiderp/basic/BasicForm.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/androiderp/basic/BasicView.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/androiderp/tools/Common.java" />
+        <option value="$PROJECT_DIR$/app/src/main/res/drawable/listview_itemcolor_shape.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/androiderp/adaper/BasicAdapter.java" />
       </list>
     </option>
   </component>
@@ -2329,6 +2318,20 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="PackagesPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="androiderp" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
       <pane id="AndroidView">
         <subPane>
           <PATH>
@@ -2339,6 +2342,7 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scope" />
       <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
@@ -2476,15 +2480,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="layout" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="form" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="layout" />
+              <option name="myItemId" value="drawable" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -2515,6 +2511,10 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="androiderp" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ui" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -2581,8 +2581,38 @@
               <option name="myItemId" value="androiderp" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
+          </PATH>
+          <PATH>
             <PATH_ELEMENT>
-              <option name="myItemId" value="Fragment" />
+              <option name="myItemId" value="androiderp" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="androiderp" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="androiderp" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="listview" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -2616,75 +2646,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="bean" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="androiderp" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="androiderp" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="androiderp" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="basic" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="androiderp" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="androiderp" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="androiderp" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="activities" />
+              <option name="myItemId" value="adaper" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -2719,48 +2681,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="activities" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="salesfrom" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="androiderp" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="androiderp" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="androiderp" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="activities" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="purchaseform" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -2818,21 +2738,6 @@
             <PATH_ELEMENT>
               <option name="myItemId" value="src" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
-      <pane id="Scope" />
-      <pane id="PackagesPane">
-        <subPane>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="androiderp" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
@@ -3397,11 +3302,18 @@
       <option name="project" value="LOCAL" />
       <updated>1508723440436</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="2017-10-23 11:59">
+      <created>1508731190510</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1508731190510</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1440" height="806" extended-state="0" />
+    <frame x="0" y="23" width="1440" height="806" extended-state="6" />
     <editor active="false" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -3409,9 +3321,8 @@
       <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32753623" sideWeight="0.5028612" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Android Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3057971" sideWeight="0.4914163" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3057971" sideWeight="0.5114449" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Android Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3057971" sideWeight="0.48855507" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3287841" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32753623" sideWeight="0.49713877" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
@@ -3419,7 +3330,6 @@
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="12" side_tool="true" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.26895565" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32173914" sideWeight="0.49284694" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24964234" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Android Model" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3297568" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
@@ -3434,6 +3344,8 @@
       <window_info id="Inspection Results" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32753623" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32173914" sideWeight="0.49284694" order="1" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
       <window_info id="SVN Repositories" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3289855" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
@@ -3500,7 +3412,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="2017-10-23 9:24" />
     <MESSAGE value="erp" />
-    <option name="LAST_COMMIT_MESSAGE" value="erp" />
+    <MESSAGE value="2017-10-23 11:59" />
+    <option name="LAST_COMMIT_MESSAGE" value="2017-10-23 11:59" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -3517,107 +3430,10 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/androiderp/activities/purchaseview/PurchaseEntyView.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="48" column="33" selection-start-line="48" selection-start-column="33" selection-end-line="48" selection-end-column="33" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/androiderp/activities/purchaseview/PurchaseSearchView.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="28" column="33" selection-start-line="28" selection-start-column="33" selection-end-line="28" selection-end-column="33" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/androiderp/activities/purchaseview/PurchaseView.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="32" column="20" selection-start-line="32" selection-start-column="20" selection-end-line="32" selection-end-column="20" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/androiderp/activities/salesview/SaleEntyView.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="44" column="37" selection-start-line="44" selection-start-column="37" selection-end-line="44" selection-end-column="37" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/androiderp/activities/salesview/SaleSearchView.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="26" column="37" selection-start-line="26" selection-start-column="37" selection-end-line="26" selection-end-column="37" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/androiderp/activities/salesview/SaleView.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="30" column="20" selection-start-line="30" selection-start-column="20" selection-end-line="30" selection-end-column="20" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/androiderp/activities/warehouseform/AppropriationForm.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="68" column="38" selection-start-line="68" selection-start-column="38" selection-end-line="68" selection-end-column="38" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/androiderp/activities/warehouseform/AppropriationShoppingForm.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="32" column="42" selection-start-line="32" selection-start-column="42" selection-end-line="32" selection-end-column="42" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/androiderp/activities/warehouseform/StockTakingForm.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="72" column="37" selection-start-line="72" selection-start-column="37" selection-end-line="72" selection-end-column="37" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/androiderp/activities/warehouseview/InventoryEntyView.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="51" column="20" selection-start-line="51" selection-start-column="20" selection-end-line="51" selection-end-column="20" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/androiderp/activities/warehouseview/InventorySearchView.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="38" column="33" selection-start-line="38" selection-start-column="33" selection-end-line="38" selection-end-column="33" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/androiderp/activities/warehouseview/InventoryView.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="81" column="28" selection-start-line="81" selection-start-column="28" selection-end-line="81" selection-end-column="28" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/androiderp/activities/warehouseview/RequisitionEntyView.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="136">
           <caret line="39" column="13" selection-start-line="39" selection-start-column="13" selection-end-line="39" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -3625,7 +3441,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="255">
           <caret line="36" column="20" selection-start-line="36" selection-start-column="20" selection-end-line="36" selection-end-column="20" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -3633,7 +3448,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="170">
           <caret line="27" column="36" selection-start-line="27" selection-start-column="36" selection-end-line="27" selection-end-column="36" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -3641,7 +3455,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="85">
           <caret line="50" column="37" selection-start-line="50" selection-start-column="37" selection-end-line="50" selection-end-column="37" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -3649,15 +3462,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="221">
           <caret line="32" column="20" selection-start-line="32" selection-start-column="20" selection-end-line="32" selection-end-column="20" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/androiderp/basic/BasicForm.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="40" column="37" selection-start-line="40" selection-start-column="37" selection-end-line="40" selection-end-column="37" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -3665,7 +3469,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="136">
           <caret line="14" column="13" selection-start-line="14" selection-start-column="13" selection-end-line="14" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -3673,7 +3476,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-442">
           <caret line="26" column="13" selection-start-line="26" selection-start-column="13" selection-end-line="26" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -3681,7 +3483,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="748">
           <caret line="61" column="22" selection-start-line="61" selection-start-column="22" selection-end-line="61" selection-end-column="22" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -3689,7 +3490,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="136">
           <caret line="25" column="13" selection-start-line="25" selection-start-column="13" selection-end-line="25" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -3697,7 +3497,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="119">
           <caret line="39" column="13" selection-start-line="39" selection-start-column="13" selection-end-line="39" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -3705,7 +3504,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="136">
           <caret line="23" column="13" selection-start-line="23" selection-start-column="13" selection-end-line="23" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -3713,7 +3511,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="136">
           <caret line="11" column="13" selection-start-line="11" selection-start-column="13" selection-end-line="11" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -3721,7 +3518,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="136">
           <caret line="23" column="13" selection-start-line="23" selection-start-column="13" selection-end-line="23" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -3745,7 +3541,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="136">
           <caret line="22" column="13" selection-start-line="22" selection-start-column="13" selection-end-line="22" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -3753,7 +3548,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="119">
           <caret line="15" column="22" selection-start-line="15" selection-start-column="22" selection-end-line="15" selection-end-column="22" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -3761,7 +3555,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="136">
           <caret line="15" column="13" selection-start-line="15" selection-start-column="13" selection-end-line="15" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -3769,7 +3562,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="136">
           <caret line="16" column="13" selection-start-line="16" selection-start-column="13" selection-end-line="16" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -3785,15 +3577,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="255">
           <caret line="30" column="28" selection-start-line="30" selection-start-column="28" selection-end-line="30" selection-end-column="28" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/androiderp/activities/basicview/ProductMoreView.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="55" column="13" selection-start-line="55" selection-start-column="13" selection-end-line="55" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -3825,7 +3608,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="408">
           <caret line="85" column="78" selection-start-line="85" selection-start-column="78" selection-end-line="85" selection-end-column="78" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -3833,7 +3615,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="141">
           <caret line="35" column="23" selection-start-line="35" selection-start-column="23" selection-end-line="35" selection-end-column="23" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -3850,25 +3631,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/androiderp/activities/basicview/CustomMoreView.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
+        <state relative-caret-position="3859">
           <caret line="260" column="46" selection-start-line="260" selection-start-column="46" selection-end-line="260" selection-end-column="46" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/androiderp/Fragment/FirstFragment.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="142" column="30" selection-start-line="142" selection-start-column="30" selection-end-line="142" selection-end-column="30" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/androiderp/bean/AdapterBean.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="5" column="13" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -3876,26 +3643,16 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-309">
           <caret line="1191" column="16" selection-start-line="1191" selection-start-column="16" selection-end-line="1191" selection-end-column="16" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/form/layout/saleproductform.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="74" column="36" selection-start-line="74" selection-start-column="36" selection-end-line="74" selection-end-column="36" />
-          <folding />
-        </state>
-      </provider>
       <provider editor-type-id="android-designer2">
         <state />
       </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/androiderp/basic/BasicView.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
-          <caret line="58" column="0" selection-start-line="58" selection-start-column="0" selection-end-line="58" selection-end-column="41" />
-          <folding />
+        <state relative-caret-position="1258">
+          <caret line="74" column="36" selection-start-line="74" selection-start-column="36" selection-end-line="74" selection-end-column="36" />
         </state>
       </provider>
     </entry>
@@ -3903,43 +3660,171 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="150">
           <caret line="149" column="0" selection-start-line="149" selection-start-column="0" selection-end-line="149" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/androiderp/tools/Common.java">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/androiderp/bean/AdapterBean.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="50" column="83" selection-start-line="50" selection-start-column="83" selection-end-line="50" selection-end-column="83" />
-          <folding>
-            <element signature="e#1479#1488#0" expanded="true" />
-            <element signature="e#7812#8171#0" expanded="true" />
-            <element signature="e#8170#8171#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="68">
+          <caret line="5" column="13" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/androiderp/activities/purchaseform/PurchaseForm.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="425">
+        <state relative-caret-position="17">
           <caret line="98" column="22" selection-start-line="98" selection-start-column="22" selection-end-line="98" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/androiderp/Fragment/FirstFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="142" column="30" selection-start-line="142" selection-start-column="30" selection-end-line="142" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/androiderp/tools/Common.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="182" column="13" selection-start-line="182" selection-start-column="13" selection-end-line="182" selection-end-column="13" />
           <folding>
-            <element signature="e#30419#30938#0" expanded="true" />
-            <element signature="e#30937#30938#0" expanded="true" />
+            <element signature="e#1433#1446#0" expanded="true" />
+            <element signature="e#1504#1513#0" expanded="true" />
+            <element signature="e#2850#3213#0" expanded="true" />
+            <element signature="e#3212#3213#0" expanded="true" />
+            <element signature="e#8070#8429#0" expanded="true" />
+            <element signature="e#8428#8429#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/ui/layout/customgridview_item.xml">
+      <provider editor-type-id="android-designer2">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/ui/layout/customgridview_layout.xml">
+      <provider editor-type-id="android-designer2">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/androiderp/basic/BasicForm.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1887">
+          <caret line="202" column="0" selection-start-line="202" selection-start-column="0" selection-end-line="202" selection-end-column="0" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/androiderp/activities/salesfrom/SaleForm.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="169">
+        <state relative-caret-position="17">
           <caret line="355" column="71" selection-start-line="355" selection-start-column="23" selection-end-line="355" selection-end-column="71" />
-          <folding>
-            <element signature="e#21480#22043#0" expanded="true" />
-            <element signature="e#22042#22043#0" expanded="true" />
-            <element signature="e#31739#32249#0" expanded="true" />
-            <element signature="e#32248#32249#0" expanded="true" />
-          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/androiderp/basic/BasicView.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="47" column="21" selection-start-line="47" selection-start-column="21" selection-end-line="47" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/androiderp/listview/SlideAndDragListView.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2686">
+          <caret line="29" column="13" selection-start-line="29" selection-start-column="13" selection-end-line="29" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/androiderp/listview/SlideListView.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="17" column="6" selection-start-line="17" selection-start-column="6" selection-end-line="17" selection-end-column="6" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/androiderp/listview/Callback.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="8" column="10" selection-start-line="8" selection-start-column="10" selection-end-line="8" selection-end-column="10" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/androiderp/listview/Compat.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="9" column="6" selection-start-line="9" selection-start-column="6" selection-end-line="9" selection-end-column="6" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/androiderp/listview/DragListView.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="12" column="6" selection-start-line="12" selection-start-column="6" selection-end-line="12" selection-end-column="6" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/androiderp/listview/ItemMainLayout.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="17" column="6" selection-start-line="17" selection-start-column="6" selection-end-line="17" selection-end-column="6" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/drawable/listview_line_shap.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/drawable/listview_itemcolor_shape.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" column="44" selection-start-line="4" selection-start-column="35" selection-end-line="4" selection-end-column="44" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/androiderp/listview/ItemBackGroundLayout.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="13" column="6" selection-start-line="13" selection-start-column="6" selection-end-line="13" selection-end-column="6" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/androiderp/activities/basicview/ProductMoreView.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4641">
+          <caret line="322" column="0" selection-start-line="322" selection-start-column="0" selection-end-line="322" selection-end-column="30" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/androiderp/adaper/BasicAdapter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="177">
+          <caret line="30" column="49" selection-start-line="30" selection-start-column="49" selection-end-line="30" selection-end-column="49" />
+          <folding />
         </state>
       </provider>
     </entry>

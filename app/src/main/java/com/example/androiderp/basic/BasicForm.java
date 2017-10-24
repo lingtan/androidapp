@@ -153,6 +153,7 @@ public class BasicForm extends AppCompatActivity implements View.OnClickListener
 
 
                         Toast.makeText(BasicForm.this, "网络连接失败", Toast.LENGTH_SHORT).show();
+                        closeDialog();
 
                     }
                 });
@@ -192,7 +193,13 @@ public class BasicForm extends AppCompatActivity implements View.OnClickListener
                                 BasicForm.this.finish();
 
 
-                            } else {
+                            } else if(returnUserData.getResult()==0)
+                            {
+                                Toast.makeText(getApplicationContext(), name.getText()+"已经存在", Toast.LENGTH_SHORT).show();
+                                closeDialog();
+                            }else
+
+                            {
 
                                 Toast.makeText(BasicForm.this, "操作失败", Toast.LENGTH_SHORT).show();
                                 closeDialog();

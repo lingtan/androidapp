@@ -80,9 +80,9 @@ public class BasicAdapter extends ArrayAdapter<AdapterBean>   {
             itemLayout.setBackgroundColor(Color.parseColor("#ffffff"));
 
         }else {
-            itemLayout.setBackgroundColor(Color.TRANSPARENT);
+            //itemLayout.setBackgroundColor(Color.TRANSPARENT);
 
-            //itemLayout.setBackgroundColor(Color.parseColor("#ffffff"));
+            itemLayout.setBackgroundColor(Color.parseColor("#ffffff"));
         }
         // 重新获取ViewHolder
 
