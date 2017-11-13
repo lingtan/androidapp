@@ -24,12 +24,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.androiderp.activities.basicview.CustomSelectView;
-import com.example.androiderp.activities.salesfrom.SaleForm;
 import com.example.androiderp.activities.salesfrom.ShoppingScrennForm;
 import com.example.androiderp.basic.BasicView;
 import com.example.androiderp.bean.AcivityPostBean;
 import com.example.androiderp.bean.BalanceAccount;
 import com.example.androiderp.bean.Employee;
+import com.example.androiderp.bean.HttpPostBean;
 import com.example.androiderp.bean.PostUserData;
 import com.example.androiderp.bean.Product;
 import com.example.androiderp.bean.ProductCategory;
@@ -45,9 +45,9 @@ import com.example.androiderp.adaper.CommonAdapterData;
 import com.example.androiderp.bean.DataStructure;
 import com.example.androiderp.bean.PopBean;
 import com.example.androiderp.adaper.SaleProductListViewAdapter;
-import com.example.androiderp.activities.accountsview.BalanceAccountView;
 import com.example.androiderp.activities.basicview.ProductSelectView;
 import com.example.androiderp.tools.Common;
+import com.example.androiderp.tools.GlobalVariable;
 import com.example.androiderp.tools.HttpUtil;
 import com.example.androiderp.ui.CSearchBase;
 import com.example.androiderp.listview.Menu;
@@ -105,6 +105,7 @@ public class PurchaseForm extends CSearchBase implements View.OnClickListener, A
     private Intent intent;
     private PostUserData postDate = new PostUserData();
     private AcivityPostBean acivityPostBen=new AcivityPostBean();
+    private HttpPostBean httpPostBean=new HttpPostBean();
     public void iniView() {
         setContentView(R.layout.purchaseproductform);
         initMenu();
@@ -383,15 +384,27 @@ public class PurchaseForm extends CSearchBase implements View.OnClickListener, A
                 break;
 
             case R.id.stockout_layout:
-                Intent intentcustom=new Intent(PurchaseForm.this, CustomSelectView.class);
-                intentcustom.putExtra("index",name.getText().toString());
-                startActivityForResult(intentcustom,8);
+                acivityPostBen.setAcivityName("供应商");
+                httpPostBean.setServlet("ContactOperate");
+                acivityPostBen.setName("");
+                httpPostBean.setClassType(GlobalVariable.supplierMoreViewType);
+                Intent intentSupplier = new Intent(getApplicationContext(), CustomSelectView.class);
+                intentSupplier.putExtra("acivityPostBen",acivityPostBen);
+                intentSupplier.putExtra("httpPostBean",httpPostBean);
+                intentSupplier.putExtra("index",name.getText().toString());
+                startActivityForResult(intentSupplier,8);
 
 
                 break;
             case R.id.balanceaccount_layout:
-                Intent intentBalance=new Intent(PurchaseForm.this, BalanceAccountView.class);
-                intentBalance.putExtra("index",balanceAccount.getText().toString());
+                acivityPostBen.setAcivityName("结算账户");
+                httpPostBean.setServlet("BrandOperate");
+                acivityPostBen.setName(balanceAccount.getText().toString());
+                httpPostBean.setClassType(9);
+                acivityPostBen.setIsSelect("YES");
+                Intent intentBalance=new Intent(getApplicationContext(), BasicView.class);
+                intentBalance.putExtra("acivityPostBen",acivityPostBen);
+                intentBalance.putExtra("httpPostBean",httpPostBean);
                 startActivityForResult(intentBalance,13);
 
 
@@ -452,12 +465,13 @@ public class PurchaseForm extends CSearchBase implements View.OnClickListener, A
                 break;
             case R.id.billnumber_layout:
                 acivityPostBen.setAcivityName("发货方式");
-                acivityPostBen.setRequestServlet("BrandOperate");
+                httpPostBean.setServlet("BrandOperate");
                 acivityPostBen.setName(consign.getText().toString());
-                acivityPostBen.setSetClassType(6);
+                httpPostBean.setClassType(6);
                 acivityPostBen.setIsSelect("YES");
                 Intent intentconsignment=new Intent(PurchaseForm.this, BasicView.class);
                 intentconsignment.putExtra("acivityPostBen",acivityPostBen);
+                intentconsignment.putExtra("acivityPostBen",httpPostBean);
                 startActivityForResult(intentconsignment,9);
                 break;
             case R.id.customtoobar_r:

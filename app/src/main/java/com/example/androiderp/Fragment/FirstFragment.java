@@ -27,6 +27,7 @@ import com.example.androiderp.activities.warehouseform.StockTakingForm;
 import com.example.androiderp.basic.BasicView;
 import com.example.androiderp.bean.AcivityPostBean;
 import com.example.androiderp.bean.GridView;
+import com.example.androiderp.bean.HttpPostBean;
 import com.example.androiderp.tools.GlobalVariable;
 import com.example.androiderp.ui.CGridView;
 
@@ -43,6 +44,7 @@ public class FirstFragment extends Fragment {
     private List<GridView> gridViewList=new ArrayList<GridView>();
     private List<GridView> gridViewAddList=new ArrayList<GridView>();
     private AcivityPostBean acivityPostBen=new AcivityPostBean();
+    private HttpPostBean httpPostBean=new HttpPostBean();
     private String[] image_texts = {
             "商品管理", "采购新增","销售新增",
             "库存查询","采购流水", "销售流水",
@@ -55,7 +57,7 @@ public class FirstFragment extends Fragment {
     private   Intent intent;
     CGridView gridView;
     @Override
-    public View onCreateView(LayoutInflater inflater,  ViewGroup container,  Bundle savedInstanceState) {
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         gridViewAddList = DataSupport.findAll(GridView.class);
 
         for(int i=0;i<6;i++)
@@ -87,10 +89,11 @@ public class FirstFragment extends Fragment {
                 switch (gridViewList.get(position).getName().toString()) {
                     case "商品管理":
                         acivityPostBen.setAcivityName("产品");
-                        acivityPostBen.setRequestServlet("ProductOperate");
-                        acivityPostBen.setSetClassType(GlobalVariable.customMoreViewType);
+                        httpPostBean.setServlet("ProductOperate");
+                        httpPostBean.setClassType(GlobalVariable.customMoreViewType);
                         Intent intentProduct = new Intent(context, ProductMoreView.class);
                         intentProduct.putExtra("acivityPostBen",acivityPostBen);
+                        intentProduct.putExtra("httpPostBean",httpPostBean);
                         startActivity(intentProduct);
                         break;
                     case "采购新增":
@@ -116,29 +119,29 @@ public class FirstFragment extends Fragment {
                         break;
                     case "供应商管理":
                         acivityPostBen.setAcivityName("供应商");
-                        acivityPostBen.setRequestServlet("ContactOperate");
+                        httpPostBean.setServlet("ContactOperate");
                         acivityPostBen.setName("");
-                        acivityPostBen.setSetClassType(GlobalVariable.supplierMoreViewType);
+                        httpPostBean.setClassType(GlobalVariable.supplierMoreViewType);
                         Intent intentSupplier = new Intent(context, CustomMoreView.class);
                         intentSupplier.putExtra("acivityPostBen",acivityPostBen);
+                        intentSupplier.putExtra("httpPostBean",httpPostBean);
                         startActivity(intentSupplier);
                         break;
                     case "客户管理":
                         acivityPostBen.setAcivityName("客户");
-                        acivityPostBen.setRequestServlet("ContactOperate");
+                        httpPostBean.setServlet("ContactSelect");
                         acivityPostBen.setName("");
-                        acivityPostBen.setSetClassType(GlobalVariable.customMoreViewType);
+                        httpPostBean.setClassType(GlobalVariable.customMoreViewType);
                         Intent intentCustom = new Intent(context, CustomMoreView.class);
                         intentCustom.putExtra("acivityPostBen",acivityPostBen);
+                        intentCustom.putExtra("httpPostBean",httpPostBean);
                         startActivity(intentCustom);
                         break;
                     case "仓库管理":
-                        acivityPostBen.setAcivityName("仓库");
-                        acivityPostBen.setRequestServlet("BrandOperate");
-                        acivityPostBen.setName("");
-                        acivityPostBen.setSetClassType(4);
                         Intent intentStock = new Intent(context, BasicView.class);
-                        intentStock.putExtra("acivityPostBen",acivityPostBen);
+                        intentStock.putExtra("acivityName","仓库");
+                        intentStock.putExtra("isSelect","NO");
+                        intentStock.putExtra("tableName","stock");
                         startActivity(intentStock);
                         break;
                     case "库存调拨":
@@ -156,12 +159,10 @@ public class FirstFragment extends Fragment {
                         break;
 
                     case "职员管理":
-                        acivityPostBen.setAcivityName("职员");
-                        acivityPostBen.setRequestServlet("BrandOperate");
-                        acivityPostBen.setName("");
-                        acivityPostBen.setSetClassType(5);
                         Intent intentEmp = new Intent(context, BasicView.class);
-                        intentEmp.putExtra("acivityPostBen",acivityPostBen);
+                        intentEmp.putExtra("acivityName","职员");
+                        intentEmp.putExtra("isSelect","NO");
+                        intentEmp.putExtra("tableName","employee");
                         startActivity(intentEmp);
                         break;
                     case "盘点流水":
@@ -173,7 +174,7 @@ public class FirstFragment extends Fragment {
                         startActivity(intent);
                         break;
                     case "仓库预警":
-                        intent = new Intent(context, StockTakingView.class);
+                        intent = new Intent(context, TallyExpandableView.class);
                         startActivity(intent);
                         break;
                     case "":

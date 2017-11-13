@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -17,9 +18,13 @@ import com.example.androiderp.R;
 import com.example.androiderp.bean.AcivityPostBean;
 import com.example.androiderp.bean.AdapterBean;
 import com.example.androiderp.bean.DataStructure;
+import com.example.androiderp.bean.HttpPostBean;
 import com.example.androiderp.bean.PostUserData;
+import com.example.androiderp.bean.ReceiveData;
+import com.example.androiderp.bean.ReceiveParamet;
 import com.example.androiderp.bean.ReturnUserData;
 import com.example.androiderp.bean.Unit;
+import com.example.androiderp.interfaces.OerationForm;
 import com.example.androiderp.tools.Common;
 import com.example.androiderp.tools.HttpUtil;
 import com.example.androiderp.ui.DataLoadingDialog;
@@ -35,18 +40,23 @@ import okhttp3.Response;
  * Created by lingtan on 2017/5/15.
  */
 
-public class BasicForm extends AppCompatActivity implements View.OnClickListener {
+public class BasicForm extends AppCompatActivity implements View.OnClickListener ,OerationForm{
     private InputMethodManager manager;
     private EditText name, note;
     private TextView save, tile, back;
     private String getPostName;
-    private String getPostType;
-    private AdapterBean getPostData;
+    private   AdapterBean getPostData;
+    private final  AdapterBean insertBean=new AdapterBean();
+    private final ReceiveParamet insertParamet=new ReceiveParamet();
+    private final ReceiveData insertData=new ReceiveData();
+    private final  AdapterBean updateBean=new AdapterBean();
+    private final ReceiveParamet updateParamet=new ReceiveParamet();
+    private final ReceiveData updateData=new ReceiveData();
+    private  ReturnUserData returnUserData;
     private boolean isSave = false;
     private List<Unit> unitList;
-    private PostUserData postUserData = new PostUserData();
-    private AcivityPostBean acivityPostBen;
     private Dialog dialog;
+    private String acivityName,actionType,tableName;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,8 +66,9 @@ public class BasicForm extends AppCompatActivity implements View.OnClickListener
         note = (EditText) findViewById(R.id.basiclayout_note);
         final Intent intent = getIntent();
         getPostData = intent.getParcelableExtra("postdata");
-        getPostType = intent.getStringExtra("type");
-        acivityPostBen = intent.getParcelableExtra("acivityPostBen");
+        acivityName=intent.getStringExtra("acivityName");
+        actionType=intent.getStringExtra("actionType");
+        tableName=intent.getStringExtra("tableName");
         save = (TextView) findViewById(R.id.custom_toobar_right);
         tile = (TextView) findViewById(R.id.custom_toobar_midd);
         back = (TextView) findViewById(R.id.custom_toobar_left);
@@ -77,73 +88,20 @@ public class BasicForm extends AppCompatActivity implements View.OnClickListener
             note.setText(getPostData.getNote());
 
         }
-        if (getPostType.equals("edit")) {
-            tile.setText(acivityPostBen.getAcivityName() + "修改");
+        if (actionType.equals("edit")) {
+            tile.setText(acivityName + "修改");
         } else {
-            tile.setText(acivityPostBen.getAcivityName() + "新增");
+            tile.setText(acivityName + "新增");
         }
 
     }
 
     @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.custom_toobar_right:
-                unitList = DataStructure.where("name = ?", name.getText().toString()).find(Unit.class);
-                if (TextUtils.isEmpty(name.getText().toString())) {
-                    name.setError("需要输入" + acivityPostBen.getAcivityName());
-                } else if (unitList.size() > 0) {
-                    Toast.makeText(BasicForm.this, acivityPostBen.getAcivityName() + "已经存在", Toast.LENGTH_SHORT).show();
-                } else if (getPostType.equals("edit")) {
-                    postUserData.setUnitId(getPostData.getUnitId());
-                    postUserData.setName(name.getText().toString().trim());
-                    postUserData.setNote(note.getText().toString().trim());
-                    postUserData.setRequestType("update");
-                    postUserData.setServerIp(Common.ip);
-                    postUserData.setServlet(acivityPostBen.getRequestServlet());
-                    postUserData.setClassType(acivityPostBen.getSetClassType());
-                    getHttpData(postUserData);
-                    isSave = true;
+    public void insertData(String address, ReceiveData receiveData) {
 
-                } else {
-                    try {
-                        postUserData.setName(name.getText().toString().trim());
-                        postUserData.setNote(note.getText().toString().trim());
-                        postUserData.setRequestType("insert");
-                        postUserData.setServerIp(Common.ip);
-                        postUserData.setServlet(acivityPostBen.getRequestServlet());
-                        postUserData.setClassType(acivityPostBen.getSetClassType());
-                        getHttpData(postUserData);
-
-
-                    } catch (Exception e) {
-
-                    }
-                }
-
-                break;
-            case R.id.custom_toobar_left:
-                if (getPostType.equals("edit")) {
-                    Intent intent = new Intent();
-                    if (isSave) {
-                        intent.putExtra("returnName", name.getText().toString());
-                    } else {
-                        intent.putExtra("returnName", getPostName);
-                    }
-                    setResult(RESULT_OK, intent);
-                    finish();
-                } else {
-                    finish();
-                }
-
-
-        }
-    }
-
-    private void getHttpData(final PostUserData postPostUserData) {
         showDialog();
 
-        HttpUtil.sendOkHttpRequst(postPostUserData, new okhttp3.Callback() {
+        HttpUtil.sendOkHttpRequst(address,receiveData, new okhttp3.Callback() {
 
             @Override
             public void onFailure(Call call, IOException e) {
@@ -163,55 +121,95 @@ public class BasicForm extends AppCompatActivity implements View.OnClickListener
             @Override
             public void onResponse(Call call, final Response response) throws IOException {
 
+                 resultHandler(response.body().string());
 
+            }
+        });
+
+
+    }
+
+    @Override
+    public void updateById(String address, ReceiveData receiveData) {
+
+        showDialog();
+
+        HttpUtil.sendOkHttpRequst(address,receiveData, new okhttp3.Callback() {
+
+            @Override
+            public void onFailure(Call call, IOException e) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        try {
 
 
-                            Gson gson = new Gson();
-                            ReturnUserData returnUserData = gson.fromJson(response.body().string(), ReturnUserData.class);
-
-
-                            if (returnUserData.getResult() > 0) {
-                                Intent intent = new Intent();
-                                setResult(RESULT_OK, intent);
-                                if (getPostData != null) {
-                                    getPostData.setUnitId(getPostData.getUnitId());
-                                    getPostData.setName(name.getText().toString().trim());
-                                    getPostData.setNote(note.getText().toString().trim());
-                                    intent.putExtra("getPostData", getPostData);
-                                } else {
-                                    AdapterBean user = new AdapterBean();
-                                    user.setName(name.getText().toString().trim());
-                                    user.setUnitId(returnUserData.getResult());
-                                    user.setNote(note.getText().toString().trim());
-                                    intent.putExtra("getPostData", user);
-                                }
-                                closeDialog();
-                                BasicForm.this.finish();
-
-
-                            } else if(returnUserData.getResult()==0)
-                            {
-                                Toast.makeText(getApplicationContext(), name.getText()+"已经存在", Toast.LENGTH_SHORT).show();
-                                closeDialog();
-                            }else
-
-                            {
-
-                                Toast.makeText(BasicForm.this, "操作失败", Toast.LENGTH_SHORT).show();
-                                closeDialog();
-                            }
-                        } catch (Exception e) {
-                            Toast.makeText(BasicForm.this, "网络连接失败", Toast.LENGTH_SHORT).show();
-                            closeDialog();
-                        }
-
+                        Toast.makeText(BasicForm.this, "网络连接失败", Toast.LENGTH_SHORT).show();
+                        closeDialog();
 
                     }
                 });
+
+            }
+
+            @Override
+            public void onResponse(Call call, final Response response) throws IOException {
+
+                resultHandler(response.body().string());
+
+            }
+        });
+
+
+    }
+
+    @Override
+    public void resultHandler(final String result) {
+
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+
+
+                    Gson gson = new Gson();
+                    ReturnUserData returnUserData = gson.fromJson(result, ReturnUserData.class);
+
+
+                    if (Integer.valueOf(returnUserData.getResult()) > 0) {
+                        Intent intent = new Intent();
+                        setResult(RESULT_OK, intent);
+                        if (getPostData != null) {
+                            getPostData.setId(getPostData.getId());
+                            getPostData.setName(name.getText().toString().trim());
+                            getPostData.setNote(note.getText().toString().trim());
+                            intent.putExtra("getPostData", getPostData);
+                        } else {
+                            AdapterBean user = new AdapterBean();
+                            user.setName(name.getText().toString().trim());
+                            user.setId(Integer.valueOf(returnUserData.getResult()));
+                            user.setNote(note.getText().toString().trim());
+                            intent.putExtra("getPostData", user);
+                        }
+                        closeDialog();
+                        BasicForm.this.finish();
+
+
+                    } else if(Integer.valueOf(returnUserData.getResult())==0)
+                    {
+                        Toast.makeText(getApplicationContext(), name.getText()+"已经存在", Toast.LENGTH_SHORT).show();
+                        closeDialog();
+                    }else
+
+                    {
+
+                        Toast.makeText(BasicForm.this, "操作失败", Toast.LENGTH_SHORT).show();
+                        closeDialog();
+                    }
+                } catch (Exception e) {
+                    Toast.makeText(BasicForm.this, "网络连接失败", Toast.LENGTH_SHORT).show();
+                    closeDialog();
+                }
 
 
             }
@@ -219,6 +217,52 @@ public class BasicForm extends AppCompatActivity implements View.OnClickListener
 
 
     }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.custom_toobar_right:
+                if (actionType.equals("edit")) {
+                    updateParamet.setId(String.valueOf(getPostData.getId()));
+                    updateParamet.setTableName(tableName);
+                    updateBean.setName(name.getText().toString().trim());
+                    updateBean.setNote(note.getText().toString().trim());
+                    updateData.setParamet(updateParamet);
+                    updateData.setAdapterBean(updateBean);
+                   updateById("updateData",updateData);
+                    isSave = true;
+
+                } else {
+
+                        insertParamet.setTableName(tableName);
+                        insertBean.setName(name.getText().toString().trim());
+                        insertBean.setNote(note.getText().toString().trim());
+                        insertData.setParamet(insertParamet);
+                        insertData.setAdapterBean(insertBean);
+                        insertData("insertData",insertData);
+
+                }
+
+                break;
+            case R.id.custom_toobar_left:
+                if (actionType.equals("edit")) {
+                    Intent intent = new Intent();
+                    if (isSave) {
+                        intent.putExtra("returnName", name.getText().toString());
+                    } else {
+                        intent.putExtra("returnName", getPostName);
+                    }
+                    setResult(RESULT_OK, intent);
+                    finish();
+                } else {
+                    finish();
+                }
+
+
+        }
+    }
+
+
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {

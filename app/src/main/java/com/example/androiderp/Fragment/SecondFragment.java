@@ -17,7 +17,6 @@ import com.example.androiderp.activities.warehouseview.InventoryView;
 import com.example.androiderp.activities.purchaseview.PurchaseView;
 import com.example.androiderp.activities.warehouseform.AppropriationForm;
 import com.example.androiderp.activities.purchaseform.PurchaseForm;
-import com.example.androiderp.activities.purchaseform.PurchaseReturnForm;
 
 /**
  * Created by lingtan on 2017/5/18.
@@ -61,7 +60,7 @@ public class SecondFragment extends Fragment implements View.OnClickListener {
                 startActivity(intent);
                 break;
             case R.id.secondfragmnet_cgthlayout:
-                intent = new Intent(context, PurchaseReturnForm.class);
+                intent = new Intent(context, PurchaseForm.class);
                 startActivity(intent);
                 break;
             case R.id.secondfragmnet_cglslayout:

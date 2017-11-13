@@ -8,7 +8,6 @@ import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -17,11 +16,10 @@ import android.widget.Toast;
 
 import com.example.androiderp.R;
 import com.example.androiderp.adaper.BasicAdapter;
-import com.example.androiderp.bean.AcivityPostBean;
 import com.example.androiderp.bean.AdapterBean;
-import com.example.androiderp.bean.PostUserData;
-import com.example.androiderp.bean.Product;
-import com.example.androiderp.bean.Unit;
+import com.example.androiderp.bean.HttpPostBean;
+import com.example.androiderp.bean.ReceiveParamet;
+import com.example.androiderp.interfaces.OerationList;
 import com.example.androiderp.listview.Menu;
 import com.example.androiderp.listview.MenuItem;
 import com.example.androiderp.listview.SlideAndDragListView;
@@ -32,8 +30,6 @@ import com.example.androiderp.ui.CSearch;
 import com.example.androiderp.ui.CSearchBase;
 import com.example.androiderp.ui.DataLoadingDialog;
 
-import org.litepal.crud.DataSupport;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,43 +39,42 @@ import okhttp3.Response;
 
 public class BasicView extends CSearchBase implements View.OnClickListener,
         AdapterView.OnItemClickListener,
-        SlideAndDragListView.OnMenuItemClickListener, SlideAndDragListView.OnItemDeleteListener {
+        SlideAndDragListView.OnMenuItemClickListener, SlideAndDragListView.OnItemDeleteListener,OerationList {
     private BasicAdapter adapter;
     private SlideAndDragListView<AdapterBean> listView;
     private DisplayMetrics dm;
-    private List<Unit> unitList;
     private TextView back, add, tile;
     private CSearch search;
     private ImageView lastCheckedOption;
-    private int iPositon = -1, getEditPositon = -1;
-    private String iName, searchVale;
+    private int iPositon = -1;
+    private String iName;
     private Menu menu;
-    private PostUserData postDate = new PostUserData();
-    private AdapterBean editDate = new AdapterBean();
     private List<AdapterBean> HttpResponseList = new ArrayList<AdapterBean>();
     private Common common = new Common();
-    private AcivityPostBean acivityPostBen;
+    private HttpPostBean httpPostBean;
     private Dialog dialog;
     private int itemPositionTemp;
+    private final ReceiveParamet findParamet=new ReceiveParamet();
+    private final ReceiveParamet deleteParamet=new ReceiveParamet();
+    private final ReceiveParamet findByNameParamet=new ReceiveParamet();
+    private String acivityName,selectName="",isSelect,tableName;
 
     @Override
     public void iniView() {
         Intent intent = getIntent();
-        acivityPostBen = intent.getParcelableExtra("acivityPostBen");
-        iName = acivityPostBen.getName();
-        postDate.setName("");
-        postDate.setRequestType("select");
-        postDate.setServerIp(Common.ip);
-        postDate.setClassType(acivityPostBen.getSetClassType());
-        postDate.setServlet(acivityPostBen.getRequestServlet());
-
-        getHttpData(postDate);
+        acivityName = intent.getStringExtra("acivityName");
+        isSelect = intent.getStringExtra("isSelect");
+        tableName = intent.getStringExtra("tableName");
+        httpPostBean = intent.getParcelableExtra("httpPostBean");
+        iName = selectName;
+        findParamet.setTableName(tableName);
+        findAll("findAllByBrand",findParamet);
         setContentView(R.layout.customlistview_category_layout);
         initMenu();
         initUiAndListener();
         back = (TextView) findViewById(R.id.custom_toobar_left);
         tile = (TextView) findViewById(R.id.custom_toobar_midd);
-        tile.setText("选择" + acivityPostBen.getAcivityName());
+        tile.setText("选择" + acivityName);
         add = (TextView) findViewById(R.id.custom_toobar_right);
         back.setOnClickListener(this);
         add.setOnClickListener(this);
@@ -95,14 +90,18 @@ public class BasicView extends CSearchBase implements View.OnClickListener,
 
 
         search.addTextChangedListener(textWatcher);
-
+        adapter = new BasicAdapter(getApplicationContext(), R.layout.custom_item, HttpResponseList);
+        listView.setAdapter(adapter);
 
     }
 
-    private void getHttpData(final PostUserData postPostUserData) {
+
+    @Override
+    public void findAll(String address,ReceiveParamet paramet) {
+
         showDialog();
 
-        HttpUtil.sendOkHttpRequst(postPostUserData, new okhttp3.Callback() {
+        HttpUtil.sendOkHttpRequst(address,paramet, new okhttp3.Callback() {
 
             @Override
             public void onFailure(Call call, IOException e) {
@@ -122,59 +121,132 @@ public class BasicView extends CSearchBase implements View.OnClickListener,
             public void onResponse(Call call, final Response response) throws IOException {
 
 
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            iPositon = -1;
-                            common.JsonUpdateUi(response.body().string(), iName, postPostUserData.getRequestType(), getApplicationContext(), adapter, R.layout.custom_item, listView);
-                            HttpResponseList = common.HttpResponseList;
-                            iPositon = common.indexPositon;
-                            closeDialog();
-
-                        } catch (Exception e) {
-                            Toast.makeText(getApplicationContext(), "网络连接失败", Toast.LENGTH_SHORT).show();
-
-                            adapter = new BasicAdapter(getApplicationContext(), R.layout.custom_item, HttpResponseList);
-                            listView.setAdapter(adapter);
-                            closeDialog();
-
-                        }
-
-                        if(postDate.getRequestType().equals("delete")) {
-                            if(common.returnResult==-2)
-                            {
-
-
-                            }else {
-                                HttpResponseList.remove(itemPositionTemp - listView.getHeaderViewsCount());
-                                adapter = new BasicAdapter(getApplicationContext(), R.layout.custom_item, HttpResponseList);
-                                listView.setAdapter(adapter);
-                                if (search.getText().toString().isEmpty()) {
-                                    if (iPositon == itemPositionTemp) {
-                                        iPositon = -1;
-                                    }
-
-                                    adapter.setSeclection(iPositon);
-                                    adapter.notifyDataSetChanged();
-                                } else {
-                                    search.setText("");
-                                }
-                            }
-
-                        }
-
-                        closeDialog();
-
-                    }
-                });
-
+                   resultHandler(response.body().string(),1);
 
             }
         });
 
 
     }
+
+    @Override
+    public void findByName(String address,ReceiveParamet paramet) {
+
+        showDialog();
+
+        HttpUtil.sendOkHttpRequst(address,paramet, new okhttp3.Callback() {
+
+            @Override
+            public void onFailure(Call call, IOException e) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        closeDialog();
+
+                        Toast.makeText(BasicView.this, "网络连接失败", Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+
+            }
+
+            @Override
+            public void onResponse(Call call, final Response response) throws IOException {
+
+
+                resultHandler(response.body().string(),1);
+
+            }
+        });
+
+
+
+    }
+
+    @Override
+    public void deleteById(String address,ReceiveParamet paramet) {
+
+        showDialog();
+
+        HttpUtil.sendOkHttpRequst(address,paramet, new okhttp3.Callback() {
+
+            @Override
+            public void onFailure(Call call, IOException e) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        closeDialog();
+
+                        Toast.makeText(BasicView.this, "网络连接失败", Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+
+            }
+
+            @Override
+            public void onResponse(Call call, final Response response) throws IOException {
+
+
+                resultHandler(response.body().string(),2);
+
+            }
+        });
+
+
+
+    }
+
+
+    @Override
+    public void resultHandler(final String result, final int type) {
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+
+                    common.JsonUpdateUi(result, iName,HttpResponseList, type, getApplicationContext(), adapter, R.layout.custom_item, listView);
+
+                    closeDialog();
+
+                } catch (Exception e) {
+                    Toast.makeText(getApplicationContext(), "网络连", Toast.LENGTH_SHORT).show();
+                    adapter = new BasicAdapter(getApplicationContext(), R.layout.custom_item, HttpResponseList);
+                    listView.setAdapter(adapter);
+                    closeDialog();
+
+                }
+
+                if(type==2) {
+                    if(common.returnResult==-2)
+                    {
+
+                    }else {
+                        HttpResponseList.remove(itemPositionTemp - listView.getHeaderViewsCount());
+                        adapter.notifyDataSetChanged();
+                        if (search.getText().toString().isEmpty()) {
+                            if (iPositon == itemPositionTemp) {
+                                iPositon = -1;
+                            }
+
+                            adapter.setSeclection(iPositon);
+                            adapter.notifyDataSetChanged();
+                        } else {
+                            search.setText("");
+                        }
+                    }
+
+                }
+
+                closeDialog();
+
+            }
+        });
+
+
+    }
+
 
     public void initMenu() {
         menu = new Menu(true);
@@ -207,29 +279,29 @@ public class BasicView extends CSearchBase implements View.OnClickListener,
             case MenuItem.DIRECTION_RIGHT:
                 switch (buttonPosition) {
                     case 0:
+
                         Intent intent = new Intent(BasicView.this, BasicForm.class);
-                        getEditPositon = itemPosition;
-                        intent.putExtra("type", "edit");
+                        intent.putExtra("acivityName",acivityName);
+                        intent.putExtra("actionType","edit");
                         intent.putExtra("postdata", HttpResponseList.get(itemPosition));
-                        intent.putExtra("acivityPostBen", acivityPostBen);
+                        intent.putExtra("httpPostBean", httpPostBean);
+                        intent.putExtra("tableName", tableName);
                         startActivityForResult(intent, 1);
 
                         return Menu.ITEM_NOTHING;
                     case 1:
                         AlertDialog.Builder dialog = new AlertDialog.Builder(BasicView.this);
                         dialog.setTitle("提示");
-                        dialog.setMessage("您确认要删除该" + acivityPostBen.getAcivityName() + "?");
+                        dialog.setMessage("您确认要删除该" + acivityName + "?");
                         dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
 
                                     itemPositionTemp=itemPosition;
-                                    postDate.setName(HttpResponseList.get(itemPosition - listView.getHeaderViewsCount()).getName().toString());
-                                    postDate.setRequestType("delete");
-                                    postDate.setServerIp(Common.ip);
-                                    postDate.setServlet(acivityPostBen.getRequestServlet());
-                                    postDate.setUnitId(HttpResponseList.get(itemPosition - listView.getHeaderViewsCount()).getUnitId());
-                                    getHttpData(postDate);
+                                    deleteParamet.setTableName(tableName);
+                                    deleteParamet.setId(String.valueOf(HttpResponseList.get(itemPosition - listView.getHeaderViewsCount()).getId()));
+                                   deleteById("deleteByBrand",deleteParamet);
+
 
 
 
@@ -238,6 +310,8 @@ public class BasicView extends CSearchBase implements View.OnClickListener,
                         dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
+
+                                adapter.notifyDataSetChanged();
 
                             }
                         });
@@ -256,9 +330,9 @@ public class BasicView extends CSearchBase implements View.OnClickListener,
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        if (acivityPostBen.getIsSelect().equals("YES")) {
+        if (isSelect.equals("YES")) {
             Intent intent = new Intent();
-            intent.putExtra("data_return", HttpResponseList.get(position).getName());
+            intent.putExtra("data_return", HttpResponseList.get(position));
             iName = HttpResponseList.get(position).getName();
             setResult(RESULT_OK, intent);
 
@@ -273,12 +347,9 @@ public class BasicView extends CSearchBase implements View.OnClickListener,
     }
 
     public void searchItem(String name) {
-
-        postDate.setName(name);
-        postDate.setRequestType("select");
-        postDate.setServerIp(Common.ip);
-        postDate.setServlet(acivityPostBen.getRequestServlet());
-        getHttpData(postDate);
+        findByNameParamet.setTableName(tableName);
+        findByNameParamet.setName(name);
+        findByName("findNameByBrand",findByNameParamet);
     }
 
     @Override
@@ -300,8 +371,10 @@ public class BasicView extends CSearchBase implements View.OnClickListener,
 
             case R.id.custom_toobar_right:
                 Intent cate = new Intent(BasicView.this, BasicForm.class);
-                cate.putExtra("type", "add");
-                cate.putExtra("acivityPostBen", acivityPostBen);
+                cate.putExtra("actionType","add");
+                cate.putExtra("acivityName",acivityName);
+                cate.putExtra("tableName", tableName);
+                cate.putExtra("httpPostBean", httpPostBean);
                 startActivityForResult(cate, 2);
                 break;
 
@@ -316,20 +389,8 @@ public class BasicView extends CSearchBase implements View.OnClickListener,
 
             case 1:
                 if (resultCode == RESULT_OK) {
-                    editDate = data.getParcelableExtra("getPostData");
-                    if (editDate != null) {
-                        HttpResponseList.get(getEditPositon).setUnitId(editDate.getUnitId());
-                        HttpResponseList.get(getEditPositon).setName(editDate.getName());
-                        HttpResponseList.get(getEditPositon).setNote(editDate.getNote());
-                        adapter = new BasicAdapter(BasicView.this, R.layout.custom_item, HttpResponseList);
-                        adapter.setSeclection(iPositon);
-                        listView.setAdapter(adapter);
-                        Toast.makeText(BasicView.this, "操作成功", Toast.LENGTH_SHORT).show();
-                    } else {
-                        adapter = new BasicAdapter(BasicView.this, R.layout.custom_item, HttpResponseList);
-                        adapter.setSeclection(iPositon);
-                        listView.setAdapter(adapter);
-                    }
+                    findAll("findAllByBrand",findParamet);
+
 
 
                 }
@@ -337,20 +398,7 @@ public class BasicView extends CSearchBase implements View.OnClickListener,
 
             case 2:
                 if (resultCode == RESULT_OK) {
-                    editDate = data.getParcelableExtra("getPostData");
-                    if (editDate != null) {
-                        HttpResponseList.add(editDate);
-                        adapter = new BasicAdapter(BasicView.this, R.layout.custom_item, HttpResponseList);
-                        adapter.setSeclection(iPositon);
-                        listView.setAdapter(adapter);
-                        Toast.makeText(BasicView.this, "操作成功", Toast.LENGTH_SHORT).show();
-                    } else {
-                        adapter = new BasicAdapter(BasicView.this, R.layout.custom_item, HttpResponseList);
-                        adapter.setSeclection(iPositon);
-                        listView.setAdapter(adapter);
-                    }
-
-
+                    findAll("findAllByBrand",findParamet);
                 }
                 break;
             default:
@@ -377,8 +425,6 @@ public class BasicView extends CSearchBase implements View.OnClickListener,
         public void afterTextChanged(Editable s) {
 
             searchItem(search.getText().toString());
-            searchVale = search.getText().toString();
-
 
         }
     };

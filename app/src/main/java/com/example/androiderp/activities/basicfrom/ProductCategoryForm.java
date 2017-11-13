@@ -175,7 +175,7 @@ private  void formInit()
                             ReturnUserData returnUserData = gson.fromJson(response.body().string(), ReturnUserData.class);
 
 
-                            if (returnUserData.getResult() > 0) {
+                            if (Integer.valueOf(returnUserData.getResult()) > 0) {
                                 Intent intent = new Intent();
                                 setResult(RESULT_OK, intent);
                                 if(getPostData !=null) {
@@ -188,7 +188,7 @@ private  void formInit()
                                 {
                                     CommonAdapterData user = new CommonAdapterData();
                                     user.setName(name.getText().toString().trim());
-                                    user.setUnitId(returnUserData.getResult());
+                                    user.setUnitId(Integer.valueOf(returnUserData.getResult()));
                                     intent.putExtra("customid", user);
                                 }
                                 ProductCategoryForm.this.finish();

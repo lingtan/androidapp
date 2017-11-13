@@ -16,7 +16,6 @@ import com.example.androiderp.activities.basicview.CustomMoreView;
 import com.example.androiderp.activities.warehouseview.InventoryView;
 import com.example.androiderp.activities.salesview.SaleView;
 import com.example.androiderp.activities.warehouseform.AppropriationForm;
-import com.example.androiderp.activities.salesfrom.SaleReturnForm;
 import com.example.androiderp.activities.salesfrom.SaleForm;
 
 /**
@@ -56,7 +55,7 @@ public class ThressFragment extends Fragment implements View.OnClickListener {
             startActivity(intent);
             break;
             case R.id.thressfragmnet_xsthlayout:
-                intent = new Intent(context, SaleReturnForm.class);
+                intent = new Intent(context, SaleForm.class);
                 startActivity(intent);
                 break;
             case R.id.thressfragmnet_dblayout:

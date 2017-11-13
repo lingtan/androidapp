@@ -49,7 +49,7 @@ public class Common extends AppCompatActivity {
     private Context context;
     public int returnResult;
     //public static final String ip="http://eedd.v228.10000net.cn/javaweb/servlet/";
-    public static final String ip="http://192.168.1.102:8080/webdemo/servlet/";
+    public static final String ip="wwww";
     public void PopupWindow(Context context, DisplayMetrics dm,List<PopBean>  popuMenuDatas)
     {   this.context=context;
         if(mPopWindow==null) {
@@ -134,63 +134,76 @@ public class Common extends AppCompatActivity {
 
     }
 
-    public  void  JsonUpdateUi(String returnData, String indexName, String type, Context context, BasicAdapter adapter, int textViewResourceId, SlideAndDragListView<AdapterBean> listView)
-    {
+    public  void  JsonUpdateUi(String returnData, String indexName,List<AdapterBean> post, int type, Context context, BasicAdapter adapter, int textViewResourceId, SlideAndDragListView<AdapterBean> listView)
+    { Gson gson = new Gson();
+        Log.d("lingtanaa",returnData);
+        switch (type) {
+
+            case 1:
+
+                indexPositon=-1;
+                post.clear();
+                HttpResponseList = gson.fromJson(returnData, new TypeToken<List<AdapterBean>>() {
+                }.getType());
+                post.addAll(HttpResponseList);
+                if (HttpResponseList.size() != 0) {
+                    for(AdapterBean adapterBean: post)
+                    {
+                        if (adapterBean.getName().equals(indexName)) {
+                            indexPositon = post.indexOf(adapterBean);
+                        }
 
 
-        if (type.equals("select")) {
-            Gson gson = new Gson();
-            HttpResponseList = gson.fromJson(returnData, new TypeToken<List<AdapterBean>>() {
-            }.getType());
 
-            if (HttpResponseList.size() != 0) {
-                for(AdapterBean adapterBean: HttpResponseList)
-                {
-                    if (adapterBean.getName().equals(indexName)) {
-                        indexPositon = HttpResponseList.indexOf(adapterBean);
+                        adapterBean.setSelectImage(R.drawable.seclec_arrow);
                     }
 
 
 
-                    adapterBean.setSelectImage(R.drawable.seclec_arrow);
+                    adapter.setSeclection(indexPositon);
+                    adapter.notifyDataSetChanged();
+
+
+                } else {
+                    adapter.setSeclection(indexPositon);
+                    adapter.notifyDataSetChanged();
+
+                    Toast.makeText(context, "没有数据", Toast.LENGTH_SHORT).show();
+
                 }
 
+                break;
+            case 2:
 
-                adapter = new BasicAdapter(context, textViewResourceId, HttpResponseList);
-                adapter.setSeclection(indexPositon);
-                listView.setAdapter(adapter);
+                ReturnUserData returnUserData = gson.fromJson(returnData, ReturnUserData.class);
+                returnResult=Integer.valueOf(returnUserData.getResult());
+                if (Integer.valueOf(returnUserData.getResult()) > 0) {
 
-
-            } else {
-                adapter = new BasicAdapter(context, textViewResourceId, HttpResponseList);
-                listView.setAdapter(adapter);
-
-                Toast.makeText(context, "没有数据", Toast.LENGTH_SHORT).show();
-
-            }
-
-        } else {
-            Gson gson = new Gson();
-            ReturnUserData returnUserData = gson.fromJson(returnData, ReturnUserData.class);
-            returnResult=returnUserData.getResult();
-            if (returnUserData.getResult() > 0) {
+                    adapter.setSeclection(indexPositon);
+                    adapter.notifyDataSetChanged();
+                    Toast.makeText(context, "操作成功", Toast.LENGTH_SHORT).show();
 
 
-                Toast.makeText(context, "操作成功", Toast.LENGTH_SHORT).show();
+                }  else  if(Integer.valueOf(returnUserData.getResult())==-2)
+                {
+                    adapter.setSeclection(indexPositon);
+                    adapter.notifyDataSetChanged();
+                    Toast.makeText(context, "已有业务发生不能删除", Toast.LENGTH_SHORT).show();
 
+                }else{
+                    adapter.setSeclection(indexPositon);
+                    adapter.notifyDataSetChanged();
 
-            }  else  if(returnUserData.getResult()==-2)
-            {
-                Toast.makeText(context, "已有业务发生不能删除", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "操作失败", Toast.LENGTH_SHORT).show();
 
-            }else{
+                }
 
-                Toast.makeText(context, "操作失败", Toast.LENGTH_SHORT).show();
+                break;
 
-            }
 
 
         }
+
 
     }
 

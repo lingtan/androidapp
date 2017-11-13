@@ -30,6 +30,7 @@ import com.example.androiderp.bean.AppropriationEnty;
 import com.example.androiderp.bean.BalanceAccount;
 import com.example.androiderp.bean.Custom;
 import com.example.androiderp.bean.Employee;
+import com.example.androiderp.bean.HttpPostBean;
 import com.example.androiderp.bean.PostUserData;
 import com.example.androiderp.bean.Product;
 import com.example.androiderp.bean.ProductCategory;
@@ -46,10 +47,10 @@ import com.example.androiderp.adaper.CommonAdapterData;
 import com.example.androiderp.bean.DataStructure;
 import com.example.androiderp.bean.PopBean;
 import com.example.androiderp.adaper.SaleProductListViewAdapter;
-import com.example.androiderp.activities.accountsview.BalanceAccountView;
 import com.example.androiderp.activities.basicview.ProductSelectView;
 import com.example.androiderp.activities.basicview.CustomSelectView;
 import com.example.androiderp.tools.Common;
+import com.example.androiderp.tools.GlobalVariable;
 import com.example.androiderp.tools.HttpUtil;
 import com.example.androiderp.ui.CSearchBase;
 import com.example.androiderp.listview.Menu;
@@ -108,6 +109,7 @@ public class SaleForm extends CSearchBase implements View.OnClickListener, Adapt
     private int stockCheck = 1;
     private List<Integer> stockCheckList = new ArrayList<Integer>();
     private AcivityPostBean acivityPostBen=new AcivityPostBean();
+    private HttpPostBean httpPostBean=new HttpPostBean();
     private Common iucCommon = new Common();
     private Common common = new Common();
 
@@ -182,16 +184,10 @@ public class SaleForm extends CSearchBase implements View.OnClickListener, Adapt
 
     private void formInit() {
 
-        custom = DataSupport.findFirst(Custom.class);
         stock = DataSupport.findFirst(Stock.class);
         employee = DataSupport.findFirst(Employee.class);
         balanceAccountList = DataSupport.findFirst(BalanceAccount.class);
 
-        if (custom == null) {
-
-        } else {
-            name.setText(custom.getName());
-        }
 
         if (stock == null) {
 
@@ -395,16 +391,28 @@ public class SaleForm extends CSearchBase implements View.OnClickListener, Adapt
 
             case R.id.stockout_layout:
 
-                Intent intentcustom = new Intent(SaleForm.this, CustomSelectView.class);
-                intentcustom.putExtra("index", name.getText().toString());
-                startActivityForResult(intentcustom, 8);
+                acivityPostBen.setAcivityName("客户");
+                httpPostBean.setServlet("ContactOperate");
+                acivityPostBen.setName("");
+                httpPostBean.setClassType(GlobalVariable.customMoreViewType);
+                Intent intentCustom = new Intent(getApplicationContext(), CustomSelectView.class);
+                intentCustom.putExtra("acivityPostBen",acivityPostBen);
+                intentCustom.putExtra("httpPostBean",httpPostBean);
+                intentCustom.putExtra("index", name.getText().toString());
+                startActivityForResult(intentCustom, 8);
 
 
                 break;
             case R.id.balanceaccount_layout:
-                Intent intentBalance = new Intent(SaleForm.this, BalanceAccountView.class);
-                intentBalance.putExtra("index", balanceAccount.getText().toString());
-                startActivityForResult(intentBalance, 13);
+                acivityPostBen.setAcivityName("结算账户");
+                httpPostBean.setServlet("BrandOperate");
+                acivityPostBen.setName(balanceAccount.getText().toString());
+                httpPostBean.setClassType(9);
+                acivityPostBen.setIsSelect("YES");
+                Intent intentBalance=new Intent(getApplicationContext(), BasicView.class);
+                intentBalance.putExtra("acivityPostBen",acivityPostBen);
+                intentBalance.putExtra("httpPostBean",httpPostBean);
+                startActivityForResult(intentBalance,13);
 
 
                 break;
@@ -466,12 +474,13 @@ public class SaleForm extends CSearchBase implements View.OnClickListener, Adapt
                 break;
             case R.id.billnumber_layout:
                 acivityPostBen.setAcivityName("发货方式");
-                acivityPostBen.setRequestServlet("BrandOperate");
+                httpPostBean.setServlet("BrandOperate");
                 acivityPostBen.setName(consign.getText().toString());
-                acivityPostBen.setSetClassType(6);
+                httpPostBean.setClassType(6);
                 acivityPostBen.setIsSelect("YES");
                 Intent intentconsignment=new Intent(SaleForm.this, BasicView.class);
                 intentconsignment.putExtra("acivityPostBen",acivityPostBen);
+                intentconsignment.putExtra("httpPostBean",httpPostBean);
                 startActivityForResult(intentconsignment,9);
                 break;
             case R.id.customtoobar_r:

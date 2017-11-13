@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.example.androiderp.adaper.BasicAdapter;
 import com.example.androiderp.bean.AcivityPostBean;
 import com.example.androiderp.bean.AdapterBean;
+import com.example.androiderp.bean.HttpPostBean;
 import com.example.androiderp.bean.PostProductData;
 import com.example.androiderp.bean.Product;
 import com.example.androiderp.bean.ProductShopping;
@@ -73,6 +74,7 @@ public class ProductSelectView extends CSearchBase implements View.OnClickListen
     private  String leftListSelecteText;
     private LinearLayout accountLayout;
     private AcivityPostBean getAcivityPostBean = new AcivityPostBean();
+    private HttpPostBean httpPostBean = new HttpPostBean();
     private AcivityPostBean postAcivityPostBen = new AcivityPostBean();
     private List<AdapterBean> HttpResponseCategory = new ArrayList<>();
     private List<Product> HttpResponseCustom = new ArrayList<>();
@@ -121,7 +123,7 @@ public class ProductSelectView extends CSearchBase implements View.OnClickListen
         PostProductData postDate = new PostProductData();
         postDate.setName("");
         postDate.setRequestType(GlobalVariable.cmvCusmtAndCategory);
-        getAcivityPostBean.setOperationType(GlobalVariable.cmvCusmtAndCategory);
+        httpPostBean.setOperation(GlobalVariable.cmvCusmtAndCategory);
         postDate.setServerIp(Common.ip);
         postDate.setClassType(1);
         postDate.setServlet("ProductOperate");
@@ -307,7 +309,7 @@ public class ProductSelectView extends CSearchBase implements View.OnClickListen
                     public void run() {
                         try {
 
-                            if (getAcivityPostBean.getOperationType().equals(GlobalVariable.cmvCusmtAndCategory)) {
+                            if (httpPostBean.getOperation().equals(GlobalVariable.cmvCusmtAndCategory)) {
                                 JSONObject jsonObject = new JSONObject(response.body().string());
                                 JSONArray jsonArray = jsonObject.getJSONArray("custom");
                                 JSONArray jsonArray1 = jsonObject.getJSONArray("customcategory");
@@ -450,7 +452,7 @@ public class ProductSelectView extends CSearchBase implements View.OnClickListen
 
                         AdapterBean commonData=new AdapterBean();
                         commonData.setName(productCategory.getName());
-                        commonData.setUnitId(productCategory.getUnitId());
+                        commonData.setId(productCategory.getId());
                         if(categorycount>0) {
                             commonData.setBadge(String.valueOf(df.format(categorycount)));
                         }
@@ -476,7 +478,7 @@ public class ProductSelectView extends CSearchBase implements View.OnClickListen
                     PostProductData postDate = new PostProductData();
                     postDate.setName("");
                     postDate.setRequestType(GlobalVariable.cmvCusmtAndCategory);
-                    getAcivityPostBean.setOperationType(GlobalVariable.cmvCusmtAndCategory);
+                    httpPostBean.setOperation(GlobalVariable.cmvCusmtAndCategory);
                     postDate.setServerIp(Common.ip);
                     postDate.setClassType(1);
                     postDate.setServlet("ProductOperate");
@@ -617,7 +619,7 @@ public class ProductSelectView extends CSearchBase implements View.OnClickListen
             }
             AdapterBean commonData=new AdapterBean();
             commonData.setName(productCategory.getName());
-            commonData.setUnitId(productCategory.getUnitId());
+            commonData.setId(productCategory.getId());
             if(categorycount>0) {
                 commonData.setBadge(String.valueOf(df.format(quantityCount)));
             }

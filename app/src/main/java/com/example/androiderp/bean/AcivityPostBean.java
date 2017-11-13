@@ -5,27 +5,10 @@ import android.os.Parcelable;
 
 public class AcivityPostBean implements Parcelable{
 
-    private int setClassType;
-    private String name;
-    private String requestServlet;
     private  String acivityName;
+    private  String actionType;
+    private  String name;
     private String isSelect="";
-    private  String operationType;
-    public int getSetClassType() {
-        return setClassType;
-    }
-
-    public void setSetClassType(int setClassType) {
-        this.setClassType = setClassType;
-    }
-
-    public String getRequestServlet() {
-        return requestServlet;
-    }
-
-    public void setRequestServlet(String requestServlet) {
-        this.requestServlet = requestServlet;
-    }
 
     public String getAcivityName() {
         return acivityName;
@@ -33,6 +16,14 @@ public class AcivityPostBean implements Parcelable{
 
     public void setAcivityName(String acivityName) {
         this.acivityName = acivityName;
+    }
+
+    public String getActionType() {
+        return actionType;
+    }
+
+    public void setActionType(String actionType) {
+        this.actionType = actionType;
     }
 
     public String getName() {
@@ -51,13 +42,6 @@ public class AcivityPostBean implements Parcelable{
         this.isSelect = isSelect;
     }
 
-    public String getOperationType() {
-        return operationType;
-    }
-
-    public void setOperationType(String operationType) {
-        this.operationType = operationType;
-    }
 
     @Override
     public int describeContents() {
@@ -66,31 +50,26 @@ public class AcivityPostBean implements Parcelable{
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-
-        dest.writeInt(setClassType);
-        dest.writeString(requestServlet);
-        dest.writeString(acivityName);
-        dest.writeString(name);
-        dest.writeString(isSelect);
-        dest.writeString(operationType);
-
-
-
-
-
+        dest.writeString(this.acivityName);
+        dest.writeString(this.actionType);
+        dest.writeString(this.name);
+        dest.writeString(this.isSelect);
     }
-    public static final Creator<AcivityPostBean> CREATOR=new Creator<AcivityPostBean>(){
+
+    public AcivityPostBean() {
+    }
+
+    protected AcivityPostBean(Parcel in) {
+        this.acivityName = in.readString();
+        this.actionType = in.readString();
+        this.name = in.readString();
+        this.isSelect = in.readString();
+    }
+
+    public static final Creator<AcivityPostBean> CREATOR = new Creator<AcivityPostBean>() {
         @Override
         public AcivityPostBean createFromParcel(Parcel source) {
-            AcivityPostBean acivityPostBen=new AcivityPostBean();
-            acivityPostBen.setClassType =source.readInt();
-            acivityPostBen.requestServlet=source.readString();
-           acivityPostBen.acivityName=source.readString();
-            acivityPostBen.name=source.readString();
-            acivityPostBen.isSelect=source.readString();
-            acivityPostBen.operationType=source.readString();
-
-            return acivityPostBen;
+            return new AcivityPostBean(source);
         }
 
         @Override

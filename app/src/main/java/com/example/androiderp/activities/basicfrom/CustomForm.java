@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -21,6 +20,8 @@ import com.example.androiderp.basic.BasicView;
 import com.example.androiderp.bean.AcivityPostBean;
 import com.example.androiderp.bean.AdapterBean;
 import com.example.androiderp.bean.Custom;
+import com.example.androiderp.bean.CustomCategory;
+import com.example.androiderp.bean.HttpPostBean;
 import com.example.androiderp.bean.PostUserData;
 import com.example.androiderp.bean.ReturnUserData;
 import com.example.androiderp.R;
@@ -48,12 +49,14 @@ public class CustomForm extends AppCompatActivity implements View.OnClickListene
     private DisplayMetrics dm;
     private LinearLayout linearLayout;
     private List<Custom> customList;
-    private String getPostType;
     private Button deleteButton;
     private AcivityPostBean acivityPostBen=new AcivityPostBean();
+    private CustomCategory customCategory=new CustomCategory();
+    private HttpPostBean httpPostBean=new HttpPostBean();
     private PostUserData postUserData = new PostUserData();
-    private AdapterBean getPostData;
+    private Custom getPostData;
     private Dialog dialog;
+    private Custom custom=new Custom();
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.userform);
@@ -61,8 +64,9 @@ public class CustomForm extends AppCompatActivity implements View.OnClickListene
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         final Intent intent=getIntent();
         getPostData =intent.getParcelableExtra("postdata");
-        getPostType = intent.getStringExtra("type");
         acivityPostBen=intent.getParcelableExtra("acivityPostBen");
+        httpPostBean=intent.getParcelableExtra("httpPostBean");
+        httpPostBean.setServlet("ContactOperate");
         manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         name=(EditText)findViewById(R.id.username);
         address=(EditText)findViewById(R.id.useraddress);
@@ -88,7 +92,7 @@ public class CustomForm extends AppCompatActivity implements View.OnClickListene
 
             name.setText(getPostData.getName());
             address.setText(getPostData.getAddress());
-            category.setText(getPostData.getCategory_name());
+            category.setText(getPostData.getCustomCategory().getName());
             phone.setText(getPostData.getPhone());
             fax.setText(getPostData.getFax());
 
@@ -98,7 +102,7 @@ public class CustomForm extends AppCompatActivity implements View.OnClickListene
         }else {
 
         }
-        if(getPostType.equals("edit"))
+        if(acivityPostBen.getAcivityName().equals("edit"))
         {
             tile.setText(acivityPostBen.getAcivityName());
         }else {
@@ -111,41 +115,42 @@ public class CustomForm extends AppCompatActivity implements View.OnClickListene
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.customtoobar_right:
-                customList= DataStructure.where("name = ?",name.getText().toString()).find(Custom.class);
-                if (TextUtils.isEmpty(name.getText().toString())) {
-                    name.setError("需要输入"+acivityPostBen.getAcivityName());
-                } else if (customList.size()>0)
-                {
-                    Toast.makeText(CustomForm.this,"客户方式已经存在",Toast.LENGTH_SHORT).show();
-                }else {
-                    if (getPostType.equals("edit")) {
-                        postUserData.setUnitId(getPostData.getContact_id());
-                        postUserData.setName(name.getText().toString());
-                        postUserData.setAddress(address.getText().toString());
-                        postUserData.setPhone(phone.getText().toString());
-                        postUserData.setFax(fax.getText().toString());
-                        postUserData.setCategory_name(category.getText().toString());
-                        postUserData.setRequestType(GlobalVariable.cfUpdate);
-                        postUserData.setServerIp(Common.ip);
-                        postUserData.setServlet(acivityPostBen.getRequestServlet());
-                        postUserData.setClassType(acivityPostBen.getSetClassType());
+
+                    if (acivityPostBen.getActionType().equals("edit")) {
+
+                        custom.setContact_id(getPostData.getContact_id());
+                        custom.setName(name.getText().toString());
+                        custom.setAddress(address.getText().toString());
+                        custom.setPhone(phone.getText().toString());
+                        custom.setFax(fax.getText().toString());
+                        if(customCategory.getId()!=0)
+                        {
+                            custom.setCustomCategory(customCategory);
+                        }else {
+                            custom.setCustomCategory(getPostData.getCustomCategory());
+                        }
+
+                        httpPostBean.setServer(Common.ip);
+                        httpPostBean.setOperation(GlobalVariable.cfUpdate);
                         showDialog();
-                        getHttpData(postUserData);
+                        getHttpData(custom,httpPostBean);
                         hintKbTwo();
                     } else {
 
-                        postUserData.setName(name.getText().toString());
-                        postUserData.setAddress(address.getText().toString());
-                        postUserData.setPhone(phone.getText().toString());
-                        postUserData.setFax(fax.getText().toString());
-                        postUserData.setCategory_name(category.getText().toString());
+                        custom.setName(name.getText().toString());
+                        custom.setAddress(address.getText().toString());
+                        custom.setPhone(phone.getText().toString());
+                        custom.setFax(fax.getText().toString());
+                        if(customCategory.getId()!=0)
+                        {
+                            custom.setCustomCategory(customCategory);
+                        }
+                        httpPostBean.setServer(Common.ip);
+                        httpPostBean.setOperation(GlobalVariable.cfInsert);
                         postUserData.setRequestType(GlobalVariable.cfInsert);
-                        postUserData.setServerIp(Common.ip);
-                        postUserData.setServlet(acivityPostBen.getRequestServlet());
-                        postUserData.setClassType(acivityPostBen.getSetClassType());
                         showDialog();
-                        getHttpData(postUserData);
-                        getPostType="edit";
+                        getHttpData(custom,httpPostBean);
+                        acivityPostBen.setActionType("edit");
                         add.setVisibility(View.VISIBLE);
                         deleteButton.setVisibility(View.VISIBLE);
                         hintKbTwo();
@@ -154,7 +159,7 @@ public class CustomForm extends AppCompatActivity implements View.OnClickListene
 
 
 
-                }
+
                 break;
             case R.id.loginbutton:
                 AlertDialog.Builder dialog=new AlertDialog.Builder(CustomForm.this);
@@ -164,14 +169,11 @@ public class CustomForm extends AppCompatActivity implements View.OnClickListene
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                             DataStructure.deleteAll(Custom.class, "name = ?", name.getText().toString());
-                        postUserData.setUnitId(getPostData.getContact_id());
-                        postUserData.setServerIp(Common.ip);
-                        postUserData.setRequestType(GlobalVariable.cfDelete);
-                        postUserData.setServlet(acivityPostBen.getRequestServlet());
-                        postUserData.setClassType(acivityPostBen.getSetClassType());
-                        getPostData.setOperationType("delete");
+
+                        httpPostBean.setServer(Common.ip);
+                        httpPostBean.setOperation(GlobalVariable.cfDelete);
                         showDialog();
-                        getHttpData(postUserData);
+                        getHttpData(getPostData,httpPostBean);
                         Intent intent = new Intent();
                         setResult(RESULT_OK,intent);
 
@@ -187,25 +189,29 @@ public class CustomForm extends AppCompatActivity implements View.OnClickListene
                 dialog.show();
                 break;
             case  R.id.customtoobar_left:
+                Intent intent = new Intent();
+                setResult(RESULT_OK,intent);
                 finish();
 
                 break;
 
             case R.id.usercategory_layout:
              AcivityPostBean acivityPostBenc=new AcivityPostBean();
+             HttpPostBean  httpPostBeanc=new HttpPostBean();
                 acivityPostBenc.setAcivityName(acivityPostBen.getAcivityName());
-                acivityPostBenc.setRequestServlet("BrandOperate");
+                httpPostBeanc.setServlet("BrandOperate");
                 acivityPostBenc.setName(category.getText().toString());
-                if(acivityPostBen.getSetClassType()==1)
+                if(httpPostBean.getClassType()==1)
                 {
-                    acivityPostBenc.setSetClassType(8);
+                    httpPostBeanc.setClassType(8);
                 }else {
-                    acivityPostBenc.setSetClassType(7);
+                    httpPostBeanc.setClassType(7);
                 }
 
                 acivityPostBenc.setIsSelect("YES");
                 Intent intentcategory=new Intent(CustomForm.this, BasicView.class);
                 intentcategory.putExtra("acivityPostBen",acivityPostBenc);
+                intentcategory.putExtra("httpPostBean",httpPostBeanc);
                 startActivityForResult(intentcategory,1);
                 break;
             case R.id.customtoobar_r:
@@ -217,16 +223,16 @@ public class CustomForm extends AppCompatActivity implements View.OnClickListene
                 add.setVisibility(View.INVISIBLE);
                 tile.setText("客户新增");
                 deleteButton.setVisibility(View.INVISIBLE);
-                getPostType="";
+                acivityPostBen.setActionType("");
                 break;
 
 
         }
     }
-    private void getHttpData( final PostUserData postPostUserData) {
+    private void getHttpData( final Custom custom,HttpPostBean httpPostBean) {
 
 
-        HttpUtil.sendOkHttpRequst(postPostUserData, new okhttp3.Callback() {
+        HttpUtil.sendOkHttpRequst(custom,httpPostBean, new okhttp3.Callback() {
 
             @Override
             public void onFailure(Call call, IOException e) {
@@ -256,7 +262,7 @@ public class CustomForm extends AppCompatActivity implements View.OnClickListene
                             ReturnUserData returnUserData = gson.fromJson(response.body().string(), ReturnUserData.class);
 
 
-                            if (returnUserData.getResult() > 0) {
+                            if (Integer.valueOf(returnUserData.getResult()) > 0) {
                                 Intent intent = new Intent();
 
                                 if(getPostData !=null) {
@@ -264,7 +270,7 @@ public class CustomForm extends AppCompatActivity implements View.OnClickListene
                                     getPostData.setContact_id(getPostData.getContact_id());
                                     getPostData.setName(name.getText().toString().trim());
                                     getPostData.setAddress(address.getText().toString().trim());
-                                    getPostData.setCategory_name(category.getText().toString().trim());
+                                    getPostData.getCustomCategory().setCategory_name(category.getText().toString().trim());
                                     getPostData.setPhone(phone.getText().toString().trim());
                                     getPostData.setFax(fax.getText().toString().trim());
                                     intent.putExtra("getPostData", getPostData);
@@ -272,7 +278,7 @@ public class CustomForm extends AppCompatActivity implements View.OnClickListene
                                 {
                                     setResult(RESULT_OK, intent);
                                     AdapterBean user = new AdapterBean();
-                                    user.setContact_id(returnUserData.getResult());
+                                    user.setContact_id(Integer.valueOf(returnUserData.getResult()));
                                     user.setName(name.getText().toString().trim());
                                     user.setAddress(address.getText().toString().trim());
                                     user.setCategory_name(category.getText().toString().trim());
@@ -308,7 +314,14 @@ public class CustomForm extends AppCompatActivity implements View.OnClickListene
         switch (requestCode){
             case 1:
                 if(resultCode==RESULT_OK){
-                    category.setText(data.getStringExtra("data_return"));
+                    AdapterBean adapterBean=new AdapterBean();
+                    adapterBean=data.getParcelableExtra("data_return");
+                    if(adapterBean!=null) {
+                        category.setText(adapterBean.getName());
+                        customCategory.setId(adapterBean.getId());
+                        customCategory.setName(adapterBean.getName());
+                        customCategory.setNote(adapterBean.getNote());
+                    }
                 }
                 break;
             default:

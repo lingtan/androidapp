@@ -17,6 +17,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.androiderp.bean.AcivityPostBean;
+import com.example.androiderp.bean.HttpPostBean;
 import com.example.androiderp.bean.PostProductData;
 import com.example.androiderp.bean.Product;
 import com.example.androiderp.R;
@@ -50,6 +51,7 @@ public class ProductSearchView extends CSearchBase {
     private ActionBar ab;
     private String scanResult;
     private AcivityPostBean postAcivityPostBen = new AcivityPostBean();
+    private HttpPostBean httpPostBean= new HttpPostBean();
     private List<Product> HttpResponseCustom = new ArrayList<>();
     private Dialog dialog;
 
@@ -77,8 +79,8 @@ public class ProductSearchView extends CSearchBase {
             public void onItemClick(AdapterView<?> adapterView, View view,
                                     int position, long id) {
 
-                postAcivityPostBen.setRequestServlet("ProductOperate");
-                postAcivityPostBen.setSetClassType(1);
+                httpPostBean.setServlet("ProductOperate");
+                httpPostBean.setClassType(1);
                 Intent intent = new Intent(getApplicationContext(), ProductForm.class);
                 intent.putExtra("type", "edit");
                 intent.putExtra("postdata", HttpResponseCustom.get(position));

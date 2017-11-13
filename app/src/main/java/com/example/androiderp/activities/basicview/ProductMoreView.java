@@ -17,7 +17,6 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -30,6 +29,7 @@ import com.example.androiderp.adaper.BasicAdapter;
 import com.example.androiderp.adaper.ProductAdapter;
 import com.example.androiderp.bean.AcivityPostBean;
 import com.example.androiderp.bean.AdapterBean;
+import com.example.androiderp.bean.HttpPostBean;
 import com.example.androiderp.bean.PostProductData;
 import com.example.androiderp.bean.Product;
 import com.example.androiderp.scanning.CommonScanActivity;
@@ -66,7 +66,8 @@ public class ProductMoreView extends CSearchBase implements View.OnClickListener
     private IntentFilter intentFilter;
     private NetworkChangeReceiver networkChangeReceiver;
     private AcivityPostBean getAcivityPostBean = new AcivityPostBean();
-    private AcivityPostBean postAcivityPostBen = new AcivityPostBean();
+    private HttpPostBean httpPostBean = new HttpPostBean();
+    private HttpPostBean postAcivityPostBen = new HttpPostBean();
     private List<AdapterBean> HttpResponseCategory = new ArrayList<>();
     private List<AdapterBean> HttpResponseCategoryTemp = new ArrayList<>();
     private List<Product> HttpResponseCustom = new ArrayList<>();
@@ -108,13 +109,16 @@ public class ProductMoreView extends CSearchBase implements View.OnClickListener
         Intent intent = getIntent();
         PostProductData postDate = new PostProductData();
         getAcivityPostBean = intent.getParcelableExtra("acivityPostBen");
+        httpPostBean = intent.getParcelableExtra("httpPostBean");
         postDate.setName("");
         postDate.setRequestType(GlobalVariable.cmvCusmtAndCategory);
-        getAcivityPostBean.setOperationType(GlobalVariable.cmvCusmtAndCategory);
+        httpPostBean.setOperation(GlobalVariable.cmvCusmtAndCategory);
         postDate.setServerIp(Common.ip);
-        postDate.setClassType(getAcivityPostBean.getSetClassType());
-        postDate.setServlet(getAcivityPostBean.getRequestServlet());
+        postDate.setClassType(httpPostBean.getClassType());
+        postDate.setServlet(httpPostBean.getServlet());
         getHttpData(postDate);
+
+
     }
 
     //控件初始化
@@ -170,9 +174,9 @@ public class ProductMoreView extends CSearchBase implements View.OnClickListener
                 }
                 postDate.setServerIp(Common.ip);
                 postDate.setRequestType(GlobalVariable.cfCatetorySelect);
-                getAcivityPostBean.setOperationType(GlobalVariable.cfCatetorySelect);
-                postDate.setClassType(getAcivityPostBean.getSetClassType());
-                postDate.setServlet(getAcivityPostBean.getRequestServlet());
+                httpPostBean.setOperation(GlobalVariable.cfCatetorySelect);
+                postDate.setClassType(httpPostBean.getClassType());
+                postDate.setServlet(httpPostBean.getServlet());
                 getHttpData(postDate);
                 countShow.setText(String.valueOf(HttpResponseCustom.size()));
             }
@@ -183,8 +187,8 @@ public class ProductMoreView extends CSearchBase implements View.OnClickListener
             public void onItemClick(AdapterView<?> adapterView, View view,
                                     int position, long id) {
 
-                postAcivityPostBen.setRequestServlet(getAcivityPostBean.getRequestServlet());
-                postAcivityPostBen.setSetClassType(getAcivityPostBean.getSetClassType());
+                postAcivityPostBen.setServlet(httpPostBean.getServlet());
+                postAcivityPostBen.setClassType(httpPostBean.getClassType());
                 Intent intent = new Intent(getApplicationContext(), ProductForm.class);
                 intent.putExtra("type", "edit");
                 intent.putExtra("postdata", HttpResponseCustom.get(position));
@@ -218,11 +222,10 @@ public class ProductMoreView extends CSearchBase implements View.OnClickListener
 
                     postDate.setServerIp(Common.ip);
                     postDate.setRequestType(GlobalVariable.cfCatetorySelect);
-                    getAcivityPostBean.setOperationType(GlobalVariable.cfCatetorySelect);
-                    postDate.setClassType(getAcivityPostBean.getSetClassType());
-                    postDate.setServlet(getAcivityPostBean.getRequestServlet());
+                    httpPostBean.setOperation(GlobalVariable.cfCatetorySelect);
+                    postDate.setClassType(httpPostBean.getClassType());
+                    postDate.setServlet(httpPostBean.getServlet());
                     HttpResponseCustom.clear();
-                    rightAdapter.notifyDataSetChanged();
                     getHttpData(postDate);
 
 
@@ -248,10 +251,11 @@ public class ProductMoreView extends CSearchBase implements View.OnClickListener
             //新增按钮
             case R.id.custom_toobar_right:
                 Intent intent = new Intent(getApplicationContext(), ProductForm.class);
-                postAcivityPostBen.setAcivityName(getAcivityPostBean.getAcivityName() + "资料");
-                postAcivityPostBen.setRequestServlet("ProductOperate");
-                postAcivityPostBen.setSetClassType(getAcivityPostBean.getSetClassType());
-                intent.putExtra("acivityPostBen", postAcivityPostBen);
+                getAcivityPostBean.setAcivityName(getAcivityPostBean.getAcivityName() + "资料");
+                postAcivityPostBen.setServlet("ProductOperate");
+                postAcivityPostBen.setClassType(httpPostBean.getClassType());
+                intent.putExtra("httpPostBean", postAcivityPostBen);
+                intent.putExtra("acivityPostBen", getAcivityPostBean);
                 intent.putExtra("type", "add");
                 startActivityForResult(intent, 1);
                 break;
@@ -281,9 +285,9 @@ public class ProductMoreView extends CSearchBase implements View.OnClickListener
         }
         postDate.setServerIp(Common.ip);
         postDate.setRequestType(GlobalVariable.cfCatetorySelect);
-        getAcivityPostBean.setOperationType(GlobalVariable.cfCatetorySelect);
-        postDate.setClassType(getAcivityPostBean.getSetClassType());
-        postDate.setServlet(getAcivityPostBean.getRequestServlet());
+        httpPostBean.setOperation(GlobalVariable.cfCatetorySelect);
+        postDate.setClassType(httpPostBean.getClassType());
+        postDate.setServlet(httpPostBean.getServlet());
         getHttpData(postDate);
     }
 
@@ -309,13 +313,12 @@ public class ProductMoreView extends CSearchBase implements View.OnClickListener
 
             @Override
             public void onResponse(Call call, final Response response) throws IOException {
-
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         try {
 
-                            if (getAcivityPostBean.getOperationType().equals(GlobalVariable.cmvCusmtAndCategory)) {
+                            if (httpPostBean.getOperation().equals(GlobalVariable.cmvCusmtAndCategory)) {
                                 JSONObject jsonObject = new JSONObject(response.body().string());
                                 JSONArray jsonArray = jsonObject.getJSONArray("custom");
                                 JSONArray jsonArray1 = jsonObject.getJSONArray("customcategory");
@@ -372,7 +375,6 @@ public class ProductMoreView extends CSearchBase implements View.OnClickListener
 
                         } catch (Exception e) {
                             Toast.makeText(getApplicationContext(), "网络", Toast.LENGTH_SHORT).show();
-                            Log.d("lingtana", e.toString());
                             closeDialog();
                         }
                     }

@@ -19,6 +19,7 @@ import com.example.androiderp.activities.warehouseform.AppropriationForm;
 import com.example.androiderp.activities.warehouseform.StockTakingForm;
 import com.example.androiderp.basic.BasicView;
 import com.example.androiderp.bean.AcivityPostBean;
+import com.example.androiderp.bean.HttpPostBean;
 
 /**
  * Created by lingtan on 2017/5/18.
@@ -27,6 +28,7 @@ import com.example.androiderp.bean.AcivityPostBean;
 public class FouthFragment extends Fragment implements View.OnClickListener {
     private   Intent intent;
     private AcivityPostBean acivityPostBen=new AcivityPostBean();
+    private HttpPostBean httpPostBean=new HttpPostBean();
     @Override
     public View onCreateView(LayoutInflater inflater,  ViewGroup container,  Bundle savedInstanceState) {
         View view=inflater.inflate(R.layout.fourthfragment_layout,container,false);
@@ -82,10 +84,11 @@ public class FouthFragment extends Fragment implements View.OnClickListener {
                 break;
             case R.id.thressfragmnet_khlayout:
                 acivityPostBen.setAcivityName("仓库");
-                acivityPostBen.setRequestServlet("StockOperate");
+                httpPostBean.setServlet("StockOperate");
                 acivityPostBen.setName("");
                 Intent intentStock = new Intent(context, BasicView.class);
                 intentStock.putExtra("acivityPostBen",acivityPostBen);
+                intentStock.putExtra("httpPostBean",httpPostBean);
                 startActivity(intentStock);
                 break;
             default:

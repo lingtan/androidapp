@@ -41,6 +41,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.androiderp.basic.BasicView;
 import com.example.androiderp.bean.AcivityPostBean;
+import com.example.androiderp.bean.HttpPostBean;
 import com.example.androiderp.bean.PostProductData;
 import com.example.androiderp.bean.Product;
 import com.example.androiderp.bean.ReturnUserData;
@@ -110,6 +111,7 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
     private AcivityPostBean acivityPost=new AcivityPostBean();
     DecimalFormat df = new DecimalFormat("#####0.00");
     private AcivityPostBean getAcivityPostBen=new AcivityPostBean();
+    private HttpPostBean httpPostBean=new HttpPostBean();
     private AcivityPostBean postAcivityPostBen=new AcivityPostBean();
     private PostProductData postUserData = new PostProductData();
     private Product getPostData;
@@ -126,6 +128,7 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
         getPostData =intent.getParcelableExtra("postdata");
         getPostType = intent.getStringExtra("type");
         getAcivityPostBen=intent.getParcelableExtra("acivityPostBen");
+        httpPostBean=intent.getParcelableExtra("httpPostBean");
         manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         name=(EditText)findViewById(R.id.name);
         number=(EditText)findViewById(R.id.number);
@@ -412,8 +415,8 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                     categoryReturnVale=category.getText().toString();
                     postUserData.setRequestType(GlobalVariable.cfUpdate);
                     postUserData.setServerIp(Common.ip);
-                    postUserData.setServlet(getAcivityPostBen.getRequestServlet());
-                    postUserData.setClassType(getAcivityPostBen.getSetClassType());
+                    postUserData.setServlet(httpPostBean.getServlet());
+                    postUserData.setClassType(httpPostBean.getClassType());
                     postUserData.setPhotoFirstPath(getPostData.getPhotoFirstPath());
                     postUserData.setPhotoSecondPath(getPostData.getPhotoSecondPath());
                     postUserData.setPhotoThressPath(getPostData.getPhotoThressPath());
@@ -462,8 +465,8 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
 
                     postUserData.setRequestType(GlobalVariable.cfInsert);
                     postUserData.setServerIp(Common.ip);
-                    postUserData.setServlet(getAcivityPostBen.getRequestServlet());
-                    postUserData.setClassType(getAcivityPostBen.getSetClassType());
+                    postUserData.setServlet(httpPostBean.getServlet());
+                    postUserData.setClassType(httpPostBean.getClassType());
                     getHttpData(postUserData);
 
                     for(int i = 0; i < stockInitiTemList.size(); i++) {
@@ -502,34 +505,37 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
              break;
             case R.id.documentmaker_layout:
                 postAcivityPostBen.setAcivityName("产品类别");
-                postAcivityPostBen.setRequestServlet("BrandOperate");
+                httpPostBean.setServlet("BrandOperate");
                 postAcivityPostBen.setName(category.getText().toString());
-                postAcivityPostBen.setSetClassType(2);
+                httpPostBean.setClassType(2);
                 postAcivityPostBen.setIsSelect("YES");
                 Intent intentcategory=new Intent(ProductForm.this, BasicView.class);
                 intentcategory.putExtra("acivityPostBen",postAcivityPostBen);
+                intentcategory.putExtra("httpPostBean",httpPostBean);
                 startActivityForResult(intentcategory,1);
                 break;
 
             case R.id.product_brand_layout:
                 postAcivityPostBen.setAcivityName("品牌");
-                postAcivityPostBen.setRequestServlet("BrandOperate");
+               httpPostBean.setServlet("BrandOperate");
                 postAcivityPostBen.setName(brand.getText().toString());
-                postAcivityPostBen.setSetClassType(1);
+                httpPostBean.setClassType(1);
                 postAcivityPostBen.setIsSelect("YES");
                 Intent intentbrand=new Intent(ProductForm.this, BasicView.class);
                 intentbrand.putExtra("acivityPostBen",postAcivityPostBen);
+                intentbrand.putExtra("httpPostBean",httpPostBean);
                 startActivityForResult(intentbrand,2);
                 break;
 
             case R.id.product_unit_layout:
                 postAcivityPostBen.setAcivityName("单位");
-                postAcivityPostBen.setRequestServlet("BrandOperate");
+                httpPostBean.setServlet("BrandOperate");
                 postAcivityPostBen.setName(unit.getText().toString());
-                postAcivityPostBen.setSetClassType(3);
+                httpPostBean.setClassType(3);
                 postAcivityPostBen.setIsSelect("YES");
                 Intent intentunit=new Intent(ProductForm.this, BasicView.class);
                 intentunit.putExtra("acivityPostBen",postAcivityPostBen);
+                intentunit.putExtra("httpPostBean",httpPostBean);
                 startActivityForResult(intentunit,3);
                 break;
             case R.id.loginbutton:
@@ -542,8 +548,8 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                         postUserData.setProduct_id(getPostData.getProduct_id());
                         postUserData.setServerIp(Common.ip);
                         postUserData.setRequestType(GlobalVariable.cfDelete);
-                        postUserData.setServlet(getAcivityPostBen.getRequestServlet());
-                        postUserData.setClassType(getAcivityPostBen.getSetClassType());
+                        postUserData.setServlet(httpPostBean.getServlet());
+                        postUserData.setClassType(httpPostBean.getClassType());
                         postUserData.setRequestType(GlobalVariable.cfDelete);
                         getHttpData(postUserData);
                         Intent intent = new Intent();
@@ -1143,7 +1149,7 @@ public class ProductForm extends AppCompatActivity implements View.OnClickListen
                             ReturnUserData returnUserData = gson.fromJson(response.body().string(), ReturnUserData.class);
                             Log.d("lingtana",returnUserData.getError());
 
-                            if (returnUserData.getResult() > 0) {
+                            if (Integer.valueOf(returnUserData.getResult()) > 0) {
                                 Intent intent = new Intent();
 
                                 if(getPostData !=null) {

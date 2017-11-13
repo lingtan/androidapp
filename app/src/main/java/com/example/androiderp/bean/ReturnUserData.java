@@ -5,14 +5,15 @@ package com.example.androiderp.bean;
  */
 
 public class ReturnUserData {
-    private int result;
+    private String result;
     private String error;
 
-    public int getResult() {
+
+    public String getResult() {
         return result;
     }
 
-    public void setResult(int result) {
+    public void setResult(String result) {
         this.result = result;
     }
 

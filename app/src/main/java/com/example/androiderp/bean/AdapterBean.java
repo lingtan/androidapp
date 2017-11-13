@@ -6,28 +6,26 @@ import android.os.Parcelable;
 public class AdapterBean implements Parcelable{
 
 
-    private int unitId;
+    private int id;
     private int contact_id;
     private String name;
     private String address;
     private String phone;
     private String fax;
-    private int category_id;
     private String category_name;
     private  String note;
     private int selectImage;
     private  String operationType;
     private String badge;
 
-
-
-    public int getUnitId() {
-        return unitId;
+    public int getId() {
+        return id;
     }
 
-    public void setUnitId(int unitId) {
-        this.unitId = unitId;
+    public void setId(int id) {
+        this.id = id;
     }
+
     public int getContact_id() {
         return contact_id;
     }
@@ -68,13 +66,6 @@ public class AdapterBean implements Parcelable{
         this.fax = fax;
     }
 
-    public int getCategory_id() {
-        return category_id;
-    }
-
-    public void setCategory_id(int category_id) {
-        this.category_id = category_id;
-    }
 
     public String getCategory_name() {
         return category_name;
@@ -116,6 +107,7 @@ public class AdapterBean implements Parcelable{
         this.badge = badge;
     }
 
+
     @Override
     public int describeContents() {
         return 0;
@@ -123,43 +115,40 @@ public class AdapterBean implements Parcelable{
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-
-        dest.writeInt(unitId);
-        dest.writeInt(contact_id);
-        dest.writeString(name);
-        dest.writeString(address);
-        dest.writeString(phone);
-        dest.writeString(fax);
-        dest.writeInt(category_id);
-        dest.writeString(category_name);
-        dest.writeString(note);
-        dest.writeInt(selectImage);
-        dest.writeString(operationType);
-        dest.writeString(badge);
-
-
-
-
-
+        dest.writeInt(this.id);
+        dest.writeInt(this.contact_id);
+        dest.writeString(this.name);
+        dest.writeString(this.address);
+        dest.writeString(this.phone);
+        dest.writeString(this.fax);
+        dest.writeString(this.category_name);
+        dest.writeString(this.note);
+        dest.writeInt(this.selectImage);
+        dest.writeString(this.operationType);
+        dest.writeString(this.badge);
     }
-    public static final Creator<AdapterBean> CREATOR=new Creator<AdapterBean>(){
+
+    public AdapterBean() {
+    }
+
+    protected AdapterBean(Parcel in) {
+        this.id = in.readInt();
+        this.contact_id = in.readInt();
+        this.name = in.readString();
+        this.address = in.readString();
+        this.phone = in.readString();
+        this.fax = in.readString();
+        this.category_name = in.readString();
+        this.note = in.readString();
+        this.selectImage = in.readInt();
+        this.operationType = in.readString();
+        this.badge = in.readString();
+    }
+
+    public static final Creator<AdapterBean> CREATOR = new Creator<AdapterBean>() {
         @Override
         public AdapterBean createFromParcel(Parcel source) {
-            AdapterBean commonAdapterData=new AdapterBean();
-            commonAdapterData.unitId =source.readInt();
-            commonAdapterData.contact_id =source.readInt();
-            commonAdapterData.name=source.readString();
-            commonAdapterData.address=source.readString();
-            commonAdapterData.phone=source.readString();
-            commonAdapterData.fax=source.readString();
-            commonAdapterData.category_id =source.readInt();
-            commonAdapterData.category_name=source.readString();
-            commonAdapterData.note=source.readString();
-            commonAdapterData.selectImage =source.readInt();
-            commonAdapterData.operationType=source.readString();
-            commonAdapterData.badge=source.readString();
-
-            return commonAdapterData;
+            return new AdapterBean(source);
         }
 
         @Override
@@ -168,3 +157,4 @@ public class AdapterBean implements Parcelable{
         }
     };
 }
+

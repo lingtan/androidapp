@@ -1,75 +1,54 @@
 package com.example.androiderp.bean;
 
+import android.os.Parcel;
+
 import org.litepal.crud.DataSupport;
 
 /**
  * Created by lingtan on 2017/5/15.
  */
 
-public class Custom extends DataSupport {
-    private int id;
-    private String name;
-    private String number;
-    private String address;
-    private String phone;
-    private String fax;
-    private String category;
+public class Custom extends ContactBean {
 
+    private AdapterBean customCategory;
 
-
-    public int getId() {
-        return id;
+    public AdapterBean getCustomCategory() {
+        return customCategory;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setCustomCategory(AdapterBean customCategory) {
+        this.customCategory = customCategory;
     }
 
-    public String getName() {
-        return name;
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        super.writeToParcel(dest, flags);
+        dest.writeParcelable(this.customCategory, flags);
     }
 
-    public String getNumber() {
-        return number;
+    public Custom() {
     }
 
-    public void setNumber(String number) {
-        this.number = number;
+    protected Custom(Parcel in) {
+        super(in);
+        this.customCategory = in.readParcelable(CustomCategory.class.getClassLoader());
     }
 
-    public String getAddress() {
-        return address;
-    }
+    public static final Creator<Custom> CREATOR = new Creator<Custom>() {
+        @Override
+        public Custom createFromParcel(Parcel source) {
+            return new Custom(source);
+        }
 
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getFax() {
-        return fax;
-    }
-
-    public void setFax(String fax) {
-        this.fax = fax;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
-    }
+        @Override
+        public Custom[] newArray(int size) {
+            return new Custom[size];
+        }
+    };
 }
